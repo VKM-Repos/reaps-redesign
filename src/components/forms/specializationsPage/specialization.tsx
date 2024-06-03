@@ -55,7 +55,7 @@ export default function Specialization({ handleNext }: Props) {
                             required: "This field is required",
                             })}
                         />
-                        <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Send Password reset code</Button>
+                        <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Next</Button>
                     </form>
                 </Form>
                 </div>

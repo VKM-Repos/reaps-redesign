@@ -65,7 +65,7 @@ const CreateSpecialization = () => {
                     <p>You can create specializations for your requests, add keywords that fits your request, and manage specialization</p>
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6 mx-auto"><span><AddIcon /></span>Create specialization</Button>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6 mx-auto focus:outline-none border-none"><span><AddIcon /></span>Create specialization</Button>
                         </DialogTrigger>
                         <RenderDialog />
                     </Dialog>
