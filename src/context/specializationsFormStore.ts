@@ -9,7 +9,7 @@ import {
     data: {
       specializationsDetails: {
         specialization: string;
-        keywords: string[];
+        keywords: string;
       };
      
     };
@@ -30,7 +30,7 @@ export const useSpecializationsStore = create<SpecializationsStore>(
             data: {
                 specializationsDetails: {
                     specialization: '',
-                    keywords: [] 
+                    keywords: ''
                 },
             },
             setStep: (step) => set({ step }),
@@ -41,7 +41,7 @@ export const useSpecializationsStore = create<SpecializationsStore>(
                 data: {
                     specializationsDetails: {
                         specialization: '',
-                        keywords: []
+                        keywords: ''
                     }
                 }
             });

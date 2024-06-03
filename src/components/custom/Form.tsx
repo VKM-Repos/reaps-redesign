@@ -27,6 +27,9 @@ export function LoginForm() {
   const { register, formState: { isValid } } = form;
   const navigate = useNavigate();
 
+  function goToHome(){
+    navigate("/home");
+  }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -62,7 +65,7 @@ export function LoginForm() {
               required: "This field is required",
             })}
           />
-          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Log in</Button>
+          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`} onClick={goToHome}>Log in</Button>
         </form>
       </Form>
     </>

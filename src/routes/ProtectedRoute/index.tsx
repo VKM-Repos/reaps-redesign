@@ -7,7 +7,10 @@ type Props = {
 
 const ProtectedRoute = ({ isPublic, isAuthorized }: Props) => {
     return isPublic || isAuthorized ? (
-        <Outlet />
+        <>
+            <Outlet />
+        </>
+
     ): (
         <>
             <Navigate to="/login" />

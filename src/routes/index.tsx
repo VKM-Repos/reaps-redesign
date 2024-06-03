@@ -18,12 +18,12 @@ const router = [
         {
             name: "login",
             path: 'login',
-            title: "Login page",
+            title: "Login",
             component: LoginPage
         },
         {
             name: "signup",
-            path: 'signup',
+            path: 'create-account',
             title: "Sign Up page",
             component: CreateOnboardingPage
         },

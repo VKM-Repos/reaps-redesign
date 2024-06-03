@@ -42,9 +42,9 @@ export default function Specialization({ handleNext }: Props) {
     }
 
     return (
-        <DialogContent className="sm:max-w-425px">
+        <DialogContent className="px-2 md:max-w-[540px] w-full flex flex-col gap-[4.75rem] ">
             <DialogHeader>
-                <DialogTitle className="font-bold text-[1.625rem]">Create a specialization</DialogTitle>
+                <DialogTitle className="font-bold text-[1.625rem] mt-[1.5rem">Create a specialization</DialogTitle>
                 <DialogDescription className="text-[454745] text-sm">Specify your specialization to Help us understand the field of your research, think of it as defining your unique area of expertise.</DialogDescription>
             </DialogHeader>
             <div className="max-w-[358px] md:max-w-[526px] mx-auto my-0">

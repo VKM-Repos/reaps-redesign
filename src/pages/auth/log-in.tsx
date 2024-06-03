@@ -8,7 +8,7 @@ export default function LoginPage() {
     return (
         <>
             <TopBar title=""/>
-            <div className="w-4/5 mx-auto my-0 antialiased inter">
+            <div className="w-4/5 mx-auto my-0 antialiased">
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Welcome back.</h1>
                     <p className="pt-2 pb-10 text-sm">New to R.E.A.P.S? <a href="/create-account" className="underline font-semibold text-black hover:text-black">Sign up</a></p>
