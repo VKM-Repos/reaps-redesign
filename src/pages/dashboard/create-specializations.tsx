@@ -22,7 +22,7 @@ const CreateSpecialization = () => {
                 let dialogData = new FormData();
 
                 dialogData.append("specialization", data?.specializationsDetails.specialization);
-                dialogData.append("keywords", data?.specializationsDetails.keywords[0]);
+                dialogData.append("keywords", data?.specializationsDetails.keywords);
 
                 setTimeout(() => {
                     handleNext();
