@@ -38,7 +38,7 @@ export default function AddKeyword({handleNext}: Props) {
                 }
             });
             handleNext();
-            resetStore();
+            
         }
         catch (error) {
             console.error(error);
@@ -46,23 +46,24 @@ export default function AddKeyword({handleNext}: Props) {
     }
 
     return (
-        <DialogContent className="px-2 md:max-w-[540px] w-full flex flex-col gap-[4.75rem]">
-            <DialogHeader>
-                <DialogTitle className="font-bold text-[1.625rem] mt-[1.5rem]">Awesome, now add some keywords</DialogTitle>
-                <DialogDescription className="text-[454745] text-sm">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
+        <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-6 w-full flex flex-col gap-[3.5rem] ">
+            <DialogHeader className="px-1 pt-[1.5rem]">
+                <DialogTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</DialogTitle>
+                <DialogDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
             </DialogHeader>
-            <div className="max-w-[358px] md:max-w-[526px] w-full mx-auto my-0">
+            <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-[4rem] !focus:border-none">
                         <FormInput
                             {...register("keywords", {
                             required: "This field is required",
                             })}
+                            className="!focus:border-none "
                         />
-                        <Button type="submit" variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Finish</Button>
+                        <Button type="submit" variant={isValid ? "default" : "ghost"} className={`focus:outline-none`}>Finish</Button>
                     </form>
                 </Form>
-            </div>            
+                </div>
         </DialogContent>
     )
 }

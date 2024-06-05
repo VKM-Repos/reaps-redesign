@@ -7,9 +7,9 @@ import Requests from '@/pages/dashboard/requests';
 import Specialization from '@/pages/dashboard/create-specializations';
 import Pricing from '@/pages/dashboard/pricing';
 import LoginPage from '@/pages/auth/log-in';
-import CreateOnboardingPage from '@/pages/auth/sign-up';
+import OnboardingPage from '@/pages/auth/sign-up';
 import NotFound from '@/pages/errors/notfound';
-import RecoverPassword from '@/pages/auth/recovery';
+import RecoverPassword from '@/pages/auth/password';
 
 const router = [
 {
@@ -19,19 +19,19 @@ const router = [
             name: "login",
             path: 'login',
             title: "Login",
-            component: LoginPage
+            element: LoginPage
         },
         {
             name: "signup",
-            path: 'create-account',
+            path: 'signup',
             title: "Sign Up page",
-            component: CreateOnboardingPage
+            element: OnboardingPage
         },
         {
-            name: "recovery-password",
-            path: 'password-recovery',
+            name: "recovery",
+            path: 'recovery',
             title: "Password Recovery",
-            component: RecoverPassword
+            element: RecoverPassword
         }
     ],
 },
@@ -42,25 +42,25 @@ const router = [
             name: "Home",
             path: 'home',
             title: "home",
-            component: Home
+            element: Home
         },
         {
             name: "Requests",
             path: 'requests',
             title: "Requests",
-            component: Requests
+            element: Requests
         },
         {
             name: "Specialization",
             path: 'specialization',
             title: "Specialization",
-            component: Specialization
+            element: Specialization
         },
         {
             name: "Pricing",
             path: 'pricing',
             title: "Pricing",
-            component: Pricing 
+            element: Pricing 
         },
         {
             path: '*',
@@ -70,42 +70,5 @@ const router = [
 }
 ]
 
-// function Router() {
-//     return (
-//         <Suspense fallback={<Loader />}>
-//                 <RouterProvider router={router} />
-//         </Suspense>
-//     );
-// }
-
 export const Routes = renderRoutes(router);
 
-
-// type AuthContextInterface = {
-//     isAuthenticated: boolean,
-//     login: () => void,
-//     logout: () => void;
-// }
-// const AuthContext = createContext<AuthContextInterface>({} as AuthContextInterface);
-
-// const PrivateRoute = ({ children }:{ children: JSX.Element}) => {
-//     const auth = useContext(AuthContext);
-//     return auth.isAuthenticated ? children : <Navigate to="/login" />;
-// };
-
-// const AuthProvider = ({ children }: {children: JSX.Element}) => {
-//     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
-
-//     const login = () => setIsAuthenticated(true);
-//     const logout = () => setIsAuthenticated(false);
-
-//     return (
-//         <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-//             {children}
-//         </AuthContext.Provider>
-//     );
-// };
-
-// routes
-// protected route

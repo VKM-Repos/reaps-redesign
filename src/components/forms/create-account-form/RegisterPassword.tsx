@@ -1,4 +1,3 @@
-import AuthLayout from "@/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/custom/BackButton";
 import { z } from "zod";
@@ -44,7 +43,7 @@ export default function Password({ handleGoBack, handleNext }: Props) {
     }
 
     return (
-        <AuthLayout>
+        <>
             <TopBar title="Personal Info" />
             <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased inter relative pt-[2.5rem]">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
@@ -67,7 +66,7 @@ export default function Password({ handleGoBack, handleNext }: Props) {
                     </Form>
                 </div>
             </div>
-        </AuthLayout>
+        </>
     )
 }
 

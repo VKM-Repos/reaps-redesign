@@ -1,4 +1,3 @@
-import AuthLayout from "@/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/custom/BackButton";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
@@ -12,7 +11,7 @@ import { Props } from "@/components/forms/forms.types";
 import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
-import countryCodes from "@/data/CountryCodes.json"
+import countryCodes from "@/lib/CountryCodes.json"
 
 
 const formSchema = z.object({
@@ -56,7 +55,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
         }
     }
     return(
-        <AuthLayout>
+        <>
             <TopBar title="Verification" />
             <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased inter relative">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
@@ -90,7 +89,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     </Form>
                 </div>
             </div>
-        </AuthLayout>
+        </>
     )
 }
 

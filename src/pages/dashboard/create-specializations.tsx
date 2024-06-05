@@ -8,7 +8,7 @@ import Specialization from "@/components/forms/specializationsPage/specializatio
 import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
 
 const CreateSpecialization = () => {
-    const { step, setStep } = useSpecializationsStore();
+    const { step, setStep, resetStore } = useSpecializationsStore();
 
     const RenderDialog = () => {
         const handleNext = () => {
@@ -36,6 +36,7 @@ const CreateSpecialization = () => {
         const { handleSubmit } = useForm<SpecializationsStore>();
         const onSubmitHandler: SubmitHandler<SpecializationsStore> = async () => {
             await handleSubmit(createSpecializationsDetails)();
+            
         };
 
         switch (step) {

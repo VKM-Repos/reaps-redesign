@@ -39,38 +39,38 @@ const Home = () => {
                 <h1 className="text-[1.375rem] font-bold">Recent Activities</h1>
                 <div className="w-full mt-8 mx-auto flex flex-col items-center">
                     {/* Set up custom Accordion */}
-                    <Accordion type="single" className="w-full !bg-inherit !border-none" collapsible>
-                        <AccordionItem value="item-1" className="!border-none">
+                    <Accordion type="single" className="w-full !bg-inherit !border-none " collapsible>
+                        <AccordionItem value="item-1" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
                             <AccordionTrigger>Your ethics approval request has been reopened</AccordionTrigger>
                             <AccordionContent>
 
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2">
+                        <AccordionItem value="item-2" className="!border-none !bg-inherit !focus:border-none !no-transition !hover:border-none">
                             <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
                             <AccordionContent>
 
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2">
+                        <AccordionItem value="item-3" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
                             <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
                             <AccordionContent>
 
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2">
+                        <AccordionItem value="item-4" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
                             <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
                             <AccordionContent>
 
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2">
+                        <AccordionItem value="item-5" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
                             <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
                             <AccordionContent>
 
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2">
+                        <AccordionItem value="item-6" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
                             <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
                             <AccordionContent>
 

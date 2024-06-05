@@ -1,4 +1,3 @@
-import AuthLayout from "@/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/custom/BackButton";
 import { z } from "zod";
@@ -47,7 +46,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
       }
 
     return(
-        <AuthLayout>
+        <>
             <TopBar title="Email" />
             <div className="w-full md:w-4/5 px-4 md:mx-auto my-0 antialiased inter relative pt-[2.5rem]">
                     {!isMobile ? <BackButton title="Back" goBack={handleGoBack}/>: ''}
@@ -75,6 +74,6 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                     </Form>
                 </div>
             </div>
-        </AuthLayout>
+        </>
     )
 }

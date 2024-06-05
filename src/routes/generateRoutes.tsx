@@ -1,5 +1,5 @@
 import flattenDeep from "lodash/flattenDeep";
-import { Route, Routes as ReactRoutes } from "react-router-dom"
+import { Route, Routes as ReactRoutes, Navigate } from "react-router-dom"
 import ProtectedRoute from "./ProtectedRoute/index.tsx"
 
 const generateFlattenRoutes = (routes: any) => {
@@ -27,12 +27,13 @@ export const renderRoutes = (mainRoutes: any) => {
                                 />
                             }>
                                 {
-                                    subRoutes.map(({ component: Component, path, name }: any) => {
+                                    subRoutes.map(({ element: Element, path, name }: any) => {
                                         return (
-                                            Component && path && (
-                                                <Route key={name} element={<Component />} path={path} />
+                                            Element && path && (
+                                                <Route key={name} element={<Element />} path={path} />
                                             )
                                         )
+                                        
                                     })
                                 }
                             </Route>
@@ -40,7 +41,12 @@ export const renderRoutes = (mainRoutes: any) => {
                 )
             }
         );
-        return <ReactRoutes>{layouts}</ReactRoutes>
+        return (
+        <ReactRoutes>
+            {layouts}
+            <Route path="/" element={<Navigate to={isAuthorized ? "/home" : "/login"} />} />
+        </ReactRoutes>
+        )
     };
     return Routes;
 }

@@ -26,8 +26,11 @@ export default function DashboardLayout() {
                         <div className="mx-auto my-0 md:absolute md:right-0 md:w-10/12">
                             <div className="w-[90%] mx-auto">
                                 <div className="flex items-center justify-end max-h-[124px] md:h-[130px] my-3">
-                                    <img src="icons/user.svg" alt="user logo" />
-                                    <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full px-1"><img src="icons/arrow-down-01.svg" alt="arrow-down" /></button>
+                                    <div className="flex items-center max-w-fit border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2">
+                                        <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full px-1"><img src="icons/user.svg" alt="user logo" /></button>
+                                        <img src="icons/arrow-down-01.svg" alt="arrow-down" />
+                                    </div>
+                                    
                                 </div>
                             <Outlet />
                             </div>

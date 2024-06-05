@@ -11,10 +11,8 @@ import SendCode from "@/components/forms/create-account-form/SendCode";
 import Password from "@/components/forms/create-account-form/RegisterPassword";
 import RegisterSuccess from "@/components/forms/create-account-form/RegisterSuccess";
 import PersonalInfo from "@/components/forms/create-account-form/PersonalInfo";
-import { MobileProvider } from "@/context/MobileContext";
 
-
-function CreateOnboardingPage() {
+export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { step, setStep } = useOnboardingFormStore();
 //   const { token } = useAppContext();
@@ -115,18 +113,12 @@ function CreateOnboardingPage() {
   }
 
   return (
-    <MobileProvider>
       <AnimatePresence initial={true} mode="wait">
-        {isLoading && <Loader />}
-        <RenderForm />
-      </AnimatePresence>
-    </MobileProvider>
-    
- 
+          {isLoading && <Loader />}
+          <RenderForm />
+      </AnimatePresence>    
   );
 }
-
-export default CreateOnboardingPage;
 
 
 // import toast from "react-hot-toast";

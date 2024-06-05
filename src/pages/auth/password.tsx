@@ -8,7 +8,7 @@ import NewPassword from "@/components/forms/recover-password/NewPassword";
 import EnterCode from "@/components/forms/recover-password/EnterCode";
 import SuccessfulReset from "@/components/forms/recover-password/SuccessfulReset";
 
-function RecoverPassword() {
+export default function RecoverPassword() {
     const [isLoading, setIsLoading] = useState(false);
     const { step, setStep, data } = usePasswordStore((state) => ({
       step: state.step,
@@ -77,5 +77,3 @@ function RecoverPassword() {
         </AnimatePresence>
     );
 }
-
-export default RecoverPassword;

@@ -120,13 +120,14 @@ label {
 }
 
 button:focus, button:focus-visible {
-  outline: none;
-  border: none;
+  outline: none !important;
+  border-color: none !important;
 }
 
 button:hover {
   border: 0px !important;
   border-color: transparent !important;
+  text-transform: none !important;
 }
 
 input:invalid {
