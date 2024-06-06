@@ -24,7 +24,7 @@ export default function RegisterSuccess() {
                 </div>
             </div>
 
-                <div className="w-full max-w-[700px] mx-auto my-0 antialiased inter relative pt-[2.5rem] flex flex-col gap-y-10">
+                <div className="w-full max-w-[700px] mx-auto my-0 antialiased relative pt-[2.5rem] flex flex-col gap-y-10">
                     <div className="flex flex-col text-center justify-center items-center gap-y-10">
                         <img src="icons/checkmark-frame.svg" alt="Successful mark" />
                         <h1 className="md:text-xl7 text-[2.5rem] font-bold barlow uppercase pt-10 pb-5 md:py-5 tracking-[0.03rem]">You have successfully registered your reaps account</h1>

@@ -52,17 +52,16 @@ export default function RegisterUser({ handleNext }: Props) {
         <>
           <div className="py-[2rem] px-[1.25rem] max-h-[124px] md:p-[3.625rem] md:max-h-[130px] border-b border-[#0C0C0F29]">
             <div className="flex justify-between items-center w-full sm:w-4/5 mx-auto my-0">
-                
-                <div className="flex items-center">
-                    <img src="icons/mark.svg" alt="Mark logo" />
-                    <img className="md:block hidden" src="icons/reap-icon.svg" alt="Reap logo for website" />
-                </div>
-                <div>
-                    <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5"><img src="icons/cancel-01.svg" alt="Close/Open button" /></button>
-                </div>
+              <div className="flex items-center">
+                  <img src="icons/mark.svg" alt="Mark logo" />
+                  <img className="md:block hidden" src="icons/reap-icon.svg" alt="Reap logo for website" />
+              </div>
+              <div>
+                  <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5"><img src="icons/cancel-01.svg" alt="Close/Open button" /></button>
+              </div>
             </div>
           </div>
-          <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased inter">
+          <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased">
               <div className="flex flex-col justify-center items-center">
                   <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Create your Reaps account</h1>
                   <p className="pt-2 pb-10 text-sm text-[#454745]">Already have an account? <a href="/login" className="underline font-semibold text-black hover:text-black" >Log in</a></p>

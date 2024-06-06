@@ -57,7 +57,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     return(
         <>
             <TopBar title="Verification" />
-            <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased inter relative">
+            <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Enter your Personal Information</h1>

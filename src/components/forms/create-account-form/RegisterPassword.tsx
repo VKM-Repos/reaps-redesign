@@ -45,7 +45,7 @@ export default function Password({ handleGoBack, handleNext }: Props) {
     return (
         <>
             <TopBar title="Personal Info" />
-            <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased inter relative pt-[2.5rem]">
+            <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased relative pt-[2.5rem]">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="text-xl2 text-center font-semibold pt-10 pb-5 md:py-5">Create your password</h1>
