@@ -1,4 +1,4 @@
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import { DialogContent, DialogClose, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -37,8 +37,10 @@ export default function AddKeyword({handleNext}: Props) {
                     keywords: values.keywords
                 }
             });
+          
             handleNext();
-            
+            resetStore();
+          
         }
         catch (error) {
             console.error(error);
@@ -60,7 +62,9 @@ export default function AddKeyword({handleNext}: Props) {
                             })}
                             className="!focus:border-none "
                         />
-                        <Button type="submit" variant={isValid ? "default" : "ghost"} className={`focus:outline-none`}>Finish</Button>
+                        <DialogClose asChild>
+                            <Button type="submit" variant={isValid ? "default" : "ghost"} className={`focus:outline-none`}>Finish</Button>
+                        </DialogClose> 
                     </form>
                 </Form>
                 </div>
