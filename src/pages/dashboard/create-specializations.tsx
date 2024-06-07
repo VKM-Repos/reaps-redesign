@@ -11,8 +11,13 @@ const CreateSpecialization = () => {
     const { step, setStep, resetStore } = useSpecializationsStore();
 
     const RenderDialog = () => {
+        if (step === 3) {
+            resetStore();
+        }
+
         const handleNext = () => {
             setStep(step + 1);
+            
         };
 
         const createSpecializationsDetails = async () => {
@@ -22,33 +27,30 @@ const CreateSpecialization = () => {
                 let dialogData = new FormData();
 
                 dialogData.append("specialization", data?.specializationsDetails.specialization);
-                dialogData.append("keywords", data?.specializationsDetails.keywords);
+                dialogData.append("keywords", data?.specializationsDetails.keywords[0]);
 
                 setTimeout(() => {
                     handleNext();
                 }, 5000)
             }
             catch (error: any) {
-                console.error("Error creating dialog", error);
+                console.error("Error creating form", error);
             }
         }
 
         const { handleSubmit } = useForm<SpecializationsStore>();
         const onSubmitHandler: SubmitHandler<SpecializationsStore> = async () => {
             await handleSubmit(createSpecializationsDetails)();
-            
         };
 
         switch (step) {
             case 1: 
-            return (
-                <Specialization handleNext={handleNext} />
-            )
+            return <Specialization handleNext={handleNext} />
+            
 
             case 2: 
-            return (
-                <AddKeyword handleNext={onSubmitHandler} />
-            )
+            return <AddKeyword handleNext={onSubmitHandler} />
+            
             default:
                 return  null;
         }
@@ -66,11 +68,11 @@ const CreateSpecialization = () => {
                     <p>You can create specializations for your requests, add keywords that fits your request, and manage specialization</p>
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6 mx-auto focus:outline-none border-none"><span><AddIcon /></span>Create specialization</Button>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6 mx-auto"><span><AddIcon /></span>Create specialization</Button>
                         </DialogTrigger>
                         <RenderDialog />
                     </Dialog>
-                    
+
                 </div>
             </div>
         </div>
