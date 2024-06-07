@@ -49,7 +49,7 @@ export const TransitionParent: React.FC<TransitionProps> = (props) => {
       variants={defaultParentVariant}
       initial="initial"
       animate="animate"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -64,7 +64,7 @@ export const TransitionParentFast: React.FC<TransitionProps> = (props) => {
       variants={defaultParentFastVariant}
       initial="initial"
       animate="animate"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -78,7 +78,7 @@ export const TransitionParentFast: React.FC<TransitionProps> = (props) => {
 export const TransitionFromLeft: React.FC<TransitionProps> = (props) => {
   const { addClass, children, onClick } = props;
   return (
-    <motion.div variants={fromLeftVariant} className={${props.className} ${addClass && addClass}} onClick={onClick}>
+    <motion.div variants={fromLeftVariant} className={`${props.className} ${addClass && addClass}`} onClick={onClick}>
       {children}
     </motion.div>
   );
@@ -87,7 +87,7 @@ export const TransitionFromLeft: React.FC<TransitionProps> = (props) => {
 export const TransitionFromRight: React.FC<TransitionProps> = (props) => {
   const { addClass, children, onClick } = props;
   return (
-    <motion.div variants={fromRightVariant} className={${props.className} ${addClass && addClass}} onClick={onClick}>
+    <motion.div variants={fromRightVariant} className={`${props.className} ${addClass && addClass}`} onClick={onClick}>
       {children}
     </motion.div>
   );
@@ -96,7 +96,7 @@ export const TransitionFromRight: React.FC<TransitionProps> = (props) => {
 export const TransitionFromBottom: React.FC<TransitionProps> = (props) => {
   const { addClass, children, onClick } = props;
   return (
-    <motion.div variants={fromBottomVariant} className={${props.className} ${addClass && addClass}} onClick={onClick}>
+    <motion.div variants={fromBottomVariant} className={`${props.className} ${addClass && addClass}`} onClick={onClick}>
       {children}
     </motion.div>
   );
@@ -107,7 +107,7 @@ export const TransitionOpacity: React.FC<TransitionProps> = (props) => {
   return (
     <motion.div
       variants={opacityAloneVariant}
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -123,7 +123,7 @@ export const TransitionOpacityAlone: React.FC<TransitionProps> = (props) => {
       variants={opacityAloneVariant}
       initial="initial"
       animate="animate"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -139,7 +139,7 @@ export const TransitionFromTopAlone: React.FC<TransitionProps> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -155,7 +155,7 @@ export const TransitionFromBottomAlone: React.FC<TransitionProps> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -171,7 +171,7 @@ export const TransitionFromLeftAlone: React.FC<TransitionProps> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
@@ -187,7 +187,7 @@ export const TransitionFromRightAlone: React.FC<TransitionProps> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className={${props.className} ${addClass && addClass}}
+      className={`${props.className} ${addClass && addClass}`}
       onClick={onClick}
     >
       {children}
