@@ -4,11 +4,9 @@ import DocValidation from "@/components/custom/Icons/DocValidation";
 import SummaryCard from "@/components/custom/SummaryCard";
 import Loading from "@/components/custom/Icons/Loading";
 import TemplateCard from "@/components/custom/TemplateCard";
+import NotificationCard from "@/components/custom/NotificationCard";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger
+    Accordion
 } from "@/components/ui/accordion"
 
 const Home = () => {
@@ -38,44 +36,14 @@ const Home = () => {
             <div className="flex flex-col gap-4">
                 <h1 className="text-[1.375rem] font-bold">Recent Activities</h1>
                 <div className="w-full mt-8 mx-auto flex flex-col items-center">
-                    {/* Set up custom Accordion */}
-                    <Accordion type="single" className="w-full !bg-inherit !border-none " collapsible>
-                        <AccordionItem value="item-1" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
-                            <AccordionTrigger>Your ethics approval request has been reopened</AccordionTrigger>
-                            <AccordionContent>
-
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-2" className="!border-none !bg-inherit !focus:border-none !no-transition !hover:border-none">
-                            <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
-                            <AccordionContent>
-
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-3" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
-                            <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
-                            <AccordionContent>
-
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-4" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
-                            <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
-                            <AccordionContent>
-
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-5" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
-                            <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
-                            <AccordionContent>
-
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-6" className="!border-none !bg-inherit !focus:outline-none !no-transition !hover:border-none">
-                            <AccordionTrigger>Your Ethics Approval Request has been successfully submitted</AccordionTrigger>
-                            <AccordionContent>
-
-                            </AccordionContent>
-                        </AccordionItem>
+                    {/* remove redundant styles, set mapping by value id */}
+                    <Accordion type="single" className="w-full"  collapsible>
+                        <NotificationCard value="item-1" title="Your ethics approval request has been approved" time="14:23" />
+                        <NotificationCard value="item-2" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
+                        <NotificationCard value="item-3" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
+                        <NotificationCard value="item-4" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
+                        <NotificationCard value="item-5" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
+                        <NotificationCard value="item-6" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
                     </Accordion>
                 </div>
             </div>

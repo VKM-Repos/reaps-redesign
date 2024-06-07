@@ -125,7 +125,6 @@ button:focus, button:focus-visible {
 }
 
 button:hover {
-  border: 0px !important;
   border-color: transparent !important;
   text-transform: none !important;
 }
