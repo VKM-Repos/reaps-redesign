@@ -1,17 +1,16 @@
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/custom/BackButton";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
+// import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { useState } from "react";
 import FormInput from "@/components/custom/FormInput";
 import { Props } from "@/components/forms/forms.types";
 import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
-import countryCodes from "@/lib/CountryCodes.json"
+// import countryCodes from "@/lib/CountryCodes.json"
 
 
 const formSchema = z.object({
@@ -27,7 +26,7 @@ const formSchema = z.object({
 });
 
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
-    const [countryCode, setCountryCode] = useState("");
+    // const [countryCode, setCountryCode] = useState("");
     const { isMobile } = useMobileContext();
     const { data, setData } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({

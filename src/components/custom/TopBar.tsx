@@ -4,7 +4,7 @@ import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
 import { useNavigate } from "react-router-dom";
 
 export default function TopBar({title}: {title: string}) {
-    const { isMobile, isSignUp, isDashboard } = useMobileContext(); 
+    const { isMobile, isSignUp } = useMobileContext(); 
     const { step, setStep } = useOnboardingFormStore();
     const navigate = useNavigate();
 
@@ -27,12 +27,7 @@ export default function TopBar({title}: {title: string}) {
                     <img src="icons/mark.svg" alt="Mark logo" />
                     <img className="md:block hidden" src="icons/reap-icon.svg" alt="Reap logo for website" />
                 </div>}
-                {/* stepper nav  */}
-                {/* {isDashboard ? 
-                <div className="flex items-center justify-center">
-                    <img src="icons/user.svg" alt="user logo" />
-                    <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full px-1"><img src="icons/arrow-down-01.svg" alt="arrow-down" /></button>
-                </div>:  */}
+             
                 <div>
                     <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5" onClick={() => {navigate(-1)}}><img src="icons/cancel-01.svg" alt="Close/Open button" /></button>
                 </div>
