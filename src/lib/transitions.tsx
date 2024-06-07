@@ -13,7 +13,7 @@ import {
   transElementVariant,
   transStartVariant,
   fromRightVariant,
-} from "@/lib/variants";
+} from "./variants";
 
 interface TransitionProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode;
