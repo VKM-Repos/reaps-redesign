@@ -20,7 +20,7 @@ const formSchema = z.object({
 
 
 export default function AddKeyword({handleNext}: Props) {
-    const { data, setData } = useSpecializationsStore();
+    const { data, setData, resetStore } = useSpecializationsStore();
     
 
     const form = useForm<z.infer<typeof formSchema>>({
