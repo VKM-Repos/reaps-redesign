@@ -8,7 +8,7 @@ import Specialization from "@/components/forms/specializationsPage/specializatio
 import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
 
 const CreateSpecialization = () => {
-    const { step, setStep } = useSpecializationsStore();
+    const { step, setStep, resetStore } = useSpecializationsStore();
 
     const RenderDialog = () => {
         if (step === 3) {
