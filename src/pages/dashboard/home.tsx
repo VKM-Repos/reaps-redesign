@@ -5,8 +5,7 @@ import SummaryCard from "@/components/custom/SummaryCard";
 import Loading from "@/components/custom/Icons/Loading";
 import TemplateCard from "@/components/custom/TemplateCard";
 import NotificationCard from "@/components/custom/NotificationCard"
-import { Sheet } from "@/components/ui/sheet";
-import { useState } from "react";
+
 
 const notifications = [
     {
@@ -40,7 +39,7 @@ const notifications = [
 const Home = () => {
     // create handle open function
     
-    const content = "Your request for ethics approval has been reopened by your institution admin for editing, as requested by your reviewer. "
+    // const content = "Your request for ethics approval has been reopened by your institution admin for editing, as requested by your reviewer. "
     return (
         <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-[3.25rem]">
