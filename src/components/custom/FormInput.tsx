@@ -39,6 +39,7 @@ const FormInput: FC<InputProps> = ({ name, label, ...rest }) => {
             <FormControl>
               <div className="relative">
                 <Input
+                
                   type={
                     type === "password"
                       ? isPasswordVisible
