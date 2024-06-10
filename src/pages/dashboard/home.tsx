@@ -9,7 +9,7 @@ import { Sheet } from "@/components/ui/sheet";
 
 const Home = () => {
     return (
-        <div className="md:4/5 mx-auto max-w-4xl flex flex-col gap-10">
+        <div>
             <div className="flex flex-col gap-[3.25rem]">
                 <div className="flex flex-col md:flex-row justify-between items-center mx-auto w-full">
                     <h1 className="text-[1.875rem] font-bold">Summary</h1>

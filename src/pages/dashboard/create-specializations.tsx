@@ -58,7 +58,7 @@ const CreateSpecialization = () => {
     }
     return (
         <div>
-            <h1 className="text-[1.875rem] font-bold py-2">Specializations</h1>
+            <h1 className="text-[1.875rem] font-bold">Specializations</h1>
             <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
                 <div className="w-[96px] h-[96px] pl-2 mx-auto my-[6rem] rounded-full flex justify-center items-center bg-[#FFD13A] ">
                     <Puzzle />

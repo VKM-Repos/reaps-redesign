@@ -32,7 +32,9 @@ export default function DashboardLayout() {
                                     </div>
                                     
                                 </div>
-                            <Outlet />
+                                <div className="md:4/5 mx-auto max-w-4xl flex flex-col gap-10">
+                                    <Outlet />
+                                </div>
                             </div>
                             {/* mobile navbar hidden in medium screen below children */}
                         </div>
