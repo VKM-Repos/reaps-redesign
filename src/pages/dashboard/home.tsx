@@ -6,8 +6,41 @@ import Loading from "@/components/custom/Icons/Loading";
 import TemplateCard from "@/components/custom/TemplateCard";
 import NotificationCard from "@/components/custom/NotificationCard"
 import { Sheet } from "@/components/ui/sheet";
+import { useState } from "react";
+
+const notifications = [
+    {
+      id: "1",
+      title: "Your ethics approval request has been approved",
+      time: "14:23",
+    },
+    {
+      id: "2",
+      title: "Your ethics approval request has been approved",
+      time: "14:23",
+    },
+    {
+      id: "3",
+      title: "Your ethics approval request has been approved",
+      time: "14:23",
+    },
+    {
+      id: "4",
+      title: "Your ethics approval request has been approved",
+      time: "14:23",
+    },
+    {
+      id: "5",
+      title: "Your ethics approval request has been approved",
+      time: "14:23",
+    },
+
+]
 
 const Home = () => {
+    // create handle open function
+    
+    const content = "Your request for ethics approval has been reopened by your institution admin for editing, as requested by your reviewer. "
     return (
         <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-[3.25rem]">
@@ -33,16 +66,12 @@ const Home = () => {
             </div>
             <div className="flex flex-col gap-4">
                 <h1 className="text-[1.375rem] font-bold">Recent Activities</h1>
-                <div className="w-full mt-8 mx-auto flex flex-col items-center">
-                    {/* remove redundant styles, set mapping by value id */}
-                    <Sheet>
-                        <NotificationCard value="item-1" title="Your ethics approval request has been approved" time="14:23" />
-                        <NotificationCard value="item-2" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
-                        <NotificationCard value="item-3" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
-                        <NotificationCard value="item-4" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
-                        <NotificationCard value="item-5" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
-                        <NotificationCard value="item-6" title="Your Ethics Approval Request has been successfully submitted" time="14:23"/>
-                    </Sheet>
+                <div className="w-full mt-8 mx-auto flex flex-col items-center">                     
+                  {notifications.map((notification: any) => (
+                        <NotificationCard id={notification.id} key={notification.id} title={notification.title} time={notification.time} />
+
+                  ))}
+
                 </div>
             </div>
         </div>
