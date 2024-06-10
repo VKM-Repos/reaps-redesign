@@ -29,7 +29,9 @@ export default function DashboardLayout() {
                                     <img src="icons/user.svg" alt="user logo" />
                                     <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full px-1"><img src="icons/arrow-down-01.svg" alt="arrow-down" /></button>
                                 </div>
-                            <Outlet />
+                                <div className="md:4/5 mx-auto max-w-4xl flex flex-col gap-10">
+                                    <Outlet />
+                                </div>
                             </div>
                             {/* mobile navbar hidden in medium screen below children */}
                         </div>
