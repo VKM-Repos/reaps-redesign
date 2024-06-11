@@ -58,8 +58,8 @@ return (
                 <SheetTrigger asChild>
                     <button className="flex flex-1 w-full items-center justify-between gap-4 p-5 font-medium">
                         <div className="flex flex-1 justify-between items-center">
-                            <p className="text-xs md:text-base">{title}</p>
-                            <p className="text-xs text-[#454745]">{time}</p>
+                            <p className="text-xs text-left md:text-base">{title}</p>
+                            <p className="text-xs text-[#454745] align-middle">{time}</p>
                         </div>
                         <ArrowRight />
                     </button>
