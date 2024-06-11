@@ -29,7 +29,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background md:p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+  "fixed overflow-auto z-50 gap-4 bg-background md:p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
   {
     variants: {
       side: {
@@ -38,7 +38,7 @@ const sheetVariants = cva(
           "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
         left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-md",
         right:
-          "inset-y-0 right-0 h-full md:border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right w-[90%] md:w-2/5",
+          "inset-y-0 right-0 h-full md:border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right w-full md:w-2/5",
       },
     },
     defaultVariants: {
@@ -63,7 +63,7 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute left-4 top-4 md:right-4 md:left-auto md:max-w-fit md:mb-24 flex flex-col justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary p-4">
+      <SheetPrimitive.Close className="absolute left-4 top-4 md:pr-4 md:right-0 md:left-auto md:max-w-fit md:mb-24 flex flex-col justify-center rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary p-4">
         <HoverCancel />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
