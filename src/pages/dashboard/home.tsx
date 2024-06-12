@@ -65,7 +65,7 @@ const Home = () => {
             </div>
             <div className="flex flex-col gap-4">
                 <h1 className="text-[1.375rem] font-bold">Recent Activities</h1>
-                <div className="w-full mt-8 mx-auto flex flex-col items-center">                     
+                <div className="w-full mt-8 mb-12 mx-auto flex flex-col items-center">                     
                   {notifications.map((notification: any) => (
                         <NotificationCard id={notification.id} key={notification.id} title={notification.title} time={notification.time} />
 
