@@ -37,8 +37,8 @@ export function LoginForm() {
       setTimeout(() => {
 
         setIsLoading(false);
-        console.log(values);
-      }, 3000);
+        goToHome();
+      }, 10000);
      
     } catch (error) {
       console.error(error);
@@ -65,7 +65,7 @@ export function LoginForm() {
               required: "This field is required",
             })}
           />
-          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`} onClick={goToHome}>Log in</Button>
+          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Log in</Button>
         </form>
       </Form>
     </>
