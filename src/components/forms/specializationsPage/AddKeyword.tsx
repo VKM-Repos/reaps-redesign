@@ -82,13 +82,13 @@ export default function AddKeyword({handleNext}: Props) {
                                 value={keyword}
                                 className="!focus:border-none"
                             />
-                            <div className="flex gap-2 w-full flex-wrap">
+                            <div className="flex gap-2 w-full flex-wrap mt-8">
                             {keywordsArray.map((item, index) => (
-                                <Badge className="text-black bg-[#192C8A1A] mt-8 flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
+                                <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
                             ))}
                             </div>
                             <DialogClose asChild>
-                                <Button type="submit" variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[4rem]`}>Finish</Button>
+                                <Button type="submit" variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
                             </DialogClose> 
                         </form>
                     </Form>
