@@ -31,7 +31,7 @@ export function LoginForm() {
     navigate("/home");
   }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit() {
     try {
       setIsLoading(true);
       setTimeout(() => {
