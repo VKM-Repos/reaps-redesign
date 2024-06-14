@@ -9,6 +9,7 @@ import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
 
 const CreateSpecialization = () => {
     const { step, setStep, resetStore } = useSpecializationsStore();
+    const dialogData = new FormData();
 
     const RenderDialog = () => {
         if (step === 3) {
@@ -23,11 +24,12 @@ const CreateSpecialization = () => {
         const createSpecializationsDetails = async () => {
             try {
                 const { data } = useSpecializationsStore.getState();
-
-                let dialogData = new FormData();
-
-                dialogData.append("specialization", data?.specializationsDetails.specialization);
-                dialogData.append("keywords", data?.specializationsDetails.keywords[0]);
+                const specialization = data?.specializationsDetails.specialization ?? '';
+                dialogData.append("specialization", specialization);
+                const keywords = Array.isArray(data?.specializationsDetails.keyword)
+                    ? data?.specializationsDetails.keyword.join(', ')
+                    : data?.specializationsDetails.keyword ?? '';
+                dialogData.append("keyword", keywords);
 
                 setTimeout(() => {
                     handleNext();
@@ -41,15 +43,17 @@ const CreateSpecialization = () => {
         const { handleSubmit } = useForm<SpecializationsStore>();
         const onSubmitHandler: SubmitHandler<SpecializationsStore> = async () => {
             await handleSubmit(createSpecializationsDetails)();
+
         };
 
+       
         switch (step) {
             case 1: 
             return <Specialization handleNext={handleNext} />
             
 
             case 2: 
-            return <AddKeyword handleNext={onSubmitHandler} />
+            return <AddKeyword handleNext={onSubmitHandler}/>
             
             default:
                 return  null;
@@ -72,7 +76,6 @@ const CreateSpecialization = () => {
                         </DialogTrigger>
                         <RenderDialog />
                     </Dialog>
-
                 </div>
             </div>
         </div>
