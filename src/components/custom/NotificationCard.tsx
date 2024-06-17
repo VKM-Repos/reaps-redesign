@@ -56,7 +56,7 @@ return (
         <div className="!focus:outline-none !no-transition !hover:border-none w-full">
             <Sheet>
                 <SheetTrigger asChild>
-                    <button className="flex flex-1 w-full items-center justify-between gap-4 p-5 font-medium">
+                    <button className="flex flex-1 w-full items-center justify-between gap-4 p-5 font-medium !rounded-none !border-0 !border-b !border-[#0C0C0F29]">
                         <div className="flex flex-1 justify-between items-center">
                             <p className="text-xs text-left md:text-base">{title}</p>
                             <p className="text-xs text-[#454745] align-middle">{time}</p>
@@ -82,7 +82,7 @@ type DetailsProps = {
  function NotificationDetails({title}: DetailsProps) {
   return (
     <div className="px-2.5 py-4 w-full flex flex-col gap-8 mx-auto justify-center">
-            <div className="mt-24 md:mt-0  flex flex-col border-[#0E0F0C1F] border-b justify-center">
+            <div className="flex flex-col border-[#0E0F0C1F] border-b justify-center">
                 <p className="text-lg w-[90%] mx-auto font-bold md:mb-4 mb-8 md:mr-16">{title}</p>
             </div>
             <div className="flex flex-col gap-8">
