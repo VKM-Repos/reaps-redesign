@@ -91,7 +91,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                             />
                             <div className="flex gap-2">
                                 <div className="flex flex-col text-xs mt-2">
-                                    <Select onValueChange={(value) => {
+                                    <Select onValueChange={(value: string) => {
                                             const selectedCountry: any = countryCodes.find(country => country.name === value);
                                             if (selectedCountry) {
                                             setDialCode(selectedCountry.dial_code);
