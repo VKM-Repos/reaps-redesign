@@ -117,10 +117,10 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 })}
                             />
                             <div className="flex gap-2">
-                                <div className="flex flex-col text-xs mt-3">
+                                <div className="flex flex-col text-xs mt-2">
                                     <Select>
-                                        <Label className="text-xs">Country Code</Label>
-                                        <SelectTrigger className="w-[80px]">
+                                        <Label className="font-md">Country Code</Label>
+                                        <SelectTrigger className="max-w-28 mt-2">
                                             <SelectValue placeholder="+234" />
                                         </SelectTrigger>
                                         <SelectContent>
