@@ -15,11 +15,12 @@ import {
     SelectContent,
     SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
@@ -34,20 +35,44 @@ const formSchema = z.object({
         .min(1, { message: "Please fill this field"})
 });
 
+type CountryCode = {
+    name?: string,
+    dial_code?: string,
+    code?: string
+}
+
+const filterUniqueCountries = (countries: CountryCode[]): CountryCode[] => {
+    const seenNames = new Set<string>();
+    return countries.filter((country) => {
+      if (seenNames.has(country.name as string)) {
+        return false;
+      } else {
+        seenNames.add(country.name as string);
+        return true;
+      }
+    });
+  };
+
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     const [dialCode, setDialCode] = useState("");
-    const [open, setOpen] = useState(false)
+
+    const [open, setOpen] = useState(false);
     const { isMobile } = useMobileContext();
     const { data, setData } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
+    
+
     const { register, formState: { isValid } } = form;
     
     // const combinedPhoneNumber = `+${countryCode}${values.phoneNumber}`;
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        const code = dialCode;
+        const dialNumber = code + values.phoneNumber;
+        console.log(dialNumber);
         try {
             setData({
                 onboardingDetails: {
@@ -55,7 +80,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     firstName: values.firstName,
                     lastName: values.lastName,
                     //set combined phone number
-                    phoneNumber: values.phoneNumber
+                    phoneNumber: dialNumber
                 }
             }); 
             handleNext();
@@ -63,6 +88,10 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           console.error(error);
         }
     }
+
+    // const filteredCountryCodes = filterUniqueCountries(countryCodes);
+    
+
     
     return(
         <>
@@ -95,22 +124,19 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                             <SelectValue placeholder="+234" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectGroup>
-                                                {/* {console.log(countryCodes)} */}
-                                               
-                                                {countryCodes && countryCodes.map((country, index) => 
-                                                    
-                                                    <SelectItem 
-                                                        key={country?.code}
-                                                        value={country?.dial_code}
-                                                        onChange={() => {
-                                                        setDialCode(country?.dial_code);
-                                                        setOpen(false);
-                                                        }}
-                                                    >
-                                                        {dialCode}
-                                                    </SelectItem>
-                                                )}
+                                            <SelectGroup> 
+                                                <SelectLabel>Country Codes</SelectLabel>
+                                                {countryCodes && countryCodes.map((country) => (
+                                                        <SelectItem 
+                                                            value={country.name}
+                                                            onChange={() => {
+                                                                setDialCode(country.dial_code);
+                                                                setOpen(false);
+                                                            }}
+                                                        >
+                                                            {country?.dial_code}
+                                                        </SelectItem>
+                                                ))}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
