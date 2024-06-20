@@ -20,7 +20,7 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
@@ -33,53 +33,30 @@ const formSchema = z.object({
     phoneNumber: z
         .string()
         .min(1, { message: "Please fill this field"})
+        .regex(/^\d+$/, { message: "Phone number should contain only numbers" })
 });
 
-type CountryCode = {
-    name?: string,
-    dial_code?: string,
-    code?: string
-}
 
-const filterUniqueCountries = (countries: CountryCode[]): CountryCode[] => {
-    const seenNames = new Set<string>();
-    return countries.filter((country) => {
-      if (seenNames.has(country.name as string)) {
-        return false;
-      } else {
-        seenNames.add(country.name as string);
-        return true;
-      }
-    });
-  };
+
 
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
-    const [dialCode, setDialCode] = useState("");
-
-    const [open, setOpen] = useState(false);
+    const [dialCode, setDialCode] = useState("+234");
     const { isMobile } = useMobileContext();
     const { data, setData } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
-    
-
     const { register, formState: { isValid } } = form;
-    
-    // const combinedPhoneNumber = `+${countryCode}${values.phoneNumber}`;
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        const code = dialCode;
-        const dialNumber = code + values.phoneNumber;
-        console.log(dialNumber);
+        const dialNumber = dialCode + values.phoneNumber;
         try {
             setData({
                 onboardingDetails: {
                     ...data.onboardingDetails,
                     firstName: values.firstName,
                     lastName: values.lastName,
-                    //set combined phone number
                     phoneNumber: dialNumber
                 }
             }); 
@@ -88,10 +65,6 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           console.error(error);
         }
     }
-
-    // const filteredCountryCodes = filterUniqueCountries(countryCodes);
-    
-
     
     return(
         <>
@@ -118,10 +91,15 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                             />
                             <div className="flex gap-2">
                                 <div className="flex flex-col text-xs mt-2">
-                                    <Select>
+                                    <Select onValueChange={(value) => {
+                                            const selectedCountry: any = countryCodes.find(country => country.name === value);
+                                            if (selectedCountry) {
+                                            setDialCode(selectedCountry.dial_code);
+                                            }
+                                        }}>
                                         <Label className="font-md">Country Code</Label>
                                         <SelectTrigger className="max-w-28 mt-2">
-                                            <SelectValue placeholder="+234" />
+                                            <SelectValue placeholder={dialCode} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup> 
@@ -129,12 +107,8 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                                 {countryCodes && countryCodes.map((country) => (
                                                         <SelectItem 
                                                             value={country.name}
-                                                            onChange={() => {
-                                                                setDialCode(country.dial_code);
-                                                                setOpen(false);
-                                                            }}
                                                         >
-                                                            {country?.dial_code}
+                                                            {country.dial_code}
                                                         </SelectItem>
                                                 ))}
                                             </SelectGroup>
@@ -146,11 +120,9 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                         label="Phone number"
                                         {...register("phoneNumber", {
                                         required: "This field is required",
-                                        })}
-                                        
+                                        })}  
                                     />
-                                </div>
-                                
+                                </div>  
                             </div>
                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>
