@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/custom/BackButton";
-// import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,8 +9,18 @@ import { Props } from "@/components/forms/forms.types";
 import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
-// import countryCodes from "@/lib/CountryCodes.json"
+import countryCodes from "@/lib/CountryCodes.json"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
     firstName: z
@@ -26,7 +35,8 @@ const formSchema = z.object({
 });
 
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
-    // const [countryCode, setCountryCode] = useState("");
+    const [dialCode, setDialCode] = useState("");
+    const [open, setOpen] = useState(false)
     const { isMobile } = useMobileContext();
     const { data, setData } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -53,6 +63,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           console.error(error);
         }
     }
+    
     return(
         <>
             <TopBar title="Verification" />
@@ -76,13 +87,45 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 required: "This field is required",
                                 })}
                             />
-                            
-                            <FormInput
-                                label="Phone number"
-                                {...register("phoneNumber", {
-                                required: "This field is required",
-                                })}
-                            />
+                            <div className="flex gap-2">
+                                <div className="flex flex-col text-xs mt-3">
+                                    <Select>
+                                        <Label className="text-xs">Country Code</Label>
+                                        <SelectTrigger className="w-[80px]">
+                                            <SelectValue placeholder="+234" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {/* {console.log(countryCodes)} */}
+                                               
+                                                {countryCodes && countryCodes.map((country, index) => 
+                                                    
+                                                    <SelectItem 
+                                                        key={country?.code}
+                                                        value={country?.dial_code}
+                                                        onChange={() => {
+                                                        setDialCode(country?.dial_code);
+                                                        setOpen(false);
+                                                        }}
+                                                    >
+                                                        {dialCode}
+                                                    </SelectItem>
+                                                )}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="w-full">
+                                    <FormInput
+                                        label="Phone number"
+                                        {...register("phoneNumber", {
+                                        required: "This field is required",
+                                        })}
+                                        
+                                    />
+                                </div>
+                                
+                            </div>
                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>
                     </Form>
@@ -93,3 +136,4 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
 }
 
 export default PersonalInfo;
+
