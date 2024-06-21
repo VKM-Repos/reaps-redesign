@@ -1,6 +1,3 @@
-import { Dialog, DialogTrigger, } from "../ui/dialog"
-import AddIcon from "./Icons/AddIcon"
-import { Button } from "../ui/button"
 import Puzzle from "./Icons/Puzzle"
 import DialogPopup from "./DialogPopup"
 

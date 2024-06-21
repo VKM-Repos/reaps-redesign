@@ -1,6 +1,3 @@
-import Puzzle from "@/components/custom/Icons/Puzzle"
-
-
 import { SpecializationsStore, useSpecializationsStore } from "@/context/specializationsFormStore"
 import { useForm, SubmitHandler } from "react-hook-form";
 import Specialization from "@/components/forms/specializationsPage/specialization"
@@ -87,6 +84,7 @@ const CreateSpecialization = () => {
         <div className="flex flex-col gap-[1.25rem]">
             <div className="flex justify-between">
                 <h1 className="text-[1.875rem] font-bold">Specializations</h1>
+
                 {tableData.length > 0 &&
                     <DialogPopup>
                         <RenderDialog />

@@ -4,9 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -22,7 +20,6 @@ type Props = {
 
 
   export default function SpecialisationsTable({tableData}: Props) {
-
     return (
       <>
         
