@@ -38,7 +38,7 @@ export function LoginForm() {
 
         setIsLoading(false);
         goToHome();
-      }, 10000);
+      }, 3000);
      
     } catch (error) {
       console.error(error);
