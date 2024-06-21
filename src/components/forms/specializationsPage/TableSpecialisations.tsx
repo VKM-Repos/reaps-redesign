@@ -20,6 +20,8 @@ type Props = {
 
 
   export default function SpecialisationsTable({tableData}: Props) {
+
+  
     return (
       <>
         
