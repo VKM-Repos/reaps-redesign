@@ -4,7 +4,7 @@ import { renderRoutes } from './generateRoutes';
 
 import Home from '@/pages/dashboard/home';
 import Requests from '@/pages/dashboard/requests';
-import Specialization from '@/pages/dashboard/create-specializations';
+import Specialization from '@/pages/dashboard/specialization';
 import Pricing from '@/pages/dashboard/pricing';
 import LoginPage from '@/pages/auth/log-in';
 import OnboardingPage from '@/pages/auth/sign-up';

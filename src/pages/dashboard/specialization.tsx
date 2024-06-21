@@ -1,14 +1,40 @@
 import Puzzle from "@/components/custom/Icons/Puzzle"
-import { Button } from "@/components/ui/button"
-import AddIcon from "@/components/custom/Icons/AddIcon"
-import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+
+
 import { SpecializationsStore, useSpecializationsStore } from "@/context/specializationsFormStore"
 import { useForm, SubmitHandler } from "react-hook-form";
 import Specialization from "@/components/forms/specializationsPage/specialization"
 import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
+import SpecialisationsTable from "@/components/forms/specializationsPage/TableSpecialisations"
+import EmptySpecializations from "@/components/custom/EmptySpecialization"
+import DialogPopup from "@/components/custom/DialogPopup";
+
+const tableData = [
+    {
+        id: "1",
+        specialization: 'MBBS',
+        keyword: ["surgery", "bone", ]
+    },
+    {
+        id: "2",
+        specialization: 'Law',
+        keyword: ["judiciary", "executive", ]
+    },
+    {
+        id: "3",
+        specialization: 'MBBS',
+        keyword: ["surgery", "bone", ]
+    },
+    {
+        id: "4",
+        specialization: 'MBBS',
+        keyword: ["surgery", "bone", ]
+    }
+]
 
 const CreateSpecialization = () => {
     const { step, setStep, resetStore } = useSpecializationsStore();
+
     const dialogData = new FormData();
 
     const RenderDialog = () => {
@@ -49,37 +75,38 @@ const CreateSpecialization = () => {
        
         switch (step) {
             case 1: 
-            return <Specialization handleNext={handleNext} />
-            
-
+                return <Specialization handleNext={handleNext} />
             case 2: 
-            return <AddKeyword handleNext={onSubmitHandler}/>
-            
+                return <AddKeyword handleNext={onSubmitHandler}/>
             default:
-                return  null;
+                return null;
         }
 
     }
     return (
-        <div>
-            <h1 className="text-[1.875rem] font-bold">Specializations</h1>
-            <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
-                <div className="w-[96px] h-[96px] pl-2 mx-auto my-[6rem] rounded-full flex justify-center items-center bg-[#FFD13A] ">
-                    <Puzzle />
-                </div>
-                <div className="flex flex-col gap-8 w-full max-w-[37rem] text-center">
-                    <h1 className="text-[1.625rem] leading-8 font-bold">Create and manage specializations</h1>
-                    <p>You can create specializations for your requests, add keywords that fits your request, and manage specialization</p>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6 mx-auto"><span><AddIcon /></span>Create specialization</Button>
-                        </DialogTrigger>
+        <div className="flex flex-col gap-[1.25rem]">
+            <div className="flex justify-between">
+                <h1 className="text-[1.875rem] font-bold">Specializations</h1>
+                {tableData.length > 0 &&
+                    <DialogPopup>
                         <RenderDialog />
-                    </Dialog>
-                </div>
+                    </DialogPopup>
+                }
+            </div>
+            <div className="w-full my-0 mx-auto flex fex-col justify-center items-center">
+                <>
+                    {tableData.length < 0 ? 
+                        <EmptySpecializations>
+                            <RenderDialog />
+                        </EmptySpecializations>
+                        :
+                        <SpecialisationsTable tableData={tableData} />
+                    }
+                </>
             </div>
         </div>
     )
 }
+
 
 export default CreateSpecialization
