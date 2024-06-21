@@ -129,12 +129,6 @@ button:hover {
   text-transform: none !important;
 }
 
-input:invalid {
-  outline: 2px solid var(--destructive);
-  color: var(--destructive-foreground);
-}
-
-
 .notransition {
   -webkit-transition: none !important;
   -moz-transition: none !important;
@@ -143,3 +137,67 @@ input:invalid {
   -webkit-transform: none !important;
   transform: none !important;
 }
+
+  .container {
+    --uib-size: 35px;
+    --uib-color: black;
+    --uib-speed: 2.5s;
+    --uib-dot-size: 8px;
+  }
+
+  .dot {
+    position: absolute;
+    top: 0;
+    left: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 30%;
+    height: 100%;
+  }
+
+  .dot::before {
+    content: '';
+    display: block;
+    height: 0.375rem;
+    width: 0.375rem;
+    border-radius: 50%;
+    background-color: var(--uib-color);
+    transition: background-color 0.3s ease;
+  }
+
+  .dot:nth-child(1) {
+    animation: leapFrog var(--uib-speed) ease infinite;
+  }
+
+  .dot:nth-child(2) {
+    animation: leapFrog var(--uib-speed) ease calc(var(--uib-speed) / -1.5)
+      infinite;
+  }
+
+  .dot:nth-child(3) {
+    animation: leapFrog var(--uib-speed) ease calc(var(--uib-speed) / -3) infinite;
+  }
+
+  @keyframes leapFrog {
+    0% {
+      transform: translateX(0) rotate(0deg);
+    }
+
+    33.333% {
+      transform: translateX(0) rotate(180deg);
+    }
+
+    66.666% {
+      transform: translateX(calc(var(--uib-size) * -0.35)) rotate(180deg);
+    }
+
+    99.999% {
+      transform: translateX(calc(var(--uib-size) * -0.65)) rotate(180deg);
+    }
+
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
