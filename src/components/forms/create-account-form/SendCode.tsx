@@ -18,6 +18,7 @@ const formSchema = z.object({
         .string()
         .max(6, {message: "Please input the code sent to your email"})
         .min(6, {message: "Please input the code sent to your email"})
+        .regex(/^\d+$/, { message: "Code should contain only digits" })
 });
 
 export default function SendCode({ handleNext, handleGoBack }: Props) {
