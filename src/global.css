@@ -124,10 +124,6 @@ button:focus, button:focus-visible {
   border-color: none !important;
 }
 
-button:hover {
-  border-color: transparent !important;
-  text-transform: none !important;
-}
 
 .notransition {
   -webkit-transition: none !important;

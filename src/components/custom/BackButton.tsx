@@ -16,7 +16,7 @@ export default function BackButton({ goBack, title }: Props) {
 
     return(
         <>
-            <button className="bg-transparent mt-4 left-0 flex gap-2 hover:border-0 hover:notransition hover:outline-none" onClick={backFunc}>
+            <button className="bg-transparent mt-4 left-0 flex gap-2" onClick={backFunc}>
                 <img src="icons/arrow-left-02.svg" />
                 <div className="flex flex-col justify-center items-center">
                     <span className="text-base font-black">
