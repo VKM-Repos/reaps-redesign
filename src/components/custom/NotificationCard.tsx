@@ -56,7 +56,7 @@ return (
         <div className="!focus:outline-none !no-transition !hover:border-none w-full">
             <Sheet>
                 <SheetTrigger asChild>
-                    <button className="flex flex-1 w-full items-center justify-between gap-4 p-5 font-medium !rounded-none !border-0 !border-b !border-[#0C0C0F29]">
+                    <button className="flex flex-1 w-full items-center justify-between gap-4 p-5 font-medium rounded-none hover:rounded-lg border-0 hover:border-none hover:bg-[#14155E14] !border-b !border-[#0C0C0F29]">
                         <div className="flex flex-1 justify-between items-center">
                             <p className="text-xs text-left md:text-base">{title}</p>
                             <p className="text-xs text-[#454745] align-middle">{time}</p>
