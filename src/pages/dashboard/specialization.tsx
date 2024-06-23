@@ -4,28 +4,30 @@ import Specialization from "@/components/forms/specializationsPage/specializatio
 import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
 import SpecialisationsTable from "@/components/forms/specializationsPage/TableSpecialisations"
 import EmptySpecializations from "@/components/custom/EmptySpecialization"
-import DialogPopup from "@/components/custom/DialogPopup";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import AddIcon from "@/components/custom/Icons/AddIcon";
 
 const tableData = [
     {
         id: "1",
         specialization: 'MBBS',
-        keyword: ["surgery", "bone", ]
+        keyword: ["Surgery", "Bone", ]
     },
     {
         id: "2",
         specialization: 'Law',
-        keyword: ["judiciary", "executive", ]
+        keyword: ["Judiciary", "Executive", ]
     },
     {
         id: "3",
         specialization: 'MBBS',
-        keyword: ["surgery", "bone", ]
+        keyword: ["Surgery", "Bone", ]
     },
     {
         id: "4",
         specialization: 'MBBS',
-        keyword: ["surgery", "bone", ]
+        keyword: ["Surgery", "Bone", ]
     }
 ]
 
@@ -84,21 +86,23 @@ const CreateSpecialization = () => {
         <div className="flex flex-col gap-[1.25rem]">
             <div className="flex justify-between">
                 <h1 className="text-[1.875rem] font-bold">Specializations</h1>
-
                 {tableData.length > 0 &&
-                    <DialogPopup>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add specialization</Button>
+                        </DialogTrigger>
                         <RenderDialog />
-                    </DialogPopup>
+                    </Dialog>
                 }
             </div>
-            <div className="w-full my-0 mx-auto flex fex-col justify-center items-center">
+            <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
                 <>
-                    {tableData.length < 0 ? 
+                    {tableData.length > 0 ? 
+                        <SpecialisationsTable tableData={tableData} />
+                        :
                         <EmptySpecializations>
                             <RenderDialog />
                         </EmptySpecializations>
-                        :
-                        <SpecialisationsTable tableData={tableData} />
                     }
                 </>
             </div>
