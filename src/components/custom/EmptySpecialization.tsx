@@ -1,5 +1,5 @@
 import { Button } from "../ui/button"
-import { Dialog, DialogTrigger } from "../ui/dialog"
+import { Drawer, DrawerTrigger } from "@/components/ui/drawer"
 import AddIcon from "./Icons/AddIcon"
 import Puzzle from "./Icons/Puzzle"
 
@@ -17,12 +17,12 @@ export default function EmptySpecializations({children}: Props) {
             <div className="flex flex-col gap-8 w-full max-w-[37rem] text-center">
                     <h1 className="text-[1.625rem] leading-8 font-bold">Create and manage specializations</h1>
                     <p>You can create specializations for your requests, add keywords that fits your request, and manage specialization</p>
-                    <Dialog>
-                        <DialogTrigger asChild>
+                    <Drawer>
+                        <DrawerTrigger asChild>
                             <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Create specialization</Button>
-                        </DialogTrigger>
+                        </DrawerTrigger>
                         {children}
-                    </Dialog>
+                    </Drawer>
         </div>
         </>
         

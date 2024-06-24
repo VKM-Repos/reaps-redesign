@@ -1,4 +1,4 @@
-import { DialogContent, DialogClose, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import { DrawerContent, DrawerClose, DrawerDescription, DrawerHeader, DrawerTitle} from "@/components/ui/drawer"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -66,11 +66,11 @@ export default function AddKeyword({handleNext}: Props) {
 
     return (
         <>
-            <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
-                <DialogHeader className="px-1 mt-16">
-                    <DialogTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</DialogTitle>
-                    <DialogDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
-                </DialogHeader>
+            <DrawerContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
+                <DrawerHeader className="px-1 mt-16">
+                    <DrawerTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</DrawerTitle>
+                    <DrawerDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DrawerDescription>
+                </DrawerHeader>
                 <div className="w-full mx-auto my-0 px-1">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col !focus:border-none">
@@ -87,13 +87,13 @@ export default function AddKeyword({handleNext}: Props) {
                                 <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
                             ))}
                             </div>
-                            <DialogClose asChild>
+                            <DrawerClose asChild>
                                 <Button type="submit" variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
-                            </DialogClose> 
+                            </DrawerClose> 
                         </form>
                     </Form>
                     </div>
-            </DialogContent>
+            </DrawerContent>
         </>
     )
 }
