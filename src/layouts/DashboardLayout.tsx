@@ -1,7 +1,7 @@
 import MobileNavBar from "@/components/custom/MobileNavBar";
 import Sidebar from "@/components/custom/SideBar";
 import { MobileProvider } from "@/context/MobileContext";
-import { useMediaQuery } from "react-responsive";
+import { useMediaQuery } from 'react-responsive'
 import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout() {
@@ -26,12 +26,10 @@ export default function DashboardLayout() {
                             </div>
                         </div>
                         {isMobile && 
-                        <MobileNavBar />}
-                        {/* mobile navbar hidden in medium screen below children */}
+                            <MobileNavBar />}
                     </div>
                 </div>
             </main>
-        </MobileProvider>
-        
+        </MobileProvider>  
     )
 }
