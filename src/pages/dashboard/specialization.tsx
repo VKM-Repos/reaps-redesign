@@ -84,7 +84,7 @@ const CreateSpecialization = () => {
     }
     return (
         <div className="flex flex-col gap-[1.25rem]">
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Specializations</h1>
                 {tableData.length > 0 &&
                     <Dialog>

@@ -30,10 +30,10 @@ type Props = {
 
     return (
       <>
-          <Table className="w-full border">
+          <Table className="w-full border overflow-scroll">
               <TableHeader>
-                <TableRow className="font-bold w-full flex justify-between !border-b p-6">
-                  <TableHead className="font-bold text-left w-full !h-auto">Specializations</TableHead>
+                <TableRow className="font-bold w-full flex gap-6 justify-between !border-b p-6">
+                  <TableHead className="font-bold text-left w-full !h-auto min-w-[10rem]">Specializations</TableHead>
                   <TableHead className="font-bold text-left w-full !h-auto">Keywords</TableHead>
                   <TableHead className="font-bold w-full text-right !h-auto pr-6">Action</TableHead>
                 </TableRow>
@@ -41,8 +41,8 @@ type Props = {
               <TableBody>
               {tableArray && (
                   tableArray.map((data: any) => (
-                      <TableRow key={data.id} className="flex items-center justify-between !p-6 !border-none" >
-                          <TableCell>{data.specialization}</TableCell>
+                      <TableRow key={data.id} className="flex items-center justify-between gap-6 !p-6 !border-none" >
+                          <TableCell className="min-w-[10rem]">{data.specialization}</TableCell>
                           <TableCell className="flex gap-2 w-full flex-wrap items-center">
                             {data.keyword.map((item: any, index: number) => (
                                 <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}>{item} </Badge>
