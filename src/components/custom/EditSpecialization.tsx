@@ -66,7 +66,7 @@ export default function EditSpecialization({ specialization, handleNext, onSave 
         <>
             <DialogHeader className="px-1 mt-16">
                 <DialogTitle className="font-bold text-[1.625rem] inter">Edit specialization</DialogTitle>
-                <DialogDescription className="text-[#454745] text-sm inter">Specify your specialization to Help us understand the field of your research, think of it as defining your unique area of expertise.</DialogDescription>
+                <DialogDescription className="text-[#454745] text-sm inter">You can change the name of your specialization below. Make sure to click the “Next” button to save your changes</DialogDescription>
             </DialogHeader>
             <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>

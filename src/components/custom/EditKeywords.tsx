@@ -79,7 +79,7 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
             {/* {isLoading && <Loader />}  */}
             <DialogHeader className="px-1 mt-16">
                 <DialogTitle className="font-bold text-[1.5rem] inter">Edit some keywords</DialogTitle>
-                <DialogDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
+                <DialogDescription className="text-[454745] text-sm inter">Delete or add more keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
             </DialogHeader>
             <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>
