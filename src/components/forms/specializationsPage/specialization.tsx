@@ -1,4 +1,4 @@
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import { DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ export default function Specialization({ handleNext }: Props) {
 
     return (
         <>
-            <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-8 w-full flex flex-col gap-[2.5rem]">
+            {/* <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-8 w-full flex flex-col gap-[2.5rem]"> */}
                 <DialogHeader className="px-1 mt-16">
                     <DialogTitle className="font-bold text-[1.625rem] inter">Create a specialization</DialogTitle>
                     <DialogDescription className="text-[#454745] text-sm inter">Specify your specialization to Help us understand the field of your research, think of it as defining your unique area of expertise.</DialogDescription>
@@ -62,7 +62,7 @@ export default function Specialization({ handleNext }: Props) {
                         </form>
                     </Form>
                 </div>
-            </DialogContent>
+            {/* </DialogContent> */}
             
         </>
         

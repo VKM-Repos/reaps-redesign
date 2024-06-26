@@ -1,4 +1,4 @@
-import { DialogContent, DialogClose, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import { DialogClose, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -22,7 +22,7 @@ const formSchema = z.object({
 })
 
 export default function AddKeyword({handleNext}: Props) {
-    const { data, setData } = useSpecializationsStore();
+    const { data, setData, resetStore } = useSpecializationsStore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -59,6 +59,7 @@ export default function AddKeyword({handleNext}: Props) {
                 }
             });
             handleNext();
+            resetStore();
         } catch (error) {
             console.error(error);
         }
@@ -66,7 +67,7 @@ export default function AddKeyword({handleNext}: Props) {
 
     return (
         <>
-            <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
+            {/* <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]"> */}
                 <DialogHeader className="px-1 mt-16">
                     <DialogTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</DialogTitle>
                     <DialogDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
@@ -93,7 +94,7 @@ export default function AddKeyword({handleNext}: Props) {
                         </form>
                     </Form>
                     </div>
-            </DialogContent>
+            {/* </DialogContent> */}
         </>
     )
 }

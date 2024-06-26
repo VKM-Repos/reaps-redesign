@@ -4,7 +4,7 @@ import Specialization from "@/components/forms/specializationsPage/specializatio
 import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
 import SpecialisationsTable from "@/components/forms/specializationsPage/TableSpecialisations"
 import EmptySpecializations from "@/components/custom/EmptySpecialization"
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import AddIcon from "@/components/custom/Icons/AddIcon";
 
@@ -32,15 +32,12 @@ const tableData = [
 ]
 
 const CreateSpecialization = () => {
-    const { step, setStep, resetStore } = useSpecializationsStore();
+    const { step, setStep } = useSpecializationsStore();
 
     const dialogData = new FormData();
 
     const RenderDialog = () => {
-        if (step === 3) {
-            resetStore();
-        }
-
+    
         const handleNext = () => {
             setStep(step + 1);
             
@@ -91,7 +88,9 @@ const CreateSpecialization = () => {
                         <DialogTrigger asChild>
                             <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add specialization</Button>
                         </DialogTrigger>
-                        <RenderDialog />
+                        <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
+                            <RenderDialog />
+                        </DialogContent>
                     </Dialog>
                 }
             </div>
@@ -109,6 +108,8 @@ const CreateSpecialization = () => {
         </div>
     )
 }
+
+
 
 
 export default CreateSpecialization
