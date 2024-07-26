@@ -1,7 +1,7 @@
-import { Button } from "../ui/button"
-import { Dialog, DialogTrigger } from "../ui/dialog"
-import AddIcon from "./Icons/AddIcon"
-import Puzzle from "./Icons/Puzzle"
+import { Button } from "../../../../components/ui/button"
+import { Dialog, DialogTrigger } from "../../../../components/ui/dialog"
+import AddIcon from "../../../../components/custom/Icons/AddIcon"
+import Puzzle from "../../../../components/custom/Icons/Puzzle"
 
 
 type Props = {
