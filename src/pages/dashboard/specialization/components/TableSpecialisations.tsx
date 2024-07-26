@@ -57,19 +57,20 @@ type Props = {
   };
 
   const handleSaveKeywords = (newKeywords: string[]) => {
-      if (currentEditData) {
-          const updatedData = {
-              ...currentEditData,
-              keyword: newKeywords,
-          };
-          setTableArray(prevData => prevData.map(item => item.id === updatedData.id ? updatedData : item));
-          setCurrentEditData(null);
-      }
-     
-  };
+    if (currentEditData) {
+        const updatedData = {
+            ...currentEditData,
+            keyword: newKeywords,
+        };
+        setTableArray(prevData => prevData.map(item => item.id === updatedData.id ? updatedData : item));
+        setCurrentEditData(null);
+    }
+   
+};
 
   const handleEditClick = (data: { id: string; specialization: string; keyword: [] }) => {
     setCurrentEditData(data);
+
     setStep(1); 
   };
  
@@ -82,15 +83,15 @@ type Props = {
   const RenderDeleteDialog = (data: any) => {
     
     return (
-      <DialogContent className="items-center justify-center px-2 md:max-w-[25rem] md:max-h-[26.5rem] rounded-3xl border-none p-6 w-full flex flex-col gap-[2.5rem]">
+      <DialogContent className="items-center justify-center px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none p-6 w-full flex flex-col gap-[2.5rem]">
         <DeleteIcon />
         <DialogHeader className="flex flex-col items-center justify-center gap-3">
           <DialogTitle className="font-bold text-xl2">Delete</DialogTitle>
           <DialogDescription className="text-[454745] text-sm">Are you sure you want to delete this specialization</DialogDescription>
         </DialogHeader>
         <div className="flex gap-14 w-full items-center justify-center">
-          <DialogClose><Button variant="destructive" className="w-full" onClick={() => {deleteTableItem(data)}}>Delete</Button></DialogClose>
-          <DialogClose><Button variant="ghost" className="w-full">Cancel</Button></DialogClose>
+          <DialogClose className="w-full p-0"><Button variant="destructive" className="w-full rounded-[2.75rem]" onClick={() => {deleteTableItem(data)}}>Delete</Button></DialogClose>
+          <DialogClose className="w-full p-0 rounded-[2.75rem] rounded-md text-sm">Cancel</DialogClose>
         </div>
       </DialogContent>
     )
@@ -109,17 +110,17 @@ type Props = {
               <TableBody>
               {tableArray && (
                   tableArray.map((data: any) => (
-                    <TableRow key={data.id} className="flex items-center justify-between gap-6 !p-6 !border-none" >
+                    <TableRow key={data.id} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none hover:bg-[#14155E14] cursor-pointer" >
                         <TableCell className="min-w-[10rem]">{data.specialization}</TableCell>
-                        <TableCell className="flex gap-2 w-full flex-wrap items-center">
+                        <TableCell className="flex gap-1 w-full flex-wrap items-center">
                           {data.keyword.map((item: any, index: number) => (
-                              <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}>{item} </Badge>
+                              <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A] !p-1.5 !rounded-lg" key={index}>{item} </Badge>
                           ))}
                         </TableCell>
                         <TableCell className="flex justify-end">
                           <Dialog>
                             <DialogTrigger onClick={() => {handleEditClick(data)}}><PencilEdit /></DialogTrigger>
-                              {currentEditData && 
+                              {currentEditData &&
                               <EditDialog 
                               step={step}
                               specialization={currentEditData.specialization}
@@ -142,4 +143,5 @@ type Props = {
       </> 
     )
   }
+
 

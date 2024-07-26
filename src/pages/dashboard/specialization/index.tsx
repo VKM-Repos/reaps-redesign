@@ -86,7 +86,7 @@ const CreateSpecialization = () => {
                 {tableData.length > 0 &&
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add specialization</Button>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add New specialization</Button>
                         </DialogTrigger>
                         <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
                             <RenderDialog />

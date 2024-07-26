@@ -58,7 +58,7 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
 
 
     function onSubmit() {
-        // setIsLoading(true);
+
         try {
             setData({
                 specializationsDetails: {

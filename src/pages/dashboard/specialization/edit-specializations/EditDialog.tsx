@@ -41,7 +41,7 @@ function EditDialog({step, specialization, keywordArray, handleNext, onSaveSpeci
                 setIsLoading(false);
             }
         }
-        console.log(step);
+       
 
 
   return (
