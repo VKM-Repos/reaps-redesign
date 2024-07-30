@@ -21,7 +21,7 @@ import {
 import { useState } from "react";
 import DeleteIcon from "@/components/custom/Icons/DeleteIcon";
 import { DialogClose } from "@radix-ui/react-dialog";
-import EditDialog from "../../custom/EditDialog";
+import EditDialog from "../../../../components/custom/EditDialog";
 
 type Props = {
   tableData: {

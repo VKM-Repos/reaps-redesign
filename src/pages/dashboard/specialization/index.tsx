@@ -2,8 +2,8 @@ import { SpecializationsStore, useSpecializationsStore } from "@/context/special
 import { useForm, SubmitHandler } from "react-hook-form";
 import Specialization from "@/pages/dashboard/specialization/create-specializations/CreateSpecializaton"
 import AddKeyword from "@/pages/dashboard/specialization/create-specializations/AddKeyword"
-import SpecialisationsTable from "@/pages/dashboard/specialization/components/TableSpecialisations"
-import EmptySpecializations from "@/pages/dashboard/specialization/components/EmptySpecialization"
+import SpecialisationsTable from "@/pages/dashboard/specialization/custom/TableSpecialisations"
+import EmptySpecializations from "@/pages/dashboard/specialization/custom/EmptySpecialization"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import AddIcon from "@/components/custom/Icons/AddIcon";

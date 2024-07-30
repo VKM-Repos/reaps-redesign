@@ -110,7 +110,7 @@ type Props = {
               <TableBody>
               {tableArray && (
                   tableArray.map((data: any) => (
-                    <TableRow key={data.id} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none hover:bg-[#14155E14] cursor-pointer" >
+                    <TableRow key={data.id} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer" >
                         <TableCell className="min-w-[10rem]">{data.specialization}</TableCell>
                         <TableCell className="flex gap-1 w-full flex-wrap items-center">
                           {data.keyword.map((item: any, index: number) => (
