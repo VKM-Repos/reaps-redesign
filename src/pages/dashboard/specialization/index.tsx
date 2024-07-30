@@ -1,10 +1,10 @@
 import { SpecializationsStore, useSpecializationsStore } from "@/context/specializationsFormStore"
 import { useForm, SubmitHandler } from "react-hook-form";
-import Specialization from "@/components/forms/specializationsPage/specialization"
-import AddKeyword from "@/components/forms/specializationsPage/AddKeyword"
-import SpecialisationsTable from "@/components/forms/specializationsPage/TableSpecialisations"
-import EmptySpecializations from "@/components/custom/EmptySpecialization"
-import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
+import Specialization from "@/pages/dashboard/specialization/create-specializations/CreateSpecializaton"
+import AddKeyword from "@/pages/dashboard/specialization/create-specializations/AddKeyword"
+import SpecialisationsTable from "@/pages/dashboard/specialization/custom/TableSpecialisations"
+import EmptySpecializations from "@/pages/dashboard/specialization/custom/EmptySpecialization"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import AddIcon from "@/components/custom/Icons/AddIcon";
 
@@ -32,15 +32,12 @@ const tableData = [
 ]
 
 const CreateSpecialization = () => {
-    const { step, setStep, resetStore } = useSpecializationsStore();
+    const { step, setStep } = useSpecializationsStore();
 
     const DrawerData = new FormData();
 
-    const RenderDrawer = () => {
-        if (step === 3) {
-            resetStore();
-        }
-
+    const RenderDialog = () => {
+    
         const handleNext = () => {
             setStep(step + 1);
             
@@ -84,15 +81,17 @@ const CreateSpecialization = () => {
     }
     return (
         <div className="flex flex-col gap-[1.25rem]">
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Specializations</h1>
                 {tableData.length > 0 &&
-                    <Drawer direction="top">
-                        <DrawerTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add specialization</Button>
-                        </DrawerTrigger>
-                        <RenderDrawer />
-                    </Drawer>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add New specialization</Button>
+                        </DialogTrigger>
+                        <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
+                            <RenderDialog />
+                        </DialogContent>
+                    </Dialog>
                 }
             </div>
             <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
@@ -101,7 +100,7 @@ const CreateSpecialization = () => {
                         <SpecialisationsTable tableData={tableData} />
                         :
                         <EmptySpecializations>
-                            <RenderDrawer />
+                            <RenderDialog />
                         </EmptySpecializations>
                     }
                 </>
@@ -109,6 +108,8 @@ const CreateSpecialization = () => {
         </div>
     )
 }
+
+
 
 
 export default CreateSpecialization
