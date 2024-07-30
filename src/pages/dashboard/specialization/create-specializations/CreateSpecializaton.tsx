@@ -1,4 +1,3 @@
-import { DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -6,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import FormInput from "@/components/custom/FormInput";
 import { Form } from "@/components/ui/form";
 import { useSpecializationsStore } from "@/context/specializationsFormStore";
+import { SheetClose, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 
 type Props = {
@@ -45,10 +46,15 @@ export default function Specialization({ handleNext }: Props) {
     return (
         <>
             {/* <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-8 w-full flex flex-col gap-[2.5rem]"> */}
-                <DialogHeader className="px-1 mt-16">
+                {/* <DialogHeader className="px-1 mt-16">
                     <DialogTitle className="font-bold text-[1.625rem] inter">Create a specialization</DialogTitle>
                     <DialogDescription className="text-[#454745] text-sm inter">Specify your specialization to Help us understand the field of your research, think of it as defining your unique area of expertise.</DialogDescription>
-                </DialogHeader>
+                </DialogHeader> */}
+                <SheetClose className="md:pr-4 w-[90%] md:absolute md:py-0 md:right-6 md:w-fit mx-auto py-4 !px-0 flex rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+                <SheetHeader className="px-1 mt-16">
+                    <SheetTitle className="font-bold text-[1.625rem] inter">Create a specialization</SheetTitle>
+                    <SheetDescription className="text-[#454745] text-sm inter">Specify your specialization to Help us understand the field of your research, think of it as defining your unique area of expertise.</SheetDescription>
+                </SheetHeader>
                 <div className="w-full mx-auto my-0 px-1">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-[3.75rem] !focus:border-none">

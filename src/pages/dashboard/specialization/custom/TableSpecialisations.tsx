@@ -11,17 +11,17 @@ import {
   } from "@/components/ui/table";
 import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose
+} from "@/components/ui/sheet"
 import { useState } from "react";
 import DeleteIcon from "@/components/custom/Icons/DeleteIcon";
-import { DialogClose } from "@radix-ui/react-dialog";
-import EditDialog from "../edit-specializations/EditDialog";
+import EditSpecializations from "../edit-specializations";
 
 type Props = {
   tableData: {
@@ -80,20 +80,22 @@ type Props = {
   }
 
 
-  const RenderDeleteDialog = (data: any) => {
+  const RenderDeleteSheet = (data: any) => {
     
     return (
-      <DialogContent className="items-center justify-center px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none p-6 w-full flex flex-col gap-[2.5rem]">
-        <DeleteIcon />
-        <DialogHeader className="flex flex-col items-center justify-center gap-3">
-          <DialogTitle className="font-bold text-xl2">Delete</DialogTitle>
-          <DialogDescription className="text-[454745] text-sm">Are you sure you want to delete this specialization</DialogDescription>
-        </DialogHeader>
-        <div className="flex gap-14 w-full items-center justify-center">
-          <DialogClose className="w-full p-0"><Button variant="destructive" className="w-full rounded-[2.75rem]" onClick={() => {deleteTableItem(data)}}>Delete</Button></DialogClose>
-          <DialogClose className="w-full p-0 rounded-[2.75rem] rounded-md text-sm">Cancel</DialogClose>
+      <SheetContent side="top" className="inset-y-auto inset-l-auto inset-x-[30%] mx-auto rounded-3xl px-2 p-6">
+        <div className="md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none w-full flex flex-col items-center gap-[2.5rem]">
+          <DeleteIcon />
+          <SheetHeader className="flex flex-col items-center justify-center gap-3">
+            <SheetTitle className="font-bold text-xl2">Delete</SheetTitle>
+            <SheetDescription className="text-[454745] text-sm">Are you sure you want to delete this specialization</SheetDescription>
+          </SheetHeader>
+          <div className="flex gap-14 w-full items-center justify-center">
+            <SheetClose className="w-full p-0"><Button variant="destructive" className="w-full rounded-[2.75rem]" onClick={() => {deleteTableItem(data)}}>Delete</Button></SheetClose>
+            <SheetClose className="w-full p-0 rounded-[2.75rem] rounded-md text-sm">Cancel</SheetClose>
+          </div>
         </div>
-      </DialogContent>
+      </SheetContent>
     )
   }
 
@@ -118,21 +120,21 @@ type Props = {
                           ))}
                         </TableCell>
                         <TableCell className="flex justify-end">
-                          <Dialog>
-                            <DialogTrigger onClick={() => {handleEditClick(data)}}><PencilEdit /></DialogTrigger>
+                          <Sheet>
+                            <SheetTrigger onClick={() => {handleEditClick(data)}}><PencilEdit /></SheetTrigger>
                               {currentEditData &&
-                              <EditDialog 
+                              <EditSpecializations
                               step={step}
                               specialization={currentEditData.specialization}
                               keywordArray={currentEditData.keyword}
                               handleNext={handleNext}
                               onSaveSpecializations={handleSaveSpecialization}
                               onSaveKeywords={handleSaveKeywords}/>}
-                          </Dialog>
-                          <Dialog>
-                            <DialogTrigger><Delete /></DialogTrigger>
-                            <RenderDeleteDialog data={data} />
-                          </Dialog>    
+                          </Sheet>
+                          <Sheet>
+                            <SheetTrigger><Delete /></SheetTrigger>
+                            <RenderDeleteSheet data={data} />
+                          </Sheet>    
                         </TableCell>
                     </TableRow>
                   ))

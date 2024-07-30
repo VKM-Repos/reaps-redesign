@@ -1,4 +1,4 @@
-import { DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import { SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -64,10 +64,10 @@ export default function EditSpecialization({ specialization, handleNext, onSave 
 
     return (
         <>
-            <DialogHeader className="px-1 mt-16">
-                <DialogTitle className="font-bold text-[1.625rem] inter">Edit specialization</DialogTitle>
-                <DialogDescription className="text-[#454745] text-sm inter">You can change the name of your specialization below. Make sure to click the “Next” button to save your changes</DialogDescription>
-            </DialogHeader>
+            <SheetHeader className="px-1 mt-16">
+                <SheetTitle className="font-bold text-[1.625rem] inter">Edit specialization</SheetTitle>
+                <SheetDescription className="text-[#454745] text-sm inter">You can change the name of your specialization below. Make sure to click the “Next” button to save your changes</SheetDescription>
+            </SheetHeader>
             <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-[3.75rem] !focus:border-none">

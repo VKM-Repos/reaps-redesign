@@ -1,4 +1,3 @@
-import { DialogClose, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,6 +8,8 @@ import { useSpecializationsStore } from "@/context/specializationsFormStore";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { X } from "lucide-react";
+import { SheetClose, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 
 type Props = {
@@ -67,34 +68,33 @@ export default function AddKeyword({handleNext}: Props) {
 
     return (
         <>
-            {/* <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]"> */}
-                <DialogHeader className="px-1 mt-16">
-                    <DialogTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</DialogTitle>
-                    <DialogDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</DialogDescription>
-                </DialogHeader>
-                <div className="w-full mx-auto my-0 px-1">
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col !focus:border-none">
-                            <FormInput
-                                {...register("keyword", {
-                                required: "This field is required",
-                                onChange: (e) => { addKey(e as React.ChangeEvent<HTMLInputElement>) }
-                                })}
-                                value={keyword}
-                                className="!focus:border-none"
-                            />
-                            <div className="flex gap-2 w-full flex-wrap mt-8">
-                            {keywordsArray.map((item, index) => (
-                                <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
-                            ))}
-                            </div>
-                            <DialogClose asChild>
-                                <Button type="submit" variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
-                            </DialogClose> 
-                        </form>
-                    </Form>
-                    </div>
-            {/* </DialogContent> */}
+            <SheetClose className="md:pr-4 w-[90%] md:absolute md:py-0 md:right-6 md:w-fit mx-auto py-4 !px-0 flex rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+            <SheetHeader className="px-1 mt-16">
+                <SheetTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</SheetTitle>
+                <SheetDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</SheetDescription>
+            </SheetHeader>
+            <div className="w-full mx-auto my-0 px-1">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col !focus:border-none">
+                        <FormInput
+                            {...register("keyword", {
+                            required: "This field is required",
+                            onChange: (e) => { addKey(e as React.ChangeEvent<HTMLInputElement>) }
+                            })}
+                            value={keyword}
+                            className="!focus:border-none"
+                        />
+                        <div className="flex gap-2 w-full flex-wrap mt-8">
+                        {keywordsArray.map((item, index) => (
+                            <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
+                        ))}
+                        </div>
+                        <SheetClose asChild>
+                            <Button type="submit" variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
+                        </SheetClose> 
+                    </form>
+                </Form>
+            </div>
         </>
     )
 }
