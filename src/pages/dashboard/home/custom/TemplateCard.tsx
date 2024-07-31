@@ -1,5 +1,5 @@
-import DocAttachment from "./Icons/DocAttachment"
-import Download from "./Icons/Download"
+import DocAttachment from "../../../../components/custom/Icons/DocAttachment"
+import Download from "../../../../components/custom/Icons/Download"
 export default function TemplateCard() {
     return (
         <a href="" className={`relative w-full md:max-w-[17.5rem] flex flex-col gap-8 justify-left p-5 rounded-2xl hover:bg-[#14155E14] hover:border-none border border-[#0C0C0F29]`} download>

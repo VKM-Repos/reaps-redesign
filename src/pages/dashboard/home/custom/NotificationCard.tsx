@@ -1,8 +1,9 @@
 import { 
     Sheet,
+    SheetClose,
     SheetContent,
     SheetTrigger
- } from "../ui/sheet"
+ } from "../../../../components/ui/sheet"
  import {
     Table,
     TableBody,
@@ -11,8 +12,9 @@ import {
     TableFooter,
     TableRow,
   } from "@/components/ui/table"
-import { Button } from "../ui/button"
-import ArrowRight from "./Icons/ArrowRight"
+import { Button } from "../../../../components/ui/button"
+import ArrowRight from "../../../../components/custom/Icons/ArrowRight"
+import HoverCancel from "@/components/custom/Icons/HoverCancel"
 
 type Props = {
     title: string,
@@ -65,7 +67,11 @@ return (
                     </button>
                 </SheetTrigger>
                 <SheetContent side="right">
-                    <NotificationDetails id={id} title={title}  />
+                    <div className="flex flex-col gap-[1rem]">
+                        <SheetClose className="md:absolute md:right-6 !w-fit md:mx-auto py-0 md:!px-0 pl-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+                        <NotificationDetails id={id} title={title}  />
+                    </div>
+                    
                 </SheetContent>
             </Sheet>
         </div>    

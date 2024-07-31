@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import DocValidation from "@/components/custom/Icons/DocValidation";
-import SummaryCard from "@/components/custom/SummaryCard";
+import SummaryCard from "@/pages/dashboard/home/custom/SummaryCard";
 import Loading from "@/components/custom/Icons/Loading";
-import TemplateCard from "@/components/custom/TemplateCard";
-import NotificationCard from "@/components/custom/NotificationCard"
+import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
+import NotificationCard from "@/pages/dashboard/home/custom/NotificationCard"
 
 
 const notifications = [
@@ -65,7 +65,7 @@ const Home = () => {
             </div>
             <div className="flex flex-col gap-4">
                 <h1 className="text-[1.375rem] font-bold">Recent Activities</h1>
-                <div className="w-full mt-8 mb-12 mx-auto flex flex-col items-center">                     
+                <div className="w-full mt-8 mb-24 mx-auto flex flex-col items-center">                     
                   {notifications.map((notification: any) => (
                         <NotificationCard id={notification.id} key={notification.id} title={notification.title} time={notification.time} />
 
