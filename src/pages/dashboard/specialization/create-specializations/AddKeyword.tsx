@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { X } from "lucide-react";
 import { SheetClose, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 
 type Props = {
@@ -23,7 +22,7 @@ const formSchema = z.object({
 })
 
 export default function AddKeyword({handleNext}: Props) {
-    const { data, setData, resetStore } = useSpecializationsStore();
+    const { data, setData } = useSpecializationsStore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -60,7 +59,6 @@ export default function AddKeyword({handleNext}: Props) {
                 }
             });
             handleNext();
-            resetStore();
         } catch (error) {
             console.error(error);
         }
@@ -68,10 +66,9 @@ export default function AddKeyword({handleNext}: Props) {
 
     return (
         <>
-            <SheetClose className="md:pr-4 w-[90%] md:absolute md:py-0 md:right-6 md:w-fit mx-auto py-4 !px-0 flex rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
             <SheetHeader className="px-1 mt-16">
-                <SheetTitle className="font-bold text-[1.5rem] inter">Awesome, now add some keywords</SheetTitle>
-                <SheetDescription className="text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</SheetDescription>
+                <SheetTitle className="text-left md:text-center font-bold text-[1.5rem] inter">Awesome, now add some keywords</SheetTitle>
+                <SheetDescription className="text-left md:text-center text-[454745] text-sm inter">Enter some keywords related to your research. Enter as many as you like separated by comma(,)</SheetDescription>
             </SheetHeader>
             <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>

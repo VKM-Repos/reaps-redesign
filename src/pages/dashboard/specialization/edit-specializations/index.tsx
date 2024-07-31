@@ -5,6 +5,7 @@ import EditSpecialization from "./EditSpecialization";
 import Loader from "../../../../components/custom/Loader";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
 import HoverCancel from "@/components/custom/Icons/HoverCancel";
+import { useMediaQuery } from "react-responsive";
 
 
 
@@ -20,6 +21,7 @@ type EditProps = {
 
 function EditSpecializations({step, specialization, keywordArray, handleNext, onSaveSpecializations, onSaveKeywords }: EditProps) {
     const [isLoading, setIsLoading] = useState(false);
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     
     let formData = new FormData();
     function handleSubmit() {
@@ -32,9 +34,8 @@ function EditSpecializations({step, specialization, keywordArray, handleNext, on
                     ? data?.specializationsDetails.keyword.join(', ')
                     : data?.specializationsDetails.keyword ?? '';
                 formData.append("keyword", keywords);
-                
-
                 handleNext();
+                
             } catch (error) {
                 console.error(error);
             }
@@ -47,19 +48,20 @@ function EditSpecializations({step, specialization, keywordArray, handleNext, on
   return (
     <>
         {isLoading && <Loader /> }
-        <SheetContent side="top" className="inset-y-auto inset-l-auto inset-x-[30%] mx-auto rounded-3xl px-6 pb-16 px-2">
-            <SheetClose className="md:pr-4 w-[90%] md:absolute md:py-0 md:right-6 md:w-fit mx-auto py-4 !px-0 flex rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
-            <div className="md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none pb-8 w-full flex flex-col gap-[2.5rem]">
-                {step == 1 && (
-                    <>
-                        <EditSpecialization handleNext={handleNext} specialization={specialization} onSave={onSaveSpecializations}/>
-                    </>
-                )}
-                {step == 2 && (
-                    <>
-                        <EditKeyword keywordArray={keywordArray} handleNext={handleSubmit} onSave={onSaveKeywords}/>
-                    </>
-                )}
+        {/* Keywords overflow, loader not working  */}
+        <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[30rem] focus-visible:outline-none overflow-y-hidden`}>
+            <SheetClose className="absolute right-6 w-fit mx-auto py-0 !px-0 flex opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+            <div className={`h-full md:max-h-[26.5rem] border-none w-full flex flex-col gap-[2.5rem]`}>  
+            {step == 1 && (
+                <>
+                    <EditSpecialization handleNext={handleNext} specialization={specialization} onSave={onSaveSpecializations}/>
+                </>
+            )}
+            {step == 2 && (
+                <>
+                    <EditKeyword keywordArray={keywordArray} handleNext={handleSubmit} onSave={onSaveKeywords}/>
+                </>
+            )}
             </div>
         </SheetContent>
     </>

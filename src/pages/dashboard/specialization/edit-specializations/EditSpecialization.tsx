@@ -64,9 +64,9 @@ export default function EditSpecialization({ specialization, handleNext, onSave 
 
     return (
         <>
-            <SheetHeader className="px-1 mt-16">
-                <SheetTitle className="font-bold text-[1.625rem] inter">Edit specialization</SheetTitle>
-                <SheetDescription className="text-[#454745] text-sm inter">You can change the name of your specialization below. Make sure to click the “Next” button to save your changes</SheetDescription>
+            <SheetHeader className="px-1 mt-20 md:mt-16">
+                <SheetTitle className="text-left md:text-center font-bold text-[1.625rem] inter">Edit specialization</SheetTitle>
+                <SheetDescription className="text-left md:text-center text-[#454745] text-sm inter">You can change the name of your specialization below. Make sure to click the “Next” button to save your changes</SheetDescription>
             </SheetHeader>
             <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>

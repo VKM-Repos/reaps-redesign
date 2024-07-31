@@ -9,7 +9,6 @@ import { useSpecializationsStore } from "@/context/specializationsFormStore";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { X } from "lucide-react";
-import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 
 
@@ -27,7 +26,7 @@ const formSchema = z.object({
 })
 
 export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
-    const { data, setData, resetStore } = useSpecializationsStore();
+    const { data, setData } = useSpecializationsStore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,9 +34,6 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
     const { register, reset } = form;
     const [keyword, setKeyword] = useState<string>("");
     const [keywordsArray, setKeywordsArray] = useState<string[]>(keywordArray);
-
-   
-
     
     function addKey(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
@@ -48,7 +44,6 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
             setKeywordsArray((prev) => [...prev, ...uniqueKeywords.filter(kw => !prev.includes(kw))]);
             reset({ keyword: "" }); 
         }
-       
     }
 
  
@@ -69,7 +64,6 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
             });
             onSave(keywordsArray);
             handleNext();
-            resetStore();
         } catch (error) {
             console.error(error);
         }
@@ -77,11 +71,9 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
 
     return (
         <>
-            {/* {isLoading && <Loader />}  */}
-            <SheetClose className="md:pr-4 w-[90%] md:absolute md:py-0 md:right-6 md:w-fit mx-auto py-4 !px-0 flex rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
-            <SheetHeader className="px-1 mt-16">
-                <SheetTitle className="font-bold text-[1.5rem] inter">Edit some keywords</SheetTitle>
-                <SheetDescription className="text-[454745] text-sm inter">Delete or add more keywords related to your research. Enter as many as you like separated by comma(,)</SheetDescription>
+            <SheetHeader className="px-1 mt-20 md:mt-16">
+                <SheetTitle className="font-bold text-left md:text-center text-[1.5rem] inter">Edit some keywords</SheetTitle>
+                <SheetDescription className="text-left md:text-center text-[454745] text-sm inter">Delete or add more keywords related to your research. Enter as many as you like separated by comma(,)</SheetDescription>
             </SheetHeader>
             <div className="w-full mx-auto my-0 px-1">
                 <Form {...form}>
@@ -104,8 +96,7 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
                         </SheetClose> 
                     </form>
                 </Form>
-                </div>
-
+            </div>
         </>
     )
 }

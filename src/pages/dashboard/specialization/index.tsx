@@ -6,7 +6,9 @@ import SpecialisationsTable from "@/pages/dashboard/specialization/custom/TableS
 import EmptySpecializations from "@/pages/dashboard/specialization/custom/EmptySpecialization"
 import { Button } from "@/components/ui/button";
 import AddIcon from "@/components/custom/Icons/AddIcon";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useMediaQuery } from "react-responsive";
+import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 const tableData = [
     {
@@ -32,15 +34,14 @@ const tableData = [
 ]
 
 const CreateSpecialization = () => {
-    const { step, setStep } = useSpecializationsStore();
+    const { step, setStep, resetStore } = useSpecializationsStore();
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
     const DrawerData = new FormData();
 
     const RenderDialog = () => {
-    
         const handleNext = () => {
-            setStep(step + 1);
-            
+            setStep(step + 1);   
         };
 
         const createSpecializationsDetails = async () => {
@@ -54,7 +55,7 @@ const CreateSpecialization = () => {
                 DrawerData.append("keyword", keywords);
 
                 setTimeout(() => {
-                    handleNext();
+                    resetStore();
                 }, 5000)
             }
             catch (error: any) {
@@ -84,20 +85,13 @@ const CreateSpecialization = () => {
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Specializations</h1>
                 {tableData.length > 0 &&
-                    // <Dialog>
-                    //     <DialogTrigger asChild>
-                    //         <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add New specialization</Button>
-                    //     </DialogTrigger>
-                    //     <DialogContent className="px-2 md:max-w-[30rem] md:max-h-[26.5rem] rounded-3xl border-none px-6 pb-16 w-full flex flex-col gap-[2.5rem]">
-                    //         <RenderDialog />
-                    //     </DialogContent>
-                    // </Dialog>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6"><span><AddIcon /></span>Add New specialization</Button>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><AddIcon /></span>Add New specialization</Button>
                         </SheetTrigger>
-                        <SheetContent side="top" className="inset-y-auto inset-l-auto inset-x-[30%] mx-auto rounded-3xl px-6 pb-16 px-2">
-                            <div className=" md:max-w-[30rem] md:max-h-[26.5rem]  border-none  w-full flex flex-col gap-[2.5rem]">
+                        <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[30rem] focus-visible:outline-none overflow-y-hidden`}>
+                            <SheetClose className="absolute right-6 w-fit mx-auto py-0 !px-0 flex opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+                            <div className={`h-full md:max-h-[26.5rem] border-none w-full flex flex-col gap-[2.5rem]`}>
                                 <RenderDialog />
                             </div>
                         </SheetContent>  
