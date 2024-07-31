@@ -68,7 +68,7 @@ return (
                 </SheetTrigger>
                 <SheetContent side="right">
                     <div className="flex flex-col gap-[1rem]">
-                        <SheetClose className="md:absolute md:right-6 !w-fit md:mx-auto py-0 md:!px-0 pl-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+                        <SheetClose className="md:absolute md:right-6 !w-fit md:mx-auto py-0 px-0 ml-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
                         <NotificationDetails id={id} title={title}  />
                     </div>
                     
