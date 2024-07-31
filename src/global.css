@@ -81,8 +81,28 @@
   }
 
   html, body, #root, #root>div {
-    width: 100%;
+    width: 100%;;
   }
+
+  :-webkit-scrollbar {
+    width: 2rem;
+}
+ 
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+ 
+
+::-webkit-scrollbar-thumb {
+    background: #868687;
+    border-radius: 5px;
+}
+ 
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 
  *, *::before,
  *::after {

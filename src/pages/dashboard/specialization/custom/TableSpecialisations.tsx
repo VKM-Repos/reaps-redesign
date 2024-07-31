@@ -110,7 +110,7 @@ type Props = {
                 <TableRow className="font-bold w-full flex gap-6 justify-between !border-b p-6">
                   <TableHead className="font-bold text-left w-full !h-auto min-w-[10rem]">Specializations</TableHead>
                   <TableHead className="font-bold text-left w-full !h-auto">Keywords</TableHead>
-                  <TableHead className="font-bold w-full text-right !h-auto pr-6">Action</TableHead>
+                  <TableHead className="font-bold w-full text-right pr-5 !h-auto ">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -123,9 +123,9 @@ type Props = {
                               <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A] !p-1.5 !rounded-lg" key={index}>{item}</Badge>
                           ))}
                         </TableCell>
-                        <TableCell className="flex justify-end">
+                        <TableCell className="flex items-center justify-end gap-4">
                           <Sheet>
-                            <SheetTrigger onClick={() => {handleEditClick(data)}}><PencilEdit /></SheetTrigger>
+                            <SheetTrigger className="px-0" onClick={() => {handleEditClick(data)}}><PencilEdit /></SheetTrigger>
                               {currentEditData &&
                               <EditSpecializations
                               step={step}
@@ -136,7 +136,7 @@ type Props = {
                               onSaveKeywords={handleSaveKeywords}/>}
                           </Sheet>
                           <Sheet>
-                            <SheetTrigger><Delete /></SheetTrigger>
+                            <SheetTrigger className="px-0"><Delete /></SheetTrigger>
                             <RenderDeleteSheet data={data} />
                           </Sheet>    
                         </TableCell>
@@ -149,5 +149,3 @@ type Props = {
       </> 
     )
   }
-
-
