@@ -40,11 +40,10 @@ export default function SelectSpecialization({ handleNext }: Props) {
         resolver: zodResolver(formSchema),
     });
 
-    const { formState: { isValid } } = form;
+    const { formState: { isValid }, setValue } = form;
     
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-       
         try {
             setData({
                 requestsDetails: {
@@ -63,7 +62,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
 
   return (
     <>
-    {specialization.length > 0 ?
+    {specialization.length < 0 ?
         <>
             <div className="flex flex-col justify-center items-center">
                 <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Select your specialization</h1>
@@ -73,11 +72,8 @@ export default function SelectSpecialization({ handleNext }: Props) {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                         <div className="flex flex-col text-xs mt-2">
                             <Select onValueChange={(value: string) => {
-                                const selectedSpec: any = specialization.find(specValue => specValue === value);
-                                if (selectedSpec) {
-                                    setSpec(selectedSpec);
-                                    // console.log(spec);
-                                }
+                                setValue("specialisation", value, { shouldValidate: true });
+                                setSpec(value);
                             }}>
                                 <Label className="font-sm">Select your Specialisation</Label>
                                 <SelectTrigger className="w-full mt-2">
