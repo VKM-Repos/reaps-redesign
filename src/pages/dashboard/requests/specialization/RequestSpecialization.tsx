@@ -6,7 +6,7 @@ import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/s
 import { useMediaQuery } from "react-responsive";
 import HoverCancel from "@/components/custom/Icons/HoverCancel";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+
 
 
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
 const RequestSpecialization = ({handleSpecNext}: Props) => {
     const { step, setStep, resetStore } = useSpecializationsStore();
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
-    const [ buttonIsValid, setButtonIsValid ] = useState(true);
 
    
 
@@ -24,7 +23,6 @@ const RequestSpecialization = ({handleSpecNext}: Props) => {
 
     const DrawerData = new FormData();
     const RenderDialog = () => {
-        setButtonIsValid(false);
         const handleNext = () => {
             setStep(step + 1);   
         };
