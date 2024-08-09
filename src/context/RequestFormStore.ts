@@ -4,13 +4,24 @@ import {
     PersistOptions,
 } from "zustand/middleware";
 
+
+export interface CheckboxGroup {
+    [key: string]: {
+      label: string;
+      value: boolean;
+    };
+  };
+
 export interface RequestsStore {
+    
     step: number;
     data: {
       requestsDetails: {
-        checkbox: string[] | null;
+        checkbox: CheckboxGroup | null;
         specialisation: string;
         institution: string;
+        title: string;
+        objectives: string;
       };
      
     };
@@ -32,7 +43,9 @@ type MyPersist = (
                 requestsDetails: {
                     checkbox: null,
                     specialisation: '',
-                    institution: ''
+                    institution: '',
+                    title: '',
+                    objectives: ''
                 },
             },
             setStep: (step) => set({ step }),
@@ -44,7 +57,9 @@ type MyPersist = (
                     requestsDetails: {
                         checkbox: null,
                         specialisation: '',
-                        institution: ''
+                        institution: '',
+                        title: '',
+                        objectives: ''
                     }
                 }
             });

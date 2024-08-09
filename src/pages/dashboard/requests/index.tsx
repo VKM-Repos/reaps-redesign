@@ -2,8 +2,8 @@ import { useRequestsStore, RequestsStore } from "@/context/RequestFormStore"
 import { SubmitHandler, useForm } from "react-hook-form";
 // import { useMediaQuery } from "react-responsive";
 import EmptyRequests from "./custom/EmptyRequests";
-import { AppInfo } from "./create-requests/AppInfo";
 import SelectSpecialization from "./specialization/SelectSpecialization";
+import ResearchInfo from "./create-requests/ResearchInfo";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -46,8 +46,10 @@ const CreateRequests = () => {
                 return <EmptyRequests handleNext={handleNext} />
             case 2:
                 return <SelectSpecialization handleNext={handleNext}/>
+            // case 3:
+            //     return <SelectInstitution handleSpecNext={handleNext} />
             case 3:
-                return <AppInfo handleNext={onSubmitHandler} />
+                return <ResearchInfo handleNext={onSubmitHandler} />
             default: 
                 return null;    
         }
