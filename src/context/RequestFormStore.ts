@@ -5,11 +5,20 @@ import {
 } from "zustand/middleware";
 
 
-export interface CheckboxGroup {
-    [key: string]: {
+// export interface CheckboxGroup {
+//     [key: string]: {
+//       label: string;
+//       value: boolean;
+//     };
+//   };
+
+export type CheckboxGroup = {
+    id: string;
+    question: string;
+    options: {
       label: string;
       value: boolean;
-    };
+    }[]
   };
 
 export interface RequestsStore {
@@ -17,7 +26,7 @@ export interface RequestsStore {
     step: number;
     data: {
       requestsDetails: {
-        checkbox: CheckboxGroup | null;
+        checkbox: CheckboxGroup[] | null;
         specialisation: string;
         institution: string;
         title: string;
