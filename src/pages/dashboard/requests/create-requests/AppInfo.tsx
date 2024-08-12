@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 // import FormCheckBox from "@/components/custom/FormCheckBox";
 // import { useMediaQuery } from "react-responsive";
 import { CheckboxGroup, useRequestsStore } from "@/context/RequestFormStore";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@radix-ui/react-checkbox";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +26,17 @@ const checkboxSchema = z.object({
 const formSchema = z.array(checkboxSchema)
 
 const initialCheckboxes: CheckboxGroup[] = [
+const formSchema = z.array(checkboxSchema)
+
+const initialCheckboxes: CheckboxGroup[] = [
     {
+      id: "q1",
+      question: "What is your name?",
+      options: [
+        { label: "Yes", value: false },
+        { label: "No", value: false },
+      ],
+    }, {
       id: "q1",
       question: "What is your name?",
       options: [
@@ -41,8 +51,22 @@ const initialCheckboxes: CheckboxGroup[] = [
         { label: "Yes", value: false },
         { label: "No", value: false },
       ],
+    },{
+      id: "q2",
+      question: "What is your favorite color?",
+      options: [
+        { label: "Yes", value: false },
+        { label: "No", value: false },
+      ],
     },
     {
+        id: "q3",
+        question: "What is your status?",
+        options: [
+          { label: "Student", value: false },
+          { label: "Researcher", value: false },
+        ],
+    }, {
         id: "q3",
         question: "What is your status?",
         options: [
@@ -60,10 +84,12 @@ type Props = {
 
 export default function AppInfo({ handleNext}: Props) {
     // const isMobile = useMediaQuery({query: 'min-width: 768px'});
-
+    const [ checkboxArray, setCheckboxArray ] = useState<CheckboxGroup[]>(initialCheckboxes);
     const { data, setData } = useRequestsStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues: initialCheckboxes
+        
     });
     const { control } = form;
 
@@ -71,6 +97,31 @@ export default function AppInfo({ handleNext}: Props) {
     // const [checkbox, setCheckbox] = useState<string>("");
     // const [checkboxArray, setCheckboxArray] = useState<string[]>([]);
 
+    const handleCheckBoxChange = (id: string, selectedLabel: string) => {
+        setCheckboxArray((prev) =>
+          prev.map((checkbox) => {
+            if (checkbox.id === id) {
+                // console.log(option.label);
+                console.log(selectedLabel)
+              return {
+                ...checkbox,
+                options: checkbox.options.map((option) =>
+                    
+                  option.label === selectedLabel
+                    ? { ...option, value: option.value } // Toggle the selected option
+                    : { ...option, value: false } // Uncheck all other options
+                ),
+              };
+            }
+            console.log(checkbox.options)
+            return checkbox;
+          })
+        );
+      };
+    
+
+    
+    function onSubmit() {
     const handleCheckBoxChange = (id: string, selectedLabel: string, value: boolean) => {
         //incorporate field.value, if checkbox is clicked, set field.value to true, if value is true
         setCheckboxArray((prev) =>
@@ -107,7 +158,7 @@ export default function AppInfo({ handleNext}: Props) {
                     ...data.requestsDetails,
                     checkbox: checkboxArray
                 }
-            });
+            })
             handleNext();
             console.log(checkboxArray);
         } catch(error) {
@@ -143,7 +194,7 @@ export default function AppInfo({ handleNext}: Props) {
                                                             <FormLabel>
                                                                 <Checkbox
                                                                 checked={field.value}
-                                                                onCheckedChange={() => {handleCheckBoxChange(group.id, option.label, field.value); field.onChange(!field.value);}}
+                                                                onCheckedChange={() => {handleCheckBoxChange(group.id, option.label, field.value); field.onChange(); console.log(option.value)}}
                                                                 />
                                                                 {option.label}
                                                             </FormLabel>
