@@ -5,44 +5,51 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 // import FormCheckBox from "@/components/custom/FormCheckBox";
 // import { useMediaQuery } from "react-responsive";
-import { useRequestsStore } from "@/context/RequestFormStore";
-import { Checkbox } from "@radix-ui/react-checkbox";
+import { CheckboxGroup, useRequestsStore } from "@/context/RequestFormStore";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 
-const formSchema = z.
-object({
-    checkbox: z
-    .object({
-        key: z.object({
-            id: z.string(),
-            label: z.string(),
-            value: z.boolean()
+
+const checkboxSchema = z.object({
+    id: z.string().min(1, {message: "Please fill this field"}),
+    question: z.string().min(1, {message: "Please fill this field"}),
+    options: z.array(
+        z.object({
+          label: z.string().min(1, { message: "Please fill this field" }),
+          value: z.boolean(),
         })
-    })
+    ),
 })
 
-const questions = [
+const formSchema = z.array(checkboxSchema)
+
+const initialCheckboxes: CheckboxGroup[] = [
     {
-    key: {
-        id: "1",
-        label: "Why",
-        value: true,
-    }
-},
+      id: "q1",
+      question: "What is your name?",
+      options: [
+        { label: "Yes", value: false },
+        { label: "No", value: false },
+      ],
+    },
     {
-    key: {
-        id: "2",
-        label: "How",
-        value: true,
-    }
-},
+      id: "q2",
+      question: "What is your favorite color?",
+      options: [
+        { label: "Yes", value: false },
+        { label: "No", value: false },
+      ],
+    },
     {
-    key: {
-        id: "3",
-        label: "What",
-        value: true,
+        id: "q3",
+        question: "What is your status?",
+        options: [
+          { label: "Student", value: false },
+          { label: "Researcher", value: false },
+        ],
     }
-},
 ]
 
 
@@ -51,7 +58,7 @@ type Props = {
 }
 
 
-export function AppInfo({ handleNext}: Props) {
+export default function AppInfo({ handleNext}: Props) {
     // const isMobile = useMediaQuery({query: 'min-width: 768px'});
 
     const { data, setData } = useRequestsStore();
@@ -60,19 +67,49 @@ export function AppInfo({ handleNext}: Props) {
     });
     const { control } = form;
 
-    // const { register, reset, formState: { isValid }} = form;
+    const { register, reset, formState: { isValid }} = form;
     // const [checkbox, setCheckbox] = useState<string>("");
     // const [checkboxArray, setCheckboxArray] = useState<string[]>([]);
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const handleCheckBoxChange = (id: string, selectedLabel: string, value: boolean) => {
+        //incorporate field.value, if checkbox is clicked, set field.value to true, if value is true
+        setCheckboxArray((prev) =>
+          prev.map((checkbox) => {
+            if (checkbox.id === id ) {
+                // console.log(option.label);
+                // console.log(checkbox)
+                // value = option.value
+              return {
+                ...checkbox,
+                options: checkbox.options.map((option) =>    
+                  option.label === selectedLabel
+                    ? { ...option, value: value } // Toggle the selected option
+                    : { ...option, value: false } // Uncheck all other options
+                ),
+              };
+            }
+            console.log(checkbox.options);
+            return checkbox;
+          })
+        
+        );
+      };
+
+    // take in selected checkbox
+    // 
+    
+
+    
+    function onSubmit() {
         try {
             setData({
                 requestsDetails: {
                     ...data.requestsDetails,
-                    checkbox: values.checkbox
+                    checkbox: checkboxArray
                 }
             });
             handleNext();
+            console.log(checkboxArray);
         } catch(error) {
             console.error(error);
         }
@@ -86,17 +123,43 @@ export function AppInfo({ handleNext}: Props) {
             <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
-                        <FormField
+                        {/* <FormField
                             control={control}
-                            name="checkbox"
+                            name=
                             render={() => (
-                                <FormItem>
+                                <FormItem> */}
                                     <div>
-                                        {questions.map(({ key }) => (
+                                    {initialCheckboxes.map((group, groupIndex) => (
+                                        <div key={group.id}>
+                                            <h3>{group.question}</h3>
+                                            {group.options.map((option, optionIndex) => (
                                             <FormField
-                                                key={key.id}
+                                                key={option.label}
+                                                name={`${groupIndex}.options.${optionIndex}.value`}  // Matches the expected path
                                                 control={control}
-                                                name="checkbox"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormControl>
+                                                            <FormLabel>
+                                                                <Checkbox
+                                                                checked={field.value}
+                                                                onCheckedChange={() => {handleCheckBoxChange(group.id, option.label, field.value); field.onChange(!field.value);}}
+                                                                />
+                                                                {option.label}
+                                                            </FormLabel>
+                                                        </FormControl>
+                                                    </FormItem>
+                                                
+                                                )}
+                                            />
+                                            ))}
+                                        </div>
+                                        ))}
+                                        {/* {initialCheckboxes.map((checkbox) => (
+                                            <FormField
+                                                key={checkbox.id}
+                                                control={control}
+                                                name={checkbox}
                                                 render={({ field }) => {
                                                     // const { value, onChange } = field;
                                                     return (
@@ -121,11 +184,12 @@ export function AppInfo({ handleNext}: Props) {
                                                 }}>
 
                                             </FormField>
-                                        ))}
+                                        ))} */}
                                     </div>
-                                </FormItem>
+                                {/* </FormItem>
                             )}
-                            />
+                            /> */}
+                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>
 
                 </Form>
