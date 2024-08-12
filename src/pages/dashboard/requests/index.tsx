@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import EmptyRequests from "./custom/EmptyRequests";
 import SelectSpecialization from "./specialization/SelectSpecialization";
 import ResearchInfo from "./create-requests/ResearchInfo";
-import AppInfo from "./create-requests/AppInfo";
+// import AppInfo from "./create-requests/AppInfo";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -50,7 +50,7 @@ const CreateRequests = () => {
             // case 3:
             //     return <SelectInstitution handleSpecNext={handleNext} />
             case 3:
-                return <AppInfo handleNext={onSubmitHandler} />
+                return <ResearchInfo handleNext={onSubmitHandler} />
             default: 
                 return null;    
         }

@@ -3,10 +3,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-// import FormCheckBox from "@/components/custom/FormCheckBox";
-// import { useMediaQuery } from "react-responsive";
 import { CheckboxGroup, useRequestsStore } from "@/context/RequestFormStore";
-import { Checkbox } from "@radix-ui/react-checkbox";
+import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -26,52 +24,50 @@ const checkboxSchema = z.object({
 const formSchema = z.array(checkboxSchema)
 
 const initialCheckboxes: CheckboxGroup[] = [
-const formSchema = z.array(checkboxSchema)
-
-const initialCheckboxes: CheckboxGroup[] = [
     {
-      id: "q1",
-      question: "What is your name?",
+      id: "q0",
+      question: "Are you the principal Investigator or a Local Principal Investigator?",
       options: [
         { label: "Yes", value: false },
         { label: "No", value: false },
       ],
     }, {
       id: "q1",
-      question: "What is your name?",
+      question: "How would you describe yourself?",
       options: [
-        { label: "Yes", value: false },
-        { label: "No", value: false },
+        { label: "Student", value: false },
+        { label: "Researcher", value: false },
       ],
-    },
+  },
     {
-      id: "q2",
-      question: "What is your favorite color?",
+      id: "q3",
+      question: "Is there a Co-Principal Investigator?",
       options: [
         { label: "Yes", value: false },
         { label: "No", value: false },
       ],
     },{
-      id: "q2",
-      question: "What is your favorite color?",
+      id: "q4",
+      question: "Is the project sponsored?",
       options: [
         { label: "Yes", value: false },
         { label: "No", value: false },
       ],
     },
-    {
-        id: "q3",
-        question: "What is your status?",
+     {
+        id: "q5",
+        question: "Did You Complete Ethics Training?",
         options: [
-          { label: "Student", value: false },
-          { label: "Researcher", value: false },
+          { label: "Yes", value: false },
+          { label: "No", value: false },
         ],
-    }, {
-        id: "q3",
-        question: "What is your status?",
+    },
+     {
+        id: "q6",
+        question: "Will materials or tissue specimens be shipped out of the country?",
         options: [
-          { label: "Student", value: false },
-          { label: "Researcher", value: false },
+          { label: "Yes", value: false },
+          { label: "No", value: false },
         ],
     }
 ]
@@ -93,61 +89,28 @@ export default function AppInfo({ handleNext}: Props) {
     });
     const { control } = form;
 
-    const { register, reset, formState: { isValid }} = form;
-    // const [checkbox, setCheckbox] = useState<string>("");
-    // const [checkboxArray, setCheckboxArray] = useState<string[]>([]);
-
-    const handleCheckBoxChange = (id: string, selectedLabel: string) => {
+    const handleCheckBoxChange = (id: string, selectedLabel: string, checked: string | boolean) => {
         setCheckboxArray((prev) =>
           prev.map((checkbox) => {
             if (checkbox.id === id) {
-                // console.log(option.label);
-                console.log(selectedLabel)
+                
+                console.log(checked)
               return {
                 ...checkbox,
                 options: checkbox.options.map((option) =>
-                    
+                    // set option.value to checked
                   option.label === selectedLabel
-                    ? { ...option, value: option.value } // Toggle the selected option
-                    : { ...option, value: false } // Uncheck all other options
+                    ? { ...option, value: !option.value } 
+                    : { ...option, value: false } 
                 ),
               };
+              
             }
-            console.log(checkbox.options)
             return checkbox;
           })
         );
       };
-    
-
-    
-    function onSubmit() {
-    const handleCheckBoxChange = (id: string, selectedLabel: string, value: boolean) => {
-        //incorporate field.value, if checkbox is clicked, set field.value to true, if value is true
-        setCheckboxArray((prev) =>
-          prev.map((checkbox) => {
-            if (checkbox.id === id ) {
-                // console.log(option.label);
-                // console.log(checkbox)
-                // value = option.value
-              return {
-                ...checkbox,
-                options: checkbox.options.map((option) =>    
-                  option.label === selectedLabel
-                    ? { ...option, value: value } // Toggle the selected option
-                    : { ...option, value: false } // Uncheck all other options
-                ),
-              };
-            }
-            console.log(checkbox.options);
-            return checkbox;
-          })
-        
-        );
-      };
-
-    // take in selected checkbox
-    // 
+   
     
 
     
@@ -167,86 +130,52 @@ export default function AppInfo({ handleNext}: Props) {
     }
 
     return (
-        <div className="w-full px-4 md:w-3/5 md:px-0 mx-auto my-0 antialiased relative">
+        <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative">
             <div className="flex flex-col justify-center items-center">
                 <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Application Information</h1>
             </div>
-            <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
+            <div className="md:w-4/5 w-full max-w-[368px] md:max-w-[526px] mx-auto my-0">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
-                        {/* <FormField
-                            control={control}
-                            name=
-                            render={() => (
-                                <FormItem> */}
-                                    <div>
-                                    {initialCheckboxes.map((group, groupIndex) => (
-                                        <div key={group.id}>
-                                            <h3>{group.question}</h3>
-                                            {group.options.map((option, optionIndex) => (
-                                            <FormField
-                                                key={option.label}
-                                                name={`${groupIndex}.options.${optionIndex}.value`}  // Matches the expected path
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormControl>
-                                                            <FormLabel>
-                                                                <Checkbox
-                                                                checked={field.value}
-                                                                onCheckedChange={() => {handleCheckBoxChange(group.id, option.label, field.value); field.onChange(); console.log(option.value)}}
-                                                                />
-                                                                {option.label}
-                                                            </FormLabel>
-                                                        </FormControl>
-                                                    </FormItem>
-                                                
-                                                )}
-                                            />
-                                            ))}
-                                        </div>
-                                        ))}
-                                        {/* {initialCheckboxes.map((checkbox) => (
-                                            <FormField
-                                                key={checkbox.id}
-                                                control={control}
-                                                name={checkbox}
-                                                render={({ field }) => {
-                                                    // const { value, onChange } = field;
-                                                    return (
-                                                        <FormItem 
-                                                            key={key.id}
-                                                            >
-                                                             <FormLabel>{key.label}</FormLabel>
-                                                                <FormControl>
-                                                                <Checkbox
-                                                                    checked={key.value === true}
-                                                                    onCheckedChange={field.onChange}
-                                                                    >Yes</Checkbox>
-                                                                </FormControl>
-                                                                <FormControl>
-                                                                <Checkbox
-                                                                    checked={key.value === false}
-                                                                    onCheckedChange={field.onChange}
-                                                                >No</Checkbox>
-                                                                </FormControl>
-                                                            </FormItem>
-                                                    )
-                                                }}>
-
-                                            </FormField>
-                                        ))} */}
-                                    </div>
-                                {/* </FormItem>
-                            )}
-                            /> */}
-                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-8 ">
+                      {initialCheckboxes.map((group, groupIndex) => (
+                          <div key={group.id} className="flex flex-col gap-2">
+                              <FormLabel className="text-sm text-[#454745]" >{group.question}</FormLabel>
+                              <div className="flex gap-1">
+                                {group.options.map((option, optionIndex) => (
+                                <FormField
+                                    key={option.label}
+                                    name={`${groupIndex}.options.${optionIndex}.value`}
+                                    control={control}
+                                    
+                                   
+                                    render={({ field }) => (
+                                        <FormItem className="space-x-3 space-y-0">
+                                            <FormControl className="flex justify-center align-center px-4">
+                                                <FormLabel className="text-base">
+                                                    <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {handleCheckBoxChange(group.id, option.label, checked); field.onChange(); console.log(option.value)}}
+                                                    />
+                                                    {option.label}
+                                                </FormLabel>
+                                            </FormControl>
+                                        </FormItem>
+                                    
+                                    )}
+                                />
+                                ))}
+                              </div>
+                              
+                          </div>
+                          ))}
+                        </div>
+                      <Button className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>
-
                 </Form>
             </div>
 
 
         </div>
     )
-}
+  }
