@@ -90,11 +90,10 @@ export default function AppInfo({ handleNext}: Props) {
         
     });
     const { control } = form;
-    const { step, setStep } = useStepper();
+    const { setStep } = useStepper();
 
     const updateStep = () => {
-      setStep(1);
-      console.log(step);
+      setStep(0);
     }
 
     useEffect(() => {

@@ -29,11 +29,10 @@ const ResearchInfo = ({ handleNext }: Props) => {
     });
 
     const { formState: {isValid}, register} = form;
-    const { step, setStep } = useStepper();
+    const { setStep } = useStepper();
 
     const updateStep = () => {
-        setStep(2);
-        console.log(step);
+        setStep(1);
       }
   
       
