@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
 import { useRequestsStore } from "@/context/RequestFormStore";
+import { useStepper } from "@/context/StepperContext";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     title: z
@@ -27,6 +29,14 @@ const ResearchInfo = ({ handleNext }: Props) => {
     });
 
     const { formState: {isValid}, register} = form;
+    const { step, setStep } = useStepper();
+
+    const updateStep = () => {
+        setStep(2);
+        console.log(step);
+      }
+  
+      
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -43,6 +53,11 @@ const ResearchInfo = ({ handleNext }: Props) => {
             console.error(error)
         }
     }
+
+    useEffect(() => {
+        updateStep();
+      }, [updateStep])
+
   return (
     <div className="flex flex-col gap-[1.25rem] my-8">
         <div className="w-full my-0 mx-auto flex flex-col gap-6 justify-center items-center">

@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { CheckboxGroup, useRequestsStore } from "@/context/RequestFormStore";
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useStepper } from "@/context/StepperContext";
+
 
 
 
@@ -88,6 +90,16 @@ export default function AppInfo({ handleNext}: Props) {
         
     });
     const { control } = form;
+    const { step, setStep } = useStepper();
+
+    const updateStep = () => {
+      setStep(1);
+      console.log(step);
+    }
+
+    useEffect(() => {
+      updateStep();
+    }, [updateStep])
 
     const handleCheckBoxChange = (id: string, selectedLabel: string, checked: string | boolean) => {
         setCheckboxArray((prev) =>
@@ -110,6 +122,8 @@ export default function AppInfo({ handleNext}: Props) {
           })
         );
       };
+
+     
    
     
 

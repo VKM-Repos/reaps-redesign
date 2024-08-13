@@ -196,7 +196,7 @@ button:focus, button:focus-visible {
   }
 
   .gradient {
-    background: linear-gradient(90deg, #F7D45B 0%, #192C8A 100%);
+    background: linear-gradient(90deg, #F7D45B 35%, #192C8A 100%);
 
   }
 
