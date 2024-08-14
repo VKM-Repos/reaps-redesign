@@ -4,13 +4,24 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import EmptyRequests from "./custom/EmptyRequests";
 import SelectSpecialization from "./specialization/SelectSpecialization";
 import ResearchInfo from "./create-requests/ResearchInfo";
+import { useStepper } from "@/context/StepperContext";
+import { useEffect } from "react";
 // import AppInfo from "./create-requests/AppInfo";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
+    const { formVisible, setFormVisible } = useStepper();
     // const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
     const RequestsData = new FormData();
+
+    const updateFormVisible = () => {
+        setFormVisible(false);
+    }
+
+    useEffect(() => {
+        updateFormVisible();
+    }, [updateFormVisible])
 
     const RenderRequestsForm = () => {
         console.log(step);
@@ -59,9 +70,10 @@ const CreateRequests = () => {
     }
     return (
         <div className="flex flex-col gap-[1.25rem]">
+            {!formVisible &&
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Requests</h1>
-            </div>
+            </div>}
             <RenderRequestsForm />
         </div>
     )

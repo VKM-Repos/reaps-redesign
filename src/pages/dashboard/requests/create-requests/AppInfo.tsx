@@ -90,15 +90,20 @@ export default function AppInfo({ handleNext}: Props) {
         
     });
     const { control } = form;
-    const { setStep } = useStepper();
+    const { setStep, setFormVisible } = useStepper();
 
     const updateStep = () => {
       setStep(0);
     }
 
+    const updateFormVisible = () => {
+      setFormVisible(true);
+    }
+
     useEffect(() => {
       updateStep();
-    }, [updateStep])
+      updateFormVisible();
+    }, [updateStep, updateFormVisible])
 
     const handleCheckBoxChange = (id: string, selectedLabel: string, checked: string | boolean) => {
         setCheckboxArray((prev) =>

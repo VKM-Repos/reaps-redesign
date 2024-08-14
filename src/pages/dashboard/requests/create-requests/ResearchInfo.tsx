@@ -29,12 +29,20 @@ const ResearchInfo = ({ handleNext }: Props) => {
     });
 
     const { formState: {isValid}, register} = form;
-    const { setStep } = useStepper();
+    const { setStep, setFormVisible } = useStepper();
 
     const updateStep = () => {
-        setStep(1);
-      }
-  
+      setStep(0);
+    }
+
+    const updateFormVisible = () => {
+      setFormVisible(true);
+    }
+
+    useEffect(() => {
+      updateStep();
+      updateFormVisible();
+    }, [updateStep, updateFormVisible]);
       
 
     function onSubmit(values: z.infer<typeof formSchema>) {
