@@ -95,7 +95,7 @@ export default function Stepper() {
                         <p
                             key={index}
                             ref={(el) => (stepRefs.current[index] = el)}
-                            className={`${textColor} ${fontWeight} text-sm inter letter-spacing-[1.25%]`}
+                            className={`${textColor} ${fontWeight} text-sm letter-spacing-[1.25%]`}
                             
                         >
                             {label}
