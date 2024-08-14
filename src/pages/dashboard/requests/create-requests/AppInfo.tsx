@@ -1,78 +1,27 @@
-// import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { CheckboxGroup, useRequestsStore } from "@/context/RequestFormStore";
-import { Checkbox } from "@/components/ui/checkbox"
-import { useEffect, useState } from "react";
+import { Form } from "@/components/ui/form";
+import {  useRequestsStore } from "@/context/RequestFormStore";
 import { Button } from "@/components/ui/button";
+import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
+import { questions } from "@/lib/questions";
+import FormInput from "@/components/custom/FormInput";
+import { useEffect } from "react";
+
 import { useStepper } from "@/context/StepperContext";
 
+const formSchema = z.object({
+  question1: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question2: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question3: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question4: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question5: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question6: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question7: z.enum(["yes", "no"], { required_error: "This field is required." }),
+  question8: z.string().min(1, { message: "This field is required"})
+});
 
-
-
-const checkboxSchema = z.object({
-    id: z.string().min(1, {message: "Please fill this field"}),
-    question: z.string().min(1, {message: "Please fill this field"}),
-    options: z.array(
-        z.object({
-          label: z.string().min(1, { message: "Please fill this field" }),
-          value: z.boolean(),
-        })
-    ),
-})
-
-const formSchema = z.array(checkboxSchema)
-
-const initialCheckboxes: CheckboxGroup[] = [
-    {
-      id: "q0",
-      question: "Are you the principal Investigator or a Local Principal Investigator?",
-      options: [
-        { label: "Yes", value: false },
-        { label: "No", value: false },
-      ],
-    }, {
-      id: "q1",
-      question: "How would you describe yourself?",
-      options: [
-        { label: "Student", value: false },
-        { label: "Researcher", value: false },
-      ],
-  },
-    {
-      id: "q3",
-      question: "Is there a Co-Principal Investigator?",
-      options: [
-        { label: "Yes", value: false },
-        { label: "No", value: false },
-      ],
-    },{
-      id: "q4",
-      question: "Is the project sponsored?",
-      options: [
-        { label: "Yes", value: false },
-        { label: "No", value: false },
-      ],
-    },
-     {
-        id: "q5",
-        question: "Did You Complete Ethics Training?",
-        options: [
-          { label: "Yes", value: false },
-          { label: "No", value: false },
-        ],
-    },
-     {
-        id: "q6",
-        question: "Will materials or tissue specimens be shipped out of the country?",
-        options: [
-          { label: "Yes", value: false },
-          { label: "No", value: false },
-        ],
-    }
-]
 
 
 type Props = {
@@ -81,15 +30,23 @@ type Props = {
 
 
 export default function AppInfo({ handleNext}: Props) {
-    // const isMobile = useMediaQuery({query: 'min-width: 768px'});
-    const [ checkboxArray, setCheckboxArray ] = useState<CheckboxGroup[]>(initialCheckboxes);
     const { data, setData } = useRequestsStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialCheckboxes
+        defaultValues: {
+          question1: "no",
+          question2: "no",
+          question3: "no",
+          question4: "no",
+          question5: "no",
+          question6: "no",
+          question7: "no",
+          question8: "1"
+        }
         
     });
-    const { control } = form;
+
+    const { register } = form;
     const { setStep } = useStepper();
 
     const updateStep = () => {
@@ -100,50 +57,28 @@ export default function AppInfo({ handleNext}: Props) {
       updateStep();
     }, [updateStep])
 
-    const handleCheckBoxChange = (id: string, selectedLabel: string, checked: string | boolean) => {
-        setCheckboxArray((prev) =>
-          prev.map((checkbox) => {
-            if (checkbox.id === id) {
-                
-                console.log(checked)
-              return {
-                ...checkbox,
-                options: checkbox.options.map((option) =>
-                    // set option.value to checked
-                  option.label === selectedLabel
-                    ? { ...option, value: !option.value } 
-                    : { ...option, value: false } 
-                ),
-              };
-              
-            }
-            return checkbox;
-          })
-        );
-      };
-
+  
      
    
     
 
     
-    function onSubmit() {
+    function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setData({
                 requestsDetails: {
                     ...data.requestsDetails,
-                    checkbox: checkboxArray
+                    checkbox: values
                 }
             })
             handleNext();
-            console.log(checkboxArray);
         } catch(error) {
             console.error(error);
         }
     }
 
     return (
-        <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative">
+        <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
             <div className="flex flex-col justify-center items-center">
                 <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Application Information</h1>
             </div>
@@ -151,37 +86,26 @@ export default function AppInfo({ handleNext}: Props) {
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8">
                     <div className="flex flex-col gap-8 ">
-                      {initialCheckboxes.map((group, groupIndex) => (
-                          <div key={group.id} className="flex flex-col gap-2">
-                              <FormLabel className="text-sm text-[#454745]" >{group.question}</FormLabel>
-                              <div className="flex gap-1">
-                                {group.options.map((option, optionIndex) => (
-                                <FormField
-                                    key={option.label}
-                                    name={`${groupIndex}.options.${optionIndex}.value`}
-                                    control={control}
-                                    
-                                   
-                                    render={({ field }) => (
-                                        <FormItem className="space-x-3 space-y-0">
-                                            <FormControl className="flex justify-center align-center px-4">
-                                                <FormLabel className="text-base">
-                                                    <Checkbox
-                                                    checked={field.value}
-                                                    onCheckedChange={(checked) => {handleCheckBoxChange(group.id, option.label, checked); field.onChange(); console.log(option.value)}}
-                                                    />
-                                                    {option.label}
-                                                </FormLabel>
-                                            </FormControl>
-                                        </FormItem>
-                                    
-                                    )}
-                                />
-                                ))}
-                              </div>
-                              
-                          </div>
-                          ))}
+
+                    {questions.map((question) => (
+                      <CustomFormField
+                          key={question.name}
+                          name={question.name}
+                          control={form.control}
+                          label={question.label}
+                          fieldType={FormFieldType.RADIO}
+                          options={[
+                              { label: "Yes", value: "yes" },
+                              { label: "No", value: "no" },
+                         ]}
+                          required={true}
+                      />
+                  ))}
+                        <FormInput label="What is the duration of the research?"
+                            {...register("question8", {
+                            required: "This field is required",
+                            })}
+                            type="text" required/>
                         </div>
                       <Button className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>

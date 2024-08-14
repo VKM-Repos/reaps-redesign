@@ -13,24 +13,26 @@ import {
 //   };
 
 export type CheckboxGroup = {
-    id: string;
-    question: string;
-    options: {
-      label: string;
-      value: boolean;
-    }[]
-  };
+    question1: string,
+    question2: string,
+    question3: string,
+    question4: string,
+    question5: string,
+    question6: string,
+    question7: string
+};
 
 export interface RequestsStore {
     
     step: number;
     data: {
       requestsDetails: {
-        checkbox: CheckboxGroup[] | null;
+        checkbox: CheckboxGroup | null;
         specialisation: string;
         institution: string;
         title: string;
         objectives: string;
+        files: any;
       };
      
     };
@@ -54,7 +56,8 @@ type MyPersist = (
                     specialisation: '',
                     institution: '',
                     title: '',
-                    objectives: ''
+                    objectives: '',
+                    files: null
                 },
             },
             setStep: (step) => set({ step }),
@@ -68,7 +71,8 @@ type MyPersist = (
                         specialisation: '',
                         institution: '',
                         title: '',
-                        objectives: ''
+                        objectives: '',
+                        files: null
                     }
                 }
             });
