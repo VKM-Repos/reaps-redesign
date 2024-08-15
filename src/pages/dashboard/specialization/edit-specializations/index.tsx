@@ -34,13 +34,13 @@ function EditSpecializations({step, specialization, keywordArray, handleNext, on
                     ? data?.specializationsDetails.keyword.join(', ')
                     : data?.specializationsDetails.keyword ?? '';
                 formData.append("keyword", keywords);
-                handleNext();
+                setTimeout(() => { 
+                    setIsLoading(false); 
+                    handleNext();
+                  }, 5000);
                 
             } catch (error) {
                 console.error(error);
-            }
-            finally {
-                setIsLoading(false);
             }
         }
 
@@ -48,7 +48,6 @@ function EditSpecializations({step, specialization, keywordArray, handleNext, on
   return (
     <>
         {isLoading && <Loader /> }
-        {/* Keywords overflow, loader not working  */}
         <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[30rem] focus-visible:outline-none overflow-y-hidden`}>
             <SheetClose className="absolute right-6 w-fit mx-auto py-0 !px-0 flex opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
             <div className={`h-full md:max-h-[26.5rem] border-none w-full flex flex-col gap-[2.5rem]`}>  

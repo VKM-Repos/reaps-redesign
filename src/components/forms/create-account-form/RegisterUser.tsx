@@ -29,6 +29,7 @@ export default function RegisterUser({ handleNext }: Props) {
       });
     const { register, formState: { isValid } } = form;
     function onSubmit(values: z.infer<typeof formSchema>) {
+      setIsLoading(true);
       try {
         setData({
           onboardingDetails: {
@@ -36,12 +37,11 @@ export default function RegisterUser({ handleNext }: Props) {
             email: values.email
           }
         });
-        setIsLoading(true);
+        
         setTimeout(() => {
+            handleNext();
             setIsLoading(false);
-            console.log(values);
         }, 3000);
-        handleNext();
       } catch (error) {
         console.error(error);
       }

@@ -6,6 +6,8 @@ import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/s
 import { useMediaQuery } from "react-responsive";
 import HoverCancel from "@/components/custom/Icons/HoverCancel";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import Loader from "@/components/custom/Loader";
 
 
 
@@ -16,6 +18,7 @@ type Props = {
 const RequestSpecialization = ({handleSpecNext}: Props) => {
     const { step, setStep, resetStore } = useSpecializationsStore();
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
+    const [loading, setLoading] = useState(false);
 
    
 
@@ -28,6 +31,7 @@ const RequestSpecialization = ({handleSpecNext}: Props) => {
         };
 
         const createSpecializationsDetails = async () => {
+            setLoading(true);
             try {
                 const { data } = useSpecializationsStore.getState();
                 const specialization = data?.specializationsDetails.specialization ?? '';
@@ -40,6 +44,7 @@ const RequestSpecialization = ({handleSpecNext}: Props) => {
                 setTimeout(() => {     
                     handleSpecNext();
                     resetStore();
+                    setLoading(false);
                 }, 5000)
             }
             catch (error: any) {
@@ -67,6 +72,8 @@ const RequestSpecialization = ({handleSpecNext}: Props) => {
     }
     
     return (
+        <>
+        {loading && <Loader />}
         <div className="flex flex-col gap-[1.25rem] my-8">
             <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
                 <div className="flex flex-col gap-8 w-full max-w-[37rem] text-center">
@@ -85,7 +92,9 @@ const RequestSpecialization = ({handleSpecNext}: Props) => {
                         </Sheet>
                 </div>
             </div>
-        </div>    
+        </div> 
+        </>
+          
     )
 }
 

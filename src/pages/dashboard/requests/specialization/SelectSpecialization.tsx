@@ -16,6 +16,7 @@ import { useState } from "react";
 import RequestSpecialization from "./RequestSpecialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
     handleNext: Function;
@@ -41,9 +42,11 @@ export default function SelectSpecialization({ handleNext }: Props) {
     });
 
     const { formState: { isValid }, setValue } = form;
+    const [ loading, setLoading ] = useState(false);
     
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true);
         try {
             setData({
                 requestsDetails: {
@@ -51,7 +54,11 @@ export default function SelectSpecialization({ handleNext }: Props) {
                     specialisation: values.specialisation,
                 }
             });
-            handleNext();
+            setTimeout(() => {
+                handleNext();
+                setLoading(false);
+            }, 5000);
+            
         }
         catch (error) {
             console.error(error);
@@ -62,6 +69,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
 
   return (
     <>
+    {loading && <Loader />}
     {specialization.length < 0 ?
         <>
             <div className="flex flex-col justify-center items-center">
