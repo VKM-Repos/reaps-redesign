@@ -1,13 +1,13 @@
 // set up summary of all steps so far
-import { useRequestsStore } from '@/context/RequestFormStore';
+// import { useRequestsStore } from '@/context/RequestFormStore';
 import { useStepper } from '@/context/StepperContext';
 import { useEffect } from 'react'
 
-type Props = {
-    handleNext: Function
-}
+// type Props = {
+//     handleNext: Function
+// }
 
-const AppSummary = ({handleNext}: Props) => {
+const AppSummary = () => {
 
     // const { data, setData } = useRequestsStore();
 

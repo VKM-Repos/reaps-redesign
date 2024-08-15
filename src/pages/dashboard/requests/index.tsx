@@ -7,6 +7,7 @@ import ResearchInfo from "./create-requests/ResearchInfo";
 import AppInfo from "./create-requests/AppInfo";
 import SupportDoc from "./create-requests/SupportDoc";
 import AppSummary from "./create-requests/AppSummary";
+import RequestsLayout from "@/layouts/RequestsLayout";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -54,9 +55,9 @@ const CreateRequests = () => {
             case 4:
                 return <ResearchInfo handleNext={handleNext} />
             case 5:
-                return <SupportDoc handleNext={handleNext} />
+                return <SupportDoc handleNext={onSubmitHandler} />
             case 6:
-                return <AppSummary handleNext={onSubmitHandler} />
+                return <AppSummary  />
             default: 
                 return null;    
         }
@@ -67,7 +68,13 @@ const CreateRequests = () => {
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Requests</h1>
             </div>
-            <RenderRequestsForm />
+            {step === 1 ? (
+                <RenderRequestsForm />
+            ) : (
+                <RequestsLayout>
+                    <RenderRequestsForm />
+                </RequestsLayout>
+            )}
         </div>
     )
 }

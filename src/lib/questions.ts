@@ -63,3 +63,10 @@ export const requirements = [
         label: "Materials transfer agreement form"
     },
 ]
+
+export const array = [
+    "Application Info",
+    "Research Info",
+    "Supporting docs",
+    "Summary"
+]

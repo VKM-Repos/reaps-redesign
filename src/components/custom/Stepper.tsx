@@ -1,18 +1,12 @@
 import { useStepper } from "@/context/StepperContext";
 import { useEffect, useRef, useState } from "react";
+import { array } from "@/lib/questions";
 
-
-const array = [
-    "Application Info",
-    "Research Info",
-    "Supporting docs",
-    "Summary"
-]
 
 const totalWidth = 600;
 
 export default function Stepper() {
-    const { step } = useStepper();
+    const { stepper } = useStepper();
     const [ball, setBall] = useState<number>(8);
     const [stepWidths, setStepWidths] = useState<number[]>([]);
     const stepRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -57,15 +51,15 @@ export default function Stepper() {
         const widths = stepRefs.current.map((step) =>
             step ? step.getBoundingClientRect().width : 0    
         );
-        updateBall(step);
+        updateBall(stepper);
         setStepWidths(widths);
-    }, [step]);
+    }, [stepper]);
 
-    const stepPosition = stepWidths.length ? calculatePosition(step) : 0;
+    const stepPosition = stepWidths.length ? calculatePosition(stepper) : 0;
 
 
     return (
-        <div className="flex flex-col gap-4 w-full max-w-[600px] mx-auto my-0">
+        <div className="flex flex-col gap-4 w-full min-w-[18.75rem] max-w-[37.5rem] mx-auto my-0">
             <div className="relative h-[9px] w-full overflow-hidden rounded-full flex items-center justify-center">
                 <div className="relative bg-[#16330014] h-[2px] relative w-full rounded-full flex items-center justify-center">
                     <div
@@ -84,9 +78,9 @@ export default function Stepper() {
                     let textColor = "text-[#454745]"; 
                     let fontWeight = "font-[400]";
 
-                    if (step > index) {
+                    if (stepper > index) {
                         fontWeight = "font-[600]";
-                    } else if (step === index) {
+                    } else if (stepper === index) {
                         textColor = "text-black"; 
                         fontWeight = "font-[600]";
                     }
@@ -95,7 +89,7 @@ export default function Stepper() {
                         <p
                             key={index}
                             ref={(el) => (stepRefs.current[index] = el)}
-                            className={`${textColor} ${fontWeight} text-sm letter-spacing-[1.25%]`}
+                            className={`${textColor} ${fontWeight} text-sm letter-spacing-[1.25%] hidden lg:block`}
                             
                         >
                             {label}
