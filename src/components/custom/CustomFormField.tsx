@@ -54,10 +54,10 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
         case FormFieldType.DOWNLOAD: 
             return(
                 <FormControl>
-                    <div className="justify-between flex">
+                    {/* <div className="justify-between flex">
                         <Label className="font-bold">{props.label} </Label>
-                        <span className="flex font-[400] justify-end text-[#868687]">Doc, Docx, Pdf (Max of 3MB)</span>
-                    </div>
+                        
+                    </div> */}
                     <Dropzone
                         accept={{
                         "/*": [".pdf", ".doc", ".docx"],
@@ -90,9 +90,9 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
               >
                 <input {...getInputProps() as DropzoneInputProps} />
            
-                  <span className="w-fit flex items-center gap-2 mx-auto p-4 rounded-lg bg-white shadow-md">
+                  <span className="w-full flex items-center justify-center gap-2 mx-auto p-4 rounded-lg bg-white border-[#0C0C0F29]">
                     <UploadIcon />
-                    <p className="font-bold">{!file ? 'Click to Upload' : 'Change file'}</p>
+                    <p className="text-sm text-[#868687]">{!file ? 'Click to Upload' : 'Change file'}</p>
                   </span>
               
               </div>
@@ -124,12 +124,19 @@ const CustomFormField = (props: CustomProps) => {
         name={name}
         render={({ field }) => (
             <FormItem className="gap-4">
-              <FormLabel className="text-[#454745] font-[400]">{label}</FormLabel>
-                {required && (
-                    <span className="text-error text-red-500" title="required">
-                    &ensp;*
-                    </span>
-                )}
+                <div className="flex justify-between items-center">
+                    <div> 
+                        <FormLabel className="text-[#454745] font-[400]">{label}</FormLabel>
+                        {required && (
+                        <span className="text-error text-red-500" title="required">
+                        &ensp;*
+                        </span>
+                        )}
+                    </div>
+                    {/* <span className="flex font-[400] justify-end text-[#868687] text-sm">Doc, Docx, Pdf (Max of 3MB)</span> */}
+                </div>
+              
+               
                 <RenderInput field={field} props={props}/>
                 <FormMessage/>
             </FormItem>

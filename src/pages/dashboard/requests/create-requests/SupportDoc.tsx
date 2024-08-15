@@ -7,6 +7,8 @@ import { useRequestsStore } from "@/context/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import { requirements } from "@/lib/questions";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
+import { useStepper } from "@/context/StepperContext";
+import { useEffect } from "react";
 
 
 type Props = {
@@ -33,7 +35,18 @@ const SupportDoc = ({handleNext}: Props) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  })
+  });
+  const { setStep } = useStepper();
+
+    const updateStep = () => {
+        setStep(2);
+      }
+
+      
+    useEffect(() => {
+      updateStep();
+    }, [updateStep])
+  
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {

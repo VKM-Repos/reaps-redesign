@@ -6,6 +6,7 @@ import SelectSpecialization from "./specialization/SelectSpecialization";
 import ResearchInfo from "./create-requests/ResearchInfo";
 import AppInfo from "./create-requests/AppInfo";
 import SupportDoc from "./create-requests/SupportDoc";
+import AppSummary from "./create-requests/AppSummary";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -53,7 +54,9 @@ const CreateRequests = () => {
             case 4:
                 return <ResearchInfo handleNext={handleNext} />
             case 5:
-                return <SupportDoc handleNext={onSubmitHandler} />
+                return <SupportDoc handleNext={handleNext} />
+            case 6:
+                return <AppSummary handleNext={onSubmitHandler} />
             default: 
                 return null;    
         }

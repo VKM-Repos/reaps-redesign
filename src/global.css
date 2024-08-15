@@ -195,6 +195,11 @@ button:focus, button:focus-visible {
     animation: leapFrog var(--uib-speed) ease calc(var(--uib-speed) / -3) infinite;
   }
 
+  .gradient {
+    background: linear-gradient(90deg, #F7D45B 35%, #192C8A 100%);
+
+  }
+
   @keyframes leapFrog {
     0% {
       transform: translateX(0) rotate(0deg);

@@ -2,13 +2,15 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { useRequestsStore } from "@/context/RequestFormStore";
+import {  useRequestsStore } from "@/context/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { questions } from "@/lib/questions";
 import FormInput from "@/components/custom/FormInput";
 import RequestsLayout from "@/layouts/RequestsLayout";
+import { useEffect } from "react";
 
+import { useStepper } from "@/context/StepperContext";
 
 const formSchema = z.object({
   question1: z.enum(["yes", "no"], { required_error: "This field is required." }),
@@ -46,6 +48,21 @@ export default function AppInfo({ handleNext}: Props) {
     });
 
     const { register } = form;
+    const { setStep } = useStepper();
+
+    const updateStep = () => {
+      setStep(0);
+    }
+
+    useEffect(() => {
+      updateStep();
+    }, [updateStep])
+
+  
+     
+   
+    
+
     
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
