@@ -28,7 +28,7 @@ export default function TopBar({title}: {title: string}) {
                     <img src="icons/mark.svg" alt="Mark logo" />
                     <img className="md:block hidden" src="icons/reap-icon.svg" alt="Reap logo for website" />
                 </div>}
-             
+                
                 <div>
                     <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5" onClick={() => {navigate(-1)}}><Cancel /></button>
                 </div>

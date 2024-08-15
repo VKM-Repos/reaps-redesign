@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { questions } from "@/lib/questions";
 import FormInput from "@/components/custom/FormInput";
+import RequestsLayout from "@/layouts/RequestsLayout";
 
 
 const formSchema = z.object({
@@ -61,7 +62,8 @@ export default function AppInfo({ handleNext}: Props) {
     }
 
     return (
-        <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
+        <RequestsLayout>
+            <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
             <div className="flex flex-col justify-center items-center">
                 <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Application Information</h1>
             </div>
@@ -97,5 +99,6 @@ export default function AppInfo({ handleNext}: Props) {
 
 
         </div>
+        </RequestsLayout>
     )
   }

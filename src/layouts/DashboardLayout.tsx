@@ -1,5 +1,6 @@
 import MobileNavBar from "@/components/custom/MobileNavBar";
 import Sidebar from "@/components/custom/SideBar";
+// import Stepper from "@/components/custom/Stepper";
 import { MobileProvider } from "@/context/MobileContext";
 import { useMediaQuery } from 'react-responsive'
 import { Outlet } from "react-router-dom";
@@ -19,6 +20,7 @@ export default function DashboardLayout() {
                                     <button className="bg-inherit focus:outline-none notransition border-none hover:z-1000 hover:bg-[#14155E14] hover:rounded-full p-2"><img src="icons/user.svg" alt="user logo" /></button>
                                     <img src="icons/arrow-down-01.svg" alt="arrow-down" />
                                 </div>
+                                {/* <Stepper /> */}
                                 
                             </div>
                             <div className="md:4/5 mx-auto max-w-4xl flex flex-col gap-10">
