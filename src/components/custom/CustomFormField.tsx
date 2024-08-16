@@ -6,12 +6,16 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import Dropzone, { DropzoneInputProps } from 'react-dropzone'
 import UploadIcon from "./Icons/UploadIcon";
+import { Textarea } from "../ui/textarea";
+import ChevronDown from "./Icons/ChevronDown";
+import ChevronUp from "./Icons/ChevronUp";
 
 export enum FormFieldType {
     INPUT = "input",
     RADIO = "radio",
-    DOWNLOAD = "download",
-    NUMBER = "number"
+    UPLOAD = "upload",
+    COUNTER = "counter",
+    TEXTAREA = "textarea"
 }
 
 type CustomProps = {
@@ -22,13 +26,23 @@ type CustomProps = {
    required?: boolean;
    children?: React.ReactNode;
    fieldType: FormFieldType;
+   className?: string;
    options?: { label: string, value: string}[]
    
 }
 
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
-    const [file, UploadFile] = useState<string>()
+    const [file, UploadFile] = useState<string>();
+    const [count, setCount] = useState(0);
+
+    const handleIncrement = () => {
+        setCount((prev) => prev + 1);
+    };
+
+    const handleDecrement = () => {
+        setCount((prev) => (prev > 0 ? prev - 1 : 0));
+    };
 
     switch (props.fieldType) {
         case FormFieldType.INPUT:
@@ -51,9 +65,9 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     </RadioGroup>
                 </FormControl>
             );
-        case FormFieldType.DOWNLOAD: 
+        case FormFieldType.UPLOAD: 
             return(
-                <FormControl>
+                <FormControl className="border-gray-300 rounded-md">
                     {/* <div className="justify-between flex">
                         <Label className="font-bold">{props.label} </Label>
                         
@@ -101,11 +115,46 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
             </FormControl>
             );
-        case FormFieldType.NUMBER:
+        case FormFieldType.COUNTER:
             return (
                 <FormControl>
-                    <Input type={FormFieldType.NUMBER} placeholder={props.placeholder}/>
-                    {...field}
+                    <div className="flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md border-input" {...field}>
+                        <Input
+                        className="border-none text-center !py-0 !px-0"
+                        type="number"
+                        value={count}
+                        placeholder={props.placeholder}
+                        readOnly
+                        />
+                        <div className="flex flex-col gap-2">
+                            <button
+                                type="button"
+                                data-action="increment"
+                                onClick={handleIncrement}
+                                className="flex justify-center items-center rotate-180"
+                            >
+                                <ChevronUp />
+                            </button>
+                            <button
+                                type="button"
+                                data-action="decrement"
+                                onClick={handleDecrement}
+                                className="flex justify-center items-center"
+                            >
+                                <ChevronDown />
+                            </button>
+                        </div>
+                    </div>
+                </FormControl>
+            )
+        case FormFieldType.TEXTAREA:
+            return (
+                <FormControl>
+                   <Textarea
+                        placeholder={props.placeholder}
+                        className={props.className}
+                        {...field}
+                    />
                 </FormControl>
             )
         
@@ -115,7 +164,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 }
 
 const CustomFormField = (props: CustomProps) => {
-    const { name, control, label, required} = props;
+    const { name, control, label, fieldType, required} = props;
 
 
   return (
@@ -133,7 +182,7 @@ const CustomFormField = (props: CustomProps) => {
                         </span>
                         )}
                     </div>
-                    {/* <span className="flex font-[400] justify-end text-[#868687] text-sm">Doc, Docx, Pdf (Max of 3MB)</span> */}
+                    {fieldType === FormFieldType.UPLOAD && <span className="flex font-[400] justify-end text-[#868687] text-sm">Doc, Docx, Pdf (Max of 3MB)</span>}
                 </div>
               
                

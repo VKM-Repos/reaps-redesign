@@ -7,6 +7,7 @@ import FormInput from "@/components/custom/FormInput";
 import { useRequestsStore } from "@/context/RequestFormStore";
 import { useStepper } from "@/context/StepperContext";
 import { useEffect } from "react";
+import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 
 const formSchema = z.object({
     title: z
@@ -73,14 +74,15 @@ const ResearchInfo = ({ handleNext }: Props) => {
                                 })}
                                 required
                             />
-                            <FormInput
+                            <CustomFormField 
+                                fieldType={FormFieldType.TEXTAREA}
+                                name="objectives"
+                                control={form.control}
                                 label="Objectives of the study"
-                                {...register("objectives", {
-                                required: "This field is required",
-                                })}
                                 className="!pb-[12rem] flex"
                                 required
                             />
+                           
                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>
                 </Form>

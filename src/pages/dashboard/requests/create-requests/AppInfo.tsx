@@ -101,11 +101,18 @@ export default function AppInfo({ handleNext}: Props) {
                           required={true}
                       />
                   ))}
-                        <FormInput label="What is the duration of the research?"
+                        {/* <FormInput label="What is the duration of the research?"
                             {...register("question8", {
                             required: "This field is required",
                             })}
-                            type="text" required/>
+                            type="text" required/> */}
+                        <CustomFormField 
+                            name="question8"
+                            fieldType={FormFieldType.COUNTER}
+                            label="What is the duration of the research?"
+                            control={form.control}
+                            required
+                        />
                         </div>
                       <Button className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>

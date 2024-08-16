@@ -17,7 +17,7 @@ export default function Stepper() {
             setBall(0)
         }
         else {
-            setBall(8.3)
+            setBall(8)
         }
     }
 

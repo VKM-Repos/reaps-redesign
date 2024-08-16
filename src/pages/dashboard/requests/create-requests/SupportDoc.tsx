@@ -77,7 +77,7 @@ const SupportDoc = ({handleNext}: Props) => {
                   name={requirement.name}
                   control={form.control}
                   label={requirement.label}
-                  fieldType={FormFieldType.DOWNLOAD}
+                  fieldType={FormFieldType.UPLOAD}
                   required={true}
                 />
               ))}
