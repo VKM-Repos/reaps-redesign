@@ -23,6 +23,8 @@ import { useState } from "react";
 import DeleteIcon from "@/components/custom/Icons/DeleteIcon";
 import EditSpecializations from "../edit-specializations";
 import { useMediaQuery } from "react-responsive";
+import { useSpecializationsStore } from "@/context/specializationsFormStore";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
   tableData: {
@@ -41,8 +43,13 @@ type Props = {
     const [currentEditData, setCurrentEditData] = useState<{ id: string; specialization: string; keyword: [] } | null>(null);
     const [step, setStep] = useState<number>(1);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
+    const { loading, setLoading } = useSpecializationsStore();
 
      function deleteTableItem(item: any) {
+      setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 5000);
       setTableArray((prevTableArray) => prevTableArray.filter((data) => data.id !== item.data.id)
       );
      } 
@@ -72,7 +79,6 @@ type Props = {
 
   const handleEditClick = (data: { id: string; specialization: string; keyword: [] }) => {
     setCurrentEditData(data);
-
     setStep(1); 
   };
  
@@ -85,23 +91,28 @@ type Props = {
   const RenderDeleteSheet = (data: any) => {
     
     return (
-      <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pt-0"} mx-auto px-2 w-full h-full md:max-w-[30rem] md:max-h-[20.5rem] flex flex-col justify-center items-center`}>
-        <div className="border-none flex flex-col justify-center items-center gap-[2.5rem] md:rounded-3xl">
-          <DeleteIcon />
-          <div className="flex flex-col md:gap-[2.5rem] gap-[9.75rem]">
-            <SheetHeader className="flex flex-col items-center justify-center gap-3">
-              <SheetTitle className="font-bold text-xl2">Delete</SheetTitle>
-              <SheetDescription className="text-[454745] text-sm">Are you sure you want to delete this specialization</SheetDescription>
-            </SheetHeader>
-            <div className="flex gap-14 w-full items-center justify-center">
-              <SheetClose className="w-full p-0"><Button variant="destructive" className="w-full rounded-[2.75rem]" onClick={() => {deleteTableItem(data)}}>Delete</Button></SheetClose>
-              <SheetClose className="w-full p-0 rounded-[2.75rem] rounded-md text-sm">Cancel</SheetClose>
+      <>
+        {loading && <Loader />}
+         <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pt-0"} mx-auto px-2 w-full h-full md:max-w-[30rem] md:max-h-[20.5rem] flex flex-col justify-center items-center`}>
+          <div className="border-none flex flex-col justify-center items-center gap-[2.5rem] md:rounded-3xl">
+            <DeleteIcon />
+            <div className="flex flex-col md:gap-[2.5rem] gap-[9.75rem]">
+              <SheetHeader className="flex flex-col items-center justify-center gap-3">
+                <SheetTitle className="font-bold text-xl2">Delete</SheetTitle>
+                <SheetDescription className="text-[454745] text-sm">Are you sure you want to delete this specialization</SheetDescription>
+              </SheetHeader>
+              <div className="flex gap-14 w-full items-center justify-center">
+                <SheetClose className="w-full p-0"><Button variant="destructive" className="w-full rounded-[2.75rem]" onClick={() => {deleteTableItem(data)}}>Delete</Button></SheetClose>
+                <SheetClose className="w-full p-0 rounded-[2.75rem] rounded-md text-sm">Cancel</SheetClose>
+              </div>
             </div>
           </div>
-        </div>
-      </SheetContent>
+        </SheetContent>
+      </>
     )
   }
+
+  // set up one table component
 
     return (
       <>

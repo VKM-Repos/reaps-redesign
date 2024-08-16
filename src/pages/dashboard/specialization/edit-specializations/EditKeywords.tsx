@@ -49,6 +49,7 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
  
     function deleteKeyword (item: string) {
         setKeywordsArray(keywordsArray.filter(keywords => keywords !== item));
+        
     }
 
 
@@ -62,8 +63,10 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
                     keyword: keywordsArray
                 }
             });
-            onSave(keywordsArray);
             handleNext();
+            onSave(keywordsArray);
+            
+           
         } catch (error) {
             console.error(error);
         }

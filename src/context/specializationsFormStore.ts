@@ -5,6 +5,7 @@ import {
   } from "zustand/middleware";
 
   export interface SpecializationsStore {
+    loading: boolean,
     step: number;
     data: {
       specializationsDetails: {
@@ -15,6 +16,7 @@ import {
     };
     setStep: (step: number) => void;
     setData: (data: Partial<SpecializationsStore["data"]>) => void;
+    setLoading: (loading: boolean) => void;
     resetStore: () => void;
   }
   
@@ -26,6 +28,7 @@ import {
 export const useSpecializationsStore = create<SpecializationsStore>(
     (persist as MyPersist)(
         (set) => ({
+            loading: false,
             step: 1,
             data: {
                 specializationsDetails: {
@@ -35,6 +38,7 @@ export const useSpecializationsStore = create<SpecializationsStore>(
             },
             setStep: (step) => set({ step }),
             setData: (data) => set((state) => ({ data: { ...state.data, ...data } })),
+            setLoading: (loading) => set({ loading }),
             resetStore: () => {
             set({
                 step: 1,
