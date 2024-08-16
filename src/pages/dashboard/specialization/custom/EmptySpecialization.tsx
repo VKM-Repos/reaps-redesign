@@ -19,7 +19,7 @@ export default function EmptySpecializations({children}: Props) {
                 <p>You can create specializations for your requests, add keywords that fits your request, and manage specialization</p>
                 <Sheet>
                     <SheetTrigger asChild>
-                        <Button className="flex gap-4 items-center justify-center py-3 px-6 w-full max-w-[18rem]"><span><AddIcon /></span>Create specialization</Button>
+                        <Button className="flex gap-4 items-center justify-center py-3 px-6 w-full mx-auto my-0 max-w-[16rem]"><span><AddIcon /></span>Create specialization</Button>
                     </SheetTrigger>
                     {children}
                 </Sheet>
