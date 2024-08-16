@@ -9,7 +9,6 @@ import AddIcon from "@/components/custom/Icons/AddIcon";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useMediaQuery } from "react-responsive";
 import HoverCancel from "@/components/custom/Icons/HoverCancel";
-import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 
 const tableData = [
@@ -36,9 +35,8 @@ const tableData = [
 ]
 
 const CreateSpecialization = () => {
-    const { step, setStep, resetStore } = useSpecializationsStore();
+    const { step, setStep, resetStore, loading, setLoading } = useSpecializationsStore();
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
-    const [loading, setLoading] = useState(false);
 
     const DrawerData = new FormData();
 
