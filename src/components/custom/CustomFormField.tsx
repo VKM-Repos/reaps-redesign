@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
-import Dropzone, { DropzoneInputProps } from 'react-dropzone'
+import Dropzone, { DropzoneInputProps, FileWithPath } from 'react-dropzone'
 import UploadIcon from "./Icons/UploadIcon";
 import { Textarea } from "../ui/textarea";
 import ChevronDown from "./Icons/ChevronDown";
@@ -27,7 +27,8 @@ type CustomProps = {
    children?: React.ReactNode;
    fieldType: FormFieldType;
    className?: string;
-   options?: { label: string, value: string}[]
+   options?: { label: string, value: string}[];
+   onDrop?: (acceptedFiles: FileWithPath[]) => void;
    
 }
 
@@ -67,14 +68,16 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
             );
         case FormFieldType.UPLOAD: 
             return(
-                <FormControl className="border-gray-300 rounded-md">
+                <FormControl>
                     {/* <div className="justify-between flex">
                         <Label className="font-bold">{props.label} </Label>
                         
                     </div> */}
                     <Dropzone
                         accept={{
-                        "/*": [".pdf", ".doc", ".docx"],
+                            "application/pdf": [".pdf"],
+                            "application/msword": [".doc"],
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
                         }}
                         multiple={false}
                         maxSize={5000000}
@@ -90,7 +93,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         }}
                     >
                         {({  getInputProps }) => (
-              <div
+              <div 
                 // {...getRootProps({
                 // getRootProps,
                 //   className: cn(
@@ -104,7 +107,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
               >
                 <input {...getInputProps() as DropzoneInputProps} />
            
-                  <span className="w-full flex items-center justify-center gap-2 mx-auto p-4 rounded-lg bg-white border-[#0C0C0F29]">
+                  <span className=" border-gray-300 border w-full flex items-center justify-center gap-2 mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]">
                     <UploadIcon />
                     <p className="text-sm text-[#868687]">{!file ? 'Click to Upload' : 'Change file'}</p>
                   </span>

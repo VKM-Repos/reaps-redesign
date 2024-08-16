@@ -6,7 +6,6 @@ import {  useRequestsStore } from "@/context/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { questions } from "@/lib/questions";
-import FormInput from "@/components/custom/FormInput";
 import { useEffect } from "react";
 
 import { useStepper } from "@/context/StepperContext";
@@ -45,8 +44,6 @@ export default function AppInfo({ handleNext}: Props) {
         }
         
     });
-
-    const { register } = form;
     const { setStep } = useStepper();
 
     const updateStep = () => {
@@ -101,11 +98,6 @@ export default function AppInfo({ handleNext}: Props) {
                           required={true}
                       />
                   ))}
-                        {/* <FormInput label="What is the duration of the research?"
-                            {...register("question8", {
-                            required: "This field is required",
-                            })}
-                            type="text" required/> */}
                         <CustomFormField 
                             name="question8"
                             fieldType={FormFieldType.COUNTER}

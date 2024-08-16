@@ -16,7 +16,11 @@ type Props = {
 }
 
 const MAX_FILE_SIZE = 3000000;
-const ACCEPTED_FILE_TYPES = [".pdf", ".doc", ".docx"];
+const ACCEPTED_FILE_TYPES = [
+  "application/pdf", 
+  "application/msword", 
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+];
 
 const formSchema = z.object({
     file: z
@@ -49,6 +53,7 @@ const SupportDoc = ({handleNext}: Props) => {
   
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
     try {
         setData({
             requestsDetails: {
@@ -79,6 +84,7 @@ const SupportDoc = ({handleNext}: Props) => {
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
                   required={true}
+                  // onDrop={(acceptedFiles) => form.setValue(requirement.name, acceptedFiles[0])}
                 />
               ))}
             </div>
