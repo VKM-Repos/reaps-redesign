@@ -78,17 +78,17 @@ const SupportDoc = ({handleNext}: Props) => {
             <div className="flex flex-col gap-8 ">
               {requirements.map((requirement) => (
                 <CustomFormField
-                  key={requirement.name}
-                  name={requirement.name}
+                  key={requirement.name} 
+                  name={`file.${requirement.name}`}
                   control={form.control}
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
                   required={true}
-                  // onDrop={(acceptedFiles) => form.setValue(requirement.name, acceptedFiles[0])}
+                  // onDrop={(acceptedFiles) => form.setValue(`file.${requirement.name}`, acceptedFiles[0])}
                 />
               ))}
             </div>
-            <Button className={`my-4 focus:outline-none`}>Continue</Button>
+            <Button type="submit" className={`my-4 focus:outline-none`}>Continue</Button>
           </form>
         </Form>
       </div>

@@ -1,6 +1,6 @@
 import { Control } from "react-hook-form"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
@@ -36,6 +36,10 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
     const [file, UploadFile] = useState<string>();
     const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        console.log("Field value changed:", field.value);
+      }, [field.value]);
 
     const handleIncrement = () => {
         setCount((prev) => prev + 1);
@@ -81,29 +85,25 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         }}
                         multiple={false}
                         maxSize={5000000}
+                        // onDrop={acceptedFiles => console.log(acceptedFiles)}
                         onDrop={(acceptedFiles) => {
                         const file = acceptedFiles[0];
                         const reader = new FileReader();
                         reader.onloadend = () => {
                             const base64String = reader.result as string;
+                            console.log(acceptedFiles[0]);
                             UploadFile(base64String);
-                            field.onChange(base64String);
+                            console.log(file);
+                            field.onChange(file);
+                            console.log(field);
+                            // form.setValue(`file.${requirement.name}`, acceptedFiles[0])
                         };
                         reader.readAsDataURL(file);
                         }}
                     >
-                        {({  getInputProps }) => (
+            {({  getInputProps, getRootProps }) => (
               <div 
-                // {...getRootProps({
-                // getRootProps,
-                //   className: cn(
-                //     "mt-6 w-full min-h-[14rem] cursor-pointer flex items-center p-4 rounded-lg text-center",
-                //     backgroundImage ? "bg-cover bg-center" : "bg-background"
-                //   ),
-                //   style: backgroundImage
-                //     ? { backgroundImage: url(${backgroundImage}) }
-                //     : {},
-                // })}
+                {...getRootProps()}
               >
                 <input {...getInputProps() as DropzoneInputProps} />
            
@@ -163,8 +163,11 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
         
             
     }
+    
+
 
 }
+
 
 const CustomFormField = (props: CustomProps) => {
     const { name, control, label, fieldType, required} = props;
@@ -199,3 +202,13 @@ const CustomFormField = (props: CustomProps) => {
 }
 
 export default CustomFormField
+
+// getRootProps
+// //   className: cn(
+// //     "mt-6 w-full min-h-[14rem] cursor-pointer flex items-center p-4 rounded-lg text-center",
+// //     backgroundImage ? "bg-cover bg-center" : "bg-background"
+// //   ),
+// //   style: backgroundImage
+// //     ? { backgroundImage: url(${backgroundImage}) }
+// //     : {},
+// }
