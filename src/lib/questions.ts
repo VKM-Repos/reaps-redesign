@@ -70,3 +70,67 @@ export const array = [
     "Supporting docs",
     "Summary"
 ]
+
+export const application = [
+    {
+        name: "question1",
+        label: "Are you the principal investigator or Local Principal Investigator?",
+        options: [
+            {
+                label: "Yes",
+                value: "yes",
+            }
+        ]
+    },
+    {
+        name: "question2",
+        label: "How would you describe yourself?",
+        options: [
+            {
+                label: "Student",
+                value: "yes",
+            }
+        ]
+    },
+    {
+        name: "question3",
+        label: "Is there a Co-Principal Investigator?",
+        options: [
+            {
+                label: "No",
+                value: "no",
+            }
+        ]
+    },
+    {
+        name: "question4",
+        label: "Is the project sponsored?",
+        options: [
+            {
+                label: "No",
+                value: "no",
+            }
+        ]
+    },
+    {
+        name: "question5",
+        label: "Did You Complete Ethics Training?",
+        options: [
+            {
+                label: "No",
+                value: "no",
+            }
+        ]
+    },
+    {
+        name: "question6",
+        label: "Will materials or tissue specimens be shipped out of the country?",
+        options: [
+            {
+                label: "Yes",
+                value: "yes",
+                
+            }
+        ]
+    }
+]

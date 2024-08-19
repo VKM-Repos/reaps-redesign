@@ -40,10 +40,11 @@ const SupportDoc = ({handleNext}: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-  const { setStep } = useStepper();
+  const { setStepper } = useStepper();
+  // const { formState: {isValid}} = form;
 
     const updateStep = () => {
-        setStep(2);
+        setStepper(2);
       }
 
       
@@ -84,7 +85,6 @@ const SupportDoc = ({handleNext}: Props) => {
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
                   required={true}
-                  // onDrop={(acceptedFiles) => form.setValue(`file.${requirement.name}`, acceptedFiles[0])}
                 />
               ))}
             </div>

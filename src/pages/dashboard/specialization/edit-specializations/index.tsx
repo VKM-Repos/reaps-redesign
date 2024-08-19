@@ -5,8 +5,6 @@ import Loader from "../../../../components/custom/Loader";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "react-responsive";
 
-
-
 type EditProps = {
     step: number;
     specialization: string;
@@ -23,14 +21,9 @@ function EditSpecializations({ step, specialization, keywordArray, handleNext, o
 
     
     async function handleSubmit() {
-        
-        
         const formData = new FormData();
         setLoading(true);
-       
         try {
-
-            
             const specialization = data?.specializationsDetails.specialization ?? '';
             formData.append("specialization", specialization);
 
@@ -38,7 +31,6 @@ function EditSpecializations({ step, specialization, keywordArray, handleNext, o
                 ? data?.specializationsDetails.keyword.join(', ')
                 : data?.specializationsDetails.keyword ?? '';
             formData.append("keyword", keywords);
-            console.log("try");
 
             setTimeout(() => {
                 handleNext();

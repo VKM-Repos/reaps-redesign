@@ -5,7 +5,7 @@ import EmptyRequests from "./custom/EmptyRequests";
 import SelectSpecialization from "./specialization/SelectSpecialization";
 import ResearchInfo from "./create-requests/ResearchInfo";
 import AppInfo from "./create-requests/AppInfo";
-import SupportDoc from "./create-requests/SupportDoc";
+// import SupportDoc from "./create-requests/SupportDoc";
 import AppSummary from "./create-requests/AppSummary";
 import RequestsLayout from "@/layouts/RequestsLayout";
 
@@ -20,6 +20,8 @@ const CreateRequests = () => {
         const handleNext = () => {
             setStep(step + 1);
         }
+
+        
 
         const createRequestsDetails = async () => {
             try {
@@ -54,10 +56,10 @@ const CreateRequests = () => {
                 return <AppInfo handleNext={handleNext} />
             case 4:
                 return <ResearchInfo handleNext={handleNext} />
+            // case 5:
+            //     return <SupportDoc handleNext={handleNext} />
             case 5:
-                return <SupportDoc handleNext={onSubmitHandler} />
-            case 6:
-                return <AppSummary  />
+                return <AppSummary handleNext={onSubmitHandler}  />
             default: 
                 return null;    
         }

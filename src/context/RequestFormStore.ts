@@ -27,7 +27,7 @@ export interface RequestsStore {
     step: number;
     data: {
       requestsDetails: {
-        checkbox: CheckboxGroup | null;
+        checkbox: CheckboxGroup | {};
         specialisation: string;
         institution: string;
         title: string;
@@ -52,7 +52,7 @@ type MyPersist = (
             step: 1,
             data: {
                 requestsDetails: {
-                    checkbox: null,
+                    checkbox: {},
                     specialisation: '',
                     institution: '',
                     title: '',
@@ -67,7 +67,7 @@ type MyPersist = (
                 step: 1,
                 data: {
                     requestsDetails: {
-                        checkbox: null,
+                        checkbox: {},
                         specialisation: '',
                         institution: '',
                         title: '',
