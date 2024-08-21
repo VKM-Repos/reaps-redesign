@@ -38,7 +38,6 @@ function EditSpecializations({ step, specialization, keywordArray, handleNext, o
                 ? data?.specializationsDetails.keyword.join(', ')
                 : data?.specializationsDetails.keyword ?? '';
             formData.append("keyword", keywords);
-            console.log("try");
 
             setTimeout(() => {
                 handleNext();
