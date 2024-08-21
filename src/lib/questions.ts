@@ -86,8 +86,8 @@ export const application = [
         label: "Are you the principal investigator or Local Principal Investigator?",
         options: [
             {
-                name: "Yes",
                 label: "Yes",
+                value: "Yes",
             }
         ]
     },
@@ -96,8 +96,8 @@ export const application = [
         label: "How would you describe yourself?",
         options: [
             {
-                name: "Student",
                 label: "Student",
+                value: "Student",
             }
         ]
     },
@@ -106,8 +106,8 @@ export const application = [
         label: "Is there a Co-Principal Investigator?",
         options: [
             {
-                name: "No",
                 label: "No",
+                value: "No",
             }
         ]
     },
@@ -116,8 +116,8 @@ export const application = [
         label: "Is the project sponsored?",
         options: [
             {
-                name: "No",
                 label: "No",
+                value: "No",
             }
         ]
     },
@@ -126,8 +126,8 @@ export const application = [
         label: "Did You Complete Ethics Training?",
         options: [
             {
-                name: "No",
                 label: "No",
+                value: "No",
             }
         ]
     },
@@ -136,9 +136,8 @@ export const application = [
         label: "Will materials or tissue specimens be shipped out of the country?",
         options: [
             {
-                name: "Yes",
                 label: "Yes",
-                
+                value: "Yes",                
             }
         ]
     }

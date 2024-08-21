@@ -65,9 +65,10 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                 </FormControl>
             );
         case FormFieldType.RADIO: 
+            console.log(field);
             return (
                 <FormControl>
-                    <RadioGroup onValueChange={field.onChange} defaultValue={field.value}>
+                    <RadioGroup onValueChange={field.onChange}  defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}>
                         {props.options?.map((option) => (
                             <div key={option.value} className={`${props.className} flex items-center gap-4 px-1`}>
                                 <RadioGroupItem value={option.value} id={`${field.name}-${option.value}`} disabled={props.disabled}/>
@@ -102,6 +103,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         };
                         reader.readAsDataURL(file);
                         }}
+                        disabled={props.disabled}
                     >
             {({  getInputProps, getRootProps }) => (
               <div 

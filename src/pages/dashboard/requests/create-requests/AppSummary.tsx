@@ -2,12 +2,13 @@
 import CustomFormField, { FormFieldType } from '@/components/custom/CustomFormField';
 import FormInput from '@/components/custom/FormInput';
 import PencilEdit from '@/components/custom/Icons/PencilEdit';
+import Loader from '@/components/custom/Loader';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useRequestsStore } from '@/context/RequestFormStore';
 import { useStepper } from '@/context/StepperContext';
 import { application, requirements } from '@/lib/questions';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 
@@ -21,6 +22,8 @@ const AppSummary = ({ handleNext }: Props) => {
 
     const { data, setStep } = useRequestsStore();
     const { title, objectives, checkbox, files } = data.requestsDetails;
+    const [loading, setLoading] = useState(false);
+    const { resetStore } = useRequestsStore();
 
 
     const form = useForm({
@@ -33,10 +36,7 @@ const AppSummary = ({ handleNext }: Props) => {
 
       }
     });
-    // const checkboxArray = Object.entries(checkbox).map(([question, answer]) => ({
-    //   question,
-    //   answer,
-    // }));
+
 
   
 
@@ -58,6 +58,7 @@ const AppSummary = ({ handleNext }: Props) => {
 
       function onSubmit() {
         // handle final submit
+        setLoading(true);
         try {
             // setData({
             //     requestsDetails: {
@@ -68,7 +69,11 @@ const AppSummary = ({ handleNext }: Props) => {
             //         files: values.files
             //     }
             // });
-            handleNext();
+            setTimeout(() => {
+              handleNext();
+              resetStore();
+              setLoading(false);
+            }, 5000);
         }
         catch (error) {
             console.error(error)
@@ -77,7 +82,9 @@ const AppSummary = ({ handleNext }: Props) => {
   
       
   return (
-    <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
+    <>
+      {loading && <Loader />}
+      <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
       <div className="flex flex-col justify-center items-center">
           <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Your application summary</h1>
           <p className='text-sm text-[#868786]'>Please ensure all data is inputted correctly  before making payments</p>
@@ -149,6 +156,7 @@ const AppSummary = ({ handleNext }: Props) => {
                             label={requirement.label}
                             fieldType={FormFieldType.UPLOAD}
                             required={true}
+                            disabled={true}
                           />
                           ))}
                         </div>
@@ -161,6 +169,8 @@ const AppSummary = ({ handleNext }: Props) => {
           </Form>
         </div>
       </div>
+    </>
+    
   )
 }
 
