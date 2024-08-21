@@ -27,39 +27,48 @@ export const questions = [
 
 export const requirements = [
     {
-        name: "requirement1",
-        label: "2-page curriculum vitae"
+        id: "requirement1",
+        name: "CV",
+        label: "2-page curriculum vitae",
     },
     {
-        name: "requirement2",
+        id: "requirement2",
+        name: "supervisorAttestation",
         label: "Supervisor's attestation statement"
     },
     {
-        name: "requirement3",
+        id: "requirement3",
+        name: "Cover Letter/Application Letter",
         label: "Cover Letter/Application Letter"
     },
     {
-        name: "requirement4",
+        id: "requirement4",
+        name: "Proposal",
         label: "Proposal"
     },
     {
-        name: "requirement5",
+        id: "requirement5",
+        name: "Research tools/Questionnaire",
         label: "Research tools/Questionnaire"
     },
     {
-        name: "requirement6",
-        label: "Evidence of Completion"
+        id: "requirement6",
+        name: "Evidence of Completion",
+        label: "Evidence of Completion",
     },
     {
-        name: "requirement7",
-        label: "Evidence of ethics training"
+        id: "requirement7",
+        name: "Evidence of ethics training",
+        label: "Evidence of ethics training",
     },
     {
-        name: "requirement8",
+        id: "requirement8",
+        name: "Sponsor's attestation statement",
         label: "Sponsor's attestation statement"
     },
     {
-        name: "requirement9",
+        id: "requirement9",
+        name: "Materials transfer agreement form",
         label: "Materials transfer agreement form"
     },
 ]
@@ -77,8 +86,8 @@ export const application = [
         label: "Are you the principal investigator or Local Principal Investigator?",
         options: [
             {
+                name: "Yes",
                 label: "Yes",
-                value: "yes",
             }
         ]
     },
@@ -87,8 +96,8 @@ export const application = [
         label: "How would you describe yourself?",
         options: [
             {
+                name: "Student",
                 label: "Student",
-                value: "yes",
             }
         ]
     },
@@ -97,8 +106,8 @@ export const application = [
         label: "Is there a Co-Principal Investigator?",
         options: [
             {
+                name: "No",
                 label: "No",
-                value: "no",
             }
         ]
     },
@@ -107,8 +116,8 @@ export const application = [
         label: "Is the project sponsored?",
         options: [
             {
+                name: "No",
                 label: "No",
-                value: "no",
             }
         ]
     },
@@ -117,8 +126,8 @@ export const application = [
         label: "Did You Complete Ethics Training?",
         options: [
             {
+                name: "No",
                 label: "No",
-                value: "no",
             }
         ]
     },
@@ -127,8 +136,8 @@ export const application = [
         label: "Will materials or tissue specimens be shipped out of the country?",
         options: [
             {
+                name: "Yes",
                 label: "Yes",
-                value: "yes",
                 
             }
         ]

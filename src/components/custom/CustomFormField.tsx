@@ -33,6 +33,7 @@ type CustomProps = {
    className?: string;
    options?: { label: string, value: string}[];
    answers?: string;
+   disabled?: boolean;
 
    
 }
@@ -69,7 +70,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     <RadioGroup onValueChange={field.onChange} defaultValue={field.value}>
                         {props.options?.map((option) => (
                             <div key={option.value} className={`${props.className} flex items-center gap-4 px-1`}>
-                                <RadioGroupItem value={option.value} id={`${field.name}-${option.value}`} />
+                                <RadioGroupItem value={option.value} id={`${field.name}-${option.value}`} disabled={props.disabled}/>
                                 <Label className="text-base " htmlFor={`${field.name}-${option.value}`}>{option.label}</Label>
                             </div>
                         ))}
@@ -90,19 +91,14 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
                         }}
                         multiple={false}
-                        maxSize={5000000}
-                        // onDrop={acceptedFiles => console.log(acceptedFiles)}
+                        maxSize={3000000}
                         onDrop={(acceptedFiles) => {
                         const file = acceptedFiles[0];
                         const reader = new FileReader();
                         reader.onloadend = () => {
                             const base64String = reader.result as string;
-                            console.log(acceptedFiles[0]);
                             UploadFile(base64String);
-                            console.log(file);
                             field.onChange(file);
-                            console.log(field.value);
-                            // form.setValue(`file.${requirement.name}`, acceptedFiles[0])
                         };
                         reader.readAsDataURL(file);
                         }}
@@ -111,9 +107,9 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
               <div 
                 {...getRootProps()}
               >
-                <input {...getInputProps() as DropzoneInputProps} />
+                <input {...getInputProps() as DropzoneInputProps} className={props.className}/>
            
-                  <span className=" border-gray-300 border w-full flex items-center justify-center mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]">
+                  <span className={`border-gray-300 border w-full flex items-center ${!file ? "justify-center" : "justify-left"} mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]`}>
                     <p className="text-sm text-[#868687]">{!file ? <span className="flex items-center justify-center gap-2"> <UploadIcon /> <span>Click to Upload</span></span> : 
                     <span className="flex justify-between items-center">
                         <span className="flex gap-2 items-center justify-center">
@@ -132,18 +128,24 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
             </FormControl>
             );
         case FormFieldType.COUNTER:
+            // console.log(field.value);
+
             return (
                 <FormControl>
                     <div className="flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md border-input">
                         
                         <Input
-                        className="border-none text-center !py-0 !px-0"
+                        className={`${props.className} border-none text-center !py-0 !px-0`}
                         type="number"
                         value={count}
                         placeholder={props.placeholder}
-                        onChange={field.onChange}
+                        onChange={(count) => {
+                            console.log(count);
+                            field.onChange(count);
+                        }}
                         
                         />
+                        {/* {...field} */}
                    
                         
                         <div className="flex flex-col gap-2">
@@ -173,6 +175,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                    <Textarea
                         placeholder={props.placeholder}
                         className={props.className}
+                        disabled={props.disabled}
                         {...field}
                     />
                 </FormControl>

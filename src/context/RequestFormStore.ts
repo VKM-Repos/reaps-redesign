@@ -22,6 +22,17 @@ export type CheckboxGroup = {
     question7: string
 };
 
+type fileGroup = {
+    requirement1: string,
+    requirement2: string,
+    requirement3: string,
+    requirement4: string,
+    requirement5: string,
+    requirement6: string,
+    requirement7: string,
+    requirement8: string,
+}
+
 export interface RequestsStore {
     
     step: number;
@@ -32,7 +43,7 @@ export interface RequestsStore {
         institution: string;
         title: string;
         objectives: string;
-        files: any;
+        files: fileGroup | {};
       };
      
     };
@@ -57,7 +68,7 @@ type MyPersist = (
                     institution: '',
                     title: '',
                     objectives: '',
-                    files: null
+                    files: {}
                 },
             },
             setStep: (step) => set({ step }),
@@ -72,7 +83,7 @@ type MyPersist = (
                         institution: '',
                         title: '',
                         objectives: '',
-                        files: null
+                        files: {}
                     }
                 }
             });

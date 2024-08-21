@@ -64,7 +64,16 @@ export default function AppInfo({ handleNext}: Props) {
             setData({
                 requestsDetails: {
                     ...data.requestsDetails,
-                    checkbox: values
+                    checkbox: {
+                        question1: values.question1,
+                        question2: values.question2,
+                        question3: values.question3,
+                        question4: values.question4,
+                        question5: values.question5,
+                        question6: values.question6,
+                        question7: values.question7,
+
+                    }
                 }
             })
             handleNext();
