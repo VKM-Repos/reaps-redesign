@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 interface StepperContextProps {
     stepper: number;
-    setStep: (step: number) => void;
+    setStepper: (step: number) => void;
 }
 
 const StepperContext = createContext<StepperContextProps | undefined>(undefined);
@@ -16,10 +16,10 @@ export const useStepper = () => {
 };
 
 export const StepperProvider = ({ children }: { children: ReactNode }) => {
-    const [stepper, setStep] = useState(0);
+    const [stepper, setStepper] = useState(0);
 
     return (
-        <StepperContext.Provider value={{ stepper, setStep }}>
+        <StepperContext.Provider value={{ stepper, setStepper }}>
             {children}
         </StepperContext.Provider>
     );

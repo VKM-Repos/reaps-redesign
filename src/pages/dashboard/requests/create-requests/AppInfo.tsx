@@ -17,8 +17,7 @@ const formSchema = z.object({
   question4: z.enum(["yes", "no"], { required_error: "This field is required." }),
   question5: z.enum(["yes", "no"], { required_error: "This field is required." }),
   question6: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question7: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question8: z.string().min(1, { message: "This field is required"})
+  question7: z.string().min(1, { message: "This field is required"}),
 });
 
 
@@ -39,15 +38,15 @@ export default function AppInfo({ handleNext}: Props) {
           question4: "no",
           question5: "no",
           question6: "no",
-          question7: "no",
-          question8: "1"
+          question7: "1",
+
         }
         
     });
-    const { setStep } = useStepper();
+    const { setStepper } = useStepper();
 
     const updateStep = () => {
-      setStep(0);
+      setStepper(0);
     }
 
     useEffect(() => {
@@ -65,7 +64,16 @@ export default function AppInfo({ handleNext}: Props) {
             setData({
                 requestsDetails: {
                     ...data.requestsDetails,
-                    checkbox: values
+                    checkbox: {
+                        question1: values.question1,
+                        question2: values.question2,
+                        question3: values.question3,
+                        question4: values.question4,
+                        question5: values.question5,
+                        question6: values.question6,
+                        question7: values.question7,
+
+                    }
                 }
             })
             handleNext();
@@ -99,9 +107,9 @@ export default function AppInfo({ handleNext}: Props) {
                       />
                   ))}
                         <CustomFormField 
-                            name="question8"
+                            name="question7"
                             fieldType={FormFieldType.COUNTER}
-                            label="What is the duration of the research?"
+                            label="What is the duration of the research"
                             control={form.control}
                             required
                         />

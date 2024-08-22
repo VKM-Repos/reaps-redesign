@@ -4,18 +4,22 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
-import Dropzone, { DropzoneInputProps, FileWithPath } from 'react-dropzone'
+import Dropzone, { DropzoneInputProps } from 'react-dropzone'
 import UploadIcon from "./Icons/UploadIcon";
 import { Textarea } from "../ui/textarea";
 import ChevronDown from "./Icons/ChevronDown";
 import ChevronUp from "./Icons/ChevronUp";
+import { Checkbox } from "@radix-ui/react-checkbox";
+import GreenCheckmark from "./Icons/GreenCheckmark";
+
 
 export enum FormFieldType {
     INPUT = "input",
     RADIO = "radio",
     UPLOAD = "upload",
     COUNTER = "counter",
-    TEXTAREA = "textarea"
+    TEXTAREA = "textarea",
+    CHECKBOX = "checkbox"
 }
 
 type CustomProps = {
@@ -28,14 +32,20 @@ type CustomProps = {
    fieldType: FormFieldType;
    className?: string;
    options?: { label: string, value: string}[];
-   onDrop?: (acceptedFiles: FileWithPath[]) => void;
+   answers?: string;
+   disabled?: boolean;
+
    
 }
 
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
     const [file, UploadFile] = useState<string>();
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(8);
+
+    // useEffect(() => {
+    //     console.log("Field value changed:", field.value);
+    //   }, [field.value]);
 
     const handleIncrement = () => {
         setCount((prev) => prev + 1);
@@ -44,6 +54,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
     const handleDecrement = () => {
         setCount((prev) => (prev > 0 ? prev - 1 : 0));
     };
+
 
     switch (props.fieldType) {
         case FormFieldType.INPUT:
@@ -54,12 +65,13 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                 </FormControl>
             );
         case FormFieldType.RADIO: 
+            console.log(field);
             return (
                 <FormControl>
-                    <RadioGroup onValueChange={field.onChange} defaultValue={field.value}>
+                    <RadioGroup onValueChange={field.onChange}  defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}>
                         {props.options?.map((option) => (
-                            <div key={option.value} className="flex items-center gap-4 px-1">
-                                <RadioGroupItem value={option.value} id={`${field.name}-${option.value}`} />
+                            <div key={option.value} className={`${props.className} flex items-center gap-4 px-1`}>
+                                <RadioGroupItem value={option.value} id={`${field.name}-${option.value}`} disabled={props.disabled}/>
                                 <Label className="text-base " htmlFor={`${field.name}-${option.value}`}>{option.label}</Label>
                             </div>
                         ))}
@@ -80,36 +92,35 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
                         }}
                         multiple={false}
-                        maxSize={5000000}
+                        maxSize={3000000}
                         onDrop={(acceptedFiles) => {
                         const file = acceptedFiles[0];
                         const reader = new FileReader();
                         reader.onloadend = () => {
                             const base64String = reader.result as string;
                             UploadFile(base64String);
-                            field.onChange(base64String);
+                            field.onChange(file);
                         };
                         reader.readAsDataURL(file);
                         }}
+                        disabled={props.disabled}
                     >
-                        {({  getInputProps }) => (
+            {({  getInputProps, getRootProps }) => (
               <div 
-                // {...getRootProps({
-                // getRootProps,
-                //   className: cn(
-                //     "mt-6 w-full min-h-[14rem] cursor-pointer flex items-center p-4 rounded-lg text-center",
-                //     backgroundImage ? "bg-cover bg-center" : "bg-background"
-                //   ),
-                //   style: backgroundImage
-                //     ? { backgroundImage: url(${backgroundImage}) }
-                //     : {},
-                // })}
+                {...getRootProps()}
               >
-                <input {...getInputProps() as DropzoneInputProps} />
+                <input {...getInputProps() as DropzoneInputProps} className={props.className}/>
            
-                  <span className=" border-gray-300 border w-full flex items-center justify-center gap-2 mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]">
-                    <UploadIcon />
-                    <p className="text-sm text-[#868687]">{!file ? 'Click to Upload' : 'Change file'}</p>
+                  <span className={`border-gray-300 border w-full flex items-center ${!file ? "justify-center" : "justify-left"} mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]`}>
+                    <p className="text-sm text-[#868687]">{!file ? <span className="flex items-center justify-center gap-2"> <UploadIcon /> <span>Click to Upload</span></span> : 
+                    <span className="flex justify-between items-center">
+                        <span className="flex gap-2 items-center justify-center">
+                            <span><GreenCheckmark /></span>
+                            <span>{field.value?.name}</span>
+                        </span>
+                        {/* <span className="p-4"><Cancel /></span> */}
+                    </span>
+                    }</p>
                   </span>
               
               </div>
@@ -119,16 +130,26 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
             </FormControl>
             );
         case FormFieldType.COUNTER:
+            // console.log(field.value);
+
             return (
                 <FormControl>
-                    <div className="flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md border-input" {...field}>
+                    <div className="flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md border-input">
+                        
                         <Input
-                        className="border-none text-center !py-0 !px-0"
+                        className={`${props.className} border-none text-center !py-0 !px-0`}
                         type="number"
                         value={count}
                         placeholder={props.placeholder}
-                        readOnly
+                        onChange={(count) => {
+                            console.log(count);
+                            field.onChange(count);
+                        }}
+                        
                         />
+                        {/* {...field} */}
+                   
+                        
                         <div className="flex flex-col gap-2">
                             <button
                                 type="button"
@@ -156,15 +177,31 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                    <Textarea
                         placeholder={props.placeholder}
                         className={props.className}
+                        disabled={props.disabled}
                         {...field}
                     />
                 </FormControl>
             )
+        case FormFieldType.CHECKBOX:
+            return (
+                <FormControl>
+                    <Checkbox
+                    checked={field.value} 
+                    onCheckedChange={field.onChange}
+                    className={props.className}
+                    {...field}
+                    />
+                </FormControl>    
+            )
+
         
             
     }
+    
+
 
 }
+
 
 const CustomFormField = (props: CustomProps) => {
     const { name, control, label, fieldType, required} = props;
@@ -187,8 +224,6 @@ const CustomFormField = (props: CustomProps) => {
                     </div>
                     {fieldType === FormFieldType.UPLOAD && <span className="flex font-[400] justify-end text-[#868687] text-sm">Doc, Docx, Pdf (Max of 3MB)</span>}
                 </div>
-              
-               
                 <RenderInput field={field} props={props}/>
                 <FormMessage/>
             </FormItem>
@@ -199,3 +234,13 @@ const CustomFormField = (props: CustomProps) => {
 }
 
 export default CustomFormField
+
+// getRootProps
+// //   className: cn(
+// //     "mt-6 w-full min-h-[14rem] cursor-pointer flex items-center p-4 rounded-lg text-center",
+// //     backgroundImage ? "bg-cover bg-center" : "bg-background"
+// //   ),
+// //   style: backgroundImage
+// //     ? { backgroundImage: url(${backgroundImage}) }
+// //     : {},
+// }

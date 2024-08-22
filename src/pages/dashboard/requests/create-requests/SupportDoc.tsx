@@ -22,16 +22,33 @@ const ACCEPTED_FILE_TYPES = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 ];
 
-const formSchema = z.object({
-    file: z
-    .any()
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 3MB.`)
-    .refine(
-    (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
-    "Only .doc, .docx, .pdf and .webp formats are supported."
-    )
-  })
+const fileSchema = z
+  .instanceof(File)
+  .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
+  .refine(
+    (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+    "Only .doc, .docx, and .pdf formats are supported."
+  );
 
+
+const formSchema = z.object({
+  file: z.object({
+    requirement1: fileSchema.nullable(),
+    requirement2: fileSchema.nullable(),
+    requirement3: fileSchema.nullable(),
+    requirement4: fileSchema.nullable(),
+    requirement5: fileSchema.nullable(),
+    requirement6: fileSchema.nullable(),
+    requirement7: fileSchema.nullable(),
+    requirement8: fileSchema.nullable(),
+    requirement9: fileSchema.nullable(),
+  }),
+});
+
+  // call api to check if file exists
+  // set data to url
+  // useForm
+  // map data to name to url
 
 
 const SupportDoc = ({handleNext}: Props) => {
@@ -40,10 +57,12 @@ const SupportDoc = ({handleNext}: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-  const { setStep } = useStepper();
+
+  const { setStepper } = useStepper();
+  const { formState: { isValid } } = form;
 
     const updateStep = () => {
-        setStep(2);
+        setStepper(2);
       }
 
       
@@ -53,12 +72,12 @@ const SupportDoc = ({handleNext}: Props) => {
   
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(values.file);
     try {
         setData({
             requestsDetails: {
                 ...data.requestsDetails,
-                files: values
+                files: values.file
             }
         })
         handleNext();
@@ -78,17 +97,16 @@ const SupportDoc = ({handleNext}: Props) => {
             <div className="flex flex-col gap-8 ">
               {requirements.map((requirement) => (
                 <CustomFormField
-                  key={requirement.name}
-                  name={requirement.name}
+                  key={requirement.name} 
+                  name={`file.${requirement.id}`}
                   control={form.control}
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
                   required={true}
-                  // onDrop={(acceptedFiles) => form.setValue(requirement.name, acceptedFiles[0])}
                 />
               ))}
             </div>
-            <Button className={`my-4 focus:outline-none`}>Continue</Button>
+            <Button variant={isValid ? "default" : "ghost"} type="submit" className={`my-4 focus:outline-none`}>Continue</Button>
           </form>
         </Form>
       </div>

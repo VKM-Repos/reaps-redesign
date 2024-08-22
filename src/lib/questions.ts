@@ -27,39 +27,48 @@ export const questions = [
 
 export const requirements = [
     {
-        name: "requirement1",
-        label: "2-page curriculum vitae"
+        id: "requirement1",
+        name: "CV",
+        label: "2-page curriculum vitae",
     },
     {
-        name: "requirement2",
+        id: "requirement2",
+        name: "supervisorAttestation",
         label: "Supervisor's attestation statement"
     },
     {
-        name: "requirement3",
+        id: "requirement3",
+        name: "Cover Letter/Application Letter",
         label: "Cover Letter/Application Letter"
     },
     {
-        name: "requirement4",
+        id: "requirement4",
+        name: "Proposal",
         label: "Proposal"
     },
     {
-        name: "requirement5",
+        id: "requirement5",
+        name: "Research tools/Questionnaire",
         label: "Research tools/Questionnaire"
     },
     {
-        name: "requirement6",
-        label: "Evidence of Completion"
+        id: "requirement6",
+        name: "Evidence of Completion",
+        label: "Evidence of Completion",
     },
     {
-        name: "requirement7",
-        label: "Evidence of ethics training"
+        id: "requirement7",
+        name: "Evidence of ethics training",
+        label: "Evidence of ethics training",
     },
     {
-        name: "requirement8",
+        id: "requirement8",
+        name: "Sponsor's attestation statement",
         label: "Sponsor's attestation statement"
     },
     {
-        name: "requirement9",
+        id: "requirement9",
+        name: "Materials transfer agreement form",
         label: "Materials transfer agreement form"
     },
 ]
@@ -69,4 +78,67 @@ export const array = [
     "Research Info",
     "Supporting docs",
     "Summary"
+]
+
+export const application = [
+    {
+        name: "question1",
+        label: "Are you the principal investigator or Local Principal Investigator?",
+        options: [
+            {
+                label: "Yes",
+                value: "Yes",
+            }
+        ]
+    },
+    {
+        name: "question2",
+        label: "How would you describe yourself?",
+        options: [
+            {
+                label: "Student",
+                value: "Student",
+            }
+        ]
+    },
+    {
+        name: "question3",
+        label: "Is there a Co-Principal Investigator?",
+        options: [
+            {
+                label: "No",
+                value: "No",
+            }
+        ]
+    },
+    {
+        name: "question4",
+        label: "Is the project sponsored?",
+        options: [
+            {
+                label: "No",
+                value: "No",
+            }
+        ]
+    },
+    {
+        name: "question5",
+        label: "Did You Complete Ethics Training?",
+        options: [
+            {
+                label: "No",
+                value: "No",
+            }
+        ]
+    },
+    {
+        name: "question6",
+        label: "Will materials or tissue specimens be shipped out of the country?",
+        options: [
+            {
+                label: "Yes",
+                value: "Yes",                
+            }
+        ]
+    }
 ]

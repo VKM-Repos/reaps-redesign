@@ -21,6 +21,8 @@ const CreateRequests = () => {
             setStep(step + 1);
         }
 
+        
+
         const createRequestsDetails = async () => {
             try {
                 const { data } = useRequestsStore.getState();
@@ -55,16 +57,16 @@ const CreateRequests = () => {
             case 4:
                 return <ResearchInfo handleNext={handleNext} />
             case 5:
-                return <SupportDoc handleNext={onSubmitHandler} />
+                return <SupportDoc handleNext={handleNext} />
             case 6:
-                return <AppSummary  />
+                return <AppSummary handleNext={onSubmitHandler}  />
             default: 
                 return null;    
         }
 
     }
     return (
-        <div className="flex flex-col gap-[1.25rem]">
+        <div className="flex flex-col gap-[1.25rem] mb-20">
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Requests</h1>
             </div>

@@ -22,17 +22,28 @@ export type CheckboxGroup = {
     question7: string
 };
 
+type fileGroup = {
+    requirement1: string,
+    requirement2: string,
+    requirement3: string,
+    requirement4: string,
+    requirement5: string,
+    requirement6: string,
+    requirement7: string,
+    requirement8: string,
+}
+
 export interface RequestsStore {
     
     step: number;
     data: {
       requestsDetails: {
-        checkbox: CheckboxGroup | null;
+        checkbox: CheckboxGroup | {};
         specialisation: string;
         institution: string;
         title: string;
         objectives: string;
-        files: any;
+        files: fileGroup | {};
       };
      
     };
@@ -52,12 +63,12 @@ type MyPersist = (
             step: 1,
             data: {
                 requestsDetails: {
-                    checkbox: null,
+                    checkbox: {},
                     specialisation: '',
                     institution: '',
                     title: '',
                     objectives: '',
-                    files: null
+                    files: {}
                 },
             },
             setStep: (step) => set({ step }),
@@ -67,12 +78,12 @@ type MyPersist = (
                 step: 1,
                 data: {
                     requestsDetails: {
-                        checkbox: null,
+                        checkbox: {},
                         specialisation: '',
                         institution: '',
                         title: '',
                         objectives: '',
-                        files: null
+                        files: {}
                     }
                 }
             });

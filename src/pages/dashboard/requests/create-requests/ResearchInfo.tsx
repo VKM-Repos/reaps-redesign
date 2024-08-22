@@ -30,10 +30,10 @@ const ResearchInfo = ({ handleNext }: Props) => {
     });
 
     const { formState: {isValid}, register} = form;
-    const { setStep } = useStepper();
+    const { setStepper } = useStepper();
 
     const updateStep = () => {
-        setStep(1);
+        setStepper(1);
       }
   
       
