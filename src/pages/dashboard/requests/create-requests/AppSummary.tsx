@@ -93,7 +93,7 @@ const AppSummary = ({ handleNext }: Props) => {
         <div className='flex justify-between items-center'>
           <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Research Information</h1>
           <Button onClick={() => {handleGoBack(4)}}>
-            <span className='flex items-center justify-center gap-2'><PencilEdit /> Edit</span>
+            <span className='flex items-center justify-center gap-2 text-white'><PencilEdit /> Edit</span>
           </Button>
         </div>
         <Form {...form}>
@@ -118,7 +118,7 @@ const AppSummary = ({ handleNext }: Props) => {
                     <div className='flex justify-between items-center'>
                       <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Application Information</h1>
                       <Button onClick={() => {handleGoBack(3)}}>
-                        <span className='flex items-center justify-center gap-2'><PencilEdit /> Edit</span>
+                        <span className='flex items-center justify-center gap-2 text-white'><PencilEdit /> Edit</span>
                         
                       </Button>
                     </div>
@@ -144,7 +144,7 @@ const AppSummary = ({ handleNext }: Props) => {
                         <div className='flex justify-between items-center'>
                             <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Support Docs</h1>
                             <Button onClick={() => {handleGoBack(5)}}>
-                              <span className='flex items-center justify-center gap-2'><PencilEdit /> Edit</span>
+                              <span className='flex items-center justify-center gap-2 text-white'><PencilEdit /> Edit</span>
                             </Button>
                         </div>
                         <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">

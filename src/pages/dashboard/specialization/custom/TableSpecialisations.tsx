@@ -136,7 +136,7 @@ type Props = {
                         </TableCell>
                         <TableCell className="flex items-center justify-end gap-4">
                           <Sheet>
-                            <SheetTrigger className="px-0" onClick={() => {handleEditClick(data)}}><PencilEdit /></SheetTrigger>
+                            <SheetTrigger className="px-0 text-black" onClick={() => {handleEditClick(data)}}><PencilEdit /></SheetTrigger>
                               {currentEditData &&
                               <EditSpecializations
                               step={step}
