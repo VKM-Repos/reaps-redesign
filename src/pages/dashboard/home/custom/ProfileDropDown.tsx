@@ -45,12 +45,6 @@ export default function ProfileDropDown() {
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
     const [open, setOpen] = useState(false);
     const { loading } = useLogout();
-    
-    const [isRotated, setIsRotated] = useState(false);
-
-    const handleRotate = () => {
-      setIsRotated(prevState => !prevState); 
-    };
 
     const handleFunc = () => {
         setOpen(false);
@@ -62,17 +56,19 @@ export default function ProfileDropDown() {
                 {loading && <Loader />}
                 <DropdownMenu open={open} onOpenChange={setOpen}>
                 <div className="flex items-center max-w-fit">
-                        <button
-                            onClick={handleRotate}
+                        
+                            <DropdownMenuTrigger asChild>
+                            <button
+                           
                             className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center"
                         >
-                            <DropdownMenuTrigger asChild>
                                 <div className="flex items-center justify-center">
                                     <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
-                                    <img src="icons/arrow-down-01.svg" alt="arrow-down" className={isRotated ? 'rotate-180' : 'rotate-0'}/>
+                                    <img src="icons/arrow-down-01.svg" alt="arrow-down" className={open ? 'rotate-180' : 'rotate-0'}/>
                                 </div>
+                                </button>
                             </DropdownMenuTrigger>   
-                        </button>
+                        
                     </div>
                 <DropdownMenuContent className="py-8 px-4 flex flex-col gap-6 rounded-3xl w-full max-w-[24rem] mr-[6rem]">
                     <DropdownMenuLabel className="flex gap-4 items-center justify-left py-3 px-4">
@@ -96,7 +92,6 @@ export default function ProfileDropDown() {
             <Sheet open={open} onOpenChange={setOpen}>
                 <div className="flex items-center max-w-fit">
                         <button
-                            onClick={handleRotate}
                             className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center"
                         >
                             <SheetTrigger asChild>
