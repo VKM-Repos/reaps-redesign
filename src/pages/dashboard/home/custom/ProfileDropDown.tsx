@@ -44,22 +44,17 @@ const profileOptions = [
 export default function ProfileDropDown() {
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
     const [open, setOpen] = useState(false);
-    // const [rotation, setRotation] = useState(0);
     const { loading } = useLogout();
-    const handleFunc = () => {
-        setOpen(false);
-    }
-
-    // const handleRotate = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //     event.stopPropagation(); // Ensure that the click event is not consumed by the dropdown trigger
-    // setRotation(prevRotation => (prevRotation === 0 ? 180 : 0));
-    //   };
+    
     const [isRotated, setIsRotated] = useState(false);
 
     const handleRotate = () => {
-      setIsRotated(prevState => !prevState); // Toggle rotation state
+      setIsRotated(prevState => !prevState); 
     };
 
+    const handleFunc = () => {
+        setOpen(false);
+    }
 
     if (isDesktop) {
         return (
@@ -119,20 +114,25 @@ export default function ProfileDropDown() {
                 <SheetTrigger>
                     <button className="bg-inherit focus:outline-none notransition border-none hover:z-1000 hover:bg-[#14155E14] hover:rounded-full p-2"><User /></button>
                 </SheetTrigger>
-                <SheetContent side="right">
-                    <div className="flex justify-left"> 
-                        <SheetClose><BackButton title="" goBack={handleFunc} /></SheetClose>
-                    </div>
-                    <SheetHeader>
-                        <div className="flex gap-4 items-center justify-center py-3 px-4">
-                            <div className="hover:rounded-full hover:bg-[#14155E14] p-2"><User /></div>
-                            <div className="flex flex-col gap-1 items-center justify-left">
-                                <p className="text-sm inter text-[#0C0D0F]">{profile.name}</p>
-                                <p className="text-sm text-[#868687] inter"><span>({profile.role})</span> <span className="font-[400]">{profile.email}</span></p>
-                            </div>
+                <SheetContent side="right" className="w-full">
+                    <div className="w-[90%] mx-auto">
+                        <div className="flex justify-left w-full px-4"> 
+                            <SheetClose><BackButton goBack={handleFunc} className="!rounded-full !bg-[#14155E14] !mt-0 !p-2 !gap-0"/></SheetClose>
                         </div>
-                    </SheetHeader>
-                    <ProfileCard />
+                        <div className="py-8 flex flex-col gap-6">
+                            <SheetHeader>
+                                <div className="flex gap-2 py-3 px-5">
+                                    <div className="rounded-full bg-[#14155E14] p-2"><User /></div>
+                                    <div className="flex flex-col gap-1 text-left justify-left">
+                                        <p className="text-sm inter text-[#0C0D0F]">{profile.name}</p>
+                                        <p className="text-sm text-[#868687] inter"><span className="font-bold">({profile.role})</span> <span className="font-[400]">{profile.email}</span></p>
+                                    </div>
+                                </div>
+                            </SheetHeader>
+                            <ProfileCard />
+                        </div>
+                    </div>
+                    
                 </SheetContent>
             </Sheet>
         </>
