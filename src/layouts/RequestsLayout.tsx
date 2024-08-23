@@ -6,7 +6,6 @@ import { useRequestsStore } from "@/context/RequestFormStore";
 import { useMediaQuery } from "react-responsive";
 import { array } from "@/lib/questions";
 import { useStepper } from "@/context/StepperContext";
-import User from "@/components/custom/Icons/User";
 import ProfileDropDown from "@/pages/dashboard/home/custom/ProfileDropDown";
 
 type Props = {
@@ -37,10 +36,6 @@ export default function RequestsLayout({ children }: Props) {
                             )}
                         </div>
                         <div className="flex items-center justify-end w-full max-w-fit gap-1">
-                            {/* <div className="flex justify-end items-center w-full border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2">
-                                <button className="bg-inherit focus:outline-none notransition border-none hover:z-1000 hover:bg-[#14155E14] hover:rounded-full p-2"><User /></button>
-                                <img src="icons/arrow-down-01.svg" alt="arrow-down" />
-                            </div> */}
                             <ProfileDropDown />
                             <button className="h-fit bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5" onClick={() => {navigate(-1)}}><Cancel /></button>
                         </div>

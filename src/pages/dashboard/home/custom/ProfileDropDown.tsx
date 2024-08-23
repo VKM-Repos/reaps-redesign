@@ -61,34 +61,19 @@ export default function ProfileDropDown() {
             <div className="relative">
                 {loading && <Loader />}
                 <DropdownMenu open={open} onOpenChange={setOpen}>
-                {/* <div className="flex items-center max-w-fit">
-                    <button onClick={handleRotate} className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center">
-                        <DropdownMenuTrigger asChild>
-                            <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
-                        </DropdownMenuTrigger>
-                        <img 
-                        src="icons/arrow-down-01.svg" 
-                        alt="arrow-down" style={{ transform: `rotate(${rotation}deg)`, transition: 'transform 0.3s ease-in-out' }}
-                        />
-                    </button>
-                </div> */}
-                 <div className="flex items-center max-w-fit">
-                <button
-                    onClick={handleRotate}
-                    className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center"
-                >
-                    <DropdownMenuTrigger asChild>
-                    <div>
-                        <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
+                <div className="flex items-center max-w-fit">
+                        <button
+                            onClick={handleRotate}
+                            className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center"
+                        >
+                            <DropdownMenuTrigger asChild>
+                                <div className="flex items-center justify-center">
+                                    <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
+                                    <img src="icons/arrow-down-01.svg" alt="arrow-down" className={isRotated ? 'rotate-180' : 'rotate-0'}/>
+                                </div>
+                            </DropdownMenuTrigger>   
+                        </button>
                     </div>
-                    </DropdownMenuTrigger>
-                    <img
-                    src="icons/arrow-down-01.svg"
-                    alt="arrow-down"
-                    className={isRotated ? 'rotate-180' : 'rotate-0'}
-                    />
-                </button>
-                </div>
                 <DropdownMenuContent className="py-8 px-4 flex flex-col gap-6 rounded-3xl w-full max-w-[24rem] mr-[6rem]">
                     <DropdownMenuLabel className="flex gap-4 items-center justify-left py-3 px-4">
                         <div className="rounded-full bg-[#14155E14] p-2"><User /></div>
@@ -98,9 +83,7 @@ export default function ProfileDropDown() {
                         </div>
                       
                     </DropdownMenuLabel>
-                    {/* <DropdownMenuSeparator /> */}
                     <ProfileCard />
-                    
                 </DropdownMenuContent>
             </DropdownMenu>
             </div>
@@ -111,9 +94,20 @@ export default function ProfileDropDown() {
         <>
             {loading && <Loader />}
             <Sheet open={open} onOpenChange={setOpen}>
-                <SheetTrigger>
-                    <button className="bg-inherit focus:outline-none notransition border-none hover:z-1000 hover:bg-[#14155E14] hover:rounded-full p-2"><User /></button>
-                </SheetTrigger>
+                <div className="flex items-center max-w-fit">
+                        <button
+                            onClick={handleRotate}
+                            className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center"
+                        >
+                            <SheetTrigger asChild>
+                                <div className="flex items-center justify-center">
+                                    <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
+                                    <img src="icons/arrow-down-01.svg" alt="arrow-down"/>
+                                </div>
+                            </SheetTrigger>
+                            
+                        </button>
+                    </div>
                 <SheetContent side="right" className="w-full">
                     <div className="w-[90%] mx-auto">
                         <div className="flex justify-left w-full px-4"> 
@@ -147,20 +141,18 @@ function ProfileCard() {
                 {profileOptions.map(({ label, path, icon }) => (
                     <li className="hover:text-black flex space-x-4 px-4 py-3 items-center justify-between z-50">
                         {typeof path === "string" ? 
-                            <Link to={path} className="flex gap-2 text-[#454745] hover:text-black">
+                            <Link to={path} className="flex gap-2 text-[#868687] hover:text-black">
                                 <span>{icon}</span>
                                 <span>{label}</span>
                             </Link>
                             :
                             <Sheet>
-                                <SheetTrigger className="flex gap-2 text-[#454745] hover:text-black">
+                                <SheetTrigger className="flex gap-2 text-[#868687] hover:text-black">
                                     <span>{icon}</span>
                                     <span>{label}</span>
                                 </SheetTrigger>
                                 <Logout />
                             </Sheet>
-                           
-                          
                         }
                     </li>
                     

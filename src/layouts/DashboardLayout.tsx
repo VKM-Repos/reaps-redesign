@@ -18,14 +18,9 @@ export default function DashboardLayout() {
                     <Sidebar />
                     <div className="mx-auto my-0 md:absolute md:right-0 md:w-10/12">
                         <div className="w-[90%] mx-auto">
-                            <div className="flex items-center justify-end max-h-[124px] md:h-[130px] my-3">
-                            {/* <button 
-                                className="flex items-center max-w-fit border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2"
-                               
-                                > */}
-                                <ProfileDropDown />
-                                
-                                {/* </button> */}
+                            <div className="flex md:justify-end justify-between items-center max-h-[124px] md:h-[130px] py-4 mb-4">
+                                    <img className="md:hidden block" src="icons/mark.svg" alt="Mark logo" />
+                                    <ProfileDropDown />
                             </div>
                             <div className="md:4/5 mx-auto max-w-4xl flex flex-col gap-10">
                                 <Outlet />
