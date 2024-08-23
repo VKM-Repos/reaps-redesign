@@ -74,7 +74,7 @@ const RequestSpecialization = ({handleSpecNext}: Props) => {
     return (
         <>
         {loading && <Loader />}
-        <div className="flex flex-col gap-[1.25rem] my-8">
+        <div className="flex flex-col gap-[1.25rem] my-8 px-4">
             <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
                 <div className="flex flex-col gap-8 w-full max-w-[37rem] text-center">
                         <h1 className="text-[1.625rem] leading-8 font-bold">You need to create a specialization first</h1>

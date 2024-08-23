@@ -23,8 +23,8 @@ export default function EmptyRequests({handleNext}: Props) {
     return (
         <>
             {loading && <Loader />}
-            <div className="mx-auto my-0 w-full md:4/5 flex flex-col justify-center items-center">
-                <div className="w-[96px] h-[96px] pl-2 mx-auto my-[6rem] rounded-full flex justify-center items-center bg-[#FFD13A] ">
+            <div className="mx-auto my-0 w-full md:4/5 flex flex-col justify-center items-center mb-10">
+                <div className="w-[96px] h-[96px] pl-2 mx-auto mt-[6rem] mb-4 md:mb-[6rem] rounded-full flex justify-center items-center bg-[#FFD13A] ">
                         <GoogleDocLarge />
                 </div>
                 <div className="flex flex-col gap-6 w-full max-w-[37rem] text-center">
