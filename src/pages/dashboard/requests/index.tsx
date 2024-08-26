@@ -8,6 +8,8 @@ import AppInfo from "./create-requests/AppInfo";
 import SupportDoc from "./create-requests/SupportDoc";
 import AppSummary from "./create-requests/AppSummary";
 import RequestsLayout from "@/layouts/RequestsLayout";
+import TableRequests from "./custom/TableRequests";
+import { tableData } from "@/lib/helpers";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -70,13 +72,19 @@ const CreateRequests = () => {
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                 <h1 className="text-[1.875rem] font-bold">Requests</h1>
             </div>
-            {step === 1 ? (
-                <RenderRequestsForm />
-            ) : (
-                <RequestsLayout>
-                    <RenderRequestsForm />
-                </RequestsLayout>
-            )}
+            <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
+                {tableData.length > 0 ? 
+                    <TableRequests tableData={tableData}/>
+                    : 
+                    (step === 1 ? (
+                        <RenderRequestsForm />
+                    ) : (
+                        <RequestsLayout>
+                            <RenderRequestsForm />
+                        </RequestsLayout>
+                    ))
+                }
+            </div>
         </div>
     )
 }

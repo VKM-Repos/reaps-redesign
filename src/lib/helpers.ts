@@ -142,3 +142,58 @@ export const application = [
         ]
     }
 ]
+
+export type ColumnSetup<T> = {
+    header: string;
+    accessor: keyof T;
+    cellType?: 'text' | 'badge' | 'custom';
+    customRender?: (data: any) => JSX.Element;
+    headerClass?: string;
+    cellClass?: string;
+}
+
+
+export const tableData = [
+    {
+        title: "The Impact of MicroInteractions on Us...",
+        specialization: "Medicine",
+        submission: "19-01-2024",
+        expiry: "-- -- -----",
+        status: "Pending",
+    },
+    {
+        title: "Hands-on Science Experiments on Stu...",
+        specialization: "Medicine",
+        submission: "19-01-2024",
+        expiry: "-- -- -----",
+        status: "Declined",
+    },
+    {
+        title: "Knowledge Acquisition in Online Health",
+        specialization: "Medicine",
+        submission: "19-01-2024",
+        expiry: "-- -- -----",
+        status: "Under Review",
+    },
+    {
+        title: "A Comparative Analysis of Health...",
+        specialization: "Medicine",
+        submission: "19-01-2024",
+        expiry: "-- -- -----",
+        status: "Approved",
+    },
+    {
+        title: "Anatomy and Physiology",
+        specialization: "Medicine",
+        submission: "19-01-2024",
+        expiry: "-- -- -----",
+        status: "Draft",
+    },
+    {
+        title: "A Study of Chronic Disease Manage...",
+        specialization: "Medicine",
+        submission: "19-01-2024",
+        expiry: "-- -- -----",
+        status: "Approved"
+    },
+  ]

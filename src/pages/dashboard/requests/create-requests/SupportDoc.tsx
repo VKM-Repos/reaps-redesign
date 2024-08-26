@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { useRequestsStore } from "@/context/RequestFormStore";
 import { Button } from "@/components/ui/button";
-import { requirements } from "@/lib/questions";
+import { requirements } from "@/lib/helpers";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { useStepper } from "@/context/StepperContext";
 import { useEffect } from "react";

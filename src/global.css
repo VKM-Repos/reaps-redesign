@@ -172,6 +172,11 @@ button:focus, button:focus-visible {
     height: 100%;
   }
 
+  .dropdown-shadow {
+    box-shadow: 0px 20px 86px 0px #00000D1A;
+
+  }
+
   .dot::before {
     content: '';
     display: block;

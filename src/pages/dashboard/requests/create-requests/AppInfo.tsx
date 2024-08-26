@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import {  useRequestsStore } from "@/context/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
-import { questions } from "@/lib/questions";
+import { questions } from "@/lib/helpers";
 import { useEffect } from "react";
 
 import { useStepper } from "@/context/StepperContext";

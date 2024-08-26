@@ -4,7 +4,7 @@ import Cancel from "@/components/custom/Icons/Cancel";
 import Stepper from "@/components/custom/Stepper";
 import { useRequestsStore } from "@/context/RequestFormStore";
 import { useMediaQuery } from "react-responsive";
-import { array } from "@/lib/questions";
+import { array } from "@/lib/helpers";
 import { useStepper } from "@/context/StepperContext";
 import ProfileDropDown from "@/pages/dashboard/home/custom/ProfileDropDown";
 

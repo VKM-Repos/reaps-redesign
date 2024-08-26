@@ -1,6 +1,6 @@
 import { useStepper } from "@/context/StepperContext";
 import { useEffect, useRef, useState } from "react";
-import { array } from "@/lib/questions";
+import { array } from "@/lib/helpers";
 
 
 const totalWidth = 600;

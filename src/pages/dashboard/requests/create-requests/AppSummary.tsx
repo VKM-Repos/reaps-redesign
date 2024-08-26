@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useRequestsStore } from '@/context/RequestFormStore';
 import { useStepper } from '@/context/StepperContext';
-import { application, requirements } from '@/lib/questions';
+import { application, requirements } from '@/lib/helpers';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 

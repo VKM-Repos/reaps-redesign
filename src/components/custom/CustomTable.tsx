@@ -1,12 +1,8 @@
-// Props: C = Column number determines number of cells
-// Number of rows is determined by number of data items
-// functions as props
-
 import { Badge } from "../ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 
-type ColumnSetup<T> = {
-    header: string;
+export type ColumnSetup<T> = {
+    header?: string;
     accessor: keyof T;
     cellType?: 'text' | 'badge' | 'custom';
     customRender?: (data: any) => JSX.Element;
@@ -20,9 +16,11 @@ type CustomTableProps<T> = {
 }
 
 const statusColorMap: { [key: string]: string } = {
-    Approved: 'bg-green-500 text-white',
-    Pending: 'bg-yellow-500 text-black',
-    Rejected: 'bg-red-500 text-white',
+    Approved: 'bg-[#34A8534] text-[#254D4B]',
+    Pending: 'bg-[#CDD0CD] text-[#333A33]',
+    Declined: 'bg-[#E74848] text-[#BF1E2C]',
+    Draft: 'bg-[#192C8A] text-[#040C21]',
+    Review: 'bg-[#F2C374] text-[#452609]'
   };
 
 export default function CustomTable({ columns, data }: CustomTableProps<any>) {
@@ -43,13 +41,14 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                         <TableRow key={rowIndex} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer">
                             {columns.map((column, colIndex) => {
                                 const cellData = rowData[column.accessor];
+
                                 return (
                                     <TableCell key={colIndex} className={column.cellClass}>
                                         {column.cellType === 'custom' && column.customRender
                                         ? column.customRender(rowData)
                                         : column.cellType === 'badge' 
-                                        // 
-                                        ? (cellData).map((item: string, badgeIndex: number) => (
+                                        ? (Array.isArray(cellData) ? 
+                                        (cellData).map((item: string, badgeIndex: number) => (
                                             <Badge
                                             key={badgeIndex}
                                             className={`${
@@ -58,10 +57,17 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                                           >
                                             {item}
                                           </Badge>
+                                        )) : (
+                                            <Badge
+                                            className={`${
+                                              statusColorMap[cellData] || 'bg-[#192C8A1A] text-black'
+                                            } flex gap-1 items-center justify-center hover:bg-opacity-75 px-2 py-1 rounded-3xl max-w-fit text-xs`}
+                                          >
+                                            {cellData}
+                                          </Badge>
                                         ))
                                     :
                                     cellData}
-
                                     </TableCell>
                                 )
                             })}
