@@ -1,4 +1,4 @@
-import { useSpecializationsStore } from "@/context/specializationsFormStore";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
 import EditKeyword from "./EditKeywords";
 import EditSpecialization from "./EditSpecialization";
 import Loader from "../../../../components/custom/Loader";

@@ -6,7 +6,7 @@ import FormInput from "@/components/custom/FormInput";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import { Form } from "@/components/ui/form";
-import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Cancel from "@/components/custom/Icons/Cancel";
 
 type Props = {

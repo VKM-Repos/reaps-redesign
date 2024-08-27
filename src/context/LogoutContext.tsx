@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useOnboardingFormStore } from './CreateOnboardingFormStore';
+import { useOnboardingFormStore } from '../store/CreateOnboardingFormStore';
 
 interface LogoutContextProps {
     loading: boolean;

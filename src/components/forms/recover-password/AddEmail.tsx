@@ -6,7 +6,7 @@ import FormInput from "@/components/custom/FormInput";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import { Form } from "@/components/ui/form";
-import { usePasswordStore } from "@/context/recoverPasswordStore";
+import { usePasswordStore } from "@/store/recoverPasswordStore";
 
 type Props = {
     handleNext: Function;

@@ -1,6 +1,6 @@
 import { useMobileContext } from "@/context/MobileContext"
 import BackButton from "./BackButton";
-import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useNavigate } from "react-router-dom";
 import Cancel from "./Icons/Cancel";
 

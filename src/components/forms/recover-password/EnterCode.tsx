@@ -7,7 +7,7 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
-import { usePasswordStore } from "@/context/recoverPasswordStore";
+import { usePasswordStore } from "@/store/recoverPasswordStore";
 
 type Props = {
     handleNext: Function,

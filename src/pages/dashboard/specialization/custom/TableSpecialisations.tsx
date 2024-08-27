@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sheet"
 import { useState } from "react";
 import EditSpecializations from "../edit-specializations";
-import { useSpecializationsStore } from "@/context/specializationsFormStore";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import Loader from "@/components/custom/Loader";
 
