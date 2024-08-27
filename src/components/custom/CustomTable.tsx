@@ -1,4 +1,3 @@
-import { Badge } from "../ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 
 export type ColumnSetup<T> = {
@@ -15,13 +14,8 @@ type CustomTableProps<T> = {
     data: T[]; // actual data
 }
 
-const statusColorMap: { [key: string]: string } = {
-    Approved: 'bg-[#34A8534] text-[#254D4B]',
-    Pending: 'bg-[#CDD0CD] text-[#333A33]',
-    Declined: 'bg-[#E74848] text-[#BF1E2C]',
-    Draft: 'bg-[#192C8A] text-[#040C21]',
-    Review: 'bg-[#F2C374] text-[#452609]'
-  };
+
+
 
 export default function CustomTable({ columns, data }: CustomTableProps<any>) {
     return (
@@ -38,40 +32,15 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                 </TableHeader>
                 <TableBody>
                     {data.map((rowData, rowIndex) => (
-                        <TableRow key={rowIndex} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer">
-                            {columns.map((column, colIndex) => {
-                                const cellData = rowData[column.accessor];
-
-                                return (
-                                    <TableCell key={colIndex} className={column.cellClass}>
-                                        {column.cellType === 'custom' && column.customRender
-                                        ? column.customRender(rowData)
-                                        : column.cellType === 'badge' 
-                                        ? (Array.isArray(cellData) ? 
-                                        (cellData).map((item: string, badgeIndex: number) => (
-                                            <Badge
-                                            key={badgeIndex}
-                                            className={`${
-                                              statusColorMap[item] || 'bg-[#192C8A1A] text-black'
-                                            } flex gap-1 items-center justify-center hover:bg-opacity-75 p-1.5 rounded-lg`}
-                                          >
-                                            {item}
-                                          </Badge>
-                                        )) : (
-                                            <Badge
-                                            className={`${
-                                              statusColorMap[cellData] || 'bg-[#192C8A1A] text-black'
-                                            } flex gap-1 items-center justify-center hover:bg-opacity-75 px-2 py-1 rounded-3xl max-w-fit text-xs`}
-                                          >
-                                            {cellData}
-                                          </Badge>
-                                        ))
-                                    :
-                                    cellData}
-                                    </TableCell>
-                                )
-                            })}
-                        </TableRow>
+                       <TableRow key={rowIndex} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer">
+                       {columns.map((column, index) => (
+                         <TableCell key={index} className={column.cellClass}>
+                           {column.cellType === 'custom' && column.customRender
+                             ? column.customRender(rowData[column.accessor])
+                             : rowData[column.accessor]}
+                         </TableCell>
+                       ))}
+                     </TableRow>
                     ))}
                 </TableBody>
                 
@@ -79,3 +48,47 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
         </>
     )
 }
+
+
+{/* <TableRow key={rowIndex} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer">
+{columns.map((column, colIndex) => {
+    const cellData = rowData[column.accessor];
+
+    return (
+        <TableCell key={colIndex} className={column.cellClass}>
+            {column.cellType === 'custom' && column.customRender
+            ? column.customRender(rowData)
+            : column.cellType === 'badge' 
+            ? (Array.isArray(cellData) ? 
+            (cellData).map((item: string, badgeIndex: number) => (
+                <Badge
+                key={badgeIndex}
+                className={`${
+                  statusColorMap[item].bg || 'bg-[#192C8A1A] text-black'
+                } flex gap-1 items-center justify-center p-1.5 rounded-lg`}
+              >
+                {item}
+              </Badge>
+            )) : (
+                <Badge
+                    style={{
+                        color: statusColorMap[cellData]?.text || '#000000',  
+                        backgroundColor: statusColorMap[cellData]?.bg || '#192C8A',
+                    }}
+                    className="flex gap-2 items-center justify-center px-2 py-1 rounded-3xl max-w-fit text-xs"
+                    >
+                    <div
+                        style={{
+                        backgroundColor: statusColorMap[cellData]?.text || '#192C8A',  // Fallback background color
+                        }}
+                        className="w-[5px] h-[5px] rounded-full"
+                    ></div>
+                    {cellData}
+                    </Badge>
+            ))
+        :
+        cellData}
+        </TableCell>
+    )
+})}
+</TableRow> */}
