@@ -10,6 +10,7 @@ import School from "@/components/custom/sidebar-icons/school"
 import ProfileTwo from "@/components/custom/sidebar-icons/profile-02"
 import UserMultiple from "@/components/custom/sidebar-icons/user-multiple-02"
 import Bank from "@/components/custom/sidebar-icons/bank"
+import { useRole } from "@/hooks/useRole"
 
 type SideBarLink = {
     label: string,
@@ -35,7 +36,8 @@ type SideBarProviderProps = {
 export default function SideBarProvider({ children }: SideBarProviderProps) {
     const sideBarLinks = [];
 
-    let role = "RESEARCHER";
+    const { role } = useRole();
+
 
     switch (role) {
         case "RESEARCHER":
