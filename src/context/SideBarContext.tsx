@@ -1,13 +1,25 @@
 import { ReactNode, createContext, useContext } from "react"
-import DocumentIcon from "@/components/custom/sidebar-icons/DocumentIcon"
-import HomeIcon from "@/components/custom/sidebar-icons/Home"
-import InvoiceIcon from "@/components/custom/sidebar-icons/InvoiceIcon"
-import More from "@/components/custom/sidebar-icons/More"
+import DocumentIcon from "@/components/custom/sidebar-icons/document-icon"
+import HomeIcon from "@/components/custom/sidebar-icons/home"
+import InvoiceIcon from "@/components/custom/sidebar-icons/invoice-icon"
+import More from "@/components/custom/sidebar-icons/more"
+import FileView from "@/components/custom/sidebar-icons/file-view"
+import FileManage from "@/components/custom/sidebar-icons/file-management"
+import DialPad from "@/components/custom/sidebar-icons/dialpad-square-01"
+import School from "@/components/custom/sidebar-icons/school"
+import ProfileTwo from "@/components/custom/sidebar-icons/profile-02"
+import UserMultiple from "@/components/custom/sidebar-icons/user-multiple-02"
+import Bank from "@/components/custom/sidebar-icons/bank"
 
 type SideBarLink = {
     label: string,
     path: string,
     icon?: ReactNode
+    subLinks?: {
+        label: string,
+        path: string,
+        icon?: ReactNode
+    }[]
 }
 
 type SideBarContextValue = {
@@ -76,27 +88,67 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
 
             );
             break;
-        case "INSTITUTIONALADMIN":
+        case "INSTITUTION_ADMIN":
             sideBarLinks.push(
                 {
                     label: "Home",
                     path: "/home",
                     icon: <HomeIcon />
                 },
-                {
-                    label: "Requests",
-                    path: "/requests",
-                    icon: <DocumentIcon />
-                },
+               
                 {
                     label: "Specialization",
                     path: "/specialization",
-                    icon: <More />
+                    icon: <More />,
                 },
                 {
-                    label: "Pricing",
-                    path: "/pricing",
-                    icon: <InvoiceIcon />
+                    label: "Requests",
+                    path: "/requests",
+                    icon: <DocumentIcon />,
+                    subLinks: [
+                        {
+                            label: "My Requests",
+                            path: "/requests/my-requests",
+                            icon: <DocumentIcon />
+                        },
+                        {
+                            label: "Review Requests",
+                            path: "/requests/review-requests",
+                            icon: <FileView />
+                        },
+                        {
+                            label: "Manage Requests",
+                            path: "/requests/manage-requests",
+                            icon: <FileManage />
+                        },
+                        {
+                            label: "Templates",
+                            path: "/requests/templates",
+                            icon: <DialPad />
+                        }
+                    ]
+                },
+                {
+                    label: "Institution",
+                    path: "/institution",
+                    icon: <School />,
+                    subLinks: [
+                        {
+                            label: "Users",
+                            path: "/institution/users",
+                            icon: <UserMultiple />,   
+                        },
+                        {
+                            label: "Profile",
+                            path: "/institution/profile",
+                            icon: <ProfileTwo />,
+                        },
+                        {
+                            label: "Institution",
+                            path: "/institution/account",
+                            icon: <Bank />,
+                        }
+                    ]
                 },
 
             );

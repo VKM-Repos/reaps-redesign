@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import {
   OnboardingFormStore,
   useOnboardingFormStore,
-} from "@/context/CreateOnboardingFormStore";
+} from "@/store/CreateOnboardingFormStore";
 import Loader from "@/components/custom/Loader";
 import RegisterUser from "@/components/forms/create-account-form/RegisterUser";
 import SendCode from "@/components/forms/create-account-form/SendCode";

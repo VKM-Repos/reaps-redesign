@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/custom/FormInput";
 import { Form } from "@/components/ui/form";
-import { useSpecializationsStore } from "@/context/specializationsFormStore";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
 import { SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 

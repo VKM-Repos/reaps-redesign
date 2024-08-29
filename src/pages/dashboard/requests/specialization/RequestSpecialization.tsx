@@ -1,4 +1,4 @@
-import { SpecializationsStore, useSpecializationsStore } from "@/context/specializationsFormStore";
+import { SpecializationsStore, useSpecializationsStore } from "@/store/specializationsFormStore";
 import { useForm, SubmitHandler } from "react-hook-form"
 import Specialization from "../../specialization/create-specializations/CreateSpecializaton";
 import AddKeyword from "@/pages/dashboard/specialization/create-specializations/AddKeyword"
