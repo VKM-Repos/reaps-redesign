@@ -17,6 +17,7 @@ import { useState } from "react";
 import EditSpecializations from "../edit-specializations";
 import { useSpecializationsStore } from "@/context/specializationsFormStore";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
   tableData: {
@@ -74,13 +75,15 @@ type Props = {
 
   const handleNext = () => {
     setStep(step + 1);
+   
   }
 
 
-  // set up one table component
+
 
     return (
       <>
+          {loading && <Loader />}
           <Table className="w-full border overflow-scroll">
               <TableHeader>
                 <TableRow className="font-bold w-full flex gap-6 justify-between !border-b p-6">
@@ -100,28 +103,29 @@ type Props = {
                           ))}
                         </TableCell>
                         <TableCell className="flex items-center justify-end gap-4">
-                          <Sheet>
+                           <Sheet>
                             <SheetTrigger className="px-0 text-black" onClick={() => {handleEditClick(data)}}><PencilEdit /></SheetTrigger>
-                              {currentEditData &&
-                              <EditSpecializations
-                              step={step}
-                              specialization={currentEditData.specialization}
-                              keywordArray={currentEditData.keyword}
-                              handleNext={handleNext}
-                              onSaveSpecializations={handleSaveSpecialization}
-                              onSaveKeywords={handleSaveKeywords}/>}
+                              {currentEditData && (
+                                <EditSpecializations
+                                  step={step}
+                                  specialization={currentEditData.specialization}
+                                  keywordArray={currentEditData.keyword}
+                                  handleNext={handleNext}
+                                  onSaveSpecializations={handleSaveSpecialization}
+                                  onSaveKeywords={handleSaveKeywords}
+                                />
+                              )}
                           </Sheet>
                           <Sheet>
                             <SheetTrigger className="px-0"><Delete /></SheetTrigger>
-                            <RenderDeleteSheet data={data} loading={loading} deleteItem={(data) => {deleteTableItem(data)}} />
-                          </Sheet>    
+                            <RenderDeleteSheet data={data} deleteItem={(data) => {deleteTableItem(data)}} />
+                          </Sheet> 
                         </TableCell>
                     </TableRow>
                   ))
                 )}
               </TableBody>
-          </Table>
-       
+          </Table> 
       </> 
     )
   }

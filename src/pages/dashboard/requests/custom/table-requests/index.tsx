@@ -5,10 +5,12 @@ import View from "@/components/custom/Icons/View";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useState } from "react";
-import SubmittedRequests from "./SubmittedRequests";
+import SubmittedRequests from "../SubmittedRequests";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
+import Loader from "@/components/custom/Loader";
+import { Badge } from "@/components/ui/badge";
 
 type TableRequestsProps = {
     tableData: {
@@ -31,20 +33,26 @@ type TableRequestsProps = {
   }
 
 
-  
-
+  const statusColorMap: { [key: string]: { bg: string; text: string } } = {
+    Approved: { bg: '#34A853', text: '#254D4B' },
+    Pending: { bg: '#CDD0CD', text: '#333A33' },
+    Declined: { bg: '#E7484847', text: '#BF1E2C' },
+    Draft: { bg: '#192C8A14', text: '#040C21' },
+    "Under Review": { bg: '#F2C374', text: '#452609' },
+  };
 
 
 function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
-    
 
     return (
+        <>
+        {loading && <Loader />}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <MoreIcon />
-            </DropdownMenuTrigger>
+                <button><MoreIcon /></button>
+            </DropdownMenuTrigger >
             <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
-                <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-center p-3">
+                <DropdownMenuGroup className="flex flex-col gap-3 justify-center p-3">
                     <DropdownMenuItem>
                         <button className="flex justify-center gap-2 text-black" onClick={() => {return <SubmittedRequests />}}>
                             <span><View /></span>
@@ -57,18 +65,18 @@ function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
                             <span>Edit</span>
                         </button>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Sheet>
-                            <SheetTrigger className="flex justify-center gap-2 text-black">
-                                <DeleteSmallIcon />
-                                <span>Delete</span>
-                            </SheetTrigger>
-                            <RenderDeleteSheet data={item} loading={loading} deleteItem={(item) => {onDelete(item)}} />
-                        </Sheet>
-                    </DropdownMenuItem>
+                    <Sheet>
+                        <SheetTrigger className="flex justify-center gap-2 text-black">
+                            <DeleteSmallIcon />
+                            <span>Delete</span>
+                        </SheetTrigger>
+                        <RenderDeleteSheet data={item} deleteItem={(item) => {onDelete(item)}} />
+                    </Sheet>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
+        </>
+        
     )
 }
 
@@ -83,7 +91,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         setTimeout(() => {
             setLoading(false);
         }, 5000);
-      setTableArray((prevTableArray) => prevTableArray.filter((data) => data.title !== item.data.title)
+      setTableArray((prevTableArray) => prevTableArray.filter((data) => data.title !== item.title)
       );
     }
 
@@ -120,15 +128,36 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         {
             header: "Status",
             accessor: "status",
-            cellType: "badge",
+            cellType: "custom",
+            customRender: (item: string) => {
+                return (
+                    <>
+                        <Badge
+                          style={{
+                            color: statusColorMap[item]?.text || '#000000',
+                            backgroundColor: statusColorMap[item]?.bg || '#192C8A',
+                          }}
+                          className="flex gap-1 items-center justify-center p-1.5 rounded-lg"
+                        >
+                          <div
+                            style={{
+                              backgroundColor: statusColorMap[item]?.text || '#192C8A',
+                            }}
+                            className="w-[5px] h-[5px] rounded-full"
+                          ></div>
+                          {item}
+                        </Badge>
+                    </>
+                  );
+            },
              headerClass: "font-bold w-full min-w-[8.75rem]",
             cellClass: "text-left min-w-[8.75rem] flex justify-left"
         },
         {
             accessor: "custom",
             cellType: "custom",
-            customRender: (item: any) => (
-                <RenderFunctions item={item} onDelete={deleteTableItem} loading={loading} />
+            customRender: (items: any) => (
+                <RenderFunctions item={items} onDelete={deleteTableItem} loading={loading} />
               ),
             cellClass: "w-fit",
         }

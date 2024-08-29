@@ -8,7 +8,7 @@ import AppInfo from "./create-requests/AppInfo";
 import SupportDoc from "./create-requests/SupportDoc";
 import AppSummary from "./create-requests/AppSummary";
 import RequestsLayout from "@/layouts/RequestsLayout";
-import TableRequests from "./custom/TableRequests";
+import TableRequests from "./custom/table-requests";
 import { tableData } from "@/lib/helpers";
 
 const CreateRequests = () => {
@@ -18,7 +18,6 @@ const CreateRequests = () => {
     const RequestsData = new FormData();
 
     const RenderRequestsForm = () => {
-        console.log(step);
         const handleNext = () => {
             setStep(step + 1);
         }
