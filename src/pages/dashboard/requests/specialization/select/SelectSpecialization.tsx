@@ -13,7 +13,7 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { useState } from "react";
-import RequestSpecialization from "./RequestSpecialization";
+import RequestSpecialization from "../request-specialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/Loader";
@@ -70,7 +70,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
   return (
     <>
     {loading && <Loader />}
-    {specialization.length < 0 ?
+    {specialization.length > 0 ?
         <>
             <div className="flex flex-col justify-center items-center">
                 <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Select your specialization</h1>

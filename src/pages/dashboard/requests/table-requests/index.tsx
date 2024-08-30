@@ -5,12 +5,12 @@ import View from "@/components/custom/Icons/View";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useState } from "react";
-import SubmittedRequests from "../SubmittedRequests";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import Loader from "@/components/custom/Loader";
 import { Badge } from "@/components/ui/badge";
+import ViewRequests from "../view-requests";
 
 type TableRequestsProps = {
     tableData: {
@@ -54,13 +54,13 @@ function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
             <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
                 <DropdownMenuGroup className="flex flex-col gap-3 justify-center p-3">
                     <DropdownMenuItem>
-                        <button className="flex justify-center gap-2 text-black" onClick={() => {return <SubmittedRequests />}}>
+                        <button className="flex justify-center gap-2 text-black" onClick={() => {return <ViewRequests />}}>
                             <span><View /></span>
                             <span>View</span>
                         </button>
                     </DropdownMenuItem>
                     <DropdownMenuItem >
-                        <button className="flex justify-center gap-2 text-black" onClick={() => {return <SubmittedRequests />}}>
+                        <button className="flex justify-center gap-2 text-black" onClick={() => {return <ViewRequests />}}>
                             <span><PencilEdit /></span>
                             <span>Edit</span>
                         </button>

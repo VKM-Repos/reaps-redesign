@@ -1,22 +1,20 @@
-import { Button } from "../../../../components/ui/button"
-import GoogleDoc from "../../../../components/custom/Icons/GoogleDoc"
-import GoogleDocLarge from "../../../../components/custom/Icons/GoogleDocLarge"
+import { Button } from "@/components/ui/button"
+import GoogleDoc from "@/components/custom/Icons/GoogleDoc"
+import GoogleDocLarge from "@/components/custom/Icons/GoogleDocLarge"
 import { useState } from "react"
 import Loader from "@/components/custom/Loader"
+import { useNavigate } from "react-router-dom"
 
 
-type Props = {
-    handleNext: Function
-}
-
-export default function EmptyRequests({handleNext}: Props) {
+export default function EmptyRequests() {
     const [ loading, setLoading ] = useState(false);
+    const navigate = useNavigate();
 
     const handleFunc = () => {
         setLoading(true);
 
         setTimeout(() => {
-          handleNext();
+          navigate('/requests/create');
           setLoading(false); 
         }, 5000);
       };
