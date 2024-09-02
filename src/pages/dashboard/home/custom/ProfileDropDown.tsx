@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import BackButton from "@/components/custom/BackButton";
 import { useLogout } from "@/context/LogoutContext";
 import Loader from "@/components/custom/Loader";
+import ArrowDown from "/icons/arrow-down-01.svg"
 
 const profile = {
     name: "John Doe",
@@ -64,7 +65,7 @@ export default function ProfileDropDown() {
                         >
                                 <div className="flex items-center justify-center">
                                     <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
-                                    <img src="icons/arrow-down-01.svg" alt="arrow-down" className={open ? 'rotate-180' : 'rotate-0'}/>
+                                    <img src={ArrowDown} alt="arrow-down" className={open ? 'rotate-180' : 'rotate-0'}/>
                                 </div>
                                 </button>
                             </DropdownMenuTrigger>   

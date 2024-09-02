@@ -118,7 +118,7 @@ type Props = {
                           </Sheet>
                           <Sheet>
                             <SheetTrigger className="px-0"><Delete /></SheetTrigger>
-                            <RenderDeleteSheet data={data} deleteItem={(data) => {deleteTableItem(data)}} />
+                            <RenderDeleteSheet text="Are you sure you want to delete this specialization?" data={data} deleteItem={(data) => {deleteTableItem(data)}} />
                           </Sheet> 
                         </TableCell>
                     </TableRow>
