@@ -13,7 +13,7 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { useState } from "react";
-import RequestSpecialization from "../request-specialization";
+import RequestSpecialization from "./CreateSpecialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/Loader";

@@ -1,6 +1,6 @@
 import { useRequestsStore, RequestsStore } from "@/store/RequestFormStore"
 import { SubmitHandler, useForm } from "react-hook-form";
-import SelectSpecialization from "../specialization/select/SelectSpecialization";
+import SelectSpecialization from "../forms/SelectSpecialization";
 import ResearchInfo from "./ResearchInfo";
 import AppInfo from "./AppInfo";
 import SupportDoc from "./SupportDoc";

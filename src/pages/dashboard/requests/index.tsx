@@ -1,6 +1,6 @@
 import { tableData } from "@/lib/helpers";
-import TableRequests from "./table-requests";
-import EmptyRequests from "./emptystate";
+import TableRequests from "./components/table-requests";
+import EmptyRequests from "./components/emptystate";
 
 export default function Requests() {
     return (
