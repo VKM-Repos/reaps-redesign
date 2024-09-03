@@ -60,8 +60,8 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
         case FormFieldType.INPUT:
             return (
                 <FormControl>
-                    <Input placeholder={props.placeholder}/>
-                    {...field}
+                    <Input placeholder={props.placeholder} {...field}/>
+                    
                 </FormControl>
             );
         case FormFieldType.RADIO: 
