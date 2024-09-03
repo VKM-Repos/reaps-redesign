@@ -72,7 +72,7 @@ const CreateRequests = () => {
                 <h1 className="text-[1.875rem] font-bold">Requests</h1>
             </div>
             <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
-                {tableData.length > 0 ? 
+                {tableData.length < 0 ? 
                     <TableRequests tableData={tableData}/>
                     : 
                     (step === 1 ? (
