@@ -43,7 +43,7 @@ const Home = () => {
     // create handle open function
     
 const navigate = useNavigate();
-const {role, setRole} = useRole();
+const { role } = useRole();
 
 
 
