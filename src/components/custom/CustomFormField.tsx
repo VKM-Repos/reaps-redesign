@@ -11,6 +11,7 @@ import ChevronDown from "./Icons/ChevronDown";
 import ChevronUp from "./Icons/ChevronUp";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import GreenCheckmark from "./Icons/GreenCheckmark";
+import { Switch } from "../ui/switch";
 
 
 export enum FormFieldType {
@@ -19,6 +20,7 @@ export enum FormFieldType {
     UPLOAD = "upload",
     COUNTER = "counter",
     TEXTAREA = "textarea",
+    SWITCH = "switch",
     CHECKBOX = "checkbox"
 }
 
@@ -180,6 +182,15 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         disabled={props.disabled}
                         {...field}
                     />
+                </FormControl>
+            )
+        case FormFieldType.SWITCH:
+            return (
+                <FormControl>
+                    <Switch 
+                        className={props.className}
+                        disabled={props.disabled}
+                        {...field}/>
                 </FormControl>
             )
         case FormFieldType.CHECKBOX:
