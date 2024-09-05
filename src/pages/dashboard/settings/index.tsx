@@ -4,13 +4,12 @@ import {
     CollapsibleTrigger,
   } from "@/components/ui/collapsible";
 import { useState } from "react";
-import { EducationSettings, 
-            EmailSettings, 
-            InstitutionSettings, 
-            NotificationsSettings, 
-            PasswordSettings, 
-            ProfileSettings 
-        } from "./forms";
+import { EducationSettings } from "./forms/EducationSettings";
+import { ProfileSettings } from "./forms/ProfileSettings";
+import { InstitutionSettings } from "./forms/InstitutionSettings";
+import { PasswordSettings } from "./forms/PasswordSettings";
+import { NotificationsSettings } from "./forms/NotificationsSettings";
+import { EmailSettings } from "./forms/EmailSettings";
 import UserSettingsIcon from "@/components/custom/Icons/UserSettingsIcon";
 import MortarIcon from "@/components/custom/Icons/MortarIcon";
 import NotificationIcon from "@/components/custom/Icons/NotificationIcon";
