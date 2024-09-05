@@ -50,11 +50,7 @@ type CustomProps = {
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
     const [file, UploadFile] = useState<string>();
-    const [count, setCount] = useState(8);
-
-    // useEffect(() => {
-    //     console.log("Field value changed:", field.value);
-    //   }, [field.value]);
+    const [count, setCount] = useState(0);
 
     const handleIncrement = () => {
         setCount((prev) => prev + 1);
@@ -208,7 +204,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full pl-3 text-left font-normal rounded-xl button-hover",
+                        "w-full pl-3 text-left text-black font-normal rounded-xl button-hover",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -218,7 +214,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         <span>Pick a date</span>
                       )}
 
-                      <img src={CalendarIcon} className="ml-auto h-4 w-4 opacity-50" />
+                      <img src={CalendarIcon} className="ml-auto h-4 w-4 opacity-50 text-black" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -245,14 +241,8 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     {...field}
                     />
                 </FormControl>    
-            )
-
-        
-            
+            )    
     }
-    
-
-
 }
 
 

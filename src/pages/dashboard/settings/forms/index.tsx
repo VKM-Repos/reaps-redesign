@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import MailIcon from "@/components/custom/Icons/MailIcon";
+import Loader from "@/components/custom/Loader";
 
 type FormWrapperProps = {
    
@@ -23,6 +24,7 @@ type FormWrapperProps = {
 
 export const ProfileSettings = () => {
     const [dialCode, setDialCode] = useState("+234");
+    const [loading, setLoader] = useState(false);
     const formSchema = z.object({
         firstName: z
         .string()
@@ -42,11 +44,12 @@ export const ProfileSettings = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
       });
-      const { register, formState: { isValid }} = form;
+      const { register, formState: { isValid }, reset} = form;
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const dialNumber = dialCode + values.phoneNumber;
+        setLoader(true);
         try {
             setData({
                 onboardingDetails: {
@@ -57,78 +60,86 @@ export const ProfileSettings = () => {
                     dob: values.dob,
                 }
             }); 
+            setTimeout(() => {
+                setLoader(false);
+                reset();
+            }, 3000);
         } catch (error) {
           console.error(error);
         }
     }
     return (
-        <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="flex flex-col gap-6">
-            <FormInput
-                label="Your First Name"
-                type="text"
-                placeholder="John"
-                {...register("firstName", {
-                required: "This field is required",
-                })}
-                />
+        <>
+         {loading && <Loader />}
+            <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6">
                 <FormInput
-                label="Your Last Name"
-                type="text"
-                placeholder="Doe"
-                {...register("lastName", {
-                required: "This field is required",
-                })}
-                />
-                <CustomFormField 
-                    name="dob"
-                    fieldType={FormFieldType.DATE}
-                    control={form.control}
-                    label="Date of Birth"
-                />
-                <div className="flex gap-2">
-                    <div className="flex flex-col text-xs mt-2">
-                        <Select onValueChange={(value: string) => {
-                                const selectedCountry: any = countryCodes.find(country => country.name === value);
-                                if (selectedCountry) {
-                                setDialCode(selectedCountry.dial_code);
-                                }
-                            }}>
-                            <Label className="font-md">Country Code</Label>
-                            <SelectTrigger className="max-w-28 mt-2">
-                                <SelectValue placeholder={dialCode} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup> 
-                                    <SelectLabel>Country Codes</SelectLabel>
-                                    {countryCodes && countryCodes.map((country) => (
-                                            <SelectItem
-                                                value={country.name}
-                                            >
-                                                {country.dial_code}
-                                            </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                    label="Your First Name"
+                    type="text"
+                    placeholder="John"
+                    {...register("firstName", {
+                    required: "This field is required",
+                    })}
+                    />
+                    <FormInput
+                    label="Your Last Name"
+                    type="text"
+                    placeholder="Doe"
+                    {...register("lastName", {
+                    required: "This field is required",
+                    })}
+                    />
+                    <CustomFormField 
+                        name="dob"
+                        fieldType={FormFieldType.DATE}
+                        control={form.control}
+                        label="Date of Birth"
+                    />
+                    <div className="flex gap-2">
+                        <div className="flex flex-col text-xs mt-2">
+                            <Select onValueChange={(value: string) => {
+                                    const selectedCountry: any = countryCodes.find(country => country.name === value);
+                                    if (selectedCountry) {
+                                    setDialCode(selectedCountry.dial_code);
+                                    }
+                                }}>
+                                <Label className="font-md">Country Code</Label>
+                                <SelectTrigger className="max-w-28 mt-2">
+                                    <SelectValue placeholder={dialCode} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup> 
+                                        <SelectLabel>Country Codes</SelectLabel>
+                                        {countryCodes && countryCodes.map((country) => (
+                                                <SelectItem
+                                                    value={country.name}
+                                                >
+                                                    {country.dial_code}
+                                                </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        
+                        <div className="w-full">
+                            <FormInput
+                                label="Phone number"
+                                {...register("phoneNumber", {
+                                required: "This field is required",
+                                })}   
+                            />
+                        </div>  
                     </div>
-                  
-                    <div className="w-full">
-                        <FormInput
-                            label="Phone number"
-                            {...register("phoneNumber", {
-                            required: "This field is required",
-                            })}   
-                        />
-                    </div>  
                 </div>
+                <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
+            </form>
+            </Form>
             </div>
-            <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
-        </form>
-      </Form>
-      </div>
+        </>
+       
     )
 }
 export const EmailSettings = () => {
@@ -139,27 +150,36 @@ export const EmailSettings = () => {
             .email({ message: "Invalid email address"})
     });
 
+
     const { data, setData } = useOnboardingFormStore();
+    const [loading, setLoader ] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
       });
-      const { register, formState: { isValid } } = form;
+      const { register, formState: { isValid }, reset } = form;
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoader(true);
         try {
             setData({
                 onboardingDetails: {
                     ...data.onboardingDetails,
-                    firstName: values.email,
+                    email: values.email,
                 }
             }); 
+            setTimeout(() => {
+                setLoader(false);
+                reset();
+            }, 3000)
         } catch (error) {
           console.error(error);
         }
     }
 
     return (
+        <>
+        {loading && <Loader />}
         <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -175,6 +195,9 @@ export const EmailSettings = () => {
            
         </Form>
         </div>
+        </>
+        
+       
     )
 
 }
@@ -188,13 +211,15 @@ export const InstitutionSettings = () => {
     const institutions = ["University of Abuja", "University of PortHarcourt", "University of Lagos", "University of Benin"];
     const { data, setData } = useRequestsStore();
     const [ institute, setInstitute ] = useState("");
+    const [loading, setLoader ] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
-    const {  setValue, formState: { isValid }} = form;
+    const {  setValue, formState: { isValid }, reset } = form;
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoader(true);
         try {
             setData({
                 requestsDetails: {
@@ -202,12 +227,18 @@ export const InstitutionSettings = () => {
                     institution: values.institution,
                 }
             });
+            setTimeout(() => {
+                setLoader(false);
+                reset();
+            }, 3000);
         }
         catch (error) {
             console.error(error);
         }
     }
     return (  
+        <>
+        {loading && <Loader />}
         <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -235,12 +266,14 @@ export const InstitutionSettings = () => {
            
         </Form>
         </div>
+        </>
+       
        
     )
 
 }
 export const EducationSettings = () => {
-    const educationLevels = ["Undergraduate", "Postgraduate", "Postgraduate"]
+    const educationLevels = ["Undergraduate", "Postgraduate", "Graduate"]
     const formSchema = z.object({
         education: z
             .string()
@@ -250,19 +283,37 @@ export const EducationSettings = () => {
             .min(1, { message: "Please fill this field"})
     });
 
-    const [ education, setEducation ] = useState("Post Graduate");
+    const [ education, setEducation ] = useState("Graduate");
+    const [ loading, setLoader ] = useState(false);
+    const { data, setData } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
-    const {  setValue, register, formState: { isValid } } = form;
+    const {  setValue, register, formState: { isValid }, reset } = form;
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+       try {
+        setData({
+            onboardingDetails: {
+                ...data.onboardingDetails,
+                education: values.education,
+            }
+        });
+        setTimeout(() => {
+            setLoader(false);
+            reset();
+        }, 3000);
+
+       } catch (error) {
+        console.error(error);
+       }
     }
 
     return (
-        <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
+        <>
+            {loading && <Loader />}
+            <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <div className="mt-2 flex flex-col gap-6">
@@ -297,6 +348,8 @@ export const EducationSettings = () => {
           
         </Form>
         </div>
+        </>
+        
     )
 
 }
@@ -309,16 +362,30 @@ export const NotificationsSettings = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
+    const { data, setData } = useOnboardingFormStore();
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-    }
+        try {
+         setData({
+             onboardingDetails: {
+                 ...data.onboardingDetails,
+                 notifications: values.notifications,
+             }
+         });
+        //  setTimeout(() => {
+        //      setLoader(false);
+            
+        //  }, 3000);
+ 
+        } catch (error) {
+         console.error(error);
+        }
+     }
+ 
 
     return (
         <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0 flex flex-col">
-            
-
             <Form {...form}>
             
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex justify-between items-center">
@@ -352,9 +419,11 @@ export const PasswordSettings = () => {
     });
 
     const { data, setData } = useOnboardingFormStore();
-    const { register, formState: { isValid} } = form;
+    const { register, formState: { isValid}, reset } = form;
+    const [ loading, setLoader ] = useState(false);
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoader(true);
         try {
             setData({
                 onboardingDetails: {
@@ -362,6 +431,8 @@ export const PasswordSettings = () => {
                   password: values.password
                 }
             });
+            setLoader(false);
+            reset();
             } 
             catch (error) {
                 console.error(error);
@@ -369,6 +440,8 @@ export const PasswordSettings = () => {
         }
     
     return (
+        <>
+             {loading && <Loader />}
         <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -385,9 +458,7 @@ export const PasswordSettings = () => {
             </Form>
         </div>
            
-
-        
-
+        </>
     )
 }
 
