@@ -12,6 +12,12 @@ import ChevronUp from "./Icons/ChevronUp";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import GreenCheckmark from "./Icons/GreenCheckmark";
 import { Switch } from "../ui/switch";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
+import CalendarIcon from "/icons/calendar-03.svg"
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 
 export enum FormFieldType {
@@ -21,6 +27,7 @@ export enum FormFieldType {
     COUNTER = "counter",
     TEXTAREA = "textarea",
     SWITCH = "switch",
+    DATE = "date",
     CHECKBOX = "checkbox"
 }
 
@@ -192,6 +199,41 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         disabled={props.disabled}
                         {...field}/>
                 </FormControl>
+            )
+        case FormFieldType.DATE:
+            return (
+                <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal rounded-xl button-hover",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+
+                      <img src={CalendarIcon} className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             )
         case FormFieldType.CHECKBOX:
             return (
