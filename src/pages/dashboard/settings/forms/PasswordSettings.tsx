@@ -30,36 +30,38 @@ export const PasswordSettings = () => {
         try {
             setData({
                 onboardingDetails: {
-                  ...data.onboardingDetails,
-                  password: values.password
+                    ...data.onboardingDetails,
+                    password: values.password,
                 }
             });
-            setLoader(false);
-            reset();
-            } 
-            catch (error) {
-                console.error(error);
-            }
+            setTimeout(() => {
+                setLoader(false);
+                reset();
+            }, 3000);
         }
-    
+        catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <>
              {loading && <Loader />}
-        <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                <FormInput
-                    label="Your password"
-                    type="password"
-                    placeholder="********"
-                    {...register("password", {
-                    required: "This field is required",
-                    })}
-                    />
-                    <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
-                </form>
-            </Form>
-        </div>
+            <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                    <FormInput
+                        label="Your password"
+                        type="password"
+                        placeholder="********"
+                        {...register("password", {
+                        required: "This field is required",
+                        })}
+                        />
+                        <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
+                    </form>
+                </Form>
+            </div>
            
         </>
     )

@@ -32,6 +32,7 @@ export const EducationSettings = () => {
     const {  setValue, register, formState: { isValid }, reset } = form;
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoader(true);
        try {
         setData({
             onboardingDetails: {
