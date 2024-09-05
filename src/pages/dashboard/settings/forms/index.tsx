@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import FormInput from "@/components/custom/FormInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
@@ -15,12 +15,12 @@ import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormFi
 import MailIcon from "@/components/custom/Icons/MailIcon";
 import Loader from "@/components/custom/Loader";
 
-type FormWrapperProps = {
+// type FormWrapperProps = {
    
-    formSchema: any,
-    onSubmit: (values: any) => void,
-    children: React.ReactNode,
-}
+//     formSchema: any,
+//     onSubmit: (values: any) => void,
+//     children: React.ReactNode,
+// }
 
 export const ProfileSettings = () => {
     const [dialCode, setDialCode] = useState("+234");
@@ -463,21 +463,21 @@ export const PasswordSettings = () => {
 }
 
 
-export const FormWrapper = ({ onSubmit, formSchema, children }: FormWrapperProps) => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-      });
+// export const FormWrapper = ({ onSubmit, formSchema, children }: FormWrapperProps) => {
+//     const form = useForm<z.infer<typeof formSchema>>({
+//         resolver: zodResolver(formSchema),
+//       });
 
-      const { formState: { isValid } } = form;
-    return (
-        <></>
-        // <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
-        //     <Form {...form}>
-        //         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        //             {children}
-        //             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
-        //         </form>
-        //     </Form>
-        // </div>
-    )
-}
+//       const { formState: { isValid } } = form;
+//     return (
+//         <></>
+//         // <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
+//         //     <Form {...form}>
+//         //         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+//         //             {children}
+//         //             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
+//         //         </form>
+//         //     </Form>
+//         // </div>
+//     )
+// }
