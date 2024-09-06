@@ -80,6 +80,17 @@
     }
   }
 
+  @layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+  
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
+}
+
   html, body, #root, #root>div {
     width: 100%;;
   }
@@ -143,6 +154,13 @@ button:focus, button:focus-visible {
   outline: none !important;
   border-color: none !important;
 }
+
+.button-hover:hover {
+  background-color: inherit !important;
+  border-color: rgb(209 213 219) !important;
+}
+
+
 
 
 .notransition {
