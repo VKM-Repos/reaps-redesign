@@ -1,18 +1,27 @@
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/custom/BackButton";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { useState } from "react";
 import FormInput from "@/components/custom/FormInput";
 import { Props } from "@/components/forms/forms.types";
-import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
 import countryCodes from "@/lib/CountryCodes.json"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
     firstName: z
@@ -24,10 +33,14 @@ const formSchema = z.object({
     phoneNumber: z
         .string()
         .min(1, { message: "Please fill this field"})
+        .regex(/^\d+$/, { message: "Phone number should contain only numbers" })
 });
 
+
+
+
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
-    const [countryCode, setCountryCode] = useState("");
+    const [dialCode, setDialCode] = useState("+234");
     const { isMobile } = useMobileContext();
     const { data, setData } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -35,18 +48,16 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     });
 
     const { register, formState: { isValid } } = form;
-    
-    // const combinedPhoneNumber = `+${countryCode}${values.phoneNumber}`;
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        const dialNumber = dialCode + values.phoneNumber;
         try {
             setData({
                 onboardingDetails: {
                     ...data.onboardingDetails,
                     firstName: values.firstName,
                     lastName: values.lastName,
-                    //set combined phone number
-                    phoneNumber: values.phoneNumber
+                    phoneNumber: dialNumber
                 }
             }); 
             handleNext();
@@ -54,6 +65,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           console.error(error);
         }
     }
+    
     return(
         <>
             <TopBar title="Verification" />
@@ -77,13 +89,41 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 required: "This field is required",
                                 })}
                             />
-                            
-                            <FormInput
-                                label="Phone number"
-                                {...register("phoneNumber", {
-                                required: "This field is required",
-                                })}
-                            />
+                            <div className="flex gap-2">
+                                <div className="flex flex-col text-xs mt-2">
+                                    <Select onValueChange={(value: string) => {
+                                            const selectedCountry: any = countryCodes.find(country => country.name === value);
+                                            if (selectedCountry) {
+                                            setDialCode(selectedCountry.dial_code);
+                                            }
+                                        }}>
+                                        <Label className="font-md">Country Code</Label>
+                                        <SelectTrigger className="max-w-28 mt-2">
+                                            <SelectValue placeholder={dialCode} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup> 
+                                                <SelectLabel>Country Codes</SelectLabel>
+                                                {countryCodes && countryCodes.map((country) => (
+                                                        <SelectItem 
+                                                            value={country.name}
+                                                        >
+                                                            {country.dial_code}
+                                                        </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="w-full">
+                                    <FormInput
+                                        label="Phone number"
+                                        {...register("phoneNumber", {
+                                        required: "This field is required",
+                                        })}  
+                                    />
+                                </div>  
+                            </div>
                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>
                     </Form>
@@ -94,3 +134,4 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
 }
 
 export default PersonalInfo;
+

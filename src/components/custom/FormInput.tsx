@@ -11,9 +11,11 @@ import { Input } from "@/components/ui/input";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label?: string;
+  className?: string;
+
 }
 
-const FormInput: FC<InputProps> = ({ name, label, ...rest }) => {
+const FormInput: FC<InputProps> = ({ name, label, className, ...rest }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const { control, formState: { errors } } = useFormContext();
   const error = errors[name];
@@ -31,14 +33,15 @@ const FormInput: FC<InputProps> = ({ name, label, ...rest }) => {
             <FormLabel className="flex gap-0 mt-2 font-md">
               {label}
               {required && (
-                <span className="text-error " title="required">
-                  *
+                <span className="text-error text-red-500" title="required">
+                  &ensp;*
                 </span>
               )}
             </FormLabel>
             <FormControl>
               <div className="relative">
                 <Input
+                
                   type={
                     type === "password"
                       ? isPasswordVisible
@@ -49,9 +52,10 @@ const FormInput: FC<InputProps> = ({ name, label, ...rest }) => {
                   placeholder={rest.placeholder}
                   onChange={onChange}
                   value={value}
-                  className={`font-medium focus:border-4 rounded-[4px] ${
+                  className={`font-medium rounded-[4px] ${
                     error ? "border-red-500" : "border-gray-300"
-                  } focus:border-[var(--input)] placeholder:text-black/30`}
+                  }  placeholder:text-black/30 ${className}`}
+                  
                   autoComplete="on"
                 />
                 {rest.type === "password" && (

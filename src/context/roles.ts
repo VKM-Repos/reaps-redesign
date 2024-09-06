@@ -1,0 +1,1 @@
+export type UserRole = 'RESEARCHER' | 'REVIEWER' | 'INSTITUTION_ADMIN'

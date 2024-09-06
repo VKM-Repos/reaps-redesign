@@ -6,7 +6,8 @@ import FormInput from "@/components/custom/FormInput";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import { Form } from "@/components/ui/form";
-import { useOnboardingFormStore } from "@/context/CreateOnboardingFormStore";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import Cancel from "@/components/custom/Icons/Cancel";
 
 type Props = {
   handleNext: Function
@@ -28,6 +29,7 @@ export default function RegisterUser({ handleNext }: Props) {
       });
     const { register, formState: { isValid } } = form;
     function onSubmit(values: z.infer<typeof formSchema>) {
+      setIsLoading(true);
       try {
         setData({
           onboardingDetails: {
@@ -35,12 +37,11 @@ export default function RegisterUser({ handleNext }: Props) {
             email: values.email
           }
         });
-        setIsLoading(true);
+        
         setTimeout(() => {
+            handleNext();
             setIsLoading(false);
-            console.log(values);
         }, 3000);
-        handleNext();
       } catch (error) {
         console.error(error);
       }
@@ -57,7 +58,7 @@ export default function RegisterUser({ handleNext }: Props) {
                   <img className="md:block hidden" src="icons/reap-icon.svg" alt="Reap logo for website" />
               </div>
               <div>
-                  <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5"><img src="icons/cancel-01.svg" alt="Close/Open button" /></button>
+                  <button className="bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5"><Cancel /></button>
               </div>
             </div>
           </div>

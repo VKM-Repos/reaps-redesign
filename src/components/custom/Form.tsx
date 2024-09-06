@@ -31,13 +31,13 @@ export function LoginForm() {
     navigate("/home");
   }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit() {
     try {
       setIsLoading(true);
       setTimeout(() => {
 
         setIsLoading(false);
-        console.log(values);
+        goToHome();
       }, 3000);
      
     } catch (error) {
@@ -65,7 +65,7 @@ export function LoginForm() {
               required: "This field is required",
             })}
           />
-          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`} onClick={goToHome}>Log in</Button>
+          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Log in</Button>
         </form>
       </Form>
     </>
