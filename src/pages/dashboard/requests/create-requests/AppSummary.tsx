@@ -75,9 +75,7 @@ const AppSummary = ({ handleNext }: Props) => {
               setLoading(false);
               
               resetStore();
-              if (handleNext) {
-                handleNext();
-            }
+              proceedToPay();
             }, 5000);
         }
         catch (error) {
