@@ -6,23 +6,17 @@ import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 
 export default function Requests() {
     return (
-        <div className="flex flex-col gap-[1.25rem] mb-20">
-            <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-                <h1 className="text-[1.875rem] font-bold">Requests</h1>
-            </div>
-            <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
-                {tableData.length > 0 ? 
-                    <TableRequests tableData={tableData}/>
-                    : 
-                    (step === 1 ? (
-                        <RenderRequestsForm />
-                    ) : (
-                        <RequestsLayout>
-                            <RenderRequestsForm />
-                        </RequestsLayout>
-                    ))
-                }
-            </div>
+    <div className="flex flex-col gap-[1.25rem] mb-20">
+        <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
+            <h1 className="text-[1.875rem] font-bold">Requests</h1>
+            {tableData.length > 0 && <Button className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>}
         </div>
+        {tableData && tableData.length > 0 ?
+            <TableRequests tableData={tableData} />
+            :
+            <EmptyRequests />
+        }
+    </div>
+        
     )
 }
