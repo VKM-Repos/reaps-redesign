@@ -11,6 +11,13 @@ import ChevronDown from "./Icons/ChevronDown";
 import ChevronUp from "./Icons/ChevronUp";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import GreenCheckmark from "./Icons/GreenCheckmark";
+import { Switch } from "../ui/switch";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
+import CalendarIcon from "/icons/calendar-03.svg"
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 
 export enum FormFieldType {
@@ -19,6 +26,8 @@ export enum FormFieldType {
     UPLOAD = "upload",
     COUNTER = "counter",
     TEXTAREA = "textarea",
+    SWITCH = "switch",
+    DATE = "date",
     CHECKBOX = "checkbox"
 }
 
@@ -41,11 +50,7 @@ type CustomProps = {
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
     const [file, UploadFile] = useState<string>();
-    const [count, setCount] = useState(8);
-
-    // useEffect(() => {
-    //     console.log("Field value changed:", field.value);
-    //   }, [field.value]);
+    const [count, setCount] = useState(0);
 
     const handleIncrement = () => {
         setCount((prev) => prev + 1);
@@ -60,8 +65,8 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
         case FormFieldType.INPUT:
             return (
                 <FormControl>
-                    <Input placeholder={props.placeholder}/>
-                    {...field}
+                    <Input placeholder={props.placeholder} {...field}/>
+                    
                 </FormControl>
             );
         case FormFieldType.RADIO: 
@@ -182,6 +187,50 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     />
                 </FormControl>
             )
+        case FormFieldType.SWITCH:
+            return (
+                <FormControl>
+                    <Switch 
+                        className={props.className}
+                        disabled={props.disabled}
+                        {...field}/>
+                </FormControl>
+            )
+        case FormFieldType.DATE:
+            return (
+                <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left text-black font-normal rounded-xl button-hover",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+
+                      <img src={CalendarIcon} className="ml-auto h-4 w-4 opacity-50 text-black" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            )
         case FormFieldType.CHECKBOX:
             return (
                 <FormControl>
@@ -192,14 +241,8 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     {...field}
                     />
                 </FormControl>    
-            )
-
-        
-            
+            )    
     }
-    
-
-
 }
 
 

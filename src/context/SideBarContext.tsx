@@ -38,6 +38,8 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
 
     const { role } = useRole();
 
+// type Record: Array(sidebarlink)
+// export 
 
     switch (role) {
         case "RESEARCHER":

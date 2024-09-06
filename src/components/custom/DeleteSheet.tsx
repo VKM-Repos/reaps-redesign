@@ -5,10 +5,11 @@ import { Button } from "../ui/button";
 
 type Props = {
     data?: any,
+    text: string,
     deleteItem: (data: any) => void
 }
 
-export default function RenderDeleteSheet({ data, deleteItem }: Props) {
+export default function RenderDeleteSheet({ text, data, deleteItem }: Props) {
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
     return (
@@ -20,7 +21,7 @@ export default function RenderDeleteSheet({ data, deleteItem }: Props) {
                       <DeleteIcon />
                       <SheetHeader className="flex flex-col items-center justify-center gap-3">
                           <SheetTitle className="font-bold text-xl2">Delete</SheetTitle>
-                          <SheetDescription className="text-[454745] text-sm md:text-center">Are you sure you want to delete this specialization?</SheetDescription>
+                          <SheetDescription className="text-[454745] text-sm md:text-center">{text}</SheetDescription>
                       </SheetHeader>
                   </div> 
                   <div className="flex gap-14 w-full items-center justify-center">

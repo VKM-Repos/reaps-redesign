@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form';
 
 
 type Props = {
-    handleNext: Function
+    handleNext?: Function
 }
 
 
@@ -70,7 +70,9 @@ const AppSummary = ({ handleNext }: Props) => {
             //     }
             // });
             setTimeout(() => {
-              handleNext();
+              if (handleNext) {
+                handleNext();
+            }
               resetStore();
               setLoading(false);
             }, 5000);

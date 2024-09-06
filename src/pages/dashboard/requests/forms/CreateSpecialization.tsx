@@ -1,6 +1,6 @@
 import { SpecializationsStore, useSpecializationsStore } from "@/store/specializationsFormStore";
 import { useForm, SubmitHandler } from "react-hook-form"
-import Specialization from "../../specialization/create-specializations/CreateSpecializaton";
+import Specialization from "@/pages/dashboard/specialization/create-specializations/CreateSpecializaton";
 import AddKeyword from "@/pages/dashboard/specialization/create-specializations/AddKeyword"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useMediaQuery } from "react-responsive";

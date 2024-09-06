@@ -3,13 +3,17 @@ import AuthLayout from '@/layouts/AuthLayout';
 import { renderRoutes } from './generateRoutes';
 
 import Home from '@/pages/dashboard/home';
-import CreateRequests from '@/pages/dashboard/requests';
+import Requests from '@/pages/dashboard/requests';
 import Specialization from '@/pages/dashboard/specialization';
 import Pricing from '@/pages/dashboard/pricing';
+import Settings from '@/pages/dashboard/settings';
 import LoginPage from '@/pages/auth/log-in';
 import OnboardingPage from '@/pages/auth/sign-up';
 import NotFound from '@/pages/errors/notfound';
 import RecoverPassword from '@/pages/auth/password';
+import CreateRequests from '@/pages/dashboard/requests/create-requests';
+import ViewRequests from '@/pages/dashboard/requests/view-requests';
+
 
 const router = [
 {
@@ -48,7 +52,21 @@ const router = [
             name: "Requests",
             path: 'requests',
             title: "Requests",
-            element: CreateRequests
+            element: Requests,
+            routes: [
+                {
+                    name: "Create Requests",
+                    path: 'requests/create', 
+                    title: "Create Requests",
+                    element: CreateRequests, 
+                },
+                {
+                    name: "View Request",
+                    path: 'requests/:id', 
+                    title: "View Request",
+                    element: ViewRequests, 
+                },
+            ],
         },
         {
             name: "Specialization",
@@ -61,6 +79,12 @@ const router = [
             path: 'pricing',
             title: "Pricing",
             element: Pricing 
+        },
+        {
+            name: "Settings",
+            path: 'settings',
+            title: "Settings",
+            element: Settings
         },
         {
             path: '*',

@@ -155,6 +155,7 @@ export type ColumnSetup<T> = {
 
 export const tableData = [
     {
+        id: "1",
         title: "The Impact of MicroInteractions on Us...",
         specialization: "Medicine",
         submission: "19-01-2024",
@@ -162,6 +163,7 @@ export const tableData = [
         status: "Pending",
     },
     {
+        id: "2",
         title: "Hands-on Science Experiments on Stu...",
         specialization: "Medicine",
         submission: "19-01-2024",
@@ -169,6 +171,7 @@ export const tableData = [
         status: "Declined",
     },
     {
+        id: "3",
         title: "Knowledge Acquisition in Online Health",
         specialization: "Medicine",
         submission: "19-01-2024",
@@ -176,6 +179,7 @@ export const tableData = [
         status: "Under Review",
     },
     {
+        id: "4",
         title: "A Comparative Analysis of Health...",
         specialization: "Medicine",
         submission: "19-01-2024",
@@ -183,6 +187,7 @@ export const tableData = [
         status: "Approved",
     },
     {
+        id: "5",
         title: "Anatomy and Physiology",
         specialization: "Medicine",
         submission: "19-01-2024",
@@ -190,6 +195,7 @@ export const tableData = [
         status: "Draft",
     },
     {
+        id: "6",
         title: "A Study of Chronic Disease Manage...",
         specialization: "Medicine",
         submission: "19-01-2024",
