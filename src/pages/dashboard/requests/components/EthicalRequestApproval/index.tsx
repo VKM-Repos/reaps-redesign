@@ -4,12 +4,44 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import RequestsLayout from "@/layouts/RequestsLayout";
 import CategoryPopOver from "./CategoryPopOver";
+import PaymentCardPopup from "./PaymentCards";
+import { usePaymentStore } from "@/store/PaymentStore";
+
 
 type EthicalApprovalProps = {
     educationLevel: string,
     amountToPay: string,
 }
 export default function EthicalApprovalCard({ educationLevel, amountToPay }: EthicalApprovalProps) {
+    const { step, resetStore } = usePaymentStore();
+
+    // const createPaymentDetails = async () => {
+    //     try {
+  
+            
+
+    //         setTimeout(() => {
+    //             resetStore();
+    //         }, 5000)
+    //     }
+    //     catch (error: any) {
+    //         console.error("Error creating form", error);
+    //     }
+    // }
+    
+   
+   
+
+    const SelectToPay = () => {
+        switch (step) {
+            case 1:
+                return <CategoryPopOver categories={categories} />
+            case 2:
+                return <PaymentCardPopup />
+            default: 
+                return null;    
+        }
+    }
     return (
         <RequestsLayout>
             <div className="w-full px-4 md:w-3/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
@@ -32,7 +64,7 @@ export default function EthicalApprovalCard({ educationLevel, amountToPay }: Eth
                         <PopoverTrigger asChild>
                             <Button className="w-full md:max-w-[12.5rem] py-3 px-6 rounded-1 text-white font-semibold flex justify-between items-center"><span>Proceed to pay</span><span><ArrowLeft /></span></Button>
                         </PopoverTrigger>
-                        <CategoryPopOver categories={categories}/>
+                        <SelectToPay />
                     </Popover>
                    
                 </div>
