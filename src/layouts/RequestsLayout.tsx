@@ -29,7 +29,7 @@ export default function RequestsLayout({ children }: Props) {
                             <img className="lg:block hidden" src={Reapslogo} alt="Reap logo for website" />
                         </div>
                         <div className="flex justify-center items-center w-full">
-                            {step >= 3 && (
+                            {step >= 2 && (
                                 isLarge ? (
                                     <p className="font-[600] text-sm">{array[stepper]}</p>
                                 ) : (

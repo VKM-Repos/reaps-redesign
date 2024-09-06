@@ -84,6 +84,7 @@ export default function Stepper() {
                         textColor = "text-black"; 
                         fontWeight = "font-[600]";
                     }
+                    // update stepper to click on step names
 
                     return (
                         <p

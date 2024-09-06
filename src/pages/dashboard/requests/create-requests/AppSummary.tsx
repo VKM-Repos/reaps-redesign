@@ -75,7 +75,7 @@ const AppSummary = ({ handleNext }: Props) => {
               setLoading(false);
               
               resetStore();
-              proceedToPay();
+
             }, 5000);
         }
         catch (error) {
@@ -83,7 +83,8 @@ const AppSummary = ({ handleNext }: Props) => {
         }
     }
 
-    const proceedToPay = () => {
+    const proceedToPay = (event:  React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event.preventDefault();
       return (
         <EthicalApprovalCard educationLevel='Undergraduate' amountToPay='250000'/>
       )
