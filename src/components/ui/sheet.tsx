@@ -1,7 +1,6 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
-import HoverCancel from "../custom/Icons/HoverCancel"
 
 import { cn } from "@/lib/utils"
 
@@ -62,8 +61,7 @@ const SheetContent = React.forwardRef<
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
-      <SheetPrimitive.Close className="md:pr-4 w-[90%] md:absolute md:py-0 md:right-6 md:w-fit mx-auto py-4 !px-0 flex rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <HoverCancel />
+      <SheetPrimitive.Close>
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
       {children}

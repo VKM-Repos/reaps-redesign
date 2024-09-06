@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import {  useNavigate } from "react-router-dom";
-import { usePasswordStore } from "@/context/recoverPasswordStore";
+import { usePasswordStore } from "@/store/recoverPasswordStore";
 
 
 

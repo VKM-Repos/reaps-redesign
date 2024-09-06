@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import Loader from "@/components/custom/Loader";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { PasswordStore, usePasswordStore } from "@/context/recoverPasswordStore";
+import { PasswordStore, usePasswordStore } from "@/store/recoverPasswordStore";
 import AddEmail from "@/components/forms/recover-password/AddEmail";
 import NewPassword from "@/components/forms/recover-password/NewPassword";
 import EnterCode from "@/components/forms/recover-password/EnterCode";
