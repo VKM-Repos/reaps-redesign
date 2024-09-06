@@ -26,6 +26,7 @@ const AppSummary = ({ handleNext }: Props) => {
     const { resetStore } = useRequestsStore();
 
 
+
     const form = useForm({
       defaultValues: {
         title: title,
@@ -70,11 +71,12 @@ const AppSummary = ({ handleNext }: Props) => {
             //     }
             // });
             setTimeout(() => {
+              setLoading(false);
+              
+              resetStore();
               if (handleNext) {
                 handleNext();
             }
-              resetStore();
-              setLoading(false);
             }, 5000);
         }
         catch (error) {
@@ -162,9 +164,9 @@ const AppSummary = ({ handleNext }: Props) => {
                           />
                           ))}
                         </div>
-                    <div className='flex justify-center items-center gap-4'>
-                      <Button type="submit" variant="outline" className={`my-4 focus:outline-none`}>Save & Continue later</Button>
-                      <Button className={`my-4 focus:outline-none`}>Proceed to pay</Button>
+                    <div className='flex flex-col md:flex-row justify-center items-center gap-5 my-4 '>
+                      <Button type="submit" variant="outline" className={`rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]`}>Save & Continue later</Button>
+                      <Button className={`focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6`}>Proceed to pay</Button>
                     </div>
                     
             </form>
