@@ -11,11 +11,22 @@ import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import Loader from "@/components/custom/Loader";
 import { Badge } from "@/components/ui/badge";
+import  { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab"
+
+// import { Button } from "@/components/ui/button"
+// import GoogleDoc from "@/components/custom/Icons/GoogleDoc"
+
 
 type TableRequestsProps = {
     tableData: {
         title: string;
         specialization: string;
+        submission: string;
+        status: string;
+    }[],
+    reviewTableData: {
+        title: string;
+        applicantName: string;
         submission: string;
         status: string;
     }[]
@@ -40,12 +51,19 @@ type TableRequestsProps = {
     Draft: { bg: '#192C8A14', text: '#040C21' },
     "Under Review": { bg: '#F2C374', text: '#452609' },
   };
+  
+  const reviewStatusColorMap: { [key: string]: { bg: string; text: string } } = {
+    Reopened: { bg: '#ffd1b3', text: '#254D4B' },
+    Reviewed: { bg: '#b3e0ff', text: '#333A33' },
+    Unreviewed: { bg: '#E7484847', text: '#BF1E2C' }
+  };
 
 
 function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
 
     return (
         <>
+        
         {loading && <Loader />}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -82,7 +100,7 @@ function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
 
 
 
-export default function TableRequests({ tableData }: TableRequestsProps) {
+export default function TableRequests({ tableData, reviewTableData }: TableRequestsProps) {
     const [loading, setLoading] = useState(false);
     const [tableArray, setTableArray] = useState(tableData);
 
@@ -137,7 +155,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             color: statusColorMap[item]?.text || '#000000',
                             backgroundColor: statusColorMap[item]?.bg || '#192C8A',
                           }}
-                          className="flex gap-1 items-center justify-center p-1.5 rounded-lg"
+                          className="flex gap-1 items-center justify-center px-1.5 rounded-full"
                         >
                           <div
                             style={{
@@ -162,10 +180,85 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             cellClass: "w-fit",
         }
     ]
+    
+    const secondTablecolumnData: ColumnSetup<any>[]= [
+        {
+            header: "Title",
+            accessor: "title",
+            cellType: 'text',
+            headerClass: "font-bold w-full min-w-[10rem] ",
+            cellClass: "min-w-[10rem] w-full "
+    
+        },
+        {
+            header: "Applicant Name",
+            accessor: "applicantName",
+            cellType: "text",
+            headerClass: "font-bold w-full min-w-[6rem]",
+            cellClass: "min-w-[6rem] w-full"
+        },
+        {
+            header: "Submission",
+            accessor: "submission",
+            cellType: "text",
+            headerClass: "font-bold w-full min-w-[6rem]",
+            cellClass: "min-w-[6rem] w-full"
+        },
+        {
+            header: "Status",
+            accessor: "status",
+            cellType: "custom",
+            customRender: (item: string) => {
+                return (
+                    <>
+                        <Badge
+                          style={{
+                            color:  reviewStatusColorMap[item]?.text || '#000000',
+                            backgroundColor: reviewStatusColorMap[item]?.bg || '#192C8A',
+                          }}
+                          className="flex gap-1 items-center justify-center px-1.5 rounded-full"
+                        >
+                          <div
+                            style={{
+                              backgroundColor: reviewStatusColorMap[item]?.text || '#192C8A',
+                            }}
+                            className="w-[5px] h-[5px] rounded-full"
+                          ></div>
+                          {item}
+                        </Badge>
+                    </>
+                  );
+            },
+             headerClass: "font-bold w-full min-w-[8.75rem]",
+            cellClass: "text-left min-w-[8.75rem] flex justify-left"
+        },
+        {
+            accessor: "custom",
+            cellType: "custom",
+            customRender: () => (
+                <button className="flex justify-center gap-2 text-black" onClick={() => {return <SubmittedRequests />}}>
+                    <span><View /></span>
+                    <span>View</span>
+                </button>
+              ),
+            cellClass: "w-fit",
+        }
+    ]
 
     return (
         <>
-            <CustomTable columns={columnData} data={tableArray} />
+        <Tabs defaultValue="My Request" className="w-full">
+            <TabsList className="w-full border-b-[1.5px] flex gap-[2rem] px-2 py-2 mb-[4rem]">
+                <TabsTrigger value="My Request" className="font-bold text-[1.2rem] py-1 px-3">My request</TabsTrigger>
+                <TabsTrigger value="Review Request" className="font-bold text-[1.2rem] py-1 px-3">Review request</TabsTrigger>
+            </TabsList>
+            <TabsContent value="My Request">
+                 <CustomTable columns={columnData} data={tableArray} />
+            </TabsContent>
+            <TabsContent value="Review Request">
+                 <CustomTable columns={secondTablecolumnData} data={reviewTableData} />
+            </TabsContent>
+        </Tabs>
         </>
     )
 }

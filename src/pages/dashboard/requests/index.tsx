@@ -1,6 +1,7 @@
 import { useRequestsStore, RequestsStore } from "@/store/RequestFormStore"
 import { SubmitHandler, useForm } from "react-hook-form";
 // import { useMediaQuery } from "react-responsive";
+import { useState } from "react";
 import EmptyRequests from "./custom/EmptyRequests";
 import SelectSpecialization from "./specialization/SelectSpecialization";
 import ResearchInfo from "./create-requests/ResearchInfo";
@@ -9,7 +10,10 @@ import SupportDoc from "./create-requests/SupportDoc";
 import AppSummary from "./create-requests/AppSummary";
 import RequestsLayout from "@/layouts/RequestsLayout";
 import TableRequests from "./custom/table-requests";
-import { tableData } from "@/lib/helpers";
+import { reviewTableData, tableData } from "@/lib/helpers";
+import { Button } from "@/components/ui/button"
+import GoogleDoc from "@/components/custom/Icons/GoogleDoc"
+
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -66,14 +70,31 @@ const CreateRequests = () => {
         }
 
     }
+
+    // const [submittedRequest, setSubmittedRequest] = useState(false);
+
+    // const openSubmittedRequest = () => {
+    //         setSubmittedRequest(true)
+    
     return (
         <div className="flex flex-col gap-[1.25rem] mb-20">
-            <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
+            <div className="w-full flex items-center justify-between">
                 <h1 className="text-[1.875rem] font-bold">Requests</h1>
+                {tableData.length > 0 && <Button
+                     
+                      className=" flex gap-4 items-center justify-center place-items-end py-3 px-6" ><span><GoogleDoc /></span>Request Ethical Approval
+                </Button> }
+            </div>
+            {/* <div className="w-full border-b-[1.5px] gap-[2rem] flex px-5 py-1.5">
+                <h3 className="font-bold text-[1.2rem]">My requests</h3>
+                <h3 className="font-bold text-[1.2rem]">Review requests</h3>
+            </div> */}
+            <div>
+                
             </div>
             <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
                 {tableData.length > 0 ? 
-                    <TableRequests tableData={tableData}/>
+                    <TableRequests tableData={tableData} reviewTableData={reviewTableData}/>
                     : 
                     (step === 1 ? (
                         <RenderRequestsForm />

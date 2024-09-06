@@ -197,3 +197,35 @@ export const tableData = [
         status: "Approved"
     },
   ]
+export const reviewTableData = [
+    {
+        title: "The Impact of MicroInteractions on Us...",
+        applicantName: "Abubakar Joseph",
+        submission: "19-01-2024",
+        status: "Unreviewed"
+    },
+    {
+        title: "Hands-on Science Experiments on Stu...",
+        applicantName: "Daniel Oladejo",
+        submission: "19-01-2024",
+        status: "Reviewed"
+    },
+    {
+        title: "Knowledge Acquisition in Online Health",
+        applicantName: "Danjuma Daramola",
+        submission: "19-01-2024",
+        status: "Reopened"
+    },
+    {
+        title: "A Comparative Analysis of Health...",
+        applicantName: "Albert Godiya",
+        submission: "19-01-2024",
+        status: "Unreviewed"
+    },
+    {
+        title: "Anatomy and Physiology",
+        applicantName: "Thinkerbell Bolly",
+        submission: "19-01-2024",
+        status: "Reviewed"
+    }
+  ]
