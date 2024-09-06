@@ -11,10 +11,11 @@ export type Category = {
 }
 
 type CategoryProps = {
-    categories: Category[]
+    categories: Category[],
+    handleNext: Function
 }
 
-export default function CategoryPopUp ({ categories }: CategoryProps) {
+export default function CategoryPopUp ({ categories, handleNext }: CategoryProps) {
     const [ selectedCategories, setSelectedCategories ] = useState<Category[]>();
     const [ clicked, setClicked ] = useState(false);
     const handleSelectedCategories = (category: Category, isSelected: boolean) => {
@@ -28,6 +29,7 @@ export default function CategoryPopUp ({ categories }: CategoryProps) {
         }
         console.log(selectedCategories);
     }
+
 
 
 
@@ -56,6 +58,7 @@ export default function CategoryPopUp ({ categories }: CategoryProps) {
                     ))}
                 </TableBody>
             </Table>
+            <Button onClick={() => handleNext}>Continue</Button>
         </PopoverContent>
     )
 }

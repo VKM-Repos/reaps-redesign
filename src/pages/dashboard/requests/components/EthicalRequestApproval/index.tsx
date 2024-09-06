@@ -13,29 +13,17 @@ type EthicalApprovalProps = {
     amountToPay: string,
 }
 export default function EthicalApprovalCard({ educationLevel, amountToPay }: EthicalApprovalProps) {
-    const { step, resetStore } = usePaymentStore();
+    const { step, setStep } = usePaymentStore();
 
-    // const createPaymentDetails = async () => {
-    //     try {
-  
-            
-
-    //         setTimeout(() => {
-    //             resetStore();
-    //         }, 5000)
-    //     }
-    //     catch (error: any) {
-    //         console.error("Error creating form", error);
-    //     }
-    // }
-    
-   
-   
+    const handleNext = () => {
+        setStep(step + 1);
+    }
+    // will remove store
 
     const SelectToPay = () => {
         switch (step) {
             case 1:
-                return <CategoryPopOver categories={categories} />
+                return <CategoryPopOver handleNext={handleNext} categories={categories} />
             case 2:
                 return <PaymentCardPopup />
             default: 
