@@ -42,7 +42,7 @@ export default function RequestsLayout({ children }: Props) {
                             <button className="h-fit bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5" onClick={() => {navigate(-1)}}><Cancel /></button>
                         </div>
                     </div>
-                    {step >= 3 &&
+                    {step >= 2 &&
                         (isLarge && 
                             <Stepper />
                         ) 
