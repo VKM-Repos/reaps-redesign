@@ -172,7 +172,7 @@ const AppSummary = ({ handleNext }: Props) => {
                         </div>
                     <div className='flex flex-col md:flex-row justify-center items-center gap-5 my-4 '>
                       <Button type="submit" variant="outline" className={`rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]`}>Save & Continue later</Button>
-                      <Button onClick={() => {proceedToPay}} className={`focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6`}>Proceed to pay</Button>
+                      <Button onClick={(event) => {proceedToPay(event)}} className={`focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6`}>Proceed to pay</Button>
                     </div>
                     
             </form>
