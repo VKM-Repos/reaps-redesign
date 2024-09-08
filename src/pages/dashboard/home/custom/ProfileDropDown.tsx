@@ -63,9 +63,9 @@ export default function ProfileDropDown() {
                            
                             className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center"
                         >
-                                <div className="flex items-center justify-center">
+                                <div className="flex items-center justify-center w-full max-w-fit">
                                     <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
-                                    <img src={ArrowDown} alt="arrow-down" className={open ? 'rotate-180' : 'rotate-0'}/>
+                                    <img src={ArrowDown} alt="arrow-down"  className={`w-6 h-6 ${open ? 'rotate-180' : 'rotate-0'}`} />
                                 </div>
                                 </button>
                             </DropdownMenuTrigger>   
@@ -80,7 +80,7 @@ export default function ProfileDropDown() {
                         </div>
                       
                     </DropdownMenuLabel>
-                    <ProfileCard />
+                    <ProfileCard setOpen={() => {setOpen(false)}}/>
                 </DropdownMenuContent>
             </DropdownMenu>
             </div>
@@ -98,7 +98,7 @@ export default function ProfileDropDown() {
                             <SheetTrigger asChild>
                                 <div className="flex items-center justify-center">
                                     <User className="bg-inherit focus:outline-none notransition border-none hover:bg-[#14155E14] hover:rounded-full p-2" />
-                                    <img src="icons/arrow-down-01.svg" alt="arrow-down"/>
+                                    <img src={ArrowDown} alt="arrow-down" className={`w-6 h-6 ${open ? 'rotate-180' : 'rotate-0'}`}/>
                                 </div>
                             </SheetTrigger>
                             
@@ -119,7 +119,7 @@ export default function ProfileDropDown() {
                                     </div>
                                 </div>
                             </SheetHeader>
-                            <ProfileCard />
+                            <ProfileCard setOpen={() => {setOpen(false)}}/>
                         </div>
                     </div>
                     
@@ -130,17 +130,21 @@ export default function ProfileDropDown() {
     )
 }
 
-function ProfileCard() {
+type ProfileCardProps = {
+    setOpen: () => void;
+}
+
+function ProfileCard({  setOpen }: ProfileCardProps) {
     return (
         <div>
             <ul className="flex flex-col gap-1">
                 {profileOptions.map(({ label, path, icon }) => (
                     <li className="hover:text-black flex space-x-4 px-4 py-3 items-center justify-between z-50">
                         {typeof path === "string" ? 
-                            <Link to={path} className="flex gap-2 text-[#868687] hover:text-black">
-                                <span>{icon}</span>
-                                <span>{label}</span>
-                            </Link>
+                                <Link to={path} className="flex gap-2 text-[#868687] hover:text-black" onClick={setOpen}>
+                                    <span>{icon}</span>
+                                    <span>{label}</span>
+                                </Link>
                             :
                             <Sheet>
                                 <SheetTrigger className="flex gap-2 text-[#868687] hover:text-black">

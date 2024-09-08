@@ -7,8 +7,7 @@ import { useMediaQuery } from "react-responsive";
 import { array } from "@/lib/helpers";
 import { useStepper } from "@/context/StepperContext";
 import ProfileDropDown from "@/pages/dashboard/home/custom/ProfileDropDown";
-import Reapslogo from "/icons/reap-icon.svg"
-import Marklogo from "/icons/mark.svg"
+
 
 type Props = {
     children: ReactNode;
@@ -24,9 +23,9 @@ export default function RequestsLayout({ children }: Props) {
             <div className="w-full mx-auto my-0 relative py-[2rem] px-[1.25rem] max-h-[130px] lg:p-[3.625rem] lg:max-h-[130px] border-b border-[#0C0C0F29]">
                 <div className="flex flex-col gap-1">
                     <div className="flex justify-between items-center w-full sm:w-11/12 mx-auto my-0">
-                        <div className="flex items-center justify-center">
-                            <img src={Marklogo} alt="Mark logo" />
-                            <img className="lg:block hidden" src={Reapslogo} alt="Reap logo for website" />
+                        <div className="flex items-center justify-center w-full max-w-fit">
+                            <img src="/icons/mark.svg" alt="Mark logo"/>
+                            <img className="lg:block hidden" src="/icons/reap-icon.svg" alt="Reap logo for website" />
                         </div>
                         <div className="flex justify-center items-center w-full">
                             {step >= 3 && (
