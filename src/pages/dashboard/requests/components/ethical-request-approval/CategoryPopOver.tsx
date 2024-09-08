@@ -4,7 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { PopoverClose, PopoverContent } from "@radix-ui/react-popover";
 import { useState } from "react";
 
-export type Category = {
+
+type Category = {
     id: string,
     description: string,
     amount: string

@@ -6,7 +6,6 @@ import AppInfo from "./AppInfo";
 import SupportDoc from "./SupportDoc";
 import AppSummary from "./AppSummary";
 import RequestsLayout from "@/layouts/RequestsLayout";
-import RequestSpecialization from "../forms/CreateSpecialization";
 
 const CreateRequests = () => {
     const { step, setStep, resetStore } = useRequestsStore();
@@ -46,7 +45,7 @@ const CreateRequests = () => {
 
         switch (step) {
             case 1:
-                return <RequestSpecialization handleSpecNext={handleNext}/>
+                return <SelectSpecialization handleNext={handleNext}/>
             case 2:
                 return <AppInfo handleNext={handleNext} />
             case 3:

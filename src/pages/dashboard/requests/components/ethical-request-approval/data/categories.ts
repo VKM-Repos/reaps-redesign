@@ -1,4 +1,4 @@
-const categories = [
+export const categories = [
     {
         id: "1",
         description: "Academic Student Nurse",
