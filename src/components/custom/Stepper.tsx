@@ -1,12 +1,14 @@
 import { useStepper } from "@/context/StepperContext";
 import { useEffect, useRef, useState } from "react";
 import { array } from "@/lib/helpers";
+import { useRequestsStore } from "@/store/RequestFormStore";
 
 
 const totalWidth = 600;
 
 export default function Stepper() {
-    const { stepper } = useStepper();
+    const { stepper, setStepper } = useStepper();
+    const { setStep } = useRequestsStore();
     const [ball, setBall] = useState<number>(8);
     const [stepWidths, setStepWidths] = useState<number[]>([]);
     const stepRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -18,6 +20,13 @@ export default function Stepper() {
         }
         else {
             setBall(8)
+        }
+    }
+
+    const handleStepClick = (index: number) => {
+        if (index <= stepper) {
+            setStep(index + 2);
+            setStepper(index);
         }
     }
 
@@ -90,7 +99,8 @@ export default function Stepper() {
                             key={index}
                             ref={(el) => (stepRefs.current[index] = el)}
                             className={`${textColor} ${fontWeight} text-sm letter-spacing-[1.25%] hidden lg:block`}
-                            
+                            style={{ cursor: index > stepper ? 'not-allowed' : 'pointer' }}
+                            onClick={() => {handleStepClick(index)}}
                         >
                             {label}
                         </p>
