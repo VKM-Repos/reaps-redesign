@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import Loader from "@/components/custom/Loader";
 
 
-export const EducationSettings = () => {
+export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
     const educationLevels = ["Undergraduate", "Postgraduate", "Graduate"]
     const formSchema = z.object({
         education: z
@@ -42,6 +42,7 @@ export const EducationSettings = () => {
         });
         setTimeout(() => {
             setLoader(false);
+            onSave();
             reset();
         }, 3000);
 

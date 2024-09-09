@@ -142,6 +142,10 @@
   font-optical-sizing: auto;
 }
 
+.plus-jarkata-sans {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
 a {
   cursor: pointer;
 }

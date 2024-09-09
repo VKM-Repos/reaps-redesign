@@ -14,7 +14,7 @@ import Loader from "@/components/custom/Loader";
 
 
 
-export const ProfileSettings = () => {
+export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
     const [dialCode, setDialCode] = useState("+234");
     const [loading, setLoader] = useState(false);
     const formSchema = z.object({
@@ -54,6 +54,7 @@ export const ProfileSettings = () => {
             }); 
             setTimeout(() => {
                 setLoader(false);
+                onSave();
                 reset();
             }, 3000);
         } catch (error) {
