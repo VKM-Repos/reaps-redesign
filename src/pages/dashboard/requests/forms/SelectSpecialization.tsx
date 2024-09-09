@@ -57,7 +57,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
             setTimeout(() => {
                 handleNext();
                 setLoading(false);
-            }, 5000);
+            }, 3000);
             
         }
         catch (error) {
