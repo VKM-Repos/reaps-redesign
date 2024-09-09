@@ -205,30 +205,35 @@ export const tableData = [
   ]
 export const reviewTableData = [
     {
+        id: "1",
         title: "The Impact of MicroInteractions on Us...",
         applicantName: "Abubakar Joseph",
         submission: "19-01-2024",
         status: "Unreviewed"
     },
     {
+        id: "2",
         title: "Hands-on Science Experiments on Stu...",
         applicantName: "Daniel Oladejo",
         submission: "19-01-2024",
         status: "Reviewed"
     },
     {
+        id: "3",
         title: "Knowledge Acquisition in Online Health",
         applicantName: "Danjuma Daramola",
         submission: "19-01-2024",
         status: "Reopened"
     },
     {
+        id: "4",
         title: "A Comparative Analysis of Health...",
         applicantName: "Albert Godiya",
         submission: "19-01-2024",
         status: "Unreviewed"
     },
     {
+        id: "5",
         title: "Anatomy and Physiology",
         applicantName: "Thinkerbell Bolly",
         submission: "19-01-2024",
