@@ -1,6 +1,5 @@
 import SideBar from "./sideBar-Nav";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
-import { Cancel } from "@radix-ui/react-alert-dialog";
 
 export default function ApplicationSummary() {
     return(
