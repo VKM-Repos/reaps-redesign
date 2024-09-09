@@ -7,7 +7,7 @@ import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormFi
 import MailIcon from "@/components/custom/Icons/MailIcon";
 
 
-export const NotificationsSettings = () => {
+export const NotificationsSettings = ({ onSave }: { onSave: () => void }) => {
     const formSchema = z.object({
         notifications: z.
             boolean()
@@ -27,6 +27,7 @@ export const NotificationsSettings = () => {
                  notifications: values.notifications,
              }
          });
+         onSave();
  
         } catch (error) {
          console.error(error);

@@ -9,7 +9,7 @@ import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Loader from "@/components/custom/Loader";
 
 
-export const EmailSettings = () => {
+export const EmailSettings = ({ onSave }: { onSave: () => void }) => {
     const formSchema = z.object({
         email: z
             .string()
@@ -37,6 +37,7 @@ export const EmailSettings = () => {
             }); 
             setTimeout(() => {
                 setLoader(false);
+                onSave();
                 reset();
             }, 3000)
         } catch (error) {
