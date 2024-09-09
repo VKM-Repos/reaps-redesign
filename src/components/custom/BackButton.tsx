@@ -1,5 +1,6 @@
 import { useMobileContext } from "@/context/MobileContext";
 import { useNavigate } from "react-router-dom";
+import ArrowLeft from "/icons/arrow-left-02.svg";
 
 type Props = {
     goBack: Function,
@@ -18,7 +19,7 @@ export default function BackButton({ goBack, title, className}: Props) {
     return(
         <>
             <button className={`bg-transparent mt-4 left-0 flex gap-2 ${className}`} onClick={backFunc}>
-                <img src="icons/arrow-left-02.svg" />
+                <img src={ArrowLeft} />
                 <div className="flex flex-col justify-center items-center">
                     <span className="text-base font-black">
                         {title}
