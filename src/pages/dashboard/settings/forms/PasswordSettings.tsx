@@ -9,7 +9,7 @@ import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Loader from "@/components/custom/Loader";
 
 
-export const PasswordSettings = () => {
+export const PasswordSettings = ({ onSave }: { onSave: () => void }) => {
     const formSchema = z.object({
         password: z
         .string({ required_error: "Password is required" })
@@ -36,6 +36,7 @@ export const PasswordSettings = () => {
             });
             setTimeout(() => {
                 setLoader(false);
+                onSave();
                 reset();
             }, 3000);
         }

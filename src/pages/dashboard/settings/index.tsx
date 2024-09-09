@@ -19,52 +19,59 @@ import ArrowDown from "/icons/arrow-down-01.svg"
 import School from "@/components/custom/sidebar-icons/school";
 
 
-const settings = [
-    {
-        title: "Profile",
-        label: "Change your Personal Information",
-        icon: <UserSettingsIcon />,
-        content: <ProfileSettings />
-    },
-    {
-        title: "Email Settings",
-        label: "holumidey22@gmail.com",
-        icon: <MailIcon />,
-        content: <EmailSettings />
-    },
-    {
-        title: "Institution",
-        label: "Change your institution",
-        icon: <School />,
-        content: <InstitutionSettings />
-    },
-    {
-        title: "Education",
-        label: "Update your education level and ORCID ID",
-        icon: <MortarIcon />,
-        content: <EducationSettings />
-    },
-    {
-        title: "Notifications",
-        label: "Choose what we get in touch about",
-        icon: <NotificationIcon />,
-        content: <NotificationsSettings />
-    },
-    {
-        title: "Change Password",
-        label: "********",
-        icon: <LockIcon />,
-        content: <PasswordSettings />
-    },
-]
-
 
 export default function Settings() {
     const [isOpenIndex, setOpenIndex] = useState<number | null>();
+    
 
     const handleToggle = (index: number) => {
         setOpenIndex((prevIndex) => (prevIndex === index ? null : index)); 
       };
+
+      const handleCloseCollapsible = () => {
+        setOpenIndex(null);
+      };
+
+      const settings = [
+        {
+            title: "Profile",
+            label: "Change your Personal Information",
+            icon: <UserSettingsIcon />,
+            content: <ProfileSettings onSave={handleCloseCollapsible} />
+        },
+        {
+            title: "Email Settings",
+            label: "holumidey22@gmail.com",
+            icon: <MailIcon />,
+            content: <EmailSettings onSave={handleCloseCollapsible} />
+        },
+        {
+            title: "Institution",
+            label: "Change your institution",
+            icon: <School />,
+            content: <InstitutionSettings onSave={handleCloseCollapsible} />
+        },
+        {
+            title: "Education",
+            label: "Update your education level and ORCID ID",
+            icon: <MortarIcon />,
+            content: <EducationSettings onSave={handleCloseCollapsible} />
+        },
+        {
+            title: "Notifications",
+            label: "Choose what we get in touch about",
+            icon: <NotificationIcon />,
+            content: <NotificationsSettings onSave={handleCloseCollapsible} />
+        },
+        {
+            title: "Change Password",
+            label: "********",
+            icon: <LockIcon />,
+            content: <PasswordSettings onSave={handleCloseCollapsible} />
+        },
+    ]
+    
+    
 
     return (
         <div className="flex flex-col gap-[1.25rem] mb-20">
@@ -103,5 +110,7 @@ export default function Settings() {
         </div>
     )
 }
+
+
 
 
