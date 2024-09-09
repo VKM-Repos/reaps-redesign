@@ -98,7 +98,7 @@ const AppSummary = ({ handleNext }: Props) => {
     <>
       {loading && <Loader />}
       {showEthicalApprovalCard ? 
-      <EthicalApprovalCard educationLevel='Undergraduate' amountToPay='25000' /> 
+      <EthicalApprovalCard educationLevel='Undergraduate' amountToPay='25000' showApproval={() => {setShowEthicalApprovalCard(false)}}/> 
       :
       <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
         <div className="flex flex-col justify-center items-center">

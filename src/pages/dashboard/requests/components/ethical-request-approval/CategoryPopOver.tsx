@@ -1,7 +1,6 @@
-import Cancel from "@/components/custom/Icons/Cancel";
 import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { PopoverClose, PopoverContent } from "@radix-ui/react-popover";
+import {  DialogContent } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
 
 
@@ -35,32 +34,31 @@ export default function CategoryPopUp ({ categories, handleNext }: CategoryProps
 
 
     return (
-        <PopoverContent className="pt-[6.25rem] pb-[3.125rem] px-[3.125rem] w-full">
-            <div className="border-b-[#0E0F0C1F] flex justify-between items-center text-[#040C21] w-full">
-                <h1 className="text-lg">Select your Category</h1>
-                <PopoverClose><Cancel /></PopoverClose> 
+        <DialogContent className="w-full max-w-[800px] h-full max-h-[700px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-8">
+            <div className="border-[#0E0F0C1F] border-b  flex justify-between items-center text-[#040C21] w-full">
+                <p className="pb-4 px-[1.125rem] font-semibold">Select your Category</p>
             </div>
-            <Table  className="w-full md:max-w-3/5 border overflow-scroll">
+            <Table  className="mx-auto my-0 w-[95%] px-[1.125rem] ">
                 <TableHeader>
-                    <TableRow className="font-bold w-full flex items-center justify-between p-6 !border-y-[#0C0C0F29]">
-                        <TableHead className="min-w-[25rem] text-[#454747] font-semibold text-lg text-left w-full !h-auto">Description</TableHead>
-                        <TableHead className="text-[#454747] font-semibold text-lg text-left w-full !h-auto">Amount</TableHead>
-                        <TableHead className="text-left w-full !h-auto">&nbsp;</TableHead>
+                    <TableRow className="font-bold w-full flex items-center justify-between p-6 border-y !border-[#0C0C0F29] ">
+                        <TableHead className="min-w-[25rem] text-[#454747] font-semibold text-left w-full !h-auto !text-[18px]">Description</TableHead>
+                        <TableHead className="text-[#454747] font-semibold text-lg flex justify-center items-center w-full !h-auto !text-[18px]">Amount</TableHead>
+                        <TableHead className="text-left w-full !h-auto"></TableHead>
                     </TableRow>
                 </TableHeader>
                 
-                <TableBody>
+                <TableBody className="overflow-scroll">
                     {categories.map((category, index) => (
                         <TableRow key={index} className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer">
-                            <TableCell className="text-sm text-black">{category.description}</TableCell>
-                            <TableCell className="text-sm text-black font-semibold">{category.amount}</TableCell>
-                            <TableCell className="items-center justify-center flex"><Button variant={clicked ? "ghost" : "default"} onClick={() => {handleSelectedCategories; setClicked(true)}}>Select</Button></TableCell>
+                            <TableCell className="w-full min-w-[25rem] text-sm text-black">{category.description}</TableCell>
+                            <TableCell className="text-sm text-black font-semibold flex justify-center items-center">₦{category.amount}</TableCell>
+                            <TableCell className="items-center justify-center flex"><Button variant={clicked ? "default" : "ghost"} onClick={() => {handleSelectedCategories; setClicked(true)}}>Select</Button></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <Button onClick={() => handleNext}>Continue</Button>
-        </PopoverContent>
+            <Button className="w-full mx-auto w-[95%] py-3 px-6 rounded-1 text-white font-semibold flex justify-center items-center" onClick={() => handleNext} >Continue</Button>
+        </DialogContent>
     )
 }
 
