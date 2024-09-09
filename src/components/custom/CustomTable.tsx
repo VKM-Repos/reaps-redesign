@@ -33,7 +33,7 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                 </TableHeader>
                 <TableBody>
                     {data.map((rowData, rowIndex) => (
-                       <TableRow key={rowIndex} className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer">
+                       <TableRow key={rowIndex} className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]">
                        {columns.map((column, index) => (
                          <TableCell key={index} className={column.cellClass}>
                            {column.cellType === 'custom' && column.customRender

@@ -10,7 +10,7 @@ import { useRequestsStore } from "@/store/RequestFormStore";
 import Loader from "@/components/custom/Loader";
 
 
-export const InstitutionSettings = () => {
+export const InstitutionSettings = ({ onSave }: { onSave: () => void }) => {
     const formSchema = z.object({
         institution: z
             .string()
@@ -38,6 +38,7 @@ export const InstitutionSettings = () => {
             });
             setTimeout(() => {
                 setLoader(false);
+                onSave();
                 reset();
             }, 3000);
         }
