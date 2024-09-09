@@ -3,4 +3,18 @@
     to = "/home"
     status = 200
     force = false
-    
+
+[[redirects]]
+  from = "/requests/create"
+  to = "/requests/create"
+  status = 200
+
+[[redirects]]
+  from = "/requests/view"
+  to = "/requests/view"
+  status = 200
+
+  [[redirects]]
+  from = "/requests/edit"
+  to = "/requests/edit"
+  status = 200
