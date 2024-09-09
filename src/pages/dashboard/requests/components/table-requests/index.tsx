@@ -12,9 +12,10 @@ import Loader from "@/components/custom/Loader";
 import { Badge } from "@/components/ui/badge";
 import ViewRequests from "../../view-requests";
 import { useRequestsStore } from "@/store/RequestFormStore";
-import CreateRequests from "../../create-requests";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
+// refactor render functions and mobile render
 
 type TableRequestsProps = {
     tableData: {
@@ -51,11 +52,11 @@ function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
 
     const { setStep } = useRequestsStore();
     const navigate = useNavigate();
+ 
 
     const redirectToSummary = () => {
-        navigate('/requests/create')
+        navigate('/requests/create');
         setStep(5);
-
     }
 
     return (
@@ -95,8 +96,39 @@ function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
     )
 }
 
-function MobileRenderOption() {
-     
+function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
+    const { setStep } = useRequestsStore();
+    const navigate = useNavigate();
+
+    const redirectToSummary = () => {
+            navigate('/requests/create');
+            setStep(5);
+        }
+
+    return(
+        <>
+             {loading && <Loader />}
+             <div className="flex gap-2 justify-center items-center">
+                <Sheet>
+                    <SheetTrigger className="text-black p-2">
+                        <View />
+                    </SheetTrigger>
+                    <ViewRequests />
+                </Sheet>
+                <div>
+                    <button onClick={redirectToSummary} className={` ${item.status === "Draft" ? "text-black" : "text-black/30"} flex justify-center gap-2 p-2`} disabled={item.status !== "Draft"}>
+                        <PencilEdit />
+                    </button>
+                </div>
+                <Sheet>
+                    <SheetTrigger className="flex justify-center gap-2 text-black p-2">
+                        <DeleteSmallIcon />
+                    </SheetTrigger>
+                    <RenderDeleteSheet text="Are you sure you want to delete this request?" data={item} deleteItem={(item) => {onDelete(item)}} />
+                </Sheet>
+            </div>
+        </>
+    )
 }
 
 
@@ -104,6 +136,7 @@ function MobileRenderOption() {
 export default function TableRequests({ tableData }: TableRequestsProps) {
     const [loading, setLoading] = useState(false);
     const [tableArray, setTableArray] = useState(tableData);
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     
 
     function deleteTableItem(item: any) {
@@ -176,9 +209,14 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         {
             accessor: "custom",
             cellType: "custom",
-            customRender: (item: any) => (
-                <RenderFunctions item={item} onDelete={deleteTableItem} loading={loading} />
-              ),
+            customRender: (item: any) => {
+                return isMobile ? (
+                  <MobileRender item={item} onDelete={deleteTableItem} loading={loading} />
+                ) : (
+                  <RenderFunctions item={item} onDelete={deleteTableItem} loading={loading} />
+                );
+              }
+              
         }
     ]
 
