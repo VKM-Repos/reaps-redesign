@@ -11,6 +11,9 @@ import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import Loader from "@/components/custom/Loader";
 import { Badge } from "@/components/ui/badge";
 import ViewRequests from "../../view-requests";
+import { useRequestsStore } from "@/store/RequestFormStore";
+import CreateRequests from "../../create-requests";
+import { useNavigate } from "react-router-dom";
 
 
 type TableRequestsProps = {
@@ -46,6 +49,15 @@ type TableRequestsProps = {
 
 function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
 
+    const { setStep } = useRequestsStore();
+    const navigate = useNavigate();
+
+    const redirectToSummary = () => {
+        navigate('/requests/create')
+        setStep(5);
+
+    }
+
     return (
         <>
         {loading && <Loader />}
@@ -62,14 +74,12 @@ function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
                             </SheetTrigger>
                             <ViewRequests />
                         </Sheet>
-                        {/* redirect to appsummary */}
-                         <Sheet>
-                            <SheetTrigger className={` ${item.status === "Draft" ? "text-black/30" : "text-black"} flex justify-center gap-2 p-3`} disabled={item.status === "Draft"}>
+                         <div>
+                            <button onClick={redirectToSummary} className={` ${item.status === "Draft" ? "text-black" : "text-black/30"} flex justify-center gap-2 p-3`} disabled={item.status !== "Draft"}>
                                 <PencilEdit />
                                 <span>Edit</span>
-                            </SheetTrigger>
-                            {/* <RenderDeleteSheet data={item} deleteItem={(item) => {onDelete(item)}} /> */}
-                        </Sheet>
+                            </button>
+                        </div>
                     <Sheet>
                         <SheetTrigger className="flex justify-center gap-2 text-black p-3">
                             <DeleteSmallIcon />
@@ -83,6 +93,10 @@ function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
         </>
         
     )
+}
+
+function MobileRenderOption() {
+     
 }
 
 
