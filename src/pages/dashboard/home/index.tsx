@@ -6,6 +6,8 @@ import Loading from "@/components/custom/Icons/Loading";
 import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
 import NotificationCard from "@/pages/dashboard/home/custom/NotificationCard"
 import { useNavigate } from "react-router-dom";
+import AssignedReuqustCard from "./custom/ReviewersDashboard";
+import { useRole } from "@/hooks/useRole";
 
 
 const notifications = [
@@ -41,11 +43,17 @@ const Home = () => {
     // create handle open function
     
 const navigate = useNavigate();
+const { role } = useRole();
 
 
 
     return (
         <div className="flex flex-col gap-10">
+           { role === 'REVIEWER' && 
+               <div>
+               <AssignedReuqustCard name="Vivian" reviewed="37" pending="5" />
+               </div>           
+           }
             <div className="flex flex-col gap-[3.25rem]">
                 <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                     <h1 className="text-[1.875rem] font-bold">Summary</h1>
