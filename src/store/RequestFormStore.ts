@@ -19,7 +19,7 @@ export type CheckboxGroup = {
     question4: string,
     question5: string,
     question6: string,
-    question7: string
+    question7: number
 };
 
 type fileGroup = {

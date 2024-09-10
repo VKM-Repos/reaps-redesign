@@ -40,6 +40,7 @@ type CustomProps = {
    children?: React.ReactNode;
    fieldType: FormFieldType;
    className?: string;
+   subClassName?: string;
    options?: { label: string, value: string}[];
    answers?: string;
    disabled?: boolean;
@@ -50,14 +51,33 @@ type CustomProps = {
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
     const [file, UploadFile] = useState<string>();
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(field.value || 0);
 
     const handleIncrement = () => {
-        setCount((prev) => prev + 1);
-    };
+        const newCount = Number(count) + 1;
+        setCount(newCount);
+        field.onChange(newCount);
+      };
+    
+      const handleDecrement = () => {
+        if (count > 0) {
+          const newCount = Number(count) - 1;
+          setCount(newCount);
+          field.onChange(newCount);
+        }
+      };
+    
+      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = Number(e.target.value);
+        setCount(newValue);
+        field.onChange(newValue);
+      };
 
-    const handleDecrement = () => {
-        setCount((prev) => (prev > 0 ? prev - 1 : 0));
+
+    const [selectedValue, setSelectedValue] = useState(props.options?.length === 1 ? props.options[0].value : ''); 
+    const handleValueChange = (value: string) => {
+        setSelectedValue(value);
+        field.onChange?.(value); 
     };
 
 
@@ -69,27 +89,41 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                     
                 </FormControl>
             );
-        case FormFieldType.RADIO: 
-            console.log(field);
+        case FormFieldType.RADIO:
             return (
                 <FormControl>
-                    <RadioGroup onValueChange={field.onChange}  defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}>
-                        {props.options?.map((option) => (
-                            <div key={option.value} className={`${props.className} flex items-center gap-4 px-1`}>
-                                <RadioGroupItem value={option.value} id={`${field.name}-${option.value}`} disabled={props.disabled}/>
-                                <Label className="text-base " htmlFor={`${field.name}-${option.value}`}>{option.label}</Label>
-                            </div>
-                        ))}
+                    <RadioGroup value={selectedValue} 
+                        onValueChange={handleValueChange} 
+                        defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}>
+                         {props.options?.map((option) => {
+                            const isChecked = selectedValue === option.value;
+
+                            return (
+                                <div
+                                key={option.value}
+                                className={`${props.className} flex items-center gap-4 px-3 py-2
+                                ${isChecked ? ' border border-[#040C21] bg-[#192C8A14] rounded-md' : ''}
+                                hover:border hover:border-[#040C21] hover:bg-[#192C8A14] hover:rounded-md`}
+                                >
+                                <RadioGroupItem
+                                    checked={isChecked}
+                                    value={option.value}
+                                    className={props.subClassName}
+                                    id={`${field.name}-${option.value}`}
+                                    disabled={props.disabled}
+                                />
+                                <Label className="text-base" htmlFor={`${field.name}-${option.value}`}>
+                                    {option.label}
+                                </Label>
+                                </div>
+                            );
+                            })}
                     </RadioGroup>
                 </FormControl>
             );
         case FormFieldType.UPLOAD: 
             return(
                 <FormControl>
-                    {/* <div className="justify-between flex">
-                        <Label className="font-bold">{props.label} </Label>
-                        
-                    </div> */}
                     <Dropzone
                         accept={{
                             "application/pdf": [".pdf"],
@@ -144,12 +178,10 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                         <Input
                         className={`${props.className} border-none text-center !py-0 !px-0`}
                         type="number"
+                        step={1}
                         value={count}
                         placeholder={props.placeholder}
-                        onChange={(count) => {
-                            console.log(count);
-                            field.onChange(count);
-                        }}
+                        onChange={handleChange}
                         
                         />
                         {/* {...field} */}

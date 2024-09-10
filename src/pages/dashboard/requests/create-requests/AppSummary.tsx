@@ -149,6 +149,7 @@ const AppSummary = ({ handleNext }: Props) => {
                                   label={question.label}
                                   fieldType={FormFieldType.RADIO}
                                   options={question.options}
+                                  subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
                                   className="px-3 py-2 border border-[#040C21] bg-[#192C8A14] rounded-md"
                                 />
                               );

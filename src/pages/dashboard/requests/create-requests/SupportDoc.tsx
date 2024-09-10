@@ -72,7 +72,6 @@ const SupportDoc = ({handleNext}: Props) => {
   
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values.file);
     try {
         setData({
             requestsDetails: {

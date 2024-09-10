@@ -17,7 +17,10 @@ const formSchema = z.object({
   question4: z.enum(["yes", "no"], { required_error: "This field is required." }),
   question5: z.enum(["yes", "no"], { required_error: "This field is required." }),
   question6: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question7: z.string().min(1, { message: "This field is required"}),
+  question7: z
+        .number()
+        .min(1, { message: "This field is required" })
+        .max(12, { message: "The maximum allowed value is 12" }),
 });
 
 
@@ -38,7 +41,7 @@ export default function AppInfo({ handleNext}: Props) {
           question4: "no",
           question5: "no",
           question6: "no",
-          question7: "1",
+          question7: 1,
 
         }
         
@@ -53,12 +56,6 @@ export default function AppInfo({ handleNext}: Props) {
       updateStep();
     }, [updateStep])
 
-  
-     
-   
-    
-
-    
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setData({
@@ -72,7 +69,6 @@ export default function AppInfo({ handleNext}: Props) {
                         question5: values.question5,
                         question6: values.question6,
                         question7: values.question7,
-
                     }
                 }
             })
@@ -98,6 +94,7 @@ export default function AppInfo({ handleNext}: Props) {
                           name={question.name}
                           control={form.control}
                           label={question.label}
+                          subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
                           fieldType={FormFieldType.RADIO}
                           options={[
                               { label: "Yes", value: "yes" },
@@ -109,7 +106,7 @@ export default function AppInfo({ handleNext}: Props) {
                         <CustomFormField 
                             name="question7"
                             fieldType={FormFieldType.COUNTER}
-                            label="What is the duration of the research"
+                            label="What is the duration of the research (months)"
                             control={form.control}
                             required
                         />
