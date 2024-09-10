@@ -12,11 +12,12 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RequestSpecialization from "./CreateSpecialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/Loader";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
 
 type Props = {
     handleNext: Function;
@@ -42,7 +43,10 @@ export default function SelectSpecialization({ handleNext }: Props) {
     });
 
     const { formState: { isValid }, setValue } = form;
-    const [ loading, setLoading ] = useState(false);
+    const { loading, setLoading } = useSpecializationsStore();
+    // issue with submitting in specialisation store to allow loading change
+
+
     
 
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -64,6 +68,10 @@ export default function SelectSpecialization({ handleNext }: Props) {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        console.log(loading);
+    }, [loading])
 
 
 
