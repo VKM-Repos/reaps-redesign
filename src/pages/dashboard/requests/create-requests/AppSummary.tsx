@@ -7,16 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useRequestsStore } from '@/store/RequestFormStore';
 import { useStepper } from '@/context/StepperContext';
-import { application, requirements } from '@/lib/helpers';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import EthicalApprovalCard from '../components/ethical-request-approval';
+import { Label } from '@/components/ui/label';
+import GreenCheckmark from '@/components/custom/Icons/GreenCheckmark';
 
 
 type Props = {
     handleNext?: Function
 }
-
 
 
 const AppSummary = ({ handleNext }: Props) => {
@@ -33,15 +33,16 @@ const AppSummary = ({ handleNext }: Props) => {
       defaultValues: {
         title: title,
         objectives: objectives,
-        checkbox: checkbox,
-        files: files,
+        checkbox: {
+          ...checkbox
+        },
+        files: {
+          ...files
+        },
 
 
       }
     });
-
-
-  
 
     const { register } = form;
     const { setStepper } = useStepper();
@@ -61,18 +62,8 @@ const AppSummary = ({ handleNext }: Props) => {
       }, [updateStep])
 
       function onSubmit() {
-        // handle final submit
         setLoading(true);
         try {
-            // setData({
-            //     requestsDetails: {
-            //         ...data.requestsDetails,
-            //         title: values.title,
-            //         objectives: values.objectives,
-            //         checkbox: values.checkbox,
-            //         files: values.files
-            //     }
-            // });
             setTimeout(() => {
               setLoading(false);
               if (handleNext) {
@@ -140,23 +131,21 @@ const AppSummary = ({ handleNext }: Props) => {
                       </div>
                       <div className="grid grid-cols-2 gap-8 ">
                         <>
-                          {application.map((question) => {
-                              return (
-                                <CustomFormField
-                                  key={question.name}
-                                  name={question.label}
-                                  control={form.control}
-                                  label={question.label}
-                                  fieldType={FormFieldType.RADIO}
-                                  options={question.options}
-                                  subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
-                                  className="px-3 py-2 border border-[#040C21] bg-[#192C8A14] rounded-md"
-                                />
-                              );
-                            })}
-
+                        {Object.entries(checkbox)
+                            .filter(([key]) => key !== 'question7') 
+                            .map(([key, question]) => (
+                              <div
+                                key={key}
+                                className="flex items-center gap-4 px-3 py-2 border border-[#040C21] bg-[#192C8A14] rounded-md w-full max-w-[6rem]"
+                              >
+                                <div className="flex justify-center items-center aspect-square h-[1.375rem] w-[1.375rem] rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                  <div className='flex items-center justify-center h-full rounded-full h-[0.875rem] w-[0.875rem] bg-black'></div>
+                                </div>
+                                <Label className="text-base capitalize">{question}</Label>
+                              </div>
+                            ))
+                          }
                           </>
-                          
                       </div>
                           <div className='flex justify-between items-center'>
                               <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Support Docs</h1>
@@ -165,17 +154,19 @@ const AppSummary = ({ handleNext }: Props) => {
                               </Button>
                           </div>
                           <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
-                            {requirements.map((requirement) => (
-                              <CustomFormField
-                              key={requirement.name} 
-                              name={`file.${requirement.id}`}
-                              control={form.control}
-                              label={requirement.label}
-                              fieldType={FormFieldType.UPLOAD}
-                              required={true}
-                              disabled={true}
-                            />
-                            ))}
+                            {Object.entries(files).map(([key, file]) => {
+                                  return (
+                                    <div
+                                      key={key}
+                                      className="flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2"
+                                    >
+                                       <span className="flex gap-2 items-center justify-center">
+                                          <span><GreenCheckmark /></span>
+                                          <span>{file.path}</span>
+                                      </span>
+                                    </div>
+                                  );
+                                })}
                           </div>
                       <div className='flex flex-col md:flex-row justify-center items-center gap-5 my-4 '>
                         <Button type="submit" variant="outline" className={`rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]`}>Save & Continue later</Button>
