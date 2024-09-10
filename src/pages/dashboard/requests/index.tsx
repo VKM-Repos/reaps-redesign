@@ -17,7 +17,6 @@ export default function Requests() {
 
     const handleFunc = () => {
         setLoading(true);
-
         setTimeout(() => {
           navigate('/requests/create');
           setLoading(false); 
