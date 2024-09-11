@@ -99,7 +99,7 @@ const AppSummary = ({ handleNext }: Props) => {
         <div className="md:4/5 w-full mx-auto my-0 flex flex-col gap-4">
           <div className='flex justify-between items-center'>
             <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Research Information</h1>
-            <Button onClick={() => {handleGoBack(4)}}>
+            <Button onClick={() => {handleGoBack(3)}}>
               <span className='flex items-center justify-center gap-2 text-white'><PencilEdit /> Edit</span>
             </Button>
           </div>
@@ -124,7 +124,7 @@ const AppSummary = ({ handleNext }: Props) => {
                       />
                       <div className='flex justify-between items-center'>
                         <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Application Information</h1>
-                        <Button onClick={() => {handleGoBack(3)}}>
+                        <Button onClick={() => {handleGoBack(2)}}>
                           <span className='flex items-center justify-center gap-2 text-white'><PencilEdit /> Edit</span>
                           
                         </Button>
@@ -149,7 +149,7 @@ const AppSummary = ({ handleNext }: Props) => {
                       </div>
                           <div className='flex justify-between items-center'>
                               <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Support Docs</h1>
-                              <Button onClick={() => {handleGoBack(5)}}>
+                              <Button onClick={() => {handleGoBack(4)}}>
                                 <span className='flex items-center justify-center gap-2 text-white'><PencilEdit /> Edit</span>
                               </Button>
                           </div>
@@ -158,12 +158,13 @@ const AppSummary = ({ handleNext }: Props) => {
                                   return (
                                     <div
                                       key={key}
-                                      className="flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2"
+                                      className="w-full flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2"
                                     >
                                        <span className="flex gap-2 items-center justify-center">
                                           <span><GreenCheckmark /></span>
                                           <span>{file.path}</span>
                                       </span>
+                                      <span className="p-2"><span className="text-[1rem]">x</span></span>
                                     </div>
                                   );
                                 })}

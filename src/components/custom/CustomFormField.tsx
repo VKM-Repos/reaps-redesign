@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
-import Dropzone, { DropzoneInputProps } from 'react-dropzone'
+import Dropzone from 'react-dropzone'
 import UploadIcon from "./Icons/UploadIcon";
 import { Textarea } from "../ui/textarea";
 import ChevronDown from "./Icons/ChevronDown";
@@ -49,8 +49,6 @@ type CustomProps = {
 }
 
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
-
-    const [file, UploadFile] = useState<string>();
     const [count, setCount] = useState(field.value || 0);
 
     const handleIncrement = () => {
@@ -125,52 +123,60 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
             return(
                 <FormControl>
                     <Dropzone
-                        accept={{
-                            "application/pdf": [".pdf"],
-                            "application/msword": [".doc"],
-                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-                        }}
-                        multiple={false}
-                        maxSize={3000000}
-                        onDrop={(acceptedFiles) => {
-                        const file = acceptedFiles[0];
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            const base64String = reader.result as string;
-                            UploadFile(base64String);
-                            field.onChange(file);
-                        };
-                        reader.readAsDataURL(file);
-                        }}
-                        disabled={props.disabled}
-                    >
-            {({  getInputProps, getRootProps }) => (
-              <div 
-                {...getRootProps()}
-              >
-                <input {...getInputProps() as DropzoneInputProps} className={props.className}/>
-           
-                  <span className={`border-gray-300 border w-full flex items-center ${!file ? "justify-center" : "justify-left"} mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]`}>
-                    <p className="text-sm text-[#868687]">{!file ? <span className="flex items-center justify-center gap-2"> <UploadIcon /> <span>Click to Upload</span></span> : 
-                    <span className="flex justify-between items-center">
-                        <span className="flex gap-2 items-center justify-center">
-                            <span><GreenCheckmark /></span>
-                            <span>{field.value?.name}</span>
-                        </span>
-                        {/* <span className="p-4"><Cancel /></span> */}
-                    </span>
-                    }</p>
-                  </span>
               
-              </div>
-            )}
-            </Dropzone>
+               accept={{
+                 "application/pdf": [".pdf"],
+                 "application/msword": [".doc"],
+                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+               }}
+               multiple={false}
+               maxSize={3000000}
+               onDrop={(acceptedFiles) => {
+                 const file = acceptedFiles[0];
+                 // Directly pass the file to the form field's onChange handler
+                 if (file) {
+                   field.onChange(file); // Update react-hook-form with the file
+                 }
+               }}
+               disabled={props.disabled}
+             >
+               {({ getInputProps, getRootProps }) => (
+                 <div {...getRootProps()}>
+                   <input {...getInputProps()} className={props.className} />
+                   <span className={`border-gray-300 border w-full flex items-center ${!field.value ? "justify-center" : "justify-left"} mx-auto p-2 rounded-lg bg-white border-[#0C0C0F29]`}>
+                     <p className="text-sm text-[#868687] w-full">
+                       {!field.value ? (
+                         <span className="flex items-center justify-center gap-2">
+                           <UploadIcon /> <span>Click to Upload</span>
+                         </span>
+                       ) : (
+                         <span className="flex justify-between items-center w-full">
+                           <span className="flex gap-2 items-center justify-center">
+                             <GreenCheckmark />
+                             {field.value?.name}
+                           </span>
+                           <span>
+                            <button
+                                    type="button"
+                                    className="p-2"
+                                    onClick={() => {
+                                    field.onChange(null);
+                                    }}
+                                >
+                                    <span className="text-[1rem]">x</span>
+                                </button>
+                           </span>
+                         </span>
+                       )}
+                     </p>
+                   </span>
+                 </div>
+               )}
+             </Dropzone>
 
             </FormControl>
             );
         case FormFieldType.COUNTER:
-            // console.log(field.value);
-
             return (
                 <FormControl>
                     <div className="flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md border-input">

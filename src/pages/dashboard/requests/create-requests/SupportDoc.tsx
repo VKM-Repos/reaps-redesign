@@ -23,7 +23,7 @@ const ACCEPTED_FILE_TYPES = [
 ];
 
 const fileSchema = z
-  .instanceof(File)
+  .instanceof(File, { message: "Please add a file" })
   .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
   .refine(
     (file) => ACCEPTED_FILE_TYPES.includes(file.type),
@@ -32,16 +32,34 @@ const fileSchema = z
 
 
 const formSchema = z.object({
-  file: z.object({
-    requirement1: fileSchema.nullable(),
-    requirement2: fileSchema.nullable(),
-    requirement3: fileSchema.nullable(),
-    requirement4: fileSchema.nullable(),
-    requirement5: fileSchema.nullable(),
-    requirement6: fileSchema.nullable(),
-    requirement7: fileSchema.nullable(),
-    requirement8: fileSchema.nullable(),
-    requirement9: fileSchema.nullable(),
+  files: z.object({
+    requirement1: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement2: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement3: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement4: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement5: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement6: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement7: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement8: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
+    requirement9: fileSchema.nullable().refine(file => file !== null, {
+      message: "This field is required."
+    }),
   }),
 });
 
@@ -50,12 +68,14 @@ const formSchema = z.object({
   // useForm
   // map data to name to url
 
+  // set default values for files
+
 
 const SupportDoc = ({handleNext}: Props) => {
   const { data, setData } = useRequestsStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema)
   });
 
   const { setStepper } = useStepper();
@@ -76,7 +96,7 @@ const SupportDoc = ({handleNext}: Props) => {
         setData({
             requestsDetails: {
                 ...data.requestsDetails,
-                files: values.file
+                files: values.files
             }
         })
         handleNext();
@@ -97,7 +117,7 @@ const SupportDoc = ({handleNext}: Props) => {
               {requirements.map((requirement) => (
                 <CustomFormField
                   key={requirement.name} 
-                  name={`file.${requirement.id}`}
+                  name={`files.${requirement.id}`}
                   control={form.control}
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
