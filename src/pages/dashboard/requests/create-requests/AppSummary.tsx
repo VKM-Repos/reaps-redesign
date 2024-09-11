@@ -11,6 +11,7 @@ import { application, requirements } from '@/lib/helpers';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import EthicalApprovalCard from '../components/ethical-request-approval';
+import SavingLoader from '../components/SavingLoader';
 
 
 type Props = {
@@ -101,8 +102,9 @@ const AppSummary = ({ handleNext }: Props) => {
       <EthicalApprovalCard educationLevel='Undergraduate' amountToPay='25000' showApproval={() => {setShowEthicalApprovalCard(false)}}/> 
       :
       <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
+        <SavingLoader />
         <div className="flex flex-col justify-center items-center">
-            <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Your application summary</h1>
+            <h1 className="text-xl2 font-semibold pt-5 pb-5 md:py-2">Your application summary</h1>
             <p className='text-sm text-[#868786]'>Please ensure all data is inputted correctly  before making payments</p>
         </div>
         <div className="md:4/5 w-full mx-auto my-0 flex flex-col gap-4">

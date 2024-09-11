@@ -9,6 +9,7 @@ import { questions } from "@/lib/helpers";
 import { useEffect } from "react";
 
 import { useStepper } from "@/context/StepperContext";
+import SavingLoader from "../components/SavingLoader";
 
 const formSchema = z.object({
   question1: z.enum(["yes", "no"], { required_error: "This field is required." }),
@@ -43,6 +44,7 @@ export default function AppInfo({ handleNext}: Props) {
         }
         
     });
+
     const { setStepper } = useStepper();
 
     const updateStep = () => {
@@ -84,8 +86,9 @@ export default function AppInfo({ handleNext}: Props) {
 
     return (
         <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
+            <SavingLoader />
             <div className="flex flex-col justify-center items-center">
-                <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Application Information</h1>
+                <h1 className="text-xl2 font-semibold pt-5 pb-5 md:py-2">Application Information</h1>
             </div>
             <div className="md:w-4/5 w-full max-w-[368px] md:max-w-[526px] mx-auto my-0">
                 <Form {...form}>

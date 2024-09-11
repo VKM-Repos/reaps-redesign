@@ -72,7 +72,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
     {loading && <Loader />}
     {specialization.length > 0 ?
         <>
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center pt-4">
                 <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Select your specialization</h1>
             </div>
             <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">

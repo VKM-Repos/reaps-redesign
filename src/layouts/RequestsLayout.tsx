@@ -47,9 +47,8 @@ export default function RequestsLayout({ children }: Props) {
                         ) 
                     }
                 </div>
-                
             </div>
-            <div className="py-[2.625rem]">
+            <div className="pt-4 pb-[2.625rem]">
                 {children}
             </div>
         </main>
