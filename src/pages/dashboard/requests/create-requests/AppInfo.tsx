@@ -18,10 +18,9 @@ const formSchema = z.object({
       question4: z.string().min(1, { message: "Please select an answer"}),
       question5: z.string().min(1, { message: "Please select an answer"}),
       question6: z.string().min(1, { message: "Please select an answer"}),
-    question7: z
-        .number()
-        .min(1, { message: "This field is required" })
-        .max(12, { message: "The maximum allowed value is 12" }),
+    question7: z.number()
+        // .min(1, { message: "This field is required" })
+        // .max(12, { message: "The maximum allowed value is 12" }),
     })
   });
 
@@ -45,7 +44,7 @@ export default function AppInfo({ handleNext}: Props) {
                 question4: checkbox?.question4 || "",
                 question5: checkbox?.question5 || "",
                 question6: checkbox?.question6 || "",
-                question7: checkbox?.question7 || 1, 
+                
           }
         } 
     });
@@ -111,10 +110,8 @@ export default function AppInfo({ handleNext}: Props) {
                         <CustomFormField 
                             name="question7"
                             fieldType={FormFieldType.COUNTER}
-                            error={(errors.checkbox as any)?.["question7"] as FieldError | undefined}
-                            label="What is the duration of the research (months)"
+                           
                             control={form.control}
-                            required
                         />
                         </div>
                       <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>

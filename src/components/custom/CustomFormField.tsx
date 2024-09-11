@@ -67,9 +67,10 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
       };
     
       const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = Number(e.target.value);
-        setCount(newValue);
-        field.onChange(newValue);
+        // const newValue = Number(e.target.value);
+        // setCount(newValue);
+        // field.onChange(newValue);
+        console.log('helo')
       };
 
 
@@ -77,6 +78,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
     const handleValueChange = (value: string) => {
         setSelectedValue(value);
         field.onChange?.(value); 
+        console.log(value)
     };
 
 
