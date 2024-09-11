@@ -139,7 +139,7 @@ const AppSummary = ({ handleNext }: Props) => {
                                 className="flex items-center gap-4 px-3 py-2 border border-[#040C21] bg-[#192C8A14] rounded-md w-full max-w-[6rem]"
                               >
                                 <div className="flex justify-center items-center aspect-square h-[1.375rem] w-[1.375rem] rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                                  <div className='flex items-center justify-center h-full rounded-full h-[0.875rem] w-[0.875rem] bg-black'></div>
+                                  <div className='flex items-center justify-center rounded-full h-[0.875rem] w-[0.875rem] bg-black'></div>
                                 </div>
                                 <Label className="text-base capitalize">{question}</Label>
                               </div>
