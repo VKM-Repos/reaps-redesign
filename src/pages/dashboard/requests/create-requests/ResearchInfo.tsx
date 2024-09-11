@@ -29,7 +29,7 @@ const ResearchInfo = ({ handleNext }: Props) => {
         resolver: zodResolver(formSchema),
     });
 
-    const { formState: {isValid}, register} = form;
+    const { formState: {isValid, errors }, register} = form;
     const { setStepper } = useStepper();
 
     const updateStep = () => {
@@ -77,6 +77,7 @@ const ResearchInfo = ({ handleNext }: Props) => {
                             <CustomFormField 
                                 fieldType={FormFieldType.TEXTAREA}
                                 name="objectives"
+                                error={errors["objectives"]}
                                 control={form.control}
                                 label="Objectives of the study"
                                 className="!pb-[12rem] flex"
