@@ -1,7 +1,7 @@
 // if specific question checkbox is true, doc support field should be filled
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ const ACCEPTED_FILE_TYPES = [
 ];
 
 const fileSchema = z
-  .instanceof(File, { message: "Please add a file" })
+  .instanceof(File, { message: "Please upload a file" })
   .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
   .refine(
     (file) => ACCEPTED_FILE_TYPES.includes(file.type),
@@ -79,7 +79,8 @@ const SupportDoc = ({handleNext}: Props) => {
   });
 
   const { setStepper } = useStepper();
-  const { formState: { isValid } } = form;
+  const { formState: { isValid, errors } } = form;
+
 
     const updateStep = () => {
         setStepper(2);
@@ -118,6 +119,7 @@ const SupportDoc = ({handleNext}: Props) => {
                 <CustomFormField
                   key={requirement.name} 
                   name={`files.${requirement.id}`}
+                  error={(errors.files as any)?.[requirement.id] as FieldError | undefined}
                   control={form.control}
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}

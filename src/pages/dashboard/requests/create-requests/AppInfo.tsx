@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import {  CheckboxGroup, useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,7 @@ export default function AppInfo({ handleNext}: Props) {
           }
         } 
     });
+    const { formState: { isValid, errors } } = form;
     const { setStepper } = useStepper();
 
     const updateStep = () => {
@@ -97,6 +98,7 @@ export default function AppInfo({ handleNext}: Props) {
                           name={question.name}
                           control={form.control}
                           label={question.label}
+                          error={(errors.checkbox as any)?.[question.name] as FieldError | undefined}
                           subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
                           fieldType={FormFieldType.RADIO}
                           options={[
@@ -109,12 +111,13 @@ export default function AppInfo({ handleNext}: Props) {
                         <CustomFormField 
                             name="question7"
                             fieldType={FormFieldType.COUNTER}
+                            error={(errors.checkbox as any)?.["question7"] as FieldError | undefined}
                             label="What is the duration of the research (months)"
                             control={form.control}
                             required
                         />
                         </div>
-                      <Button className={`my-4 focus:outline-none`}>Continue</Button>
+                      <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>
                 </Form>
             </div>
