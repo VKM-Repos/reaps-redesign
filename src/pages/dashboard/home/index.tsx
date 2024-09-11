@@ -8,6 +8,8 @@ import NotificationCard from "@/pages/dashboard/home/custom/NotificationCard"
 import { useNavigate } from "react-router-dom";
 import AssignedReuqustCard from "./custom/ReviewersDashboard";
 import { useRole } from "@/hooks/useRole";
+import { useState } from "react";
+import Loader from "@/components/custom/Loader";
 
 
 const notifications = [
@@ -44,10 +46,22 @@ const Home = () => {
     
 const navigate = useNavigate();
 const { role } = useRole();
+const [ loading, setLoading ] = useState(false);
+
+    const handleFunc = () => {
+        setLoading(true);
+
+        setTimeout(() => {
+          navigate('/requests/create');
+          setLoading(false); 
+        }, 5000);
+      };
 
 
 
     return (
+      <>
+      {loading && <Loader />}
         <div className="flex flex-col gap-10">
            { role === 'REVIEWER' && 
                <div>
@@ -57,7 +71,7 @@ const { role } = useRole();
             <div className="flex flex-col gap-[3.25rem]">
                 <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                     <h1 className="text-[1.875rem] font-bold">Summary</h1>
-                    <Button onClick={() => { navigate('/requests')}} className="flex gap-2 px-6 w-[17.5rem] md:w-auto"><span><GoogleDoc /></span>Request Ethical Approval</Button>
+                    <Button onClick={handleFunc} className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>
                 </div>
                 <div className="w-full my-8 mx-auto flex md:flex-row gap-7 flex-col items-center justify-between">
                     <SummaryCard icon={GoogleDoc()} label="Submitted" num="24" color="#4D4341"/>
@@ -86,6 +100,7 @@ const { role } = useRole();
                 </div>
             </div>
         </div>
+      </> 
     )
 }
 

@@ -24,14 +24,12 @@ const RadioGroupItem = React.forwardRef<
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "aspect-square h-4 w-4 rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        checked ? className : "!bg-inherit"
+        "flex justify-center items-center aspect-square h-[1.375rem] w-[1.375rem] rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        
       )}
       {...props}
     >
-      <RadioGroupPrimitive.Indicator className="flex items-center justify-center h-full w-full">
-        {/* <Circle className="h-2.5 w-2.5 fill-black bg-black text-primary" /> */}
-        <div className={cn("w-full rounded-full h-full !p-2 bg-none ")}></div>
+      <RadioGroupPrimitive.Indicator className={cn("flex items-center justify-center h-full rounded-full", checked ? className : "!bg-inherit")}>
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

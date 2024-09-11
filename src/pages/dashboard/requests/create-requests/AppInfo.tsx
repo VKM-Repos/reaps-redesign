@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import {  useRequestsStore } from "@/store/RequestFormStore";
+import {  CheckboxGroup, useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { questions } from "@/lib/helpers";
@@ -11,14 +11,19 @@ import { useEffect } from "react";
 import { useStepper } from "@/context/StepperContext";
 
 const formSchema = z.object({
-  question1: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question2: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question3: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question4: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question5: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question6: z.enum(["yes", "no"], { required_error: "This field is required." }),
-  question7: z.string().min(1, { message: "This field is required"}),
-});
+    checkbox: z.object({
+      question1: z.string().min(1, { message: "Please select an answer"}),
+      question2: z.string().min(1, { message: "Please select an answer"}),
+      question3: z.string().min(1, { message: "Please select an answer"}),
+      question4: z.string().min(1, { message: "Please select an answer"}),
+      question5: z.string().min(1, { message: "Please select an answer"}),
+      question6: z.string().min(1, { message: "Please select an answer"}),
+    question7: z
+        .number()
+        .min(1, { message: "This field is required" })
+        .max(12, { message: "The maximum allowed value is 12" }),
+    })
+  });
 
 
 
@@ -29,20 +34,22 @@ type Props = {
 
 export default function AppInfo({ handleNext}: Props) {
     const { data, setData } = useRequestsStore();
+    const checkbox = data.requestsDetails.checkbox as CheckboxGroup;
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          question1: "no",
-          question2: "no",
-          question3: "no",
-          question4: "no",
-          question5: "no",
-          question6: "no",
-          question7: "1",
-
-        }
-        
+            checkbox: {
+                question1: checkbox?.question1 || "",
+                question2: checkbox?.question2 || "",
+                question3: checkbox?.question3 || "",
+                question4: checkbox?.question4 || "",
+                question5: checkbox?.question5 || "",
+                question6: checkbox?.question6 || "",
+                question7: checkbox?.question7 || 1, 
+          }
+        } 
     });
+    const { formState: { isValid, errors } } = form;
     const { setStepper } = useStepper();
 
     const updateStep = () => {
@@ -53,26 +60,19 @@ export default function AppInfo({ handleNext}: Props) {
       updateStep();
     }, [updateStep])
 
-  
-     
-   
-    
-
-    
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setData({
                 requestsDetails: {
                     ...data.requestsDetails,
                     checkbox: {
-                        question1: values.question1,
-                        question2: values.question2,
-                        question3: values.question3,
-                        question4: values.question4,
-                        question5: values.question5,
-                        question6: values.question6,
-                        question7: values.question7,
-
+                        question1: values.checkbox.question1,
+                        question2: values.checkbox.question2,
+                        question3: values.checkbox.question3,
+                        question4: values.checkbox.question4,
+                        question5: values.checkbox.question5,
+                        question6: values.checkbox.question6,
+                        question7: values.checkbox.question7,
                     }
                 }
             })
@@ -98,6 +98,8 @@ export default function AppInfo({ handleNext}: Props) {
                           name={question.name}
                           control={form.control}
                           label={question.label}
+                          error={(errors.checkbox as any)?.[question.name] as FieldError | undefined}
+                          subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
                           fieldType={FormFieldType.RADIO}
                           options={[
                               { label: "Yes", value: "yes" },
@@ -109,12 +111,13 @@ export default function AppInfo({ handleNext}: Props) {
                         <CustomFormField 
                             name="question7"
                             fieldType={FormFieldType.COUNTER}
-                            label="What is the duration of the research"
+                            error={(errors.checkbox as any)?.["question7"] as FieldError | undefined}
+                            label="What is the duration of the research (months)"
                             control={form.control}
                             required
                         />
                         </div>
-                      <Button className={`my-4 focus:outline-none`}>Continue</Button>
+                      <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                     </form>
                 </Form>
             </div>

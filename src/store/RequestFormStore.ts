@@ -12,6 +12,11 @@ import {
 //     };
 //   };
 
+type FileDetails = {
+    path: string;
+};
+
+
 export type CheckboxGroup = {
     question1: string,
     question2: string,
@@ -19,18 +24,18 @@ export type CheckboxGroup = {
     question4: string,
     question5: string,
     question6: string,
-    question7: string
+    question7: number
 };
 
 type fileGroup = {
-    requirement1: string,
-    requirement2: string,
-    requirement3: string,
-    requirement4: string,
-    requirement5: string,
-    requirement6: string,
-    requirement7: string,
-    requirement8: string,
+    requirement1: FileDetails,
+    requirement2: FileDetails,
+    requirement3: FileDetails,
+    requirement4: FileDetails,
+    requirement5: FileDetails,
+    requirement6: FileDetails,
+    requirement7: FileDetails,
+    requirement8: FileDetails,
 }
 
 export interface RequestsStore {
