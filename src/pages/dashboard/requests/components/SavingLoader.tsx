@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import Recycle from "/icons/recycle-03.svg"
+import Cloud from "/icons/cloud-saving-done-01.svg"
 import { useMediaQuery } from "react-responsive";
 
 export default function SavingLoader() {
@@ -19,7 +20,7 @@ export default function SavingLoader() {
         <>
             {!isMobile && 
             <div className="w-full flex justify-start items-center">
-                {saved ? <p className="flex items-center justify-center gap-1 text-sm text-[#454745]"><span><img src={Recycle} /></span><span>Saving...</span></p> : <p className="flex items-center justify-center gap-1 text-sm text-[#454745]"><span><img src={Recycle} /></span><span>Saved</span></p>}
+                {saved ? <p className="flex items-center justify-center gap-1 text-sm text-[#454745]"><span><img src={Recycle} /></span><span>Saving...</span></p> : <p className="flex items-center justify-center gap-1 text-sm text-[#454745]"><span><img src={Cloud} /></span><span>Saved</span></p>}
             </div>}
         </>
     )
