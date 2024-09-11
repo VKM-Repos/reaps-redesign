@@ -9,6 +9,7 @@ import { requirements } from "@/lib/helpers";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { useStepper } from "@/context/StepperContext";
 import { useEffect } from "react";
+import SavingLoader from "../components/SavingLoader";
 
 
 type Props = {
@@ -108,8 +109,9 @@ const SupportDoc = ({handleNext}: Props) => {
 
   return (
     <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
+      <SavingLoader />
       <div className="flex flex-col justify-center items-center">
-          <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Supporting Document</h1>
+          <h1 className="text-xl2 font-semibold pt-5 pb-5 md:py-2">Supporting Document</h1>
       </div>
       <div className="md:w-4/5 w-full max-w-[368px] md:max-w-[526px] mx-auto my-0">
         <Form {...form}>

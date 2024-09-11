@@ -8,6 +8,7 @@ import { useRequestsStore } from "@/store/RequestFormStore";
 import { useStepper } from "@/context/StepperContext";
 import { useEffect } from "react";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
+import SavingLoader from "../components/SavingLoader";
 
 const formSchema = z.object({
     title: z
@@ -59,8 +60,9 @@ const ResearchInfo = ({ handleNext }: Props) => {
       }, [updateStep])
 
   return (
-    <div className="flex flex-col gap-[1.25rem] my-8">
-        <div className="w-full my-0 mx-auto flex flex-col gap-6 justify-center items-center">
+    <div className="flex flex-col gap-[1.25rem] w-full px-4 md:w-4/5 md:px-0 my-0 mx-auto">
+        <SavingLoader />
+        <div className=" my-4 flex flex-col gap-6 justify-center items-center">
             <div className="flex flex-col gap-8 w-full max-w-[37rem] text-center">
                 <h1 className="text-[1.625rem] leading-8 font-bold">Research Information</h1>
             </div>
