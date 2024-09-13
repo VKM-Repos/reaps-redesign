@@ -92,9 +92,9 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                     <div className="font-semibold text-[#868687]">
                         <p>Details</p>
                     </div>
-                    <div className="flex gap-5 text-sm"><p className="font-bold">Transaction Reference</p><p>{transaction.reference}</p></div>
-                    <div className="flex gap-5 text-sm"><p className="font-bold">Request ID</p><p>{transaction.id}</p></div>
-                    <div className="flex gap-5 text-sm"><p className="font-bold">Status</p>
+                    <div className="flex gap-5 text-sm items-center"><p className="font-bold">Transaction Reference</p><p>{transaction.reference}</p></div>
+                    <div className="flex gap-5 text-sm items-center"><p className="font-bold">Request ID</p><p>{transaction.id}</p></div>
+                    <div className="flex gap-5 text-sm items-center"><p className="font-bold">Status</p>
                         <Badge
                           style={{
                             color: statusColorMap[transaction.status]?.text || '#000000',
