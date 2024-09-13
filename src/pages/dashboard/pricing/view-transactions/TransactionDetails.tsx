@@ -8,6 +8,9 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { useTransactionStore } from "@/store/TransactionStore"
+import { useState } from "react"
+import DocumentIcon from "@/components/custom/sidebar-icons/document-icon"
+import Download from "@/components/custom/Icons/Download"
 
 type TransactionDetailsProps = {
     transaction: {
@@ -34,7 +37,7 @@ type TransactionDetailsProps = {
       );
 
       const formSchema = z.object({
-        receipt: fileSchema.optional(), 
+        receipt: fileSchema.nullable() 
       });
 
 
@@ -46,13 +49,15 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
 
     const { formState: { isValid, errors } } = form;
     const { setReceipt } = useTransactionStore();
+    // const { receipt } = data;
+    const [ showFile, setShowFile ] = useState(false);
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
         try {
             if (values.receipt) {
-              console.log("Receipt file:", values.receipt);
+              // console.log("Receipt file:", values.receipt);
               setReceipt(values.receipt); 
+              setShowFile(true);
             } else {
               console.warn("No receipt file provided."); 
             }
@@ -108,28 +113,51 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                     </div>
                 </div>
                 <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
-                    <div className="font-semibold text-[#868687]">
+                    <div className="font-semibold text-[#868687] flex flex-col gap-5">
                         <p>Document</p>
                         <div>
                             <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-4 w-full">
-                              <div className="grow">
-                                {/* onsubmit, retrieve path, set state,  render new div */}
-                                <CustomFormField
-                                  key={transaction.id} 
-                                  name="receipt" 
-                                  error={(errors.receipt as any)?.[transaction.id] as FieldError | undefined} 
-                                  control={form.control}
-                                  label="Remita Payment Receipt"
-                                  fieldType={FormFieldType.UPLOAD}
-                                  required={true}
-                                  />
-                              </div>
-                              <div className="flex flex-col items-center justify-end mt-2">
-                                <Button variant={isValid ? "default" : "ghost"} type="submit" className="focus:outline-none">
-                                  Submit
-                                </Button>
-                              </div>
+                            
+                              {showFile ?
+                                <div className="flex flex-col gap-1 w-full max-w-[374px] md:max-w-[526px]">
+                                  <div className="flex justify-between">
+                                    <p className="font-semibold text-sm flex gap-1"><span className="text-black">Remita Payment Receipt</span><span className="text-red-500">*</span></p>
+                                    <p className="text-xs font-normal text-[#868687]">.Doc, .Docx, .Pdf (Max of 3MB)</p>
+                                  </div>
+                                  <div className="w-full  py-3 px-6 rounded-[.5rem] border border-[#0C0C0F29] flex justify-between items-center">
+                                    <div className="gap-6 flex items-center">
+                                      <DocumentIcon />
+                                      <p>Remita Receipt </p>
+                                    </div>
+                                    <div><Download /></div>
+                                  </div>
+                                </div>
+                                 : 
+                                <>
+                                  <div className="grow">
+                                  {/* onsubmit, retrieve path, set state,  render new div */}
+                                  <CustomFormField
+                                    key={transaction.id} 
+                                    name="receipt" 
+                                    error={(errors.receipt as any)?.[transaction.id] as FieldError | undefined} 
+                                    control={form.control}
+                                    label="Remita Payment Receipt"
+                                    labelClassName="!font-semibold !text-black"
+                                    fieldType={FormFieldType.UPLOAD}
+                                    required={true}
+                                    />
+                                </div>
+                                <div className={`flex flex-col items-center mt-8`}>
+                                  <Button variant={isValid ? "default" : "ghost"} type="submit" className="focus:outline-none">
+                                    Submit
+                                  </Button>
+                                </div>
+                                </>
+                              }
+                             
+                       
+                              
                             </form>
                                
                             </Form>
