@@ -48,9 +48,26 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
       });
 
     const { formState: { isValid, errors } } = form;
-    const { setReceipt } = useTransactionStore();
-    // const { receipt } = data;
+    const { data, setReceipt } = useTransactionStore();
+    const { receipt } = data;
     const [ showFile, setShowFile ] = useState(false);
+
+    const handleDownload = () => {
+      if (!receipt) {
+        console.warn('No receipt file available to download.');
+        return;
+      }
+      const fileURL = URL.createObjectURL(receipt);
+  
+      const a = document.createElement('a');
+      a.href = fileURL;
+      a.download = receipt.name; 
+      document.body.appendChild(a);
+      a.click();
+  
+      document.body.removeChild(a);
+      URL.revokeObjectURL(fileURL);
+    };
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -120,17 +137,17 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-4 w-full">
                             
                               {showFile ?
-                                <div className="flex flex-col gap-1 w-full max-w-[374px] md:max-w-[526px]">
+                                <div className="flex flex-col gap-3 w-full max-w-[374px] md:max-w-[526px]">
                                   <div className="flex justify-between">
                                     <p className="font-semibold text-sm flex gap-1"><span className="text-black">Remita Payment Receipt</span><span className="text-red-500">*</span></p>
                                     <p className="text-xs font-normal text-[#868687]">.Doc, .Docx, .Pdf (Max of 3MB)</p>
                                   </div>
                                   <div className="w-full  py-3 px-6 rounded-[.5rem] border border-[#0C0C0F29] flex justify-between items-center">
-                                    <div className="gap-6 flex items-center">
+                                    <div className="gap-6 flex items-center text-black">
                                       <DocumentIcon />
-                                      <p>Remita Receipt </p>
+                                      <p className="font-normal text-[#515152]">Remita Receipt </p>
                                     </div>
-                                    <div><Download /></div>
+                                    <div><button className="text-black" onClick={handleDownload}><Download /></button></div>
                                   </div>
                                 </div>
                                  : 
