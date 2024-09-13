@@ -23,8 +23,8 @@ export default function CategoryTable({ categories }: CategoryProps) {
             header: "Ethical Approval Request Fee",
             accessor: "amount",
             cellType: 'text',
-            headerClass: "text-[#454747] font-semibold !text-[18px] flex justify-end",
-            cellClass: "font-bold flex justify-end text-sm text-black py-[.875rem] px-4"
+            headerClass: "w-full min-w-[18rem] text-[#454747] font-semibold !text-[18px] flex justify-end",
+            cellClass: "w-full min-w-[18rem] font-bold flex justify-end text-sm text-black py-[.875rem] px-4"
         },
 
     ]
