@@ -91,27 +91,27 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
             </div>
             <div className="w-full flex flex-col gap-4">
                 <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex justify-between p-[1.75rem]">
-                    <div className="flex flex-col gap-1 text-sm justify-center text-[#515152]">
+                    <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
                         <p className="text-bold font-semibold">Name of Researcher</p>
                         <p className="text-[#868687]">Academic - Undergraduates</p>
                     </div>
-                    <div className="flex flex-col gap-1 text-sm justify-center text-[#515152]">
+                    <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
                         <p className="text-bold font-semibold">Category</p>
                         <p className="text-[#868687]">Academic - Undergraduates</p>
                     </div>
-                    <div className="flex flex-col gap-1 text-sm justify-center text-[#515152]">
+                    <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
                         <p className="text-bold font-semibold">Amount</p>
                         <p className="text-[#868687]">{transaction.amount}</p>
                     </div>
                     
                 </div>
-                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
-                    <div className="font-semibold text-[#868687]">
+                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] text-[#868687] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
+                    <div className="font-semibold">
                         <p>Details</p>
                     </div>
-                    <div className="flex gap-5 text-sm items-center"><p className="font-bold">Transaction Reference</p><p>{transaction.reference}</p></div>
-                    <div className="flex gap-5 text-sm items-center"><p className="font-bold">Request ID</p><p>{transaction.id}</p></div>
-                    <div className="flex gap-5 text-sm items-center"><p className="font-bold">Status</p>
+                    <div className="flex gap-5 text-sm items-center text-[#515152]"><p className="font-bold">Transaction Reference</p><p>{transaction.reference}</p></div>
+                    <div className="flex gap-5 text-sm items-center text-[#515152]"><p className="font-bold">Request ID</p><p>{transaction.id}</p></div>
+                    <div className="flex gap-5 text-sm items-center text-[#515152]"><p className="font-bold">Status</p>
                         <Badge
                           style={{
                             color: statusColorMap[transaction.status]?.text || '#000000',
