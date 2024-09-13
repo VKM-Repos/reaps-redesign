@@ -124,7 +124,7 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                 <TableBody>
                     {transactions.map((rowData, rowIndex) => (
                     <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger className="w-full">
                             <TableRow key={rowIndex} 
                             className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]"
                             onClick={() => handleRowClick()}>

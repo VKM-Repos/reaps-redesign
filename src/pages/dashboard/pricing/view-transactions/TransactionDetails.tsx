@@ -48,46 +48,48 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
     const { setReceipt } = useTransactionStore();
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log(values)
         try {
             if (values.receipt) {
-              setReceipt(values.receipt); // Only call setReceipt if receipt is defined
+              console.log("Receipt file:", values.receipt);
+              setReceipt(values.receipt); 
             } else {
-              console.warn("No receipt file provided."); // Handle the case where no receipt is provided
+              console.warn("No receipt file provided."); 
             }
           } catch (error) {
-            console.error("Error submitting form:", error); // Provide an error message
+            console.error("Error submitting form:", error); 
           }
     }
 
     
     return (
         <DialogContent className="w-full max-w-[800px] h-full max-h-[700px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
-             <div className="border-[#0E0F0C1F] border-b  flex justify-between items-center text-[#040C21] w-full">
+             <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
                 <p className="pb-4 px-[1.125rem] font-semibold text-xl2">Transaction Details</p>
             </div>
             <div className="w-full flex flex-col gap-4">
-                <div className="w-full max-w-4/5 border-[#0E0F0C1F] rounded-[1.25rem] flex gap-5 p-[1.75rem]">
+                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex justify-between p-[1.75rem]">
                     <div className="flex flex-col gap-1 text-sm justify-center text-[#515152]">
-                        <p className="text-bold">Name of Researcher</p>
+                        <p className="text-bold font-semibold">Name of Researcher</p>
                         <p className="text-[#868687]">Academic - Undergraduates</p>
                     </div>
                     <div className="flex flex-col gap-1 text-sm justify-center text-[#515152]">
-                        <p className="text-bold">Category</p>
+                        <p className="text-bold font-semibold">Category</p>
                         <p className="text-[#868687]">Academic - Undergraduates</p>
                     </div>
                     <div className="flex flex-col gap-1 text-sm justify-center text-[#515152]">
-                        <p className="text-bold">Amount</p>
+                        <p className="text-bold font-semibold">Amount</p>
                         <p className="text-[#868687]">{transaction.amount}</p>
                     </div>
                     
                 </div>
-                <div className="w-full max-w-4/5 border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
+                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
                     <div className="font-semibold text-[#868687]">
                         <p>Details</p>
                     </div>
-                    <div className="flex gap-5 "><p className="font-bold">Transaction Reference</p><p>{transaction.reference}</p></div>
-                    <div className="flex gap-5 "><p className="font-bold">Request ID</p><p>{transaction.id}</p></div>
-                    <div className="flex gap-5 "><p className="font-bold">Status</p>
+                    <div className="flex gap-5 text-sm"><p className="font-bold">Transaction Reference</p><p>{transaction.reference}</p></div>
+                    <div className="flex gap-5 text-sm"><p className="font-bold">Request ID</p><p>{transaction.id}</p></div>
+                    <div className="flex gap-5 text-sm"><p className="font-bold">Status</p>
                         <Badge
                           style={{
                             color: statusColorMap[transaction.status]?.text || '#000000',
@@ -105,16 +107,17 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                         </Badge>
                     </div>
                 </div>
-                <div className="w-full max-w-4/5 border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
+                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
                     <div className="font-semibold text-[#868687]">
                         <p>Document</p>
                         <div>
                             <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-4 w-full">
                               <div className="grow">
+                                {/* onsubmit, retrieve path, set state,  render new div */}
                                 <CustomFormField
                                   key={transaction.id} 
-                                  name={`file.${transaction.id}`} 
+                                  name="receipt" 
                                   error={(errors.receipt as any)?.[transaction.id] as FieldError | undefined} 
                                   control={form.control}
                                   label="Remita Payment Receipt"
@@ -122,7 +125,11 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                                   required={true}
                                   />
                               </div>
-                                <Button variant={isValid ? "default" : "ghost"} type="submit" className={`focus:outline-none mt-[1.875rem]`}>Submit</Button>
+                              <div className="flex flex-col items-center justify-end mt-2">
+                                <Button variant={isValid ? "default" : "ghost"} type="submit" className="focus:outline-none">
+                                  Submit
+                                </Button>
+                              </div>
                             </form>
                                
                             </Form>
