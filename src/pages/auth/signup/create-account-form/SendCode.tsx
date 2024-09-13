@@ -8,6 +8,7 @@ import FormInput from "@/components/custom/FormInput";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
     handleNext: Function,
@@ -23,8 +24,9 @@ const formSchema = z.object({
 
 export default function SendCode({ handleNext, handleGoBack }: Props) {
    // might need loading for api call
+  
    const { isMobile } = useMobileContext();
-    const { data, setData } = useOnboardingFormStore();
+    const { data, setData, loading, setLoading } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
@@ -33,6 +35,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
   
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true);
         try {
             setData({
                 onboardingDetails: {
@@ -40,7 +43,10 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                   code: values.code
                 }
             });
-          handleNext();
+            setTimeout(() => {
+                handleNext();
+                setLoading(false);
+            }, 3000);
         } catch (error) {
           console.error(error);
         }
@@ -48,6 +54,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
 
     return(
         <>
+             {loading && <Loader />}
             <TopBar title="Email" />
             <div className="w-full md:w-4/5 px-4 md:mx-auto my-0 antialiased relative pt-[2.5rem]">
                     {!isMobile ? <BackButton title="Back" goBack={handleGoBack}/>: ''}
@@ -58,7 +65,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                             <p className="text-sm text-center leading-[14px] text-[#454745]">For security, we've sent you an email to <span className="font-bold font-black">{data.onboardingDetails.email}</span>.  Simply enter the code in the email into the box below to proceed.</p>
                         </div>
                     </div>
-                   {/* {isLoading && <Loader />} */}
+                  
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                             <FormInput

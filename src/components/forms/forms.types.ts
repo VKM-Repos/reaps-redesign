@@ -1,4 +1,4 @@
 export type Props = {
     handleNext: Function,
-    handleGoBack: Function,
+    handleGoBack?: Function,
 }

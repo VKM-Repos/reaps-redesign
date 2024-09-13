@@ -22,6 +22,7 @@ import {
 
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
+import Loader from "@/components/custom/Loader";
 
 const formSchema = z.object({
     firstName: z
@@ -42,7 +43,7 @@ const formSchema = z.object({
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     const [dialCode, setDialCode] = useState("+234");
     const { isMobile } = useMobileContext();
-    const { data, setData } = useOnboardingFormStore();
+    const { data, setData, loading, setLoading } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
@@ -51,6 +52,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const dialNumber = dialCode + values.phoneNumber;
+        setLoading(true);
         try {
             setData({
                 onboardingDetails: {
@@ -60,7 +62,10 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     phoneNumber: dialNumber
                 }
             }); 
-            handleNext();
+            setTimeout(() => {
+                handleNext();
+                setLoading(false);
+            }, 3000);
         } catch (error) {
           console.error(error);
         }
@@ -68,6 +73,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     
     return(
         <>
+            {loading && <Loader />}
             <TopBar title="Verification" />
             <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
