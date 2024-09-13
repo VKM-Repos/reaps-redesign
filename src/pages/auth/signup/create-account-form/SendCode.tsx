@@ -22,10 +22,8 @@ const formSchema = z.object({
         .regex(/^\d+$/, { message: "Code should contain only digits" })
 });
 
-export default function SendCode({ handleNext, handleGoBack }: Props) {
-   // might need loading for api call
-  
-   const { isMobile } = useMobileContext();
+export default function SendCode({ handleNext, handleGoBack }: Props) {  
+    const { isMobile } = useMobileContext();
     const { data, setData, loading, setLoading } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
