@@ -34,6 +34,7 @@ const formSchema = z.object({
     phoneNumber: z
         .string()
         .min(1, { message: "Please fill this field"})
+        .max(12, { message: "Phone number should not contain more than 12 characters"})
         .regex(/^\d+$/, { message: "Phone number should contain only numbers" })
 });
 
