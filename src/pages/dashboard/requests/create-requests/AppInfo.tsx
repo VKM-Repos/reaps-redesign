@@ -2,7 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { CheckboxGroup, useRequestsStore } from "@/store/RequestFormStore";
+import { useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import CustomFormField, {
   FormFieldType,
@@ -13,19 +13,19 @@ import { useEffect } from "react";
 import { useStepper } from "@/context/StepperContext";
 import SavingLoader from "../components/SavingLoader";
 
-const formSchema = z.object({
-  checkbox: z.object({
-    question1: z.string().min(1, { message: "Please select an answer" }),
-    question2: z.string().min(1, { message: "Please select an answer" }),
-    question3: z.string().min(1, { message: "Please select an answer" }),
-    question4: z.string().min(1, { message: "Please select an answer" }),
-    question5: z.string().min(1, { message: "Please select an answer" }),
-    question6: z.string().min(1, { message: "Please select an answer" }),
-    question7: z
-      .number()
-      .min(1, { message: "This field is required" })
-      .max(12, { message: "The maximum allowed value is 12" }),
-  }),
+
+const checkboxGroupSchema = z.object({
+  question1: z.string().min(1, { message: "Please select an answer"}),
+  question2: z.string().min(1, { message: "Please select an answer"}),
+  question3: z.string().min(1, { message: "Please select an answer"}),
+  question4: z.string().min(1, { message: "Please select an answer"}),
+  question5: z.string().min(1, { message: "Please select an answer"}),
+  question6: z.string().min(1, { message: "Please select an answer"}),
+  question7: z.number()
+                .int()
+                .nonnegative("Number of months must be a non-negative integer")
+                .min(1, { message: "Number of months must exceed 0" })
+                .max(12, {message: "Number of months must not exceed 12"}),
 });
 
 type Props = {
@@ -34,21 +34,10 @@ type Props = {
 
 export default function AppInfo({ handleNext }: Props) {
   const { data, setData } = useRequestsStore();
-  const checkbox = data.requestsDetails.checkbox as CheckboxGroup;
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      checkbox: {
-        question1: checkbox?.question1 || "",
-        question2: checkbox?.question2 || "",
-        question3: checkbox?.question3 || "",
-        question4: checkbox?.question4 || "",
-        question5: checkbox?.question5 || "",
-        question6: checkbox?.question6 || "",
-        question7: checkbox?.question7 || 1,
-      },
-    },
+  const form = useForm<z.infer<typeof checkboxGroupSchema>>({
+    resolver: zodResolver(checkboxGroupSchema),
   });
+
   const {
     formState: { isValid, errors },
   } = form;
@@ -58,23 +47,25 @@ export default function AppInfo({ handleNext }: Props) {
     setStepper(0);
   };
 
+  
+
   useEffect(() => {
     updateStep();
   }, [updateStep]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof checkboxGroupSchema>) {
     try {
       setData({
         requestsDetails: {
           ...data.requestsDetails,
           checkbox: {
-            question1: values.checkbox.question1,
-            question2: values.checkbox.question2,
-            question3: values.checkbox.question3,
-            question4: values.checkbox.question4,
-            question5: values.checkbox.question5,
-            question6: values.checkbox.question6,
-            question7: values.checkbox.question7,
+            question1: values.question1,
+            question2: values.question2,
+            question3: values.question3,
+            question4: values.question4,
+            question5: values.question5,
+            question6: values.question6,
+            question7: values.question7,
           },
         },
       });
@@ -106,7 +97,7 @@ export default function AppInfo({ handleNext }: Props) {
                   control={form.control}
                   label={question.label}
                   error={
-                    (errors.checkbox as any)?.[question.name] as
+                    (errors as any)?.[question.name] as
                       | FieldError
                       | undefined
                   }
@@ -123,7 +114,7 @@ export default function AppInfo({ handleNext }: Props) {
                 name="question7"
                 fieldType={FormFieldType.COUNTER}
                 error={
-                  (errors.checkbox as any)?.["question7"] as
+                  (errors as any)?.["question7"] as
                     | FieldError
                     | undefined
                 }
