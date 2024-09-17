@@ -46,6 +46,7 @@ type CustomProps = {
    answers?: string;
    disabled?: boolean;
    error?: FieldError;
+   labelClassName?: string;
    
 }
 
@@ -288,7 +289,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
 
 const CustomFormField = (props: CustomProps) => {
-    const { name, error, control, label, fieldType, required} = props;
+    const { name, error, control, label, fieldType, required, labelClassName} = props;
 
 
   return (
@@ -299,7 +300,7 @@ const CustomFormField = (props: CustomProps) => {
             <FormItem className="gap-4">
                 <div className="flex justify-between items-center">
                     <div> 
-                        <FormLabel className={` ${error ? 'text-red-500' : 'text-[#454745]'} font-[400]`}>{label}</FormLabel>
+                        <FormLabel className={`${labelClassName} ${error ? 'text-red-500' : 'text-[#454745]'} font-[400]`}>{label}</FormLabel>
                         {required && (
                         <span className="text-error text-red-500" title="required">
                         &ensp;*
