@@ -52,7 +52,7 @@ type FlagData = {
 
 
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
-    const [dialCode, setDialCode] = useState("+1");
+    const [dialCode, setDialCode] = useState("+93");
     const { isMobile } = useMobileContext();
     const { data, setData, loading, setLoading } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -65,20 +65,23 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     const [countriesData, setCountries] = useState<CountryListItemType[]>([])
 
     useEffect(() => {
-        console.log(dialCode)
         setCountries(countries);
         setFlags(countryFlags);
     }, []);
 
-    // Combine data based on country name
-    const combinedData = countriesData.map((country) => {
+
+
+    const combinedData = countriesData
+        .filter(country => flags.some(f => f.name === country.name))
+        .map(country => {
         const flag = flags.find(f => f.name === country.name);
         return {
             ...country,
-            flag: flag ? flag.file_url : '' 
-    }});
+            flag: flag?.file_url || ''
+        };
+    });
 
-  
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         const dialNumber = dialCode + values.phoneNumber;
         setLoading(true);
@@ -145,7 +148,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                                         <SelectItem 
                                                         key={country.name} value={country.name}
                                                         >
-                                                            <div className="flex gap-4">
+                                                            <div className="flex gap-4 items-center justify-center">
                                                                 <span><img src={country.flag} height="24px" width="24px"/></span>
                                                                 <span>{country.name}</span>
                                                                 <span>{country.dial_code}</span>
