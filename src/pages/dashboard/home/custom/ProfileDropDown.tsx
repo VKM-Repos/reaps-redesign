@@ -9,7 +9,6 @@ import LogOutIcon from "@/components/custom/Icons/LogOutIcon";
 import Logout from "@/components/custom/LogOut";
 import { Link } from "react-router-dom";
 import BackButton from "@/components/custom/BackButton";
-import { useLogout } from "@/context/LogoutContext";
 import Loader from "@/components/custom/Loader";
 import ArrowDown from "/icons/arrow-down-01.svg"
 
@@ -45,7 +44,6 @@ const profileOptions = [
 export default function ProfileDropDown() {
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
     const [open, setOpen] = useState(false);
-    // const { loading } = useLogout();
     const [loading, setLoading] = useState(false)
 
     const handleFunc = () => {
