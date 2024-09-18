@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import FormInput from "@/components/custom/FormInput";
-import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import { Form } from "@/components/ui/form";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
@@ -22,14 +21,13 @@ const formSchema = z.object({
 
 
 export default function RegisterUser({ handleNext }: Props) {
-  const { data, setData } = useOnboardingFormStore();
-    const [isLoading, setIsLoading] = useState(false);
+  const { data, loading, setData, setLoading } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
       });
     const { register, formState: { isValid } } = form;
     function onSubmit(values: z.infer<typeof formSchema>) {
-      setIsLoading(true);
+      setLoading(true);
       try {
         setData({
           onboardingDetails: {
@@ -40,7 +38,7 @@ export default function RegisterUser({ handleNext }: Props) {
         
         setTimeout(() => {
             handleNext();
-            setIsLoading(false);
+            setLoading(false);
         }, 3000);
       } catch (error) {
         console.error(error);
@@ -51,6 +49,7 @@ export default function RegisterUser({ handleNext }: Props) {
 
     return(
         <>
+          {loading && <Loader />}
           <div className="py-[2rem] px-[1.25rem] max-h-[124px] md:p-[3.625rem] md:max-h-[130px] border-b border-[#0C0C0F29]">
             <div className="flex justify-between items-center w-full sm:w-4/5 mx-auto my-0">
               <div className="flex items-center">
@@ -68,7 +67,6 @@ export default function RegisterUser({ handleNext }: Props) {
                   <p className="pt-2 pb-10 text-sm text-[#454745]">Already have an account? <a href="/login" className="underline font-semibold text-black hover:text-black" >Log in</a></p>
               </div>
               <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
-              {isLoading && <Loader />}
               <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                       <FormInput

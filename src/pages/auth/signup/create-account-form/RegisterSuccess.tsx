@@ -1,19 +1,29 @@
 import { Button } from "@/components/ui/button"
 import {  useNavigate } from "react-router-dom";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import Loader from "@/components/custom/Loader";
+import { Props } from "@/components/forms/forms.types";
 
 
 
-export default function RegisterSuccess() {
-    const { resetStore } = useOnboardingFormStore();
+export default function RegisterSuccess({ handleNext }: Props) {
+    const { resetStore, loading, setLoading } = useOnboardingFormStore();
     const navigate = useNavigate();
 
-    function goToLogin() {  
-        resetStore();
-        navigate("/login");
+    function goToLogin() { 
+        setLoading(true);
+        setTimeout(() => {
+            handleNext();
+            resetStore();
+            navigate("/login");
+            setLoading(false);
+        }, 3000) 
+       
     }
 
     return (
+        <>
+        {loading && <Loader />}
         <main className="min-h-screen w-full mx-auto my-0 flex flex-col items-center">
             <div className="w-full py-[2rem] px-[1.25rem] max-h-[124px] md:p-[3.625rem] md:max-h-[130px]">
                 <div className="w-4/5 sm:w-4/5 mx-auto my-0 h-[124px]">
@@ -35,6 +45,8 @@ export default function RegisterSuccess() {
                     </div>
                 </div>
         </main>
+        </>
+        
     )
 
 }

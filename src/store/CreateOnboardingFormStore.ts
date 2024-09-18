@@ -5,6 +5,7 @@ import {
 } from "zustand/middleware";
 
 export interface OnboardingFormStore {
+  loading: boolean;
   step: number;
   data: {
     onboardingDetails: {
@@ -22,6 +23,7 @@ export interface OnboardingFormStore {
   };
   setStep: (step: number) => void;
   setData: (data: Partial<OnboardingFormStore["data"]>) => void;
+  setLoading: (loading: boolean) => void;
   resetStore: () => void;
 }
 
@@ -33,6 +35,7 @@ type MyPersist = (
 export const useOnboardingFormStore = create<OnboardingFormStore>(
   (persist as MyPersist)(
     (set) => ({
+      loading: false,
       step: 1,
       data: {
         onboardingDetails: {
@@ -50,6 +53,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
       },
       setStep: (step) => set({ step }),
       setData: (data) => set((state) => ({ data: { ...state.data, ...data } })),
+      setLoading: (loading) => set({ loading }),
       resetStore: () => {
         set({
           step: 1,

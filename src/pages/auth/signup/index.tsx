@@ -6,11 +6,11 @@ import {
   useOnboardingFormStore,
 } from "@/store/CreateOnboardingFormStore";
 import Loader from "@/components/custom/Loader";
-import RegisterUser from "@/components/forms/create-account-form/RegisterUser";
-import SendCode from "@/components/forms/create-account-form/SendCode";
-import Password from "@/components/forms/create-account-form/RegisterPassword";
-import RegisterSuccess from "@/components/forms/create-account-form/RegisterSuccess";
-import PersonalInfo from "@/components/forms/create-account-form/PersonalInfo";
+import RegisterUser from "@/pages/auth/signup/create-account-form/RegisterUser";
+import SendCode from "@/pages/auth/signup/create-account-form/SendCode";
+import Password from "@/pages/auth/signup/create-account-form/RegisterPassword";
+import RegisterSuccess from "@/pages/auth/signup/create-account-form/RegisterSuccess";
+import PersonalInfo from "@/pages/auth/signup/create-account-form/PersonalInfo";
 
 export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -100,12 +100,12 @@ export default function OnboardingPage() {
         );
       case 4:
         return (
-          <Password handleNext={onSubmitHandler} handleGoBack={handleGoBack}
+          <Password handleNext={handleNext} handleGoBack={handleGoBack}
           />
         );
         case 5: 
          return (
-          <RegisterSuccess />
+          <RegisterSuccess handleNext={onSubmitHandler}/>
          )
       default:
         return null;
