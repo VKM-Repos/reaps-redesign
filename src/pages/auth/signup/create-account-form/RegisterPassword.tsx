@@ -9,6 +9,7 @@ import { Props } from "@/components/forms/forms.types"
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
+import Loader from "@/components/custom/Loader";
 
 
 const formSchema = z.object({
@@ -19,7 +20,7 @@ const formSchema = z.object({
 });
 
 export default function Password({ handleGoBack, handleNext }: Props) {
-  const { data, setData } = useOnboardingFormStore();
+  const { data, setData, loading, setLoading } = useOnboardingFormStore();
   const { isMobile } = useMobileContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -28,6 +29,7 @@ export default function Password({ handleGoBack, handleNext }: Props) {
   const { register, formState: { isValid } } = form;
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     try {
         setData({
             onboardingDetails: {
@@ -35,7 +37,10 @@ export default function Password({ handleGoBack, handleNext }: Props) {
               password: values.password
             }
         });
-        handleNext();
+        setTimeout(() => {
+            setLoading(false);
+            handleNext();
+        }, 3000);
         } 
         catch (error) {
             console.error(error);
@@ -44,6 +49,7 @@ export default function Password({ handleGoBack, handleNext }: Props) {
 
     return (
         <>
+            {loading && <Loader />}
             <TopBar title="Personal Info" />
             <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased relative pt-[2.5rem]">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ArrowLeft from "/icons/arrow-left-02.svg";
 
 type Props = {
-    goBack: Function,
+    goBack?: Function,
     title?: string,
     className?: string
 }
