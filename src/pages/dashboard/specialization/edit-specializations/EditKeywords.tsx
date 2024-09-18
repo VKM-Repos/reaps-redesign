@@ -27,13 +27,19 @@ const formSchema = z.object({
 
 export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
     const { data, setData } = useSpecializationsStore();
+ 
+    const [keyword, setKeyword] = useState<string>("");
+    const [keywordsArray, setKeywordsArray] = useState<string[]>(keywordArray);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            keyword: "", 
+        },
     });
+
     const { register, reset } = form;
-    const [keyword, setKeyword] = useState<string>("");
-    const [keywordsArray, setKeywordsArray] = useState<string[]>(keywordArray);
+   
     
     function addKey(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
@@ -49,28 +55,23 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
  
     function deleteKeyword (item: string) {
         setKeywordsArray(keywordsArray.filter(keywords => keywords !== item));
-        
+       
     }
-
 
 
     function onSubmit() {
-
-        try {
-            setData({
-                specializationsDetails: {
-                    ...data.specializationsDetails,
-                    keyword: keywordsArray
-                }
-            });
-            handleNext();
-            onSave(keywordsArray);
-            
-           
-        } catch (error) {
-            console.error(error);
-        }
-    }
+        setData({
+          specializationsDetails: {
+            ...data.specializationsDetails,
+            keyword: keywordsArray.length > 0 ? keywordsArray : keywordsArray, // Save the existing keywords if none are added
+          },
+        });
+    
+        // Call the onSave function regardless of keyword modification
+        onSave(keywordsArray.length > 0 ? keywordsArray : keywordsArray);
+        handleNext(); 
+      }
+    
 
     return (
         <>
@@ -91,7 +92,7 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
                         />
                         <div className="flex gap-2 w-full flex-wrap mt-8">
                         {keywordsArray.map((item, index) => (
-                            <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
+                            <Badge className="capitalize text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
                         ))}
                         </div>
                         <SheetClose asChild>

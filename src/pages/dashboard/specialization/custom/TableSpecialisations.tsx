@@ -96,10 +96,10 @@ type Props = {
               {tableArray && (
                   tableArray.map((data: any) => (
                     <TableRow key={data.id} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer" >
-                        <TableCell className="min-w-[10rem]">{data.specialization}</TableCell>
+                        <TableCell className="min-w-[10rem] capitalize">{data.specialization}</TableCell>
                         <TableCell className="flex gap-1 w-full flex-wrap items-center">
                           {data.keyword.map((item: any, index: number) => (
-                              <Badge className="text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A] !p-1.5 !rounded-lg" key={index}>{item}</Badge>
+                              <Badge className="capitalize text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A] !p-1.5 !rounded-lg" key={index}>{item}</Badge>
                           ))}
                         </TableCell>
                         <TableCell className="flex items-center justify-end gap-4">
