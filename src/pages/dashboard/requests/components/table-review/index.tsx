@@ -81,7 +81,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                 cellType: "custom",
                 customRender: () => (
                     <div className="flex justify-center gap-2 text-black p-3 cursor-pointer">
-                        {/* open a drawer to view */}
+                        {/* open a sheet to view */}
                         <Sheet>
                             <SheetTrigger className="flex gap-2">
                                 <View /> <span>View</span>
