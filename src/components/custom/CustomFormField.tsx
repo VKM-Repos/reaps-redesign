@@ -51,34 +51,9 @@ type CustomProps = {
 }
 
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
-    const [count, setCount] = useState(field.value || 0);
+  
 
-    const handleIncrement = () => {
-        const newCount = Number(count) + 1;
-        setCount(newCount);
-        field.onChange(newCount);
-      };
-    
-      const handleDecrement = () => {
-        if (count > 0) {
-          const newCount = Number(count) - 1;
-          setCount(newCount);
-          field.onChange(newCount);
-        }
-      };
-    
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = Number(e.target.value);
-        setCount(newValue);
-        field.onChange(newValue);
-      };
-
-
-    const [selectedValue, setSelectedValue] = useState(props.options?.length === 1 ? props.options[0].value : ''); 
-    const handleValueChange = (value: string) => {
-        setSelectedValue(value);
-        field.onChange?.(value); 
-    };
+  const [selectedValue, setSelectedValue] = useState(props.options?.length === 1 ? props.options[0].value : ''); 
 
 
     switch (props.fieldType) {
@@ -93,8 +68,12 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
             return (
                 <FormControl>
                     <RadioGroup value={selectedValue} 
-                        onValueChange={handleValueChange} 
-                        defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}>
+                         onValueChange={(value: string) => {
+                          setSelectedValue(value);
+                          field.onChange(value.toString()); 
+                        }}
+                        defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
+                      >
                          {props.options?.map((option) => {
                             const isChecked = selectedValue === option.value;
 
@@ -178,44 +157,46 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
 
             </FormControl>
             );
-        case FormFieldType.COUNTER:
-            return (
+            case FormFieldType.COUNTER:
+              return (
                 <FormControl>
-                    <div className={`${props.error ? 'border-red-500' : 'border-input'} flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md `}>
-                        
-                        <Input
-                        className={`${props.className} border-none text-center !py-0 !px-0`}
-                        type="number"
-                        step={1}
-                        value={count}
-                        placeholder={props.placeholder}
-                        onChange={handleChange}
-                        
-                        />
-                        {/* {...field} */}
-                   
-                        
-                        <div className="flex flex-col gap-2">
-                            <button
-                                type="button"
-                                data-action="increment"
-                                onClick={handleIncrement}
-                                className="flex justify-center items-center rotate-180"
-                            >
-                                <ChevronUp />
-                            </button>
-                            <button
-                                type="button"
-                                data-action="decrement"
-                                onClick={handleDecrement}
-                                className="flex justify-center items-center"
-                            >
-                                <ChevronDown />
-                            </button>
-                        </div>
-                    </div>
-                </FormControl>
-            )
+                <div className={`${props.error ? 'border-red-500' : 'border-input'} flex gap-4 px-3 w-full max-w-[6.25rem] border rounded-md`}>
+                  <Input
+                    className={`${props.className} border-none text-center !py-0 !px-0`}
+                    type="number"
+                    step={1}
+                    defaultValue={0}
+                    value={field.value}
+                    placeholder={props.placeholder}
+                    onChange={(e) => field.onChange(Number(e.target.value))} // Update form state on input change
+                  />
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      data-action="increment"
+                      onClick={() => {
+                        const newValue = (field.value || 0) + 1;
+                        field.onChange(newValue); // Update form state
+                      }}
+                      className="flex justify-center items-center rotate-180"
+                    >
+                      <ChevronUp />
+                    </button>
+                    <button
+                      type="button"
+                      data-action="decrement"
+                      onClick={() => {
+                        const newValue = (field.value || 0) - 1;
+                        field.onChange(newValue); // Update form state
+                      }}
+                      className="flex justify-center items-center"
+                    >
+                      <ChevronDown />
+                    </button>
+                  </div>
+                </div>
+              </FormControl>
+            );
         case FormFieldType.TEXTAREA:
             return (
                 <FormControl>
@@ -291,7 +272,7 @@ const CustomFormField = (props: CustomProps) => {
 
 
   return (
-    <FormField 
+    <FormField
         control={control}
         name={name}
         render={({ field }) => (
@@ -317,13 +298,3 @@ const CustomFormField = (props: CustomProps) => {
 }
 
 export default CustomFormField
-
-// getRootProps
-// //   className: cn(
-// //     "mt-6 w-full min-h-[14rem] cursor-pointer flex items-center p-4 rounded-lg text-center",
-// //     backgroundImage ? "bg-cover bg-center" : "bg-background"
-// //   ),
-// //   style: backgroundImage
-// //     ? { backgroundImage: url(${backgroundImage}) }
-// //     : {},
-// }
