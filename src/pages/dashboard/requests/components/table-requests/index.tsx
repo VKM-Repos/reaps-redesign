@@ -2,7 +2,7 @@ import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
@@ -18,12 +18,10 @@ import FilterIcon from "@/components/custom/Icons/Filter";
 import SearchIcon from "@/components/custom/Icons/Search";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { X } from "lucide-react";
 
 // refactor render functions and mobile render
-// UI for search and filter functionalities
 
 type SelectSingleEventHandler = (day: Date | undefined) => void;
 
@@ -152,6 +150,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [endDate, setEndDate] = useState<Date | undefined>();
     const [status, setStatus] = useState('')
 
+       function deleteTableItem(item: any) {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+      setTableArray((prevTableArray) => prevTableArray.filter((data) => data.id !== item.id)
+      );
+    }
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
@@ -165,15 +172,6 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     }
     
 
-    function deleteTableItem(item: any) {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-      setTableArray((prevTableArray) => prevTableArray.filter((data) => data.id !== item.id)
-      );
-    }
-
     const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
 
         setStartDate(day || undefined);
@@ -184,25 +182,41 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
       };
 
 
-
       useEffect(() => {
         let filtered = tableData;
-    
+
         if (searchTerm) {
-          const lowercasedSearchTerm = searchTerm.toLowerCase();
-          filtered = filtered.filter(
+        const lowercasedSearchTerm = searchTerm.toLowerCase();
+        filtered = filtered.filter(
             (item) =>
-              item.title.toLowerCase().includes(lowercasedSearchTerm) ||
-              item.specialization.toLowerCase().includes(lowercasedSearchTerm)
-          );
+            item.title.toLowerCase().includes(lowercasedSearchTerm) ||
+            item.specialization.toLowerCase().includes(lowercasedSearchTerm)
+        );
         }
-    
+
         if (status) {
-          filtered = filtered.filter((item) => item.status === status);
+        filtered = filtered.filter((item) => item.status === status);
         }
-    
+
+        if (startDate && endDate) {
+        filtered = filtered.filter((item) => {
+            const submissionDate = new Date(item.submission);
+            return submissionDate >= new Date(startDate) && submissionDate <= new Date(endDate);
+        });
+        } else if (startDate) {
+        filtered = filtered.filter((item) => {
+            const submissionDate = new Date(item.submission);
+            return submissionDate >= new Date(startDate);
+        });
+        } else if (endDate) {
+        filtered = filtered.filter((item) => {
+            const submissionDate = new Date(item.submission);
+            return submissionDate <= new Date(endDate);
+        });
+        }
+
         setTableArray(filtered);
-      }, [searchTerm, status]);
+    }, [searchTerm, status, startDate, endDate]);
 
  
 
@@ -292,7 +306,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div className="flex gap-3 items-center">
-                    <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem]">
+                    <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem] w-full min-w-[13rem] md:min-w-[21rem]">
                         <SearchIcon />
                         <input 
                             name="search"
