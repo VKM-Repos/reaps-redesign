@@ -29,37 +29,30 @@ export default function EditSpecialization({ specialization, handleNext, onSave 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            specialization: specialization
-        }
-
+            specialization: specialization,
+        },
     });
+
     const { register, watch, formState: { isValid } } = form;
 
     const handleSpecialization = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewSpecialization(e.target.value)
-    }
-
-   
+        setNewSpecialization(e.target.value);
+    };
 
     function onSubmit() {
         try {
             setData({
                 specializationsDetails: {
                     ...data.specializationsDetails,
-                    specialization: newSpecialization
-                }
+                    specialization: newSpecialization || specialization, // Submit new or existing specialization
+                },
             });
-            onSave(newSpecialization);
+            onSave(newSpecialization || specialization);
             handleNext();
-         
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
         }
     }
-
-    
-    
 
 
     return (
