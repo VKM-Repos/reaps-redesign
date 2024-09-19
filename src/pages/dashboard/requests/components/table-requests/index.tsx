@@ -15,8 +15,8 @@ import { useRequestsStore } from "@/store/RequestFormStore";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import FormInput from "@/components/custom/FormInput";
-import FilterIcon from "/images/filter.svg"
-import SearchIcon from "/images/search.svg"
+import FilterIcon from "@/components/custom/Icons/Filter";
+import SearchIcon from "@/components/custom/Icons/Search";
 
 // refactor render functions and mobile render
 // UI for search and filter functionalities
@@ -231,14 +231,14 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             <div className="flex items-center justify-between">
                 <div className="flex gap-3 items-center">
                     <div className="flex py-3 px-4 gap-2 border-[#0E0F0C1F] rounded-[0.625rem]">
-                        <img src={SearchIcon} />
+                        <SearchIcon />
                         <FormInput 
                             name="search"
                             placeholder="Search"
                             className="border-none hover:border-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
-                        <button className="bg-[#14155E14] rounded-full p-2"><img src={FilterIcon} /></button>
+                        <button className="bg-[#14155E14] rounded-full p-2"><FilterIcon /></button>
                         <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
                     </div>
                 </div>
