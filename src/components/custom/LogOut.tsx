@@ -2,11 +2,23 @@ import { SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } f
 import { Button } from "../ui/button";
 import { useMediaQuery } from "react-responsive";
 import LogOutLarge from "./Icons/LogOutLarge";
-import { useLogout } from "@/context/LogoutContext";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import { useNavigate } from "react-router-dom";
 
-export default function Logout() {
+export default function Logout( {setLoading}: {setLoading: any} ) {
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-    const { handleLogOut } = useLogout();
+    const { resetStore } = useOnboardingFormStore();
+    const navigate = useNavigate();
+    
+
+    const handleLogOut = () => {
+        setLoading(true);
+        setTimeout(() => {
+            resetStore();
+            navigate('/login');
+            setLoading(false);
+          }, 3000);  
+    }
 
     return (
         <>
