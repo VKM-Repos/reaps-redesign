@@ -2,7 +2,7 @@ import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
@@ -17,9 +17,15 @@ import { useMediaQuery } from "react-responsive";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import SearchIcon from "@/components/custom/Icons/Search";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
+import ArrowRight from "@/components/custom/Icons/ArrowRight";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { X } from "lucide-react";
 
 // refactor render functions and mobile render
 // UI for search and filter functionalities
+
+type SelectSingleEventHandler = (day: Date | undefined) => void;
 
 type TableRequestsProps = {
     tableData: {
@@ -142,10 +148,21 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [tableArray, setTableArray] = useState(tableData);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     const [searchTerm, setSearchTerm] = useState('');
+    const [startDate, setStartDate] = useState<Date | undefined>();
+    const [endDate, setEndDate] = useState<Date | undefined>();
+    const [status, setStatus] = useState('')
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
+
+    const handleStatusUpdate = (status: string) => {
+        setStatus(status);
+    }
+
+    const deleteStatusUpdate = () => {
+        setStatus('');
+    }
     
 
     function deleteTableItem(item: any) {
@@ -157,22 +174,47 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
       );
     }
 
-    useEffect(() => {
-        if (searchTerm === '') {
-            setTableArray(tableData);
-        } else {
-            const lowercasedSearchTerm = searchTerm.toLowerCase();
-            const filtered = tableData.filter((item) =>
-                item.title.toLowerCase().includes(lowercasedSearchTerm) ||
-                item.specialization.toLowerCase().includes(lowercasedSearchTerm)
-            );
-            setTableArray(filtered);
+    const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
+
+        setStartDate(day || undefined);
+      };
+    const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
+
+        setEndDate(day || undefined);
+      };
+
+
+
+      useEffect(() => {
+        let filtered = tableData;
+    
+        if (searchTerm) {
+          const lowercasedSearchTerm = searchTerm.toLowerCase();
+          filtered = filtered.filter(
+            (item) =>
+              item.title.toLowerCase().includes(lowercasedSearchTerm) ||
+              item.specialization.toLowerCase().includes(lowercasedSearchTerm)
+          );
         }
-    }, [searchTerm]);
+    
+        if (status) {
+          filtered = filtered.filter((item) => item.status === status);
+        }
+    
+        setTableArray(filtered);
+      }, [searchTerm, status]);
 
  
 
-    // function for search and for filter
+
+    const statuses = [
+        "Draft",
+        "Pending",
+        "Approved",
+        "Under Review",
+        "Declined",
+        "Reapproved"
+    ]
 
     const columnData: ColumnSetup<any>[]= [
         {
@@ -261,8 +303,73 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             className="border-none hover:border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
-                        <button className="bg-[#14155E14] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
-                        <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="bg-[#14155E14] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-full min-w-[13.25rem] h-full min-h-[11.875rem] rounded-xl rounded-t-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
+                                <div className="gap-2 flex flex-col justify-center">
+                                    <p className="font-[500] text-sm text-[#6A6C6A] px-1">Status</p>
+                                    <DropdownMenu>
+                                        
+                                        <DropdownMenuTrigger asChild>
+                                            <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-full min-w-[11.25rem] rounded-xl rounded-t-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
+                                            <ul className="flex flex-col justify-center items-start gap-4">
+                                                {statuses.map((status: string) =>(
+                                                <button onClick={() => {handleStatusUpdate(status)}} className="py-1 px-2 text-sm font-medium text-[#6A6C6A]">{status}</button>
+                                                ))}
+                                            </ul>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                                <div className="gap-2 flex flex-col justify-center">
+                                    <p className="font-[500] text-sm text-[#6A6C6A] px-1">Time Range</p>
+                                    <div className="flex justify-between items-center">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</button></DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={startDate}
+                                                    onSelect={handleStartDateChange}
+                                                    disabled={(date) =>
+                                                    date > new Date() || date < new Date("1900-01-01")
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</button></DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={endDate}
+                                                    onSelect={handleEndDateChange}
+                                                    disabled={(date) =>
+                                                    date > new Date() || date < new Date("1900-01-01")
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        {status ? 
+                            <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-2">
+                                <span className="w-[5px] h-[5px] bg-[#FFD13A] rounded-full"></span>
+                                <span className="text-xs font-semibold text-[#0C0D0F]">{status}</span>
+                                <span onClick={() => deleteStatusUpdate()}><X size={10}/></span>
+                            </div> 
+                            : 
+                            <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
+                        }
+                        
                     </div>
                 </div>
                 <div className="md:flex items-center gap-1 hidden">
