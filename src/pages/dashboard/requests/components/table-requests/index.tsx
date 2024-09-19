@@ -14,9 +14,9 @@ import ViewRequests from "../../view-requests";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import FormInput from "@/components/custom/FormInput";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import SearchIcon from "@/components/custom/Icons/Search";
+import LinkIcon from "@/components/custom/Icons/LinkIcon";
 
 // refactor render functions and mobile render
 // UI for search and filter functionalities
@@ -230,17 +230,22 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div className="flex gap-3 items-center">
-                    <div className="flex py-3 px-4 gap-2 border-[#0E0F0C1F] rounded-[0.625rem]">
+                    <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem]">
                         <SearchIcon />
-                        <FormInput 
+                        <input 
                             name="search"
                             placeholder="Search"
-                            className="border-none hover:border-none"/>
+                            type="search"
+                            className="border-none hover:border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
-                        <button className="bg-[#14155E14] rounded-full p-2"><FilterIcon /></button>
+                        <button className="bg-[#14155E14] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
                         <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
                     </div>
+                </div>
+                <div className="md:flex items-center gap-1 hidden">
+                    <span><a href="" className="font-semibold underline text-black">The approval process</a></span>
+                    <span><LinkIcon /></span>
                 </div>
             </div>
             <CustomTable columns={columnData} data={tableArray} />
