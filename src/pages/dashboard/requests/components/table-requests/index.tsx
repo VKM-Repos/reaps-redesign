@@ -4,7 +4,7 @@ import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
@@ -141,6 +141,11 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [loading, setLoading] = useState(false);
     const [tableArray, setTableArray] = useState(tableData);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
     
 
     function deleteTableItem(item: any) {
@@ -151,6 +156,21 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
       setTableArray((prevTableArray) => prevTableArray.filter((data) => data.id !== item.id)
       );
     }
+
+    useEffect(() => {
+        if (searchTerm === '') {
+            setTableArray(tableData);
+        } else {
+            const lowercasedSearchTerm = searchTerm.toLowerCase();
+            const filtered = tableData.filter((item) =>
+                item.title.toLowerCase().includes(lowercasedSearchTerm) ||
+                item.specialization.toLowerCase().includes(lowercasedSearchTerm)
+            );
+            setTableArray(filtered);
+        }
+    }, [searchTerm]);
+
+ 
 
     // function for search and for filter
 
@@ -236,6 +256,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             name="search"
                             placeholder="Search"
                             type="search"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
                             className="border-none hover:border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
