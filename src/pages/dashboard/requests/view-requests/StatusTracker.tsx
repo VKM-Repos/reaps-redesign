@@ -14,7 +14,7 @@ export default function StatusTracker({ currentStatus, statuses }: StatusTracker
     const currentIndex = statuses.indexOf(currentStatus);
 
     return (
-        <div className="max-w-[24.375rem] hidden md:block w-full flex flex-col fixed py-12 px-4 mx-auto">
+        <div className="max-w-[24.375rem] hidden w-full md:flex flex-col fixed py-12 px-4 mx-auto">
             <div className="max-w-[14.7rem] w-full mx-auto flex flex-col gap-8 py-16">
                 <div className="flex gap-2 items-center justify-start">
                     <h1 className="font-semibold border-b-2 border-[#FFD13A] text-[1.625rem]">Status Tracker</h1>
