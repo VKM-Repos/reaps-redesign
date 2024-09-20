@@ -363,7 +363,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                     <div className="flex justify-between items-center">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</button></DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start" side="right">
+                                            <DropdownMenuContent align="start" side="bottom">
                                                 <Calendar
                                                     mode="single"
                                                     selected={startDate}
@@ -377,7 +377,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         </DropdownMenu>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</button></DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start" side="right">
+                                            <DropdownMenuContent align="end" side="bottom">
                                                 <Calendar
                                                     mode="single"
                                                     selected={endDate}
