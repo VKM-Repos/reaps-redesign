@@ -406,7 +406,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                         
                     </div>
                 </div>
-                <div className="md:flex items-center gap-1 hidden">
+                <div className="lg:flex items-center gap-1 hidden">
                     <span><a href="" className="font-semibold underline text-black">The approval process</a></span>
                     <span><LinkIcon /></span>
                 </div>
