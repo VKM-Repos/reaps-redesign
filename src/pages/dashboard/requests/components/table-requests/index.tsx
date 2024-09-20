@@ -151,7 +151,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [status, setStatus] = useState('');
     const [open, setOpen] = useState(false);
 
-       function deleteTableItem(item: any) {
+    function deleteTableItem(item: any) {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
@@ -167,13 +167,13 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const handleStatusUpdate = (status: string) => {
         setLoading(true);
         setTimeout(() => {
-            
-            setLoading(false);
             setStatus(status);
             setOpen(false);
-        }, 3000);
-        
+            setLoading(false); 
+        }, 3000);   
     }
+
+    // loader background is darker on first onchange
 
     const deleteStatusUpdate = () => {
         setStatus('');
@@ -183,19 +183,23 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
         setLoading(true);
         setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-        setStartDate(day || undefined);
-        setOpen(false); 
-      };
+            setStartDate(day || undefined);
+            setOpen(false); 
+            setLoading(false);  
+        }, 3000);  
+    };
+
+
     const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
         setLoading(true);
         setTimeout(() => {
+            setEndDate(day || undefined);
+            setOpen(false);
             setLoading(false); 
         }, 3000);
-        setEndDate(day || undefined);
-        setOpen(false);
-      };
+        
+        
+    };
 
 
       useEffect(() => {
@@ -335,31 +339,31 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     <div className="flex gap-2 p-1 items-center w-fit">
                         <DropdownMenu open={open} onOpenChange={setOpen}>
                             <DropdownMenuTrigger asChild>
-                                <button className="bg-[#14155E14] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
+                                <button className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" className="w-full min-w-[13.25rem] h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                 <div className="gap-2 flex flex-col justify-center">
-                                    <p className="font-[500] text-sm text-[#6A6C6A] px-1">Status</p>
+                                    <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                     <DropdownMenu>
                                         
                                         <DropdownMenuTrigger asChild>
-                                            <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
+                                            <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
-                                            <ul className="flex flex-col justify-center items-start gap-4">
+                                        <DropdownMenuContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
+                                            <ul className="flex flex-col items-start gap-4">
                                                 {statuses.map((status: string) =>(
-                                                <button onClick={() => {handleStatusUpdate(status)}} className="py-1 px-2 text-sm font-medium text-[#6A6C6A]">{status}</button>
+                                                <button onClick={() => {handleStatusUpdate(status)}} className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start">{status}</button>
                                                 ))}
                                             </ul>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
                                 <div className="gap-2 flex flex-col justify-center">
-                                    <p className="font-[500] text-sm text-[#6A6C6A] px-1">Time Range</p>
+                                    <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
                                     <div className="flex justify-between items-center">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</button></DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start">
+                                            <DropdownMenuContent align="start" side="right">
                                                 <Calendar
                                                     mode="single"
                                                     selected={startDate}
@@ -373,7 +377,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         </DropdownMenu>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</button></DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start">
+                                            <DropdownMenuContent align="start" side="right">
                                                 <Calendar
                                                     mode="single"
                                                     selected={endDate}
@@ -391,9 +395,9 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             </DropdownMenuContent>
                         </DropdownMenu>
                         {status ? 
-                            <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-2">
+                            <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-2 w-full min-w-fit">
                                 <span className="w-[5px] h-[5px] bg-[#FFD13A] rounded-full"></span>
-                                <span className="text-xs font-semibold text-[#0C0D0F]">{status}</span>
+                                <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit">{status}</span>
                                 <span onClick={() => deleteStatusUpdate()}><X size={10}/></span>
                             </div> 
                             : 
