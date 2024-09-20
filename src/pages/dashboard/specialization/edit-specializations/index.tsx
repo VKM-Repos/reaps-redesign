@@ -4,6 +4,7 @@ import EditSpecialization from "./EditSpecialization";
 import Loader from "../../../../components/custom/Loader";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "react-responsive";
+import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 type EditProps = {
     step: number;
@@ -35,8 +36,9 @@ function EditSpecializations({ step, specialization, keywordArray, handleNext, o
     
                 setTimeout(() => {
                     handleNext();
-                    resetStore();
+                    
                     setLoading(false);
+                    resetStore();
                 }, 5000)
     
             } catch (error) {
@@ -62,7 +64,7 @@ function EditSpecializations({ step, specialization, keywordArray, handleNext, o
         <>
             {loading && <Loader />}
             <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[30rem] focus-visible:outline-none overflow-y-hidden`}>
-                <SheetClose className="absolute right-6 w-fit mx-auto py-0 !px-0 flex opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none" />
+            <SheetClose className="absolute right-6 w-fit mx-auto py-0 !px-0 flex opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
                 <div className={`h-full md:max-h-[26.5rem] border-none w-full flex flex-col gap-[2.5rem]`}>
                     <RenderEdit />
                 </div>
