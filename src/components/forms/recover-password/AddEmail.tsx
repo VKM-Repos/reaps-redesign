@@ -41,7 +41,6 @@ export default function AddEmail({ handleNext }: Props) {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            console.log(values);
         }, 3000);
         handleNext();
         } 
