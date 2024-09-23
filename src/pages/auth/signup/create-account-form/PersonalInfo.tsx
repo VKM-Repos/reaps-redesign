@@ -162,9 +162,11 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 <div className="w-full">
                                     <FormInput
                                         label="Phone number"
+                                        type="number"
                                         {...register("phoneNumber", {
                                         required: "This field is required",
                                         })}  
+                                        className="no-spinner"
                                     />
                                 </div>  
                             </div>
