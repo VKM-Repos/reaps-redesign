@@ -8,11 +8,14 @@ import FormInput from "@/components/custom/FormInput";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
 import { usePasswordStore } from "@/store/recoverPasswordStore";
+import Loader from "@/components/custom/Loader";
+import { useState } from "react";
 
 type Props = {
     handleNext: Function,
     handleGoBack: Function
 }
+
 const formSchema = z.object({
     password: z
     .string({ required_error: "Password is required" })
@@ -22,6 +25,7 @@ const formSchema = z.object({
 
 export default function NewPassword({ handleNext, handleGoBack }: Props) {
     const { isMobile } = useMobileContext();
+    const [loading, setLoading ] = useState(false)
     const { data, setData } = usePasswordStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -29,24 +33,37 @@ export default function NewPassword({ handleNext, handleGoBack }: Props) {
 
     const { register, formState: {isValid} } = form;
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    // using async because usestate is being blocked
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            setData({
-                passwordDetails: {
-                  ...data.passwordDetails,
-                  password: values.password
-                }
-            });
-          handleNext();
+          setLoading(true); 
+      
+
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+      
+          // After async task completes, update state and perform actions
+          setData({
+            passwordDetails: {
+              ...data.passwordDetails,
+              password: values.password,
+            },
+          });
+
+            setLoading(false);
+            handleNext();
+          
         } catch (error) {
-          console.error(error);
+          console.error("Error in onSubmit:", error);
+          setLoading(false); 
         }
       }
 
       return(
         <>
+            {loading && <Loader />}
             <TopBar title="Back" />
-            <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased inter relative pt-[2.5rem]">
+            <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased relative pt-[2.5rem]">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="text-xl2 text-center text-[#454745] text-black font-semibold pt-10 pb-5 md:py-5">Create your password</h1>

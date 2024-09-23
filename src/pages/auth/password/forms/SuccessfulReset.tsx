@@ -1,19 +1,28 @@
 import { Button } from "@/components/ui/button"
 import {  useNavigate } from "react-router-dom";
 import { usePasswordStore } from "@/store/recoverPasswordStore";
+import { useState } from "react";
+import Loader from "@/components/custom/Loader";
 
 
 
 export default function SuccessfulReset() {
     const { resetStore } = usePasswordStore();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
 
     function goToLogin() {  
-        resetStore();
-        navigate("/login");
+        setLoading(true);
+        setTimeout(() => {
+            resetStore();
+            navigate("/login");
+            setLoading(false);
+        }, 3000);
+        
     }
 
     return (
+
         <main className="min-h-screen w-full mx-auto my-0 flex flex-col items-center">
             <div className="w-full py-[2rem] px-[1.25rem] max-h-[124px] md:p-[3.625rem] md:max-h-[130px]">
                 <div className="w-4/5 sm:w-4/5 mx-auto my-0 h-[124px]">
@@ -23,6 +32,7 @@ export default function SuccessfulReset() {
                     </div>
                 </div>
             </div>
+            {loading && <Loader />}
 
                 <div className="w-full max-w-[700px] mx-auto my-0 antialiased inter relative md:pt-10 flex flex-col md:gap-y-10 px-2">
                     <div className="flex flex-col text-center justify-center items-center md:gap-y-10">
