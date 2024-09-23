@@ -3,10 +3,10 @@ import { AnimatePresence } from "framer-motion";
 import Loader from "@/components/custom/Loader";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { PasswordStore, usePasswordStore } from "@/store/recoverPasswordStore";
-import AddEmail from "@/components/forms/recover-password/AddEmail";
-import NewPassword from "@/components/forms/recover-password/NewPassword";
-import EnterCode from "@/components/forms/recover-password/EnterCode";
-import SuccessfulReset from "@/components/forms/recover-password/SuccessfulReset";
+import AddEmail from "@/pages/auth/password/forms/AddEmail";
+import NewPassword from "@/pages/auth/password/forms/NewPassword";
+import EnterCode from "@/pages/auth/password/forms/EnterCode";
+import SuccessfulReset from "@/pages/auth/password/forms/SuccessfulReset";
 
 export default function RecoverPassword() {
     const [isLoading, setIsLoading] = useState(false);

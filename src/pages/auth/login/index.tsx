@@ -1,4 +1,4 @@
-import { LoginForm }  from "@/components/custom/Form"
+import { LoginForm } from "./LoginForm"
 import LoginGoogle from "@/components/custom/LoginGoogle"
 import TopBar from "@/components/custom/TopBar"
 

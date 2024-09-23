@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
-import { Props } from "@/components/forms/forms.types";
+import { Props } from "@/types/forms.types";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import Loader from "@/components/custom/Loader";
 import { countries, CountryListItemType } from "country-list-json";
-import countryFlags from "@/pages/auth/signup/data/countries.json"
+import countryFlags from "@/lib/data/countries.json"
 
 
 const formSchema = z.object({
@@ -35,7 +35,7 @@ const formSchema = z.object({
         .min(1, {message: "Please fill this field"}),
     phoneNumber: z
         .string()
-        .min(1, { message: "Please fill this field"})
+        .min(8, { message: "Please fill this field"})
         .max(12, { message: "Phone number should not contain more than 12 characters"})
         .regex(/^\d+$/, { message: "Phone number should contain only numbers" })
 });

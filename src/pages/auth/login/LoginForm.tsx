@@ -2,10 +2,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import FormInput from "./FormInput";
-import { Form } from "../ui/form";
+import FormInput from "../../../components/custom/FormInput";
+import { Form } from "../../../components/ui/form";
 import { useState } from "react";
-import Loader from "./Loader";
+import Loader from "../../../components/custom/Loader";
 import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({

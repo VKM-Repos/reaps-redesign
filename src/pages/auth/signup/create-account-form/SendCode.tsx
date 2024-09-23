@@ -68,9 +68,11 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                             <FormInput
                                 label="Your 6-digit code"
+                                type="number"
                                 {...register("code", {
                                 required: "This field is required",
                                 })}
+                                className="no-spinner"
                             />
                             <div className="flex flex-col justify-center items-center">
                                 <p className="pt-2 pb-7 text-sm text-[#454745]">Didn't get an email? <a href="/" className="underline font-semibold text-black hover:text-black" >Send it again</a></p>

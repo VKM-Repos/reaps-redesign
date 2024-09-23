@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import {  useNavigate } from "react-router-dom";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Loader from "@/components/custom/Loader";
-import { Props } from "@/components/forms/forms.types";
+import { Props } from "@/types/forms.types";
 
 
 

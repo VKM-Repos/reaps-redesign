@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import countryCodes from "@/lib/CountryCodes.json"
+import countryCodes from "@/lib/data/CountryCodes.json"
 import { Label } from "@/components/ui/label";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import Loader from "@/components/custom/Loader";
