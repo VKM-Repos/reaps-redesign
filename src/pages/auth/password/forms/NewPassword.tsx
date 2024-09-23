@@ -21,6 +21,7 @@ const formSchema = z.object({
     .string({ required_error: "Password is required" })
     .min(1, { message: "Please fill this field" })
     .min(7, {message: "Password must contain a minimum of 7 characters"})
+    .regex(/^(?=.*[a-zA-Z])(?=.*\d).+$/, {message: "Password must contain a number and a letter"})
 });
 
 export default function NewPassword({ handleNext, handleGoBack }: Props) {

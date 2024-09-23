@@ -20,7 +20,9 @@ const formSchema = z.object({
     .string()
     .max(6, {message: "Please input the code sent to your email"})
     .min(6, {message: "Please input the code sent to your email"})
-    .regex(/^\d+$/, { message: "Code should contain only digits" })
+    .regex(/^\d+$/, {
+        message: "Code must contain non-negative integers",
+      })
 });
 
 export default function EnterCode({ handleNext, handleGoBack }: Props) {
