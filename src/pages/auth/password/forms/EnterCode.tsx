@@ -97,7 +97,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
                             <div className="flex flex-col justify-center items-center">
                                 <p className="pt-2 pb-7 text-sm">Still need help? <a href="/" className="underline font-semibold text-black hover:text-black" >Contact us</a></p>
                             </div>
-                            <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Submit</Button>
+                            <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>
                     </Form>
                 </div>

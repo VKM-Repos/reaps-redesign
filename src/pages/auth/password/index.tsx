@@ -10,12 +10,7 @@ import SuccessfulReset from "@/pages/auth/password/forms/SuccessfulReset";
 
 export default function RecoverPassword() {
     const [isLoading, setIsLoading] = useState(false);
-    const { step, setStep, data } = usePasswordStore((state) => ({
-      step: state.step,
-      setStep: state.setStep,
-      data: state.data,
-      setData: state.setData,
-  }));
+    const { step, setStep, data, resetStore } = usePasswordStore();
 
     const RenderForm = () => {
         const handleNext = () => {
@@ -38,7 +33,7 @@ export default function RecoverPassword() {
 
                 setTimeout(() => {
                     setIsLoading(false);
-                    handleNext();
+                    resetStore();
                 }, 5000);
             } catch (error: any) {
                 console.error("Error recovering password: ", error);
@@ -61,10 +56,10 @@ export default function RecoverPassword() {
                 );
             case 3:
                 return (
-                    <NewPassword handleNext={onSubmitHandler} handleGoBack={handleGoBack} />
+                    <NewPassword handleNext={handleNext} handleGoBack={handleGoBack} />
                 );
             case 4:
-                return <SuccessfulReset />;
+                return <SuccessfulReset handleNext={onSubmitHandler}/>;
             default:
                 return null;
         }

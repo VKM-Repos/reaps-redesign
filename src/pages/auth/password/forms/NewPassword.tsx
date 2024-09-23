@@ -51,8 +51,8 @@ export default function NewPassword({ handleNext, handleGoBack }: Props) {
             },
           });
 
-            setLoading(false);
             handleNext();
+            setLoading(false);
           
         } catch (error) {
           console.error("Error in onSubmit:", error);
@@ -68,12 +68,10 @@ export default function NewPassword({ handleNext, handleGoBack }: Props) {
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="text-xl2 text-center text-[#454745] text-black font-semibold pt-10 pb-5 md:py-5">Create your password</h1>
-                    <p className="pt-2 pb-10 text-sm">Password must contain a <span className="font-semibold">letter</span> and a <span className="font-semibold">number</span>, and be minimum of 7 <span className="font-semibold">characters</span> long</p>
-
                 </div>
                 <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center gap-2">
                             <FormInput
                                 label="Your password"
                                 type="password"
@@ -82,6 +80,7 @@ export default function NewPassword({ handleNext, handleGoBack }: Props) {
                                 required: "This field is required",
                                 })}
                             />
+                             <p className="my-5 text-center text-sm">Password must contain a <span className="font-semibold">letter</span> and a <span className="font-semibold">number</span>, and be minimum of 7 <span className="font-semibold">characters</span> long</p>
                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>
                     </Form>
