@@ -51,9 +51,9 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
           code: values.code,
         },
       });
-
-        setLoading(false);
         handleNext();
+        setLoading(false);
+        
       
     } catch (error) {
       console.error("Error in onSubmit:", error);

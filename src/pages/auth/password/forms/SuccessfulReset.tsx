@@ -33,14 +33,13 @@ export default function SuccessfulReset() {
                 </div>
             </div>
             {loading && <Loader />}
-
-                <div className="w-full max-w-[700px] mx-auto my-0 antialiased inter relative md:pt-10 flex flex-col md:gap-y-10 px-2">
-                    <div className="flex flex-col text-center justify-center items-center md:gap-y-10">
+                <div className="w-full max-w-[700px] mx-auto my-0 antialiased relative md:pt-10 flex flex-col md:gap-y-10 px-2">
+                    <div className="flex flex-col text-center justify-center items-center gap-5 md:gap-y-[2.5rem]">
                         <img src="icons/checkmark-frame.svg" alt="Successful mark" />
-                        <h1 className="md:text-xl7 text-[1rem] font-bold barlow uppercase pt-5 md:py-5 tracking-[0.03rem]">You have successfully reset your password</h1>
-                        <p className="pb-5 pt-10 text-[#454745]">Still need help? <span className="font-semibold">Contact us</span></p>
+                        <h1 className=" font-[800] barlow uppercase tracking-[0.03rem] md:text-[64px] text-[2.5rem]">You have successfully reset your password</h1>
+                        <p className="pb-[1.5rem] text-[#454745]">Still need help? <span className="font-semibold">Contact us</span></p>
                     </div>
-                    <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0 py-[1rem]">
+                    <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
                         <Button className={`my-4 focus:outline-none w-full`} onClick={() => { goToLogin()}}>Back to Login</Button>
                     </div>
                 </div>
