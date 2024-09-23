@@ -25,6 +25,7 @@ type FlagData = {
 
 export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
     const [dialCode, setDialCode] = useState("+93");
+    const [selectedFlag, setSelectedFlag] = useState();
     const [loading, setLoader] = useState(false);
     const formSchema = z.object({
         firstName: z
@@ -125,12 +126,22 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                             <Select onValueChange={(value: string) => {
                                     const selectedCountry: any = combinedData.find(country => country.name === value);
                                     if (selectedCountry) {
-                                    setDialCode(selectedCountry.dial_code);
+                                        setDialCode(selectedCountry.dial_code);  
+                                        setSelectedFlag(selectedCountry.flag); 
                                     }
                                 }}>
                                 <Label className="font-md">Country Code</Label>
-                                <SelectTrigger className="max-w-32 mt-2">
-                                    <SelectValue placeholder={dialCode}>{dialCode}</SelectValue>
+                                <SelectTrigger className="min-w-[7.5rem] mt-2 !gap-2 w-full">
+                                <SelectValue placeholder="Select a country">
+                                    {selectedFlag ? (
+                                    <div className="flex items-center gap-2 w-full">
+                                        <img src={selectedFlag} height="20px" width="20px" alt="Selected country flag" />
+                                        <span>{dialCode}</span>
+                                    </div>  
+                                    ) : (
+                                        <span className="text-xs">Select a country</span>
+                                    )}
+                                </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup> 
