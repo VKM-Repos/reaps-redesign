@@ -55,11 +55,11 @@ const Summary = () => {
   return (
     <>
       {/* {loading && <Loader />} */}
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full items-center flex justify-center">
       
-      <div className="md:4/5 md:ml-20 py-10 flex flex-col gap-10 max-w-4xl">
-        <div className='flex justify-between items-center'>
-          <h1 className="text-[1.375rem] font-semibold pt-10 md:pb-5 md:py-5 text-black">Research Information</h1>
+      <div className="md:4/5 pb-10 flex flex-col gap-10 w-full">
+        <div className='flex'>
+          <h1 className="text-[1.375rem] font-semibold text-black">Research Information</h1>
         </div>
         <Form {...form}>
             <form  className="flex flex-col gap-4 text-sm text-[#454745]">
@@ -105,13 +105,16 @@ const Summary = () => {
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Documents</h1>
                   <p className='text-[#000066] flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>
               </div>
-              <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
+              <div className="md:grid md:grid-cols-2 gap-8 flex flex-col w-full">
                     {Object.entries(files).map(([key, file]) =>
-                    <div key={key}  className="w-full flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2">
-                        <span className='flex gap-2 items-center'>
-                          <span className='text-black '><GoogleDoc /></span>
-                          <span className="text-[0.8rem]">{file.path}</span>
-                          <a href="" className='text-black cursor-pointer' download={file}><Download /></a>
+                    <div key={key}  className="w-full border border-gray-300 p-2 rounded-md mb-2">
+                        <span className='flex justify-between items-center'>
+                          
+                          <div className='flex gap-4 items-center'>
+                            <span className='text-black text-[0.8rem]'><GoogleDoc /></span>
+                            <span className="text-[0.8rem]">{file.path}</span>
+                          </div>  
+                          <a href={file.path} className='text-black cursor-pointer' download><Download /></a>
                         </span>
                     </div>
                     )}
@@ -122,7 +125,7 @@ const Summary = () => {
       </div>
     </>
     
-  )
-}
+  );
+};
 
 export default Summary
