@@ -19,7 +19,7 @@ const formSchema = z.object({
         .string()
         .max(6, {message: "Please input the code sent to your email"})
         .min(6, {message: "Please input the code sent to your email"})
-        .regex(/^\d+$/, { message: "Code should contain only digits" })
+        .regex(/^\d+$/, { message: "Code must contain only digits" })
 });
 
 export default function SendCode({ handleNext, handleGoBack }: Props) {  
@@ -58,7 +58,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                     {!isMobile ? <BackButton title="Back" goBack={handleGoBack}/>: ''}
                 <div className="md:w-3/5 w-full max-w-[375px] md:max-w-[526px] mx-auto my-0">
                     <div className="flex flex-col justify-center items-center">
-                        <h1 className="text-xl3 font-semibold pt-10 pb-5 md:py-5">Enter the 6-digit code</h1>
+                        <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5 text-center">Enter the 6-digit code</h1>
                         <div className="pt-2 pb-5">
                             <p className="text-sm text-center leading-[14px] text-[#454745]">For security, we've sent you an email to <span className="font-bold font-black">{data.onboardingDetails.email}</span>.  Simply enter the code in the email into the box below to proceed.</p>
                         </div>
@@ -68,9 +68,11 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                             <FormInput
                                 label="Your 6-digit code"
+                                type="number"
                                 {...register("code", {
                                 required: "This field is required",
                                 })}
+                                className="no-spinner"
                             />
                             <div className="flex flex-col justify-center items-center">
                                 <p className="pt-2 pb-7 text-sm text-[#454745]">Didn't get an email? <a href="/" className="underline font-semibold text-black hover:text-black" >Send it again</a></p>
