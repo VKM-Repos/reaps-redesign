@@ -14,7 +14,7 @@ import PersonalInfo from "@/pages/auth/signup/create-account-form/PersonalInfo";
 
 export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const { step, setStep } = useOnboardingFormStore();
+  const { step, setStep, resetStore } = useOnboardingFormStore();
 //   const { token } = useAppContext();
 
   const RenderForm = () => {
@@ -46,7 +46,7 @@ export default function OnboardingPage() {
 
         setTimeout(() => {
           setIsLoading(false);
-          handleNext();
+          resetStore()
         }, 5000)
         // wrap form components with transition framer-motion
         // if (data.image) {

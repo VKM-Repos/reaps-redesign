@@ -21,7 +21,7 @@ export const MobileProvider = ({ children }: {children: React.ReactNode}) => {
     }
 
     const updateSignUp = () => {
-        setSignUp(pathname === "/create-account");
+        setSignUp(pathname === "/signup");
     }
 
     const updateDashboard = () => {
