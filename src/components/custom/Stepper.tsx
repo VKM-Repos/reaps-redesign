@@ -60,15 +60,18 @@ export default function Stepper( { setStep, step, array }: Props) {
     };
 
     useEffect(() => {
-        if (step !== stepper + 1) {
-            setStepper(step - 1); // Sync stepper with step
-          }
         const widths = stepRefs.current.map((step) =>
             step ? step.getBoundingClientRect().width : 0    
         );
         updateBall(stepper);
         setStepWidths(widths);
-    }, [stepper]);
+    }, [step, stepper]);
+
+    useEffect(() => {
+        if (step !== stepper + 1) {
+            setStepper(step - 1); // Sync stepper with step
+        }
+    }, [step]);
 
     const stepPosition = stepWidths.length ? calculatePosition(stepper) : 0;
 
