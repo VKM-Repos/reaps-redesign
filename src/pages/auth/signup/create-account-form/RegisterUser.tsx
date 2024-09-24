@@ -63,7 +63,7 @@ export default function RegisterUser({ handleNext }: Props) {
           </div>
           <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased">
               <div className="flex flex-col justify-center items-center">
-                  <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Create your Reaps account</h1>
+                  <h1 className="text-xl2 text-center font-semibold pt-10 pb-5 md:py-5">Create your Reaps account</h1>
                   <p className="pt-2 pb-10 text-sm text-[#454745]">Already have an account? <a href="/login" className="underline font-semibold text-black hover:text-black" >Log in</a></p>
               </div>
               <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">

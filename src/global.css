@@ -222,6 +222,12 @@ button:focus, button:focus-visible {
     animation: leapFrog var(--uib-speed) ease calc(var(--uib-speed) / -3) infinite;
   }
 
+  input[type=number].no-spinner::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+   margin: 0; 
+}
+
   .gradient {
     background: linear-gradient(90deg, #F7D45B 35%, #192C8A 100%);
 

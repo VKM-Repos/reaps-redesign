@@ -53,9 +53,8 @@ export const EmailSettings = ({ onSave }: { onSave: () => void }) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
              <FormInput
                 label="First enter your email address"
-                placeholder="johndoe@email.com"
                 {...register("email", {
-                required: "This field is required",
+                required: "This field is required"
                 })}
             />
              <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none py-4`}>Save</Button>
