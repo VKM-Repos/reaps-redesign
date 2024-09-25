@@ -255,15 +255,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             header: "Title",
             accessor: "title",
             cellType: 'text',
-            headerClass: "font-bold w-full min-w-[18rem] ",
-            cellClass: " min-w-[18rem] w-full "
+            headerClass: "font-bold w-full min-w-[18.75rem] ",
+            cellClass: " min-w-[18.75rem] w-full "
     
         },
         {
             header: "Specialization",
             accessor: "specialization",
             cellType: "text",
-            headerClass: "font-bold w-full min-w-[8rem]",
+            headerClass: "font-bold min-w-[8rem] w-full",
             cellClass: "min-w-[8rem] w-full"
         },
         {
@@ -273,13 +273,13 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             headerClass: "font-bold w-full min-w-[8rem]",
             cellClass: "min-w-[8rem] w-full"
         },
-        {
-            header: "Expiry",
-            accessor: "expiry",
-            cellType: "text",
-            headerClass: "font-bold w-full min-w-[8rem]",
-            cellClass: "min-w-[8rem] "
-        },
+        // {
+        //     header: "Expiry",
+        //     accessor: "expiry",
+        //     cellType: "text",
+        //     headerClass: "font-bold w-full min-w-[8rem]",
+        //     cellClass: "min-w-[8rem] "
+        // },
         {
             header: "Status",
             accessor: "status",
@@ -311,6 +311,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         {
             accessor: "custom",
             cellType: "custom",
+            cellClass: "flex justify-center items-center w-full md:max-w-[3rem]",
+            headerClass: "w-full md:max-w-[3rem]",
             customRender: (item: any) => {
                 return isMobile ? (
                   <MobileRender item={item} onDelete={deleteTableItem} loading={loading} />
