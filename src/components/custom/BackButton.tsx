@@ -20,7 +20,7 @@ export default function BackButton({ goBack, title, className}: Props) {
         <>
             <button className={`bg-transparent mt-4 left-0 flex gap-2 ${className}`} onClick={backFunc}>
                 <img src={ArrowLeft} />
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-center items-center w-full">
                     <span className="text-base font-black">
                         {title}
                     </span>

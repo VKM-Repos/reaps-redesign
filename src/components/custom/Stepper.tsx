@@ -1,14 +1,17 @@
 import { useStepper } from "@/context/StepperContext";
 import { useEffect, useRef, useState } from "react";
-import { array } from "@/lib/helpers";
-import { useRequestsStore } from "@/store/RequestFormStore";
 
+type Props = {
+    setStep: (step: number) => void,
+    step: number,
+    array: string[]
+}
+   
 
 const totalWidth = 600;
 
-export default function Stepper() {
+export default function Stepper( { setStep, step, array }: Props) {
     const { stepper, setStepper } = useStepper();
-    const { setStep } = useRequestsStore();
     const [ball, setBall] = useState<number>(8);
     const [stepWidths, setStepWidths] = useState<number[]>([]);
     const stepRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -62,13 +65,19 @@ export default function Stepper() {
         );
         updateBall(stepper);
         setStepWidths(widths);
-    }, [stepper]);
+    }, [step, stepper]);
+
+    useEffect(() => {
+        if (step !== stepper + 1) {
+            setStepper(step - 1); // Sync stepper with step
+        }
+    }, [step]);
 
     const stepPosition = stepWidths.length ? calculatePosition(stepper) : 0;
 
 
     return (
-        <div className="flex flex-col gap-4 w-full min-w-[18.75rem] max-w-[37.5rem] mx-auto my-0">
+        <div className="flex flex-col gap-4 w-full min-w-[18.75rem] max-w-[32rem] my-0">
             <div className="relative h-[9px] w-full overflow-hidden rounded-full flex items-center justify-center">
                 <div className="relative bg-[#16330014] h-[2px] relative w-full rounded-full flex items-center justify-center">
                     <div
