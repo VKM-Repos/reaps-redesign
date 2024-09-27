@@ -21,6 +21,7 @@ import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { Calendar } from "@/components/ui/calendar";
 import { X } from "lucide-react";
 import Tick from "@/components/custom/Icons/Tick";
+import { Button } from "@/components/ui/button";
 
 // refactor render functions and mobile render
 
@@ -149,7 +150,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>();
-    const [status, setStatus] = useState('');
+    const [showStatuses, setShowStatuses] = useState(false);
     const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
     const [open, setOpen] = useState(false);
 
@@ -172,36 +173,32 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
           );
       };
 
-    // loader background is darker on first onchange
-// work on closing dropdowncontent and rendering changes on apply
-    const deleteStatusUpdate = () => {
-        setStatus('');
+    const deleteStatusUpdate = (status: String) => {
+        setSelectedStatuses((prev) => prev.filter((val) => val !== status))
     }
     
 
     const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setLoading(true);
-        setTimeout(() => {
-            setStartDate(day || undefined);
-            setOpen(false); 
-            setLoading(false);  
-        }, 3000);  
+        setStartDate(day || undefined);
+        console.log(startDate)
     };
 
 
     const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setLoading(true);
-        setTimeout(() => {
-            setEndDate(day || undefined);
-            setOpen(false);
-            setLoading(false); 
-        }, 3000);
+        setEndDate(day || undefined);
+        console.log(endDate)
+        // setLoading(true);
+        // setTimeout(() => {
+            
+        //     setOpen(false);
+        //     setLoading(false); 
+        // }, 3000);
         
         
     };
 
 
-      useEffect(() => {
+    const setFilters = () => {
         let filtered = tableData;
 
         if (searchTerm) {
@@ -237,7 +234,17 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         }
 
         setTableArray(filtered);
-    }, [searchTerm, selectedStatuses, startDate, endDate]);
+    };
+
+    const applyFilters = () => {
+        setLoading(true);
+        setTimeout(() => {
+        setFilters(); 
+        setShowStatuses(true);
+        setOpen(false);
+        setLoading(false); 
+        }, 3000);
+    }
 
  
 
@@ -394,20 +401,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
-                                    
+                                   
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]" variant="ghost" onClick={() => {setOpen(false)}}>Cancel</Button>
+                                    <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-white" onClick={applyFilters}>Apply</Button>
                                 </div>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        {status ? 
-                            <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-1 md:gap-2 w-full min-w-fit">
-                                <span className="w-[5px] h-[5px] bg-[#FFD13A] rounded-full"></span>
-                                <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">{status}</span>
-                                <span onClick={() => deleteStatusUpdate()}><X size={10}/></span>
-                            </div> 
-                            : 
-                            <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
-                        }
-                        
+                        <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
                     </div>
                 </div>
                 <div className="lg:flex items-center gap-1 hidden">
@@ -415,6 +417,17 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     <span><LinkIcon /></span>
                 </div>
             </div>
+            {showStatuses &&
+                <div className="flex flex-wrap justify-center items-center p-4 gap-3">
+                    {selectedStatuses.map((status) => (
+                        <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-1 md:gap-2 w-full max-w-fit">
+                            <span className="w-[5px] h-[5px] bg-[#FFD13A] rounded-full"></span>
+                            <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">{status}</span>
+                            <span onClick={() => deleteStatusUpdate(status)}><X size={10}/></span>
+                        </div>
+                    ))}    
+                </div>
+                }
             <CustomTable columns={columnData} data={tableArray} />
         </div>
     )
