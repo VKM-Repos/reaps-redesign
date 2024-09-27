@@ -17,11 +17,14 @@ import LockIcon from "@/components/custom/Icons/LockIcon";
 import MailIcon from "@/components/custom/Icons/MailIcon";
 import ArrowDown from "/icons/arrow-down-01.svg"
 import School from "@/components/custom/sidebar-icons/school";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 
 
 
 export default function Settings() {
     const [isOpenIndex, setOpenIndex] = useState<number | null>();
+    const { data } = useOnboardingFormStore();
+    const email = data.onboardingDetails.email;
     
 
     const handleToggle = (index: number) => {
@@ -41,7 +44,7 @@ export default function Settings() {
         },
         {
             title: "Email Settings",
-            label: "holumidey22@gmail.com",
+            label: <span>{email}</span>,
             icon: <MailIcon />,
             content: <EmailSettings onSave={handleCloseCollapsible} />
         },

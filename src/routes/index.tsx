@@ -7,7 +7,7 @@ import Requests from '@/pages/dashboard/requests';
 import Specialization from '@/pages/dashboard/specialization';
 import Pricing from '@/pages/dashboard/pricing';
 import Settings from '@/pages/dashboard/settings';
-import LoginPage from '@/pages/auth/log-in';
+import LoginPage from '@/pages/auth/login';
 import OnboardingPage from '@/pages/auth/signup';
 import NotFound from '@/pages/errors/notfound';
 import RecoverPassword from '@/pages/auth/password';

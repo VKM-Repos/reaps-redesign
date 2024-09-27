@@ -73,11 +73,18 @@ export const requirements = [
     },
 ]
 
-export const array = [
+export const requestsArray = [
     "Application Info",
     "Research Info",
     "Supporting docs",
     "Summary"
+]
+
+export const signupArray = [
+    "Email",
+    "Verification",
+    "Personal Info",
+    "Password"
 ]
 
 export const application = [
@@ -166,7 +173,7 @@ export const tableData = [
         id: "2",
         title: "Hands-on Science Experiments on Stu...",
         specialization: "Medicine",
-        submission: "19-01-2024",
+        submission: "20-01-2024",
         expiry: "-- -- -----",
         status: "Declined",
     },
@@ -174,7 +181,7 @@ export const tableData = [
         id: "3",
         title: "Knowledge Acquisition in Online Health",
         specialization: "Medicine",
-        submission: "19-01-2024",
+        submission: "30-07-2024",
         expiry: "-- -- -----",
         status: "Under Review",
     },
@@ -198,7 +205,7 @@ export const tableData = [
         id: "6",
         title: "A Study of Chronic Disease Manage...",
         specialization: "Medicine",
-        submission: "19-01-2024",
+        submission: "26-09-2024",
         expiry: "-- -- -----",
         status: "Approved"
     },
