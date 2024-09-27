@@ -8,7 +8,6 @@ import FormInput from "@/components/custom/FormInput";
 import { Props } from "@/types/forms.types";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
-import TopBar from "@/components/custom/TopBar";
 import {
     Select,
     SelectContent,
@@ -107,7 +106,6 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     return(
         <>
             {loading && <Loader />}
-            <TopBar title="Verification" />
             <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">

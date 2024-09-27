@@ -73,11 +73,18 @@ export const requirements = [
     },
 ]
 
-export const array = [
+export const requestsArray = [
     "Application Info",
     "Research Info",
     "Supporting docs",
     "Summary"
+]
+
+export const signupArray = [
+    "Email",
+    "Verification",
+    "Personal Info",
+    "Password"
 ]
 
 export const application = [
