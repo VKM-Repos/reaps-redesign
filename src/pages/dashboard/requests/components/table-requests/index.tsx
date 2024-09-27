@@ -430,8 +430,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             {showStatuses &&
                 <div className="flex flex-wrap justify-center items-center p-4 gap-3">
                     {selectedStatuses.map((status) => (
-                        <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-1 md:gap-2 w-full max-w-fit">
-                            <span className="w-[5px] h-[5px] bg-[#FFD13A] rounded-full"></span>
+                        <div className="py-2 px-3 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center justify-start gap-2 w-full max-w-fit">
+                            <span className="w-[6px] h-[5px] bg-[#FFD13A] rounded-full"></span>
                             <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">{status}</span>
                             <span onClick={() => deleteStatusUpdate(status)}><X size={10}/></span>
                         </div>
