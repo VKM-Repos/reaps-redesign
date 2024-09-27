@@ -4,7 +4,7 @@ import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
@@ -180,24 +180,27 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
 
     const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
         setStartDate(day || undefined);
-        console.log(startDate)
     };
 
 
     const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setEndDate(day || undefined);
-        console.log(endDate)
-        // setLoading(true);
-        // setTimeout(() => {
-            
-        //     setOpen(false);
-        //     setLoading(false); 
-        // }, 3000);
-        
-        
+        setEndDate(day || undefined);  
     };
 
+    // format date to backend date format
+    function formatDateToDDMMYYYY(date: Date) {
+        const day = String(date.getDate()).padStart(2, '0');  // Get the day and pad with 0 if necessary
+        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-based, so add 1
+        const year = date.getFullYear();  // Get the full year
+        return `${day}-${month}-${year}`;  // Return in DD-MM-YYYY format
+    }
 
+    function parseDate(dateString: string) {
+        const [day, month, year] = dateString.split('-');
+        return new Date(`${year}-${month}-${day}`);
+    }
+
+    // refactor setFilters function
     const setFilters = () => {
         let filtered = tableData;
 
@@ -217,20 +220,27 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         }
 
         if (startDate && endDate) {
-        filtered = filtered.filter((item) => {
-            const submissionDate = new Date(item.submission);
-            return submissionDate >= new Date(startDate) && submissionDate <= new Date(endDate);
-        });
+            const formattedStartDate = formatDateToDDMMYYYY(startDate); // convert input date to backend date format
+            const formattedEndDate = formatDateToDDMMYYYY(endDate);
+        
+            filtered = filtered.filter((item) => {
+                const submissionDate = parseDate(item.submission);  // Convert backend date string to Date
+                return submissionDate >= parseDate(formattedStartDate) && submissionDate <= parseDate(formattedEndDate); // use parsed dates to compare
+            });
         } else if (startDate) {
-        filtered = filtered.filter((item) => {
-            const submissionDate = new Date(item.submission);
-            return submissionDate >= new Date(startDate);
-        });
+            const formattedStartDate = formatDateToDDMMYYYY(startDate);
+        
+            filtered = filtered.filter((item) => {
+                const submissionDate = parseDate(item.submission);  
+                return submissionDate >= parseDate(formattedStartDate);
+            });
         } else if (endDate) {
-        filtered = filtered.filter((item) => {
-            const submissionDate = new Date(item.submission);
-            return submissionDate <= new Date(endDate);
-        });
+            const formattedEndDate = formatDateToDDMMYYYY(endDate);
+        
+            filtered = filtered.filter((item) => {
+                const submissionDate = parseDate(item.submission);  
+                return submissionDate <= parseDate(formattedEndDate);
+            });
         }
 
         setTableArray(filtered);
