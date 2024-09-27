@@ -2,7 +2,7 @@ import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
@@ -20,6 +20,7 @@ import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { Calendar } from "@/components/ui/calendar";
 import { X } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 
 // refactor render functions and mobile render
 
@@ -149,6 +150,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>();
     const [status, setStatus] = useState('');
+    const [selectedStatuses, setSelectedStatuses] = useState<String[]>(['']);
     const [open, setOpen] = useState(false);
 
     function deleteTableItem(item: any) {
@@ -164,14 +166,20 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         setSearchTerm(e.target.value);
     };
 
-    const handleStatusUpdate = (status: string) => {
-        setLoading(true);
-        setTimeout(() => {
-            setStatus(status);
-            setOpen(false);
-            setLoading(false); 
-        }, 3000);   
-    }
+    // const handleStatusUpdate = (status: string) => {
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //         setStatus(status);
+    //         // setOpen(false);
+    //         setLoading(false); 
+    //     }, 3000);   
+    // }
+
+    const handleSelect = (value: string) => {
+        setSelectedStatuses((prev) =>
+          prev.includes(value) ? prev.filter((val) => val !== value) : [...prev, value]
+        );
+      };
 
     // loader background is darker on first onchange
 
@@ -348,17 +356,45 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                     <DropdownMenu>
                                         
-                                        <DropdownMenuTrigger asChild>
-                                            <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
-                                        </DropdownMenuTrigger>
+                                    <DropdownMenuTrigger asChild>
+                                                    <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
+                                                </DropdownMenuTrigger>
                                         <DropdownMenuContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                             <ul className="flex flex-col items-start gap-4">
                                                 {statuses.map((status: string) =>(
-                                                <button onClick={() => {handleStatusUpdate(status)}} className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start">{status}</button>
-                                                ))}
+                                                 <DropdownMenuItem key={status} onClick={() => handleSelect(status)}>
+                                                    <input type="checkbox"
+                                                        checked={selectedStatuses.includes(status)}
+                                                        onChange={() => handleSelect(status)}  className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start"
+                                                         />
+                                                         {status}
+                                                 </DropdownMenuItem>))}
                                             </ul>
+                                        {/* <Select onValueChange={
+                                            (value: string) =>{
+                                                if (selectedStatuses.includes(value)) {
+                                                setSelectedStatuses(selectedStatuses.filter((val) => val !== value));
+                                                console.log(selectedStatuses)
+                                                } else {
+                                                setSelectedStatuses([...selectedStatuses, value]);
+                                                console.log(selectedStatuses);
+                                                }
+                                            }}>
+                                                <SelectTrigger className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]">
+                                                    <span>Show All</span><span><ArrowRight /></span>
+                                                </SelectTrigger>
+                                                <SelectContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
+                                                    {statuses.map((status: string) => (
+                                                        <SelectItem value={status}>
+                                                            <button className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start">{status}</button>
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select> */}
+
                                         </DropdownMenuContent>
                                     </DropdownMenu>
+                                    {/* add arrow, if selected, arrow shows up and stays there, if not, hopefully two items in a dropdown item */}
                                 </div>
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
