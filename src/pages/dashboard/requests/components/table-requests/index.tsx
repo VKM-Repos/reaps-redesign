@@ -20,7 +20,7 @@ import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { Calendar } from "@/components/ui/calendar";
 import { X } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import Tick from "@/components/custom/Icons/Tick";
 
 // refactor render functions and mobile render
 
@@ -150,7 +150,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>();
     const [status, setStatus] = useState('');
-    const [selectedStatuses, setSelectedStatuses] = useState<String[]>(['']);
+    const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
     const [open, setOpen] = useState(false);
 
     function deleteTableItem(item: any) {
@@ -166,23 +166,14 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         setSearchTerm(e.target.value);
     };
 
-    // const handleStatusUpdate = (status: string) => {
-    //     setLoading(true);
-    //     setTimeout(() => {
-    //         setStatus(status);
-    //         // setOpen(false);
-    //         setLoading(false); 
-    //     }, 3000);   
-    // }
-
     const handleSelect = (value: string) => {
         setSelectedStatuses((prev) =>
-          prev.includes(value) ? prev.filter((val) => val !== value) : [...prev, value]
-        );
+            prev.includes(value) ? prev.filter((val) => val !== value) : [...prev, value]
+          );
       };
 
     // loader background is darker on first onchange
-
+// work on closing dropdowncontent and rendering changes on apply
     const deleteStatusUpdate = () => {
         setStatus('');
     }
@@ -222,8 +213,10 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         );
         }
 
-        if (status) {
-        filtered = filtered.filter((item) => item.status === status);
+        if (selectedStatuses.length > 0) {
+            filtered = filtered.filter((item) =>
+                selectedStatuses.includes(item.status)
+            )
         }
 
         if (startDate && endDate) {
@@ -244,7 +237,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         }
 
         setTableArray(filtered);
-    }, [searchTerm, status, startDate, endDate]);
+    }, [searchTerm, selectedStatuses, startDate, endDate]);
 
  
 
@@ -349,58 +342,31 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     <div className="flex gap-2 p-1 items-center w-fit">
                         <DropdownMenu open={open} onOpenChange={setOpen}>
                             <DropdownMenuTrigger asChild>
-                                <button className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
+                                <div className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" className="w-full min-w-[13.25rem] h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                     <DropdownMenu>
-                                        
-                                    <DropdownMenuTrigger asChild>
-                                                    <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
-                                                </DropdownMenuTrigger>
+                                        <DropdownMenuTrigger asChild>
+                                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Show All</span><span><ArrowRight /></span></div>
+                                        </DropdownMenuTrigger>
                                         <DropdownMenuContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                             <ul className="flex flex-col items-start gap-4">
                                                 {statuses.map((status: string) =>(
-                                                 <DropdownMenuItem key={status} onClick={() => handleSelect(status)}>
-                                                    <input type="checkbox"
-                                                        checked={selectedStatuses.includes(status)}
-                                                        onChange={() => handleSelect(status)}  className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start"
-                                                         />
-                                                         {status}
-                                                 </DropdownMenuItem>))}
+                                                    <DropdownMenuItem className="flex gap-2 items-center justify-start w-full" key={status} onClick={() => handleSelect(status)}>
+                                                            {selectedStatuses.includes(status) ? <Tick /> : <div className="w-6 h-6">&nbsp;</div>}
+                                                            {status}
+                                                    </DropdownMenuItem>))}
                                             </ul>
-                                        {/* <Select onValueChange={
-                                            (value: string) =>{
-                                                if (selectedStatuses.includes(value)) {
-                                                setSelectedStatuses(selectedStatuses.filter((val) => val !== value));
-                                                console.log(selectedStatuses)
-                                                } else {
-                                                setSelectedStatuses([...selectedStatuses, value]);
-                                                console.log(selectedStatuses);
-                                                }
-                                            }}>
-                                                <SelectTrigger className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]">
-                                                    <span>Show All</span><span><ArrowRight /></span>
-                                                </SelectTrigger>
-                                                <SelectContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
-                                                    {statuses.map((status: string) => (
-                                                        <SelectItem value={status}>
-                                                            <button className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start">{status}</button>
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select> */}
-
                                         </DropdownMenuContent>
                                     </DropdownMenu>
-                                    {/* add arrow, if selected, arrow shows up and stays there, if not, hopefully two items in a dropdown item */}
                                 </div>
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
                                     <div className="flex justify-between items-center">
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</button></DropdownMenuTrigger>
+                                            <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="start" side="bottom">
                                                 <Calendar
                                                     mode="single"
@@ -414,7 +380,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</button></DropdownMenuTrigger>
+                                            <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" side="bottom">
                                                 <Calendar
                                                     mode="single"
