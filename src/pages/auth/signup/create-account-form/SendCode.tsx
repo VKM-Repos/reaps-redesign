@@ -7,7 +7,6 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
-import TopBar from "@/components/custom/TopBar";
 import Loader from "@/components/custom/Loader";
 
 type Props = {
@@ -53,7 +52,6 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
     return(
         <>
              {loading && <Loader />}
-            <TopBar title="Email" />
             <div className="w-full md:w-4/5 px-4 md:mx-auto my-0 antialiased relative pt-[2.5rem]">
                     {!isMobile ? <BackButton title="Back" goBack={handleGoBack}/>: ''}
                 <div className="md:w-3/5 w-full max-w-[375px] md:max-w-[526px] mx-auto my-0">
