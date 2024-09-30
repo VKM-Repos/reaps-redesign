@@ -154,6 +154,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
     const [open, setOpen] = useState(false);
     const [filteredData, setFiltered] = useState(tableData);
+    const [startCalendarOpen, setStartCalendarOpen] = useState(false);
+    const [endCalendarOpen, setEndCalendarOpen] = useState(false);
 
 
     function deleteTableItem(item: any) {
@@ -186,11 +188,13 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
 
     const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
         setStartDate(day || undefined);
+        setStartCalendarOpen(false);
     };
 
 
     const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
         setEndDate(day || undefined);  
+        setEndCalendarOpen(false);
     };
 
     // format date to backend date format
@@ -397,7 +401,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
                                     <div className="flex justify-between items-center">
-                                        <DropdownMenu>
+                                        <DropdownMenu open={startCalendarOpen} onOpenChange={setStartCalendarOpen}>
                                             <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="start" side="bottom">
                                                 <Calendar
@@ -411,7 +415,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                                 />
                                             </DropdownMenuContent>
                                         </DropdownMenu>
-                                        <DropdownMenu>
+                                        <DropdownMenu open={endCalendarOpen} onOpenChange={setEndCalendarOpen}>
                                             <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" side="bottom">
                                                 <Calendar
