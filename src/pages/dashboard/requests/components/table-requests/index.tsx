@@ -372,10 +372,10 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         <DropdownMenuContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                             <ul className="flex flex-col items-start gap-4">
                                                 {statuses.map((status: string) =>(
-                                                    <DropdownMenuItem className="flex gap-2 items-center justify-start w-full" key={status} onClick={() => handleSelect(status)}>
+                                                    <div className="flex gap-2 items-center justify-start w-full text-xs font-[500] text-[#6A6C6A]" key={status} onClick={() => handleSelect(status)}>
                                                             {selectedStatuses.includes(status) ? <Tick /> : <div className="w-6 h-6">&nbsp;</div>}
                                                             {status}
-                                                    </DropdownMenuItem>))}
+                                                    </div>))}
                                             </ul>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
