@@ -80,8 +80,8 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                     </>
                   );
             },
-            headerClass: "text-[#454747] w-full max-w-[10rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center w-full max-w-[10rem] font-normal"
+            headerClass: "text-[#454747] w-full min-w-[10rem] font-semibold text-lg flex items-center text-xl",
+            cellClass: "flex items-center w-full min-w-[10rem] font-normal"
         },
         {
             header: "Date",
