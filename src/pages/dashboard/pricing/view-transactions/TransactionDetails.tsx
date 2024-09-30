@@ -85,12 +85,12 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
 
     
     return (
-        <DialogContent className="w-full max-w-[800px] h-full max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
+        <DialogContent className="w-full max-w-[800px] h-full md:max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
              <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
                 <p className="pb-4 px-[1.125rem] font-semibold text-xl2">Transaction Details</p>
             </div>
             <div className="w-full flex flex-col gap-4">
-                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex justify-between p-[1.75rem]">
+                <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col md:flex-row gap-[3rem] md:gap-0 justify-between p-5 md:p-[1.75rem]">
                     <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
                         <p className="text-bold font-semibold">Name of Researcher</p>
                         <p className="text-[#868687]">Academic - Undergraduates</p>
@@ -105,7 +105,7 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                     </div>
                     
                 </div>
-                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] text-[#868687] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
+                <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] text-[#868687] rounded-[1.25rem] flex flex-col gap-5 md:p-[1.75rem] p-5">
                     <div className="font-semibold">
                         <p>Details</p>
                     </div>
@@ -129,7 +129,7 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                         </Badge>
                     </div>
                 </div>
-                <div className="w-full max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-[1.75rem]">
+                <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-5 p-5 md:p-[1.75rem]">
                     <div className="font-semibold text-[#868687] flex flex-col gap-5">
                         <p>Document</p>
                         <div>
@@ -138,7 +138,7 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
                             
                               {showFile ?
                                 <div className="flex flex-col gap-3 w-full max-w-[374px] md:max-w-[526px]">
-                                  <div className="flex justify-between">
+                                  <div className="flex justify-between flex-col gap-5 md:flex-row">
                                     <p className="font-semibold text-sm flex gap-1"><span className="text-black">Remita Payment Receipt</span><span className="text-red-500">*</span></p>
                                     <p className="text-xs font-normal text-[#868687]">.Doc, .Docx, .Pdf (Max of 3MB)</p>
                                   </div>
