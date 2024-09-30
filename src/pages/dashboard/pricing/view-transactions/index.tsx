@@ -14,9 +14,9 @@ type ViewTransactionsProps = {
 }
 
 export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-    Unpaid: { bg: '#C8AD98', text: '#321702' },
-    Confirmed: { bg: '#80EF80', text: '#0E1A0E' },
-    "Awaiting Confirmation": { bg: '#FFDEFF', text: '#410A70' },
+    Failed: { bg: '#FC8D94', text: '#320104' },
+    Success: { bg: '#80EF80', text: '#0E1A0E' },
+    Pending: { bg: '#FFDEFF', text: '#410A70' },
   };
 
 
@@ -46,14 +46,14 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
             accessor: "reference",
             cellType: 'text',
             headerClass: " text-[#454747] min-w-[12.5rem] font-semibold text-left text-xl",
-            cellClass: "w-full min-w-[12.5rem] text-[#868687] text-sm text-left"
+            cellClass: "w-full min-w-[12.5rem] text-[#868687] text-sm text-left font-normal"
         },
         {
             header: "Request ID",
             accessor: "id",
             cellType: 'text',
             headerClass: "text-[#454747] w-full min-w-[12.5rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center w-full min-w-[12.5rem] text-[#868687] text-sm"
+            cellClass: "flex items-center w-full min-w-[12.5rem] text-[#868687] text-sm font-normal"
         },
         {
             header: "Status",
@@ -67,7 +67,7 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                             color: statusColorMap[item.status]?.text || '#000000',
                             backgroundColor: statusColorMap[item.status]?.bg || '#192C8A',
                           }}
-                          className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-[400]"
+                          className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-normal text-xs"
                         >
                           <div
                             style={{
@@ -80,22 +80,28 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                     </>
                   );
             },
-            headerClass: "text-[#454747] w-full min-w-[12.5rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center w-full min-w-[12.5rem]"
+            headerClass: "text-[#454747] w-full max-w-[10rem] font-semibold text-lg flex items-center text-xl",
+            cellClass: "flex items-center w-full max-w-[10rem] font-normal"
         },
         {
             header: "Date",
             accessor: "date",
-            cellType: 'text',
+            cellType: 'custom',
+            customRender: (item: any) => {
+               
+                return (
+                    <>{item.date} <span>&nbsp;|&nbsp;</span> {item.time}</>
+                )
+            },
             headerClass: "text-[#454747] w-full min-w-[10rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center text-[#868687] text-sm w-full min-w-[10rem]"
+            cellClass: "flex items-center text-[#868687] text-sm w-full min-w-[10rem] font-normal"
         },
         {
             header: "Amount",
             accessor: "amount",
             cellType: 'text',
-            headerClass: "text-[#454747] font-semibold text-lg text-xl",
-            cellClass: "flex items-center justify-center text-[#868687] text-sm"
+            headerClass: "text-[#454747] font-semibold text-lg text-xl flex items-center justify-center max-w-[6rem]",
+            cellClass: "flex items-center justify-center text-[#868687] text-sm font-normal max-w-[6rem]"
         },
 
     ]

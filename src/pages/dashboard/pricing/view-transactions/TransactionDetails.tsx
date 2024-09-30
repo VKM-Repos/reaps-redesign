@@ -85,7 +85,7 @@ export default function TransactionDetails({ transaction }: TransactionDetailsPr
 
     
     return (
-        <DialogContent className="w-full max-w-[800px] h-full max-h-[700px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
+        <DialogContent className="w-full max-w-[800px] h-full max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
              <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
                 <p className="pb-4 px-[1.125rem] font-semibold text-xl2">Transaction Details</p>
             </div>
