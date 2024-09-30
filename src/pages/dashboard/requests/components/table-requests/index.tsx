@@ -2,9 +2,9 @@ import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
@@ -153,6 +153,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [showStatuses, setShowStatuses] = useState(false);
     const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
     const [open, setOpen] = useState(false);
+    const [filteredData, setFiltered] = useState(tableData);
+
 
     function deleteTableItem(item: any) {
         setLoading(true);
@@ -203,16 +205,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
 
     // refactor setFilters function
     const setFilters = () => {
-        let filtered = tableData;
-
-        if (searchTerm) {
-        const lowercasedSearchTerm = searchTerm.toLowerCase();
-        filtered = filtered.filter(
-            (item) =>
-            item.title.toLowerCase().includes(lowercasedSearchTerm) ||
-            item.specialization.toLowerCase().includes(lowercasedSearchTerm)
-        );
-        }
+        let filtered = tableData;  
 
         if (selectedStatuses.length > 0) {
             filtered = filtered.filter((item) =>
@@ -244,8 +237,22 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             });
         }
 
-        setTableArray(filtered);
+        setFiltered(filtered)
+        setTableArray(filteredData);
+
     };
+
+    const applySearch = (filteredData: typeof tableData) => {
+        if (searchTerm) {
+            const lowercasedSearchTerm = searchTerm.toLowerCase();
+            filteredData = filteredData.filter(
+                (item) =>
+                item.title.toLowerCase().includes(lowercasedSearchTerm) ||
+                item.specialization.toLowerCase().includes(lowercasedSearchTerm)
+            );
+        }
+        setTableArray(filteredData)
+    }
 
     const applyFilters = () => {
         setLoading(true);
@@ -256,6 +263,10 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         setLoading(false); 
         }, 3000);
     }
+
+    useEffect(() => {
+        applySearch(filteredData);
+    }, [filteredData, searchTerm])
 
  
 
