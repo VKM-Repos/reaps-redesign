@@ -177,7 +177,10 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
 
     const deleteStatusUpdate = (status: String) => {
         setSelectedStatuses((prev) => prev.filter((val) => val !== status))
-        setShowStatuses(false);
+        if(selectedStatuses.length === 0)
+            {
+                setShowStatuses(false);
+            }
     }
     
 
