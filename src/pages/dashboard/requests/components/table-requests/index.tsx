@@ -156,7 +156,10 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [filteredData, setFiltered] = useState(tableData);
     const [startCalendarOpen, setStartCalendarOpen] = useState(false);
     const [endCalendarOpen, setEndCalendarOpen] = useState(false);
+    const [activeContent, setActiveContent] = useState("Status")
 
+    // set active modal, click on button trigger which one is seen 
+    // always have apply and cancel buttons, what's changing is the status and date content
 
     function deleteTableItem(item: any) {
         setLoading(true);
@@ -380,14 +383,27 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             <DropdownMenuTrigger asChild>
                                 <div className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></div>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-full min-w-[13.25rem] h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
-                                <div className="gap-2 flex flex-col justify-center">
-                                    <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
+                            <DropdownMenuContent align="start" className="w-full h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex gap-2 border border-[#0C0C0F29] dropdown-shadow">
+                                <div className="gap-8 flex flex-col justify-start w-full max-w-[12rem]">
+                                    <div className="gap-2 flex flex-col justify-center">
+                                        <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
+                                        <button onClick={() => {setActiveContent("Status")}}>
                                             <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Show All</span><span><ArrowRight /></span></div>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
+                                        </button>
+                                    
+                                    </div>
+                                    <div className="gap-2 flex flex-col justify-center">
+                                        <p className="font-semibold text-sm text-[#6A6C6A] px-1">Date</p>
+                                        <button onClick={() => {setActiveContent("Date")}}>
+                                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Select Date</span><span><ArrowRight /></span></div>
+                                        </button>
+                                    </div>
+                                </div>
+                                {/* <DropdownMenuSeparator /> */}
+                                <div className="border-l-[#0E0F0C1F] border"></div>
+                                <div className={`${activeContent === "Status" ? "gap-3" : "justify-between"} w-full flex flex-col`}>
+                                    {activeContent === "Status" ? 
+                                        (<div className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                             <ul className="flex flex-col items-start gap-4">
                                                 {statuses.map((status: string) =>(
                                                     <div className="flex gap-2 items-center justify-start w-full text-xs font-[500] text-[#6A6C6A]" key={status} onClick={() => handleSelect(status)}>
@@ -395,46 +411,48 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                                             {status}
                                                     </div>))}
                                             </ul>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
-                                <div className="gap-2 flex flex-col justify-center">
-                                    <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
-                                    <div className="flex justify-between items-center">
-                                        <DropdownMenu open={startCalendarOpen} onOpenChange={setStartCalendarOpen}>
-                                            <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start" side="bottom">
-                                                <Calendar
-                                                    mode="single"
-                                                    selected={startDate}
-                                                    onSelect={handleStartDateChange}
-                                                    disabled={(date) =>
-                                                    date > new Date() || date < new Date("1900-01-01")
-                                                    }
-                                                    initialFocus
-                                                />
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                        <DropdownMenu open={endCalendarOpen} onOpenChange={setEndCalendarOpen}>
-                                            <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end" side="bottom">
-                                                <Calendar
-                                                    mode="single"
-                                                    selected={endDate}
-                                                    onSelect={handleEndDateChange}
-                                                    disabled={(date) =>
-                                                    date > new Date() || date < new Date("1900-01-01")
-                                                    }
-                                                    initialFocus
-                                                />
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        </div>)
+                                        : activeContent === "Date" &&
+                                        (
+                                        <div className="gap-2 flex flex-col justify-center">
+                                            <div className="flex gap-3 items-center">
+                                                <DropdownMenu open={startCalendarOpen} onOpenChange={setStartCalendarOpen}>
+                                                    <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="start" side="bottom">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={startDate}
+                                                            onSelect={handleStartDateChange}
+                                                            disabled={(date) =>
+                                                            date > new Date() || date < new Date("1900-01-01")
+                                                            }
+                                                            initialFocus
+                                                        />
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                                <DropdownMenu open={endCalendarOpen} onOpenChange={setEndCalendarOpen}>
+                                                    <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end" side="bottom">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={endDate}
+                                                            onSelect={handleEndDateChange}
+                                                            disabled={(date) =>
+                                                            date > new Date() || date < new Date("1900-01-01")
+                                                            }
+                                                            initialFocus
+                                                        />
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </div>
+                                           
+                                        </div>  
+                                        )
+                                    }
+                                    <div className="flex items-center gap-3">
+                                        <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]" variant="ghost" onClick={() => {setOpen(false)}}>Cancel</Button>
+                                        <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-white" onClick={applyFilters}>Apply</Button>
                                     </div>
-                                   
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]" variant="ghost" onClick={() => {setOpen(false)}}>Cancel</Button>
-                                    <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-white" onClick={applyFilters}>Apply</Button>
                                 </div>
                             </DropdownMenuContent>
                         </DropdownMenu>
