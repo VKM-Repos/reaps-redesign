@@ -13,7 +13,7 @@ import Loader from "@/components/custom/Loader";
 export default function Requests() {
     const { role } = useRole();
     const [ loading, setLoading ] = useState(false);
-    const [ activeTab, setActiveTab ] = useState("requests table")
+    // const [ activeTab, setActiveTab ] = useState("requests table")
     const navigate = useNavigate()
 
     const handleFunc = () => {
@@ -41,7 +41,8 @@ export default function Requests() {
                     {role === 'RESEARCHER' && 
                         <TableRequests tableData={tableData} />}
                         {role === 'REVIEWER' &&
-                            <Tabs defaultValue="request table" onValueChange={(val) => setActiveTab(val)}>
+                        // onValueChange={(val) => setActiveTab(val)}
+                            <Tabs defaultValue="request table" >
                                 <TabsList className="border-b-[1.5px] w-full px-3">
                                     <TabsTrigger value="request table">My request</TabsTrigger>
                                     <TabsTrigger value="review table">Review request</TabsTrigger>

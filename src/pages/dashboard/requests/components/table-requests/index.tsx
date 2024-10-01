@@ -1,16 +1,10 @@
 import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
-import RenderDeleteSheet from "@/components/custom/DeleteSheet";
-import PencilEdit from "@/components/custom/Icons/PencilEdit";
-import View from "@/components/custom/Icons/View";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
-import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import Loader from "@/components/custom/Loader";
 import { Badge } from "@/components/ui/badge";
-import ViewRequests from "../../view-requests";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -22,6 +16,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { X } from "lucide-react";
 import Tick from "@/components/custom/Icons/Tick";
 import { Button } from "@/components/ui/button";
+import SharedActions from "./custom/SharedActions";
 
 // refactor render functions and mobile render
 
@@ -58,88 +53,49 @@ type TableRequestsProps = {
   };
 
 
-function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
-
+  function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
     const { setStep } = useRequestsStore();
     const navigate = useNavigate();
- 
-
+  
     const redirectToSummary = () => {
-        navigate('/requests/create');
-        setStep(5);
-    }
-
+      navigate("/requests/create");
+      setStep(5);
+    };
+  
     return (
-        <>
+      <>
         {loading && <Loader />}
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <button><MoreIcon /></button>
-            </DropdownMenuTrigger >
-            <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
-                <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
-                        <Sheet>
-                            <SheetTrigger className="flex justify-center gap-2 text-black p-3">
-                                <View />
-                                <span>View</span>
-                            </SheetTrigger>
-                            <ViewRequests />
-                        </Sheet>
-                         <div>
-                            <button onClick={redirectToSummary} className={` ${item.status === "Draft" ? "text-black" : "text-black/30"} flex justify-center gap-2 p-3`} disabled={item.status !== "Draft"}>
-                                <PencilEdit />
-                                <span>Edit</span>
-                            </button>
-                        </div>
-                    <Sheet>
-                        <SheetTrigger className="flex justify-center gap-2 text-black p-3">
-                            <DeleteSmallIcon />
-                            <span>Delete</span>
-                        </SheetTrigger>
-                        <RenderDeleteSheet text="Are you sure you want to delete this request?" data={item} deleteItem={(item) => {onDelete(item)}} />
-                    </Sheet>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
+          <DropdownMenuTrigger asChild>
+            <button><MoreIcon /></button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
+            <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
+              <SharedActions item={item} onDelete={onDelete} redirectToSummary={redirectToSummary} />
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
         </DropdownMenu>
-        </>
-        
-    )
-}
-
-function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
+      </>
+    );
+  }
+  function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
     const { setStep } = useRequestsStore();
     const navigate = useNavigate();
-
+  
     const redirectToSummary = () => {
-            navigate('/requests/create');
-            setStep(5);
-        }
-
-    return(
-        <>
-             {loading && <Loader />}
-             <div className="flex gap-2 justify-center items-center">
-                <Sheet>
-                    <SheetTrigger className="text-black p-2">
-                        <View />
-                    </SheetTrigger>
-                    <ViewRequests />
-                </Sheet>
-                <div>
-                    <button onClick={redirectToSummary} className={` ${item.status === "Draft" ? "text-black" : "text-black/30"} flex justify-center gap-2 p-2`} disabled={item.status !== "Draft"}>
-                        <PencilEdit />
-                    </button>
-                </div>
-                <Sheet>
-                    <SheetTrigger className="flex justify-center gap-2 text-black p-2">
-                        <DeleteSmallIcon />
-                    </SheetTrigger>
-                    <RenderDeleteSheet text="Are you sure you want to delete this request?" data={item} deleteItem={(item) => {onDelete(item)}} />
-                </Sheet>
-            </div>
-        </>
-    )
-}
+      navigate("/requests/create");
+      setStep(5);
+    };
+  
+    return (
+      <>
+        {loading && <Loader />}
+        <div className="flex gap-2 justify-center items-center">
+          <SharedActions item={item} onDelete={onDelete} redirectToSummary={redirectToSummary} isMobile />
+        </div>
+      </>
+    );
+  }
 
 
 
@@ -152,11 +108,13 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [endDate, setEndDate] = useState<Date | undefined>();
     const [showStatuses, setShowStatuses] = useState(false);
     const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
+    const [appliedStatuses, setAppliedStatuses] = useState(selectedStatuses)
     const [open, setOpen] = useState(false);
     const [filteredData, setFiltered] = useState(tableData);
     const [startCalendarOpen, setStartCalendarOpen] = useState(false);
     const [endCalendarOpen, setEndCalendarOpen] = useState(false);
-    const [activeContent, setActiveContent] = useState("Status")
+    const [activeContent, setActiveContent] = useState("Status");
+    const [showTick, setShowTick] = useState("");
 
     // set active modal, click on button trigger which one is seen 
     // always have apply and cancel buttons, what's changing is the status and date content
@@ -181,8 +139,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
       };
 
     const deleteStatusUpdate = (status: String) => {
-        setSelectedStatuses((prev) => prev.filter((val) => val !== status))
-        if(selectedStatuses.length === 0)
+        setAppliedStatuses((prev) => prev.filter((val) => val !== status))
+        if(appliedStatuses.length === 0)
             {
                 setShowStatuses(false);
             }
@@ -269,6 +227,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         setTimeout(() => {
         setFilters(); 
         setShowStatuses(true);
+        setAppliedStatuses([...selectedStatuses]);
         setOpen(false);
         setLoading(false); 
         }, 3000);
@@ -313,13 +272,6 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             headerClass: "font-bold w-full min-w-[8rem]",
             cellClass: "min-w-[8rem] w-full"
         },
-        // {
-        //     header: "Expiry",
-        //     accessor: "expiry",
-        //     cellType: "text",
-        //     headerClass: "font-bold w-full min-w-[8rem]",
-        //     cellClass: "min-w-[8rem] "
-        // },
         {
             header: "Status",
             accessor: "status",
@@ -384,11 +336,11 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                 <div className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" className="w-full h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex gap-2 border border-[#0C0C0F29] dropdown-shadow">
-                                <div className="gap-8 flex flex-col justify-start w-full max-w-[12rem]">
+                                <div className="gap-8 flex flex-col justify-start w-full md:min-w-[12rem]">
                                     <div className="gap-2 flex flex-col justify-center">
                                         <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                         <button onClick={() => {setActiveContent("Status")}}>
-                                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Show All</span><span><ArrowRight /></span></div>
+                                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>{selectedStatuses.length > 0 ? `${selectedStatuses.length} selected` : "Show All"}</span><span><ArrowRight /></span></div>
                                         </button>
                                     
                                     </div>
@@ -399,16 +351,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         </button>
                                     </div>
                                 </div>
-                                {/* <DropdownMenuSeparator /> */}
                                 <div className="border-l-[#0E0F0C1F] border"></div>
                                 <div className={`${activeContent === "Status" ? "gap-3" : "justify-between"} w-full flex flex-col`}>
                                     {activeContent === "Status" ? 
-                                        (<div className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
-                                            <ul className="flex flex-col items-start gap-4">
+                                        (<div className="w-full min-w-[11.25rem] px-4 py-3 flex flex-col gap-8">
+                                            <ul className="flex flex-col items-start">
                                                 {statuses.map((status: string) =>(
-                                                    <div className="flex gap-2 items-center justify-start w-full text-xs font-[500] text-[#6A6C6A]" key={status} onClick={() => handleSelect(status)}>
-                                                            {selectedStatuses.includes(status) ? <Tick /> : <div className="w-6 h-6">&nbsp;</div>}
-                                                            {status}
+                                                    <div onMouseEnter={() => {setShowTick(status)}} onMouseLeave={() => {setShowTick("")}} className={`flex gap-2 py-2 items-center justify-start w-full text-xs font-[500] ${showTick === status || selectedStatuses.includes(status) ? "text-black bg-[#192C8A0D]" : "text-[#6A6C6A]"}`} key={status} onClick={() => handleSelect(status)}>
+                                                        {selectedStatuses.includes(status) || showTick === status ? <Tick /> : <div className="w-6 h-6">&nbsp;</div>}
+                                                        {status}
                                                     </div>))}
                                             </ul>
                                         </div>)
@@ -417,7 +368,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         <div className="gap-2 flex flex-col justify-center">
                                             <div className="flex gap-3 items-center">
                                                 <DropdownMenu open={startCalendarOpen} onOpenChange={setStartCalendarOpen}>
-                                                    <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
+                                                    <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">{startDate ? `${formatDateToDDMMYYYY(startDate)}` : "Start date"}</div></DropdownMenuTrigger>
                                                     <DropdownMenuContent align="start" side="bottom">
                                                         <Calendar
                                                             mode="single"
@@ -431,7 +382,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                                 <DropdownMenu open={endCalendarOpen} onOpenChange={setEndCalendarOpen}>
-                                                    <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
+                                                    <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">{endDate ? `${formatDateToDDMMYYYY(endDate)}` : "End date"}</div></DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" side="bottom">
                                                         <Calendar
                                                             mode="single"
@@ -449,7 +400,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         </div>  
                                         )
                                     }
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 align-self-end">
                                         <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]" variant="ghost" onClick={() => {setOpen(false)}}>Cancel</Button>
                                         <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-white" onClick={applyFilters}>Apply</Button>
                                     </div>
@@ -464,9 +415,9 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     <span><LinkIcon /></span>
                 </div>
             </div>
-            {showStatuses &&
+            {isMobile && showStatuses && appliedStatuses.length !== 0 &&
                 <div className="flex flex-wrap justify-center items-center p-4 gap-3">
-                    {selectedStatuses.map((status) => (
+                    {appliedStatuses.map((status) => (
                         <div className="py-2 px-3 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center justify-start gap-2 w-full max-w-fit">
                             <span className="w-[6px] h-[5px] bg-[#FFD13A] rounded-full"></span>
                             <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">{status}</span>
