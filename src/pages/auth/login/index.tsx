@@ -1,5 +1,4 @@
 import { LoginForm } from "./LoginForm"
-import LoginGoogle from "@/components/custom/LoginGoogle"
 import TopBar from "@/components/custom/TopBar"
 import { useNavigate } from "react-router-dom"
 
@@ -17,7 +16,7 @@ export default function LoginPage() {
                 <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
                     <LoginForm/>
                 </div>
-                <LoginGoogle />
+                <p className="pt-2 pb-8 text-sm mx-auto max-w-fit">Trouble logging in? <a className="underline font-semibold text-black hover:text-black" href="" >Contact us</a></p>
             </div>
         </>
     )
