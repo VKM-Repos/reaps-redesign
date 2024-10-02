@@ -33,9 +33,9 @@ export default function Logout( {setLoading}: {setLoading: any} ) {
                             <SheetDescription className="text-[454745] text-sm md:text-center">Are you sure you want to log out? You will lose any unsaved changes</SheetDescription>
                         </SheetHeader>
                     </div> 
-                    <div className="flex gap-14 w-full items-center justify-center">
-                        <SheetClose className="w-full p-0"><Button variant="destructive" className="w-full rounded-[2.75rem] !py-3 !px-6" onClick={() => {handleLogOut()}}>Log out</Button></SheetClose>
-                        <SheetClose className="w-full !py-[1.375rem] !px-6 border border-[#0C0C0F29] rounded-[2.75rem] text-sm">Cancel</SheetClose>
+                    <div className="flex gap-10 w-full items-center justify-center">
+                        <SheetClose className="w-full max-w-[12rem] p-0"><Button variant="destructive" className="w-full rounded-[2.75rem] !py-3 !px-6" onClick={() => {handleLogOut()}}>Log out</Button></SheetClose>
+                        <SheetClose className="w-full max-w-[12rem] !py-3 !px-6 border border-[#0C0C0F29] rounded-[2.75rem] text-sm">Cancel</SheetClose>
                     </div>
                 </div>
             </div>
