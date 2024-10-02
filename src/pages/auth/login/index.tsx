@@ -16,7 +16,7 @@ export default function LoginPage() {
                 <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
                     <LoginForm/>
                 </div>
-                <p className="pt-2 pb-8 text-sm mx-auto max-w-fit">Trouble logging in? <a className="underline font-semibold text-black hover:text-black" href="" >Contact us</a></p>
+                <p className="pt-2 pb-8 text-sm mx-auto max-w-fit">Trouble logging in? <a className="underline font-semibold text-black hover:text-black" href="https://www.vhdo.org/" target="_blank">Contact us</a></p>
             </div>
         </>
     )
