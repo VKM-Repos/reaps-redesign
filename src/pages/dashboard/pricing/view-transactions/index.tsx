@@ -8,6 +8,8 @@ import TransactionDetails from "./TransactionDetails";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
 type ViewTransactionsProps = {
     setShowTransactions: (value: boolean) => void;
@@ -26,7 +28,10 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
     const { data, setTransactions } = useTransactionStore();
     const { transactions } = data;
     const [ showDetails, setShowDetails ] = useState(false);
-
+    const isMobile = useMediaQuery({query: '(max-width: 767px)'});
+  
+    
+    
     const handleFunc = () => {
         setShowTransactions(false);
     }
@@ -129,7 +134,24 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                 </TableHeader>
                 <TableBody>
                     {transactions.map((rowData, rowIndex) => (
-                    <Dialog>
+                    <>
+                    {isMobile ?
+                    <Sheet>
+                        <SheetTrigger className="w-full">
+                            <TableRow key={rowIndex} 
+                            className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]"
+                            onClick={() => handleRowClick()}>
+                                {columnData.map((column, index) => (
+                                    <TableCell key={index} className={column.cellClass}>
+                                    {column.cellType === 'custom' && column.customRender ? column.customRender(rowData) :  (rowData as any)[column.accessor]}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </SheetTrigger>
+                        {showDetails && <TransactionDetails transaction={rowData}/>}
+                    </Sheet>
+                     : 
+                     <Dialog>
                         <DialogTrigger className="w-full">
                             <TableRow key={rowIndex} 
                             className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]"
@@ -143,7 +165,8 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                         </DialogTrigger>
                         {showDetails && <TransactionDetails transaction={rowData}/>}
                     </Dialog>
-                       
+                    }
+                    </>
                     ))}
                 </TableBody>
                 
