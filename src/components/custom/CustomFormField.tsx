@@ -277,7 +277,7 @@ const CustomFormField = (props: CustomProps) => {
         name={name}
         render={({ field }) => (
             <FormItem className="gap-4">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-1 items-start md:flex-row md:justify-between md:items-center">
                     <div> 
                         <FormLabel className={`${labelClassName} ${error ? 'text-red-500' : 'text-[#454745]'} font-[400]`}>{label}</FormLabel>
                         {required && (
