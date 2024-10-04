@@ -11,17 +11,14 @@ import { Link } from "react-router-dom";
 import BackButton from "@/components/custom/BackButton";
 import Loader from "@/components/custom/Loader";
 import ArrowDown from "/icons/arrow-down-01.svg";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 
-const profile = {
-    name: "John Doe",
-    role: "Researcher",
-    email: "johndoe@gmail.com",
-};
+
 
 type ProfileDropdownProps = {
     profile: {
         name: string;
-        role: string;
+        role: JSX.Element;
         email: string;
     };
     open: boolean;
@@ -34,6 +31,13 @@ export default function ProfileDropDown() {
     const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { data } = useOnboardingFormStore();
+
+    const profile = {
+        name: data.onboardingDetails.firstName + ' ' + data.onboardingDetails.lastName ||'',
+        role: <span className="">Researcher</span>,
+        email: data.onboardingDetails.email || '',
+    };
 
     const handleClose = () => setOpen(false);
 
@@ -124,7 +128,7 @@ function MobileProfileSheet({
 }
 
 // Profile Header Component
-function ProfileHeader({ profile }: { profile: { name: string; role: string; email: string } }) {
+function ProfileHeader({ profile }: { profile: { name: string; role: JSX.Element; email: string } }) {
     return (
         <div className="flex gap-4 items-center justify-left py-3 px-4">
             <div className="rounded-full bg-[#14155E14] p-2">

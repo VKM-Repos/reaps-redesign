@@ -19,9 +19,13 @@ export const EmailSettings = ({ onSave }: { onSave: () => void }) => {
 
 
     const { data, setData } = useOnboardingFormStore();
+    const defaultValues = {
+        email: data.onboardingDetails.email  || ''
+    }
     const [loading, setLoader ] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues,
       });
       const { register, formState: { isValid }, reset } = form;
 
