@@ -2,9 +2,9 @@ import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import View from "@/components/custom/Icons/View";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
@@ -20,6 +20,8 @@ import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { Calendar } from "@/components/ui/calendar";
 import { X } from "lucide-react";
+import Tick from "@/components/custom/Icons/Tick";
+import { Button } from "@/components/ui/button";
 
 // refactor render functions and mobile render
 
@@ -148,7 +150,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>();
-    const [status, setStatus] = useState('');
+    const [showStatuses, setShowStatuses] = useState(false);
+    const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
     const [open, setOpen] = useState(false);
 
     function deleteTableItem(item: any) {
@@ -164,45 +167,41 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         setSearchTerm(e.target.value);
     };
 
-    const handleStatusUpdate = (status: string) => {
-        setLoading(true);
-        setTimeout(() => {
-            setStatus(status);
-            setOpen(false);
-            setLoading(false); 
-        }, 3000);   
-    }
+    const handleSelect = (value: string) => {
+        setSelectedStatuses((prev) =>
+            prev.includes(value) ? prev.filter((val) => val !== value) : [...prev, value]
+          );
+      };
 
-    // loader background is darker on first onchange
-
-    const deleteStatusUpdate = () => {
-        setStatus('');
+    const deleteStatusUpdate = (status: String) => {
+        setSelectedStatuses((prev) => prev.filter((val) => val !== status))
     }
     
 
     const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setLoading(true);
-        setTimeout(() => {
-            setStartDate(day || undefined);
-            setOpen(false); 
-            setLoading(false);  
-        }, 3000);  
+        setStartDate(day || undefined);
     };
 
 
     const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setLoading(true);
-        setTimeout(() => {
-            setEndDate(day || undefined);
-            setOpen(false);
-            setLoading(false); 
-        }, 3000);
-        
-        
+        setEndDate(day || undefined);  
     };
 
+    // format date to backend date format
+    function formatDateToDDMMYYYY(date: Date) {
+        const day = String(date.getDate()).padStart(2, '0');  // Get the day and pad with 0 if necessary
+        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-based, so add 1
+        const year = date.getFullYear();  // Get the full year
+        return `${day}-${month}-${year}`;  // Return in DD-MM-YYYY format
+    }
 
-      useEffect(() => {
+    function parseDate(dateString: string) {
+        const [day, month, year] = dateString.split('-');
+        return new Date(`${year}-${month}-${day}`);
+    }
+
+    // refactor setFilters function
+    const setFilters = () => {
         let filtered = tableData;
 
         if (searchTerm) {
@@ -214,29 +213,48 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         );
         }
 
-        if (status) {
-        filtered = filtered.filter((item) => item.status === status);
+        if (selectedStatuses.length > 0) {
+            filtered = filtered.filter((item) =>
+                selectedStatuses.includes(item.status)
+            )
         }
 
         if (startDate && endDate) {
-        filtered = filtered.filter((item) => {
-            const submissionDate = new Date(item.submission);
-            return submissionDate >= new Date(startDate) && submissionDate <= new Date(endDate);
-        });
+            const formattedStartDate = formatDateToDDMMYYYY(startDate); // convert input date to backend date format
+            const formattedEndDate = formatDateToDDMMYYYY(endDate);
+        
+            filtered = filtered.filter((item) => {
+                const submissionDate = parseDate(item.submission);  // Convert backend date string to Date
+                return submissionDate >= parseDate(formattedStartDate) && submissionDate <= parseDate(formattedEndDate); // use parsed dates to compare
+            });
         } else if (startDate) {
-        filtered = filtered.filter((item) => {
-            const submissionDate = new Date(item.submission);
-            return submissionDate >= new Date(startDate);
-        });
+            const formattedStartDate = formatDateToDDMMYYYY(startDate);
+        
+            filtered = filtered.filter((item) => {
+                const submissionDate = parseDate(item.submission);  
+                return submissionDate >= parseDate(formattedStartDate);
+            });
         } else if (endDate) {
-        filtered = filtered.filter((item) => {
-            const submissionDate = new Date(item.submission);
-            return submissionDate <= new Date(endDate);
-        });
+            const formattedEndDate = formatDateToDDMMYYYY(endDate);
+        
+            filtered = filtered.filter((item) => {
+                const submissionDate = parseDate(item.submission);  
+                return submissionDate <= parseDate(formattedEndDate);
+            });
         }
 
         setTableArray(filtered);
-    }, [searchTerm, status, startDate, endDate]);
+    };
+
+    const applyFilters = () => {
+        setLoading(true);
+        setTimeout(() => {
+        setFilters(); 
+        setShowStatuses(true);
+        setOpen(false);
+        setLoading(false); 
+        }, 3000);
+    }
 
  
 
@@ -255,15 +273,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             header: "Title",
             accessor: "title",
             cellType: 'text',
-            headerClass: "font-bold w-full min-w-[18rem] ",
-            cellClass: " min-w-[18rem] w-full "
+            headerClass: "font-bold w-full min-w-[18.75rem] ",
+            cellClass: " min-w-[18.75rem] w-full "
     
         },
         {
             header: "Specialization",
             accessor: "specialization",
             cellType: "text",
-            headerClass: "font-bold w-full min-w-[8rem]",
+            headerClass: "font-bold min-w-[8rem] w-full",
             cellClass: "min-w-[8rem] w-full"
         },
         {
@@ -273,13 +291,13 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             headerClass: "font-bold w-full min-w-[8rem]",
             cellClass: "min-w-[8rem] w-full"
         },
-        {
-            header: "Expiry",
-            accessor: "expiry",
-            cellType: "text",
-            headerClass: "font-bold w-full min-w-[8rem]",
-            cellClass: "min-w-[8rem] "
-        },
+        // {
+        //     header: "Expiry",
+        //     accessor: "expiry",
+        //     cellType: "text",
+        //     headerClass: "font-bold w-full min-w-[8rem]",
+        //     cellClass: "min-w-[8rem] "
+        // },
         {
             header: "Status",
             accessor: "status",
@@ -311,6 +329,8 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
         {
             accessor: "custom",
             cellType: "custom",
+            cellClass: "flex justify-center items-center w-full md:max-w-[3rem]",
+            headerClass: "w-full md:max-w-[3rem]",
             customRender: (item: any) => {
                 return isMobile ? (
                   <MobileRender item={item} onDelete={deleteTableItem} loading={loading} />
@@ -339,21 +359,22 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     <div className="flex gap-2 p-1 items-center w-fit">
                         <DropdownMenu open={open} onOpenChange={setOpen}>
                             <DropdownMenuTrigger asChild>
-                                <button className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></button>
+                                <div className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" className="w-full min-w-[13.25rem] h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                     <DropdownMenu>
-                                        
                                         <DropdownMenuTrigger asChild>
-                                            <button className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A]"><span>Show All</span><span><ArrowRight /></span></button>
+                                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Show All</span><span><ArrowRight /></span></div>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="start" side="right" className="w-full min-w-[11.25rem] rounded-xl px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                             <ul className="flex flex-col items-start gap-4">
                                                 {statuses.map((status: string) =>(
-                                                <button onClick={() => {handleStatusUpdate(status)}} className="hover:bg-[#14155E14] hover:text-black py-2 px-3 text-xs font-medium text-[#6A6C6A] rounded-lg w-full flex items-start">{status}</button>
-                                                ))}
+                                                    <DropdownMenuItem className="flex gap-2 items-center justify-start w-full" key={status} onClick={() => handleSelect(status)}>
+                                                            {selectedStatuses.includes(status) ? <Tick /> : <div className="w-6 h-6">&nbsp;</div>}
+                                                            {status}
+                                                    </DropdownMenuItem>))}
                                             </ul>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -362,7 +383,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
                                     <div className="flex justify-between items-center">
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</button></DropdownMenuTrigger>
+                                            <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="start" side="bottom">
                                                 <Calendar
                                                     mode="single"
@@ -376,7 +397,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger><button className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</button></DropdownMenuTrigger>
+                                            <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" side="bottom">
                                                 <Calendar
                                                     mode="single"
@@ -390,20 +411,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
-                                    
+                                   
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]" variant="ghost" onClick={() => {setOpen(false)}}>Cancel</Button>
+                                    <Button className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-white" onClick={applyFilters}>Apply</Button>
                                 </div>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        {status ? 
-                            <div className="py-1 px-2 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center gap-1 md:gap-2 w-full min-w-fit">
-                                <span className="w-[5px] h-[5px] bg-[#FFD13A] rounded-full"></span>
-                                <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">{status}</span>
-                                <span onClick={() => deleteStatusUpdate()}><X size={10}/></span>
-                            </div> 
-                            : 
-                            <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
-                        }
-                        
+                        <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
                     </div>
                 </div>
                 <div className="lg:flex items-center gap-1 hidden">
@@ -411,6 +427,17 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     <span><LinkIcon /></span>
                 </div>
             </div>
+            {showStatuses &&
+                <div className="flex flex-wrap justify-center items-center p-4 gap-3">
+                    {selectedStatuses.map((status) => (
+                        <div className="py-2 px-3 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center justify-start gap-2 w-full max-w-fit">
+                            <span className="w-[6px] h-[5px] bg-[#FFD13A] rounded-full"></span>
+                            <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">{status}</span>
+                            <span onClick={() => deleteStatusUpdate(status)}><X size={10}/></span>
+                        </div>
+                    ))}    
+                </div>
+                }
             <CustomTable columns={columnData} data={tableArray} />
         </div>
     )

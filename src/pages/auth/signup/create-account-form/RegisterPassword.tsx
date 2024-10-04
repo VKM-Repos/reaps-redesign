@@ -8,7 +8,6 @@ import FormInput from "@/components/custom/FormInput";
 import { Props } from "@/types/forms.types"
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
-import TopBar from "@/components/custom/TopBar";
 import Loader from "@/components/custom/Loader";
 
 
@@ -52,7 +51,6 @@ export default function Password({ handleGoBack, handleNext }: Props) {
     return (
         <>
             {loading && <Loader />}
-            <TopBar title="Personal Info" />
             <div className= "md:w-4/5 w-full px-4 md:px-0 mx-auto my-0 antialiased relative pt-[2.5rem]">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">

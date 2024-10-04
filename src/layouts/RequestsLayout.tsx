@@ -4,7 +4,7 @@ import Cancel from "@/components/custom/Icons/Cancel";
 import Stepper from "@/components/custom/Stepper";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useMediaQuery } from "react-responsive";
-import { array } from "@/lib/helpers";
+import { requestsArray } from "@/lib/helpers";
 import { useStepper } from "@/context/StepperContext";
 import ProfileDropDown from "@/pages/dashboard/home/custom/ProfileDropDown";
 
@@ -14,7 +14,7 @@ type Props = {
 }
 export default function RequestsLayout({ children }: Props) {
     const navigate = useNavigate();
-    const { step } = useRequestsStore();
+    const { step, setStep } = useRequestsStore();
     const { stepper } = useStepper();
     const isLarge = useMediaQuery({query: '(max-width: 1024px)'});
 
@@ -30,9 +30,9 @@ export default function RequestsLayout({ children }: Props) {
                         <div className="flex justify-center items-center w-full">
                             {step >= 2 && (
                                 isLarge ? (
-                                    <p className="font-[600] text-sm">{array[stepper]}</p>
+                                    <p className="font-[600] text-sm">{requestsArray[stepper]}</p>
                                 ) : (
-                                    <Stepper />
+                                    <Stepper step={step} setStep={setStep} array={requestsArray}/>
                                 )
                             )}
                         </div>
@@ -43,7 +43,7 @@ export default function RequestsLayout({ children }: Props) {
                     </div>
                     {step >= 2 &&
                         (isLarge && 
-                            <Stepper />
+                            <Stepper step={step} setStep={setStep} array={requestsArray}/>
                         ) 
                     }
                 </div>
