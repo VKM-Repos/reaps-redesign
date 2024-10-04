@@ -26,7 +26,7 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                     <TableRow className="font-bold w-full flex items-center justify-between !border-b p-6">
                     {columns.map((column, index) => (
                         <TableHead key={index} className={`font-bold text-left w-full !h-auto ${column.headerClass || ''}`}>
-                            {column.header}
+                            {column.header }
                         </TableHead>
                     ))}
                     </TableRow>
