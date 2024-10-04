@@ -68,7 +68,7 @@ function DesktopProfileDropDown({
 }: ProfileDropdownProps) {
     return (
         <div className="relative">
-            <DropdownMenu open={open} onOpenChange={setOpen}>
+            <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
                 <div className="flex items-center max-w-fit">
                     <DropdownMenuTrigger asChild>
                         <button className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center">

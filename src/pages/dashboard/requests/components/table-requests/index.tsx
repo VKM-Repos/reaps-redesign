@@ -72,7 +72,7 @@ function RenderFunctions({ item, onDelete, loading, }: RenderFunctionsProps) {
     return (
         <>
         {loading && <Loader />}
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
                 <button><MoreIcon /></button>
             </DropdownMenuTrigger >
@@ -357,14 +357,14 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             className="border-none hover:border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
-                        <DropdownMenu open={open} onOpenChange={setOpen}>
+                        <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <div className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" className="w-full min-w-[13.25rem] h-full min-h-[11.875rem] rounded-xl rounded-tl-none px-4 py-3 flex flex-col gap-8 border border-[#0C0C0F29] dropdown-shadow">
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
-                                    <DropdownMenu>
+                                    <DropdownMenu modal={false}>
                                         <DropdownMenuTrigger asChild>
                                             <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Show All</span><span><ArrowRight /></span></div>
                                         </DropdownMenuTrigger>
@@ -382,7 +382,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                 <div className="gap-2 flex flex-col justify-center">
                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Time Range</p>
                                     <div className="flex justify-between items-center">
-                                        <DropdownMenu>
+                                        <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">Start Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="start" side="bottom">
                                                 <Calendar
@@ -396,7 +396,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                                 />
                                             </DropdownMenuContent>
                                         </DropdownMenu>
-                                        <DropdownMenu>
+                                        <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">End Date</div></DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" side="bottom">
                                                 <Calendar
