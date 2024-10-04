@@ -15,6 +15,7 @@ import EthicalApprovalCard from "../components/ethical-request-approval";
 import SavingLoader from "../components/SavingLoader";
 import { Label } from "@/components/ui/label";
 import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   handleNext?: Function;
@@ -25,7 +26,7 @@ const AppSummary = ({ handleNext }: Props) => {
   const { title, objectives, checkbox, files } = data.requestsDetails;
   const [loading, setLoading] = useState(false);
   const [showEthicalApprovalCard, setShowEthicalApprovalCard] = useState(false);
-  const { resetStore } = useRequestsStore();
+  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -63,8 +64,7 @@ const AppSummary = ({ handleNext }: Props) => {
         if (handleNext) {
           handleNext();
         }
-
-        resetStore();
+        navigate('/requests')
       }, 5000);
     } catch (error) {
       console.error(error);

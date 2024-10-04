@@ -8,6 +8,8 @@ import FormInput from "@/components/custom/FormInput";
 import { useMobileContext } from "@/context/MobileContext";
 import TopBar from "@/components/custom/TopBar";
 import { usePasswordStore } from "@/store/recoverPasswordStore";
+import { useState } from "react";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
     handleNext: Function,
@@ -15,13 +17,17 @@ type Props = {
 }
 const formSchema = z.object({
     code: z
-        .string()
-        .max(6, {message: "Please input the code sent to your email"})
-        .min(6, {message: "Please input the code sent to your email"})
+    .string()
+    .max(6, {message: "Please input the code sent to your email"})
+    .min(6, {message: "Please input the code sent to your email"})
+    .regex(/^\d+$/, {
+        message: "Code must contain non-negative integers",
+      })
 });
 
 export default function EnterCode({ handleNext, handleGoBack }: Props) {
     const { isMobile } = useMobileContext();
+    const [loading, setLoading] = useState(false);
     const { data, setData } = usePasswordStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -29,23 +35,38 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
 
     const { register, formState: {isValid} } = form;
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        try {
-            setData({
-                passwordDetails: {
-                  ...data.passwordDetails,
-                  code: values.code
-                }
-            });
-          handleNext();
-        } catch (error) {
-          console.error(error);
-        }
-      }
+   // using async because usestate is being blocked
+
+   async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setLoading(true); 
+  
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+  
+      // After async task completes, update state and perform actions
+      setData({
+        passwordDetails: {
+          ...data.passwordDetails,
+          code: values.code,
+        },
+      });
+        handleNext();
+        setLoading(false);
+        
+      
+    } catch (error) {
+      console.error("Error in onSubmit:", error);
+      setLoading(false); 
+    }
+  }
+
+
       return(
         <>
+            {loading && <Loader />}
             <TopBar title="Back" />
-            <div className="w-full md:w-4/5 px-4 md:mx-auto my-0 antialiased inter relative">
+            <div className="w-full md:w-4/5 px-4 md:mx-auto my-0 antialiased relative">
                 
                 <div className="flex flex-col justify-center items-center relative w-full">
                     <div className="absolute left-0">
@@ -67,14 +88,16 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                             <FormInput
                                 label="Enter 6-digit code"
+                                type="number"
                                 {...register("code", {
                                 required: "This field is required",
                                 })}
+                                className="no-spinner"
                             />
                             <div className="flex flex-col justify-center items-center">
                                 <p className="pt-2 pb-7 text-sm">Still need help? <a href="/" className="underline font-semibold text-black hover:text-black" >Contact us</a></p>
                             </div>
-                            <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Submit</Button>
+                            <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>
                     </Form>
                 </div>

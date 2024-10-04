@@ -11,11 +11,19 @@ import SendCode from "@/pages/auth/signup/create-account-form/SendCode";
 import Password from "@/pages/auth/signup/create-account-form/RegisterPassword";
 import RegisterSuccess from "@/pages/auth/signup/create-account-form/RegisterSuccess";
 import PersonalInfo from "@/pages/auth/signup/create-account-form/PersonalInfo";
+import TopBar from "@/components/custom/TopBar";
 
 export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const { step, setStep } = useOnboardingFormStore();
+  const { step, setStep, resetStore } = useOnboardingFormStore();
 //   const { token } = useAppContext();
+
+  const stepTitles:  Record<number, string> = {
+    1: "",
+    2: "Email",
+    3: "Verification",
+    4: "Personal Info",
+  };
 
   const RenderForm = () => {
     const handleNext = () => {
@@ -46,7 +54,7 @@ export default function OnboardingPage() {
 
         setTimeout(() => {
           setIsLoading(false);
-          handleNext();
+          resetStore()
         }, 5000)
         // wrap form components with transition framer-motion
         // if (data.image) {
@@ -112,10 +120,14 @@ export default function OnboardingPage() {
     }
   }
 
+  
   return (
       <AnimatePresence initial={true} mode="wait">
           {isLoading && <Loader />}
-          <RenderForm />
+          <>
+            {step !== 1 && !(step >= 5) && <TopBar title={stepTitles[step]} />}
+            <RenderForm />
+          </>
       </AnimatePresence>    
   );
 }

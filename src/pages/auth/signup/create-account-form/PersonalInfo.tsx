@@ -5,10 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
-import { Props } from "@/components/forms/forms.types";
+import { Props } from "@/types/forms.types";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
-import TopBar from "@/components/custom/TopBar";
 import {
     Select,
     SelectContent,
@@ -23,7 +22,7 @@ import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import Loader from "@/components/custom/Loader";
 import { countries, CountryListItemType } from "country-list-json";
-import countryFlags from "@/pages/auth/signup/data/countries.json"
+import countryFlags from "@/lib/data/countries.json"
 
 
 const formSchema = z.object({
@@ -35,7 +34,7 @@ const formSchema = z.object({
         .min(1, {message: "Please fill this field"}),
     phoneNumber: z
         .string()
-        .min(1, { message: "Please fill this field"})
+        .min(8, { message: "Please fill this field"})
         .max(12, { message: "Phone number should not contain more than 12 characters"})
         .regex(/^\d+$/, { message: "Phone number should contain only numbers" })
 });
@@ -53,6 +52,7 @@ type FlagData = {
 
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     const [dialCode, setDialCode] = useState("+93");
+    const [selectedFlag, setSelectedFlag] = useState();
     const { isMobile } = useMobileContext();
     const { data, setData, loading, setLoading } = useOnboardingFormStore();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -106,11 +106,10 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     return(
         <>
             {loading && <Loader />}
-            <TopBar title="Verification" />
             <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative">
                 {!isMobile && <BackButton title="Back" goBack={handleGoBack}/>}
                 <div className="flex flex-col justify-center items-center">
-                    <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">Enter your Personal Information</h1>
+                    <h1 className="text-xl2 text-center font-semibold pt-10 pb-5 md:py-5">Enter your Personal Information</h1>
                 </div>
                 <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] mx-auto my-0">
                     <Form {...form}>
@@ -121,6 +120,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 {...register("firstName", {
                                 required: "This field is required",
                                 })}
+                                className="capitalize"
                             />
                             <FormInput
                                 label="Your last name"
@@ -128,18 +128,29 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 {...register("lastName", {
                                 required: "This field is required",
                                 })}
+                                className="capitalize"
                             />
-                            <div className="flex gap-2">
+                              <div className="flex gap-2">
                                 <div className="flex flex-col text-xs mt-2">
                                     <Select onValueChange={(value: string) => {
                                             const selectedCountry: any = combinedData.find(country => country.name === value);
                                             if (selectedCountry) {
-                                            setDialCode(selectedCountry.dial_code);
+                                                setDialCode(selectedCountry.dial_code);  
+                                                setSelectedFlag(selectedCountry.flag);  
                                             }
                                         }}>
                                         <Label className="font-md">Country Code</Label>
-                                        <SelectTrigger className="max-w-32 mt-2">
-                                            <SelectValue placeholder={dialCode}>{dialCode}</SelectValue>
+                                        <SelectTrigger className="min-w-[7.5rem] mt-2 !gap-2 w-full">
+                                        <SelectValue placeholder="Select a country">
+                                            {selectedFlag ? (
+                                            <div className="flex items-center gap-2 w-full">
+                                                <img src={selectedFlag} height="20px" width="20px" alt="Selected country flag" />
+                                                <span>{dialCode}</span>
+                                            </div>  
+                                            ) : (
+                                                "Select a country"
+                                            )}
+                                        </SelectValue>
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup> 
@@ -162,9 +173,11 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                 <div className="w-full">
                                     <FormInput
                                         label="Phone number"
+                                        type="number"
                                         {...register("phoneNumber", {
                                         required: "This field is required",
                                         })}  
+                                        className="no-spinner"
                                     />
                                 </div>  
                             </div>

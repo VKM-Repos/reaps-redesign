@@ -26,7 +26,7 @@ export default function Requests() {
     return (
         <>
         {loading && <Loader />}
-            <div className="flex flex-col gap-[1.25rem] mb-20">
+            <div className="flex flex-col gap-12 mb-20">
                 <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
                     <h1 className="text-[1.875rem] font-bold">Requests</h1>
                     {tableData.length > 0 && <Button onClick={handleFunc} className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>}
