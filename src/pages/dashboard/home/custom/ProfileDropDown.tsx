@@ -34,9 +34,9 @@ export default function ProfileDropDown() {
     const { data } = useOnboardingFormStore();
 
     const profile = {
-        name: data.onboardingDetails.firstName + ' ' + data.onboardingDetails.lastName ||'',
+        name: data.onboardingDetails.firstName + ' ' + data.onboardingDetails.lastName || 'John Doe',
         role: <span className="">Researcher</span>,
-        email: data.onboardingDetails.email || '',
+        email: data.onboardingDetails.email || 'johndoe@gmail.com',
     };
 
     const handleClose = () => setOpen(false);
