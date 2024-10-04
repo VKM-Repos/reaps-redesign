@@ -334,7 +334,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             type="search"
                             value={searchTerm}
                             onChange={handleSearchChange}
-                            className="border-none hover:border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
+                            className="border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
                         <DropdownMenu open={open} onOpenChange={setOpen}>
