@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import RequestSpecialization from "./CreateSpecialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -68,10 +68,6 @@ export default function SelectSpecialization({ handleNext }: Props) {
             console.error(error);
         }
     }
-
-    useEffect(() => {
-        console.log(loading);
-    }, [loading])
 
 
 
