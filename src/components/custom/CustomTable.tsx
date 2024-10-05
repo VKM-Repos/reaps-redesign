@@ -1,3 +1,4 @@
+import { useMediaQuery } from "react-responsive";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 
 export type ColumnSetup<T> = {
@@ -19,9 +20,15 @@ type CustomTableProps<T> = {
 
 export default function CustomTable({ columns, data }: CustomTableProps<any>) {
 
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
+
     return (
-        <>
-            <Table className="w-full border overflow-scroll">
+        <div className={`w-full flex flex-col mb-10 ${isMobile && "overflow-x-scroll"} gap-2 
+        [&::-webkit-scrollbar]:h-2 
+        [&::-webkit-scrollbar-track]:rounded-full 
+        [&::-webkit-scrollbar-track]:bg-gray-10110
+        [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
+            <Table className="w-full border ">
                 <TableHeader>
                     <TableRow className="font-bold w-full flex items-center justify-between !border-b p-6">
                     {columns.map((column, index) => (
@@ -43,9 +50,9 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                        ))}
                      </TableRow>
                     ))}
-                </TableBody>
-                
+                </TableBody>   
             </Table>
-        </>
+            {isMobile && <div className="w-full">&nbsp;</div>}
+        </div>
     )
 }
