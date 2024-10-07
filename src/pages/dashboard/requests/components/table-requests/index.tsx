@@ -324,7 +324,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                             className="border-none hover:border-none focus:border-none hover:border-none w-full focus-visible:outline-none"/>
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
-                        <DropdownMenu open={open} onOpenChange={setOpen}>
+                        <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <div className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"><FilterIcon /></div>
                             </DropdownMenuTrigger>

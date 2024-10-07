@@ -22,11 +22,17 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
             .min(1, { message: "Please fill this field"})
     });
 
-    const [ education, setEducation ] = useState("Graduate");
     const [ loading, setLoader ] = useState(false);
     const { data, setData } = useOnboardingFormStore();
+    const defaultValues = {
+        education: data.onboardingDetails.education,
+        orcid: data.onboardingDetails.orcid,
+
+    }
+    const [ education, setEducation ] = useState("Graduate");
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues,
     });
 
     const {  setValue, register, formState: { isValid }, reset } = form;
@@ -38,6 +44,7 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
             onboardingDetails: {
                 ...data.onboardingDetails,
                 education: values.education,
+                orcid: values.orcid
             }
         });
         setTimeout(() => {

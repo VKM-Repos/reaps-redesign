@@ -75,6 +75,7 @@ const ResearchInfo = ({ handleNext }: Props) => {
                                 required: "This field is required",
                                 })}
                                 required
+                                className="font-normal"
                             />
                             <CustomFormField 
                                 fieldType={FormFieldType.TEXTAREA}
@@ -82,6 +83,7 @@ const ResearchInfo = ({ handleNext }: Props) => {
                                 error={errors["objectives"]}
                                 control={form.control}
                                 label="Objectives of the study"
+                                labelClassName="!font-medium"
                                 className="!pb-[12rem] flex"
                                 required
                             />
