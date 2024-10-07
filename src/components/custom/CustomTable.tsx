@@ -23,7 +23,7 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
     const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
 
     return (
-        <div className={`w-full flex flex-col mb-10 ${isMobile && "overflow-x-scroll"} gap-2 
+        <div className={`w-full flex flex-col mb-[6rem] ${isMobile && "overflow-x-scroll"} gap-2 
         [&::-webkit-scrollbar]:h-2 
         [&::-webkit-scrollbar-track]:rounded-full 
         [&::-webkit-scrollbar-track]:bg-gray-10110

@@ -122,6 +122,11 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
             <p className="text-sm text-[#454745]">Here you can see the details of all the payments you have made , please not that you will only find the transaction history of only payments made online and not offline</p>
         </div>
         {/* <CustomTable columns={columnData} data={transactions} onRowClick={handleRowClick}/>  */}
+        <div className={`w-full flex flex-col mb-[7rem] ${isMobile && "overflow-x-scroll"} gap-2 
+        [&::-webkit-scrollbar]:h-2 
+        [&::-webkit-scrollbar-track]:rounded-full 
+        [&::-webkit-scrollbar-track]:bg-gray-10110
+        [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
         <Table className="w-full border overflow-scroll">
                 <TableHeader>
                     <TableRow className="font-bold w-full flex items-center justify-between !border-b p-6">
@@ -171,6 +176,8 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                 </TableBody>
                 
             </Table>
+            {isMobile && <div className="w-full">&nbsp;</div>}
+        </div>
     </div>
     )
 }
