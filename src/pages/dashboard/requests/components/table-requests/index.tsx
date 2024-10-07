@@ -1,4 +1,4 @@
-import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
+import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
@@ -251,65 +251,58 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
 
     const columnData: ColumnSetup<any>[]= [
         {
-            header: "Title",
-            accessor: "title",
-            cellType: 'text',
-            headerClass: "font-bold w-full min-w-[18.75rem] ",
-            cellClass: " min-w-[18.75rem] w-full "
-    
+            header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[18.75rem]" />,
+            accessorKey: "title",
+            cell: (info) => <CustomCell value={info.getValue()} className="min-w-[18.75rem] w-full" />,
         },
         {
-            header: "Specialization",
-            accessor: "specialization",
-            cellType: "text",
-            headerClass: "font-bold min-w-[8rem] w-full",
-            cellClass: "min-w-[8rem] w-full"
+            header: () => <CustomCell value={"Specialization"} className="font-bold min-w-[9rem] w-full" />,
+            accessorKey: "specialization",
+            cell: (info) => <CustomCell value={info.getValue()} className="min-w-[9rem] w-full" />,
         },
         {
-            header: "Submission",
-            accessor: "submission",
-            cellType: "text",
-            headerClass: "font-bold w-full min-w-[8rem]",
-            cellClass: "min-w-[8rem] w-full"
+            header: () => <CustomCell value={"Submission"} className="font-bold w-full min-w-[11rem]" />,
+            accessorKey: "submission",
+            cell: (info) => <CustomCell value={info.getValue()} className="min-w-[11rem] w-full" />,
         },
         {
             header: "Status",
-            accessor: "status",
-            cellType: "custom",
-            customRender: (item: any) => {
+            accessorKey: "status",
+            cell: ({ getValue }) => {
+                const item = getValue();
+                console.log(item);
                 return (
-                    <>
+                    <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full min-w-[8.75rem]">
                         <Badge
                           style={{
-                            color: statusColorMap[item.status]?.text || '#000000',
-                            backgroundColor: statusColorMap[item.status]?.bg || '#192C8A',
+                            color: statusColorMap[item]?.text || '#000000',
+                            backgroundColor: statusColorMap[item]?.bg || '#192C8A',
                           }}
                           className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
                         >
                           <div
                             style={{
-                              backgroundColor: statusColorMap[item.status]?.text || '#192C8A',
+                              backgroundColor: statusColorMap[item]?.text || '#192C8A',
                             }}
                             className="w-[5px] h-[5px] rounded-full"
                           ></div>
-                          {item.status}
+                          {item}
                         </Badge>
-                    </>
+                    </span>
                   );
             },
-             headerClass: "font-bold w-full min-w-[8.75rem]",
-            cellClass: "text-left min-w-[8.75rem] flex justify-left !text-xs"
         },
         {
-            accessor: "custom",
-            cellType: "custom",
-            cellClass: "flex justify-center items-center w-full md:max-w-[3rem]",
-            headerClass: "w-full md:max-w-[3rem]",
-            customRender: (item: any) => {
+            accessorKey: "custom",
+            header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
+            meta: { cellType: "custom" },
+            cell: ({ row }) => {
+                const item = row.original;
+                console.log(item);
                 return isMobile ? (
-                  <MobileRender item={item} onDelete={deleteTableItem} loading={loading} />
+                  <CustomCell value={<MobileRender item={item} onDelete={deleteTableItem} loading={loading} />} className="flex justify-center items-center w-full md:max-w-[3rem]" />
                 ) : (
-                  <RenderFunctions item={item} onDelete={deleteTableItem} loading={loading} />
+                    <CustomCell value={<RenderFunctions item={item} onDelete={deleteTableItem} loading={loading} />} className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]" />
                 );
               }
               
