@@ -1,21 +1,21 @@
 import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useEffect, useState } from "react";
-import MoreIcon from "@/components/custom/Icons/MoreIcon";
+// import { useEffect, useState } from "react";
+// import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import Loader from "@/components/custom/Loader";
 import { Badge } from "@/components/ui/badge";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import FilterIcon from "@/components/custom/Icons/Filter";
-import SearchIcon from "@/components/custom/Icons/Search";
-import LinkIcon from "@/components/custom/Icons/LinkIcon";
-import ArrowRight from "@/components/custom/Icons/ArrowRight";
-import { Calendar } from "@/components/ui/calendar";
-import { X } from "lucide-react";
-import Tick from "@/components/custom/Icons/Tick";
-import { Button } from "@/components/ui/button";
+// import FilterIcon from "@/components/custom/Icons/Filter";
+// import SearchIcon from "@/components/custom/Icons/Search";
+// import LinkIcon from "@/components/custom/Icons/LinkIcon";
+// import ArrowRight from "@/components/custom/Icons/ArrowRight";
+// import { Calendar } from "@/components/ui/calendar";
+// import { X } from "lucide-react";
+// import Tick from "@/components/custom/Icons/Tick";
+// import { Button } from "@/components/ui/button";
 import SharedActions from "./custom/SharedActions";
 
 // refactor render functions and mobile render
@@ -65,7 +65,7 @@ type TableRequestsProps = {
     return (
       <>
         {loading && <Loader />}
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <button><MoreIcon /></button>
           </DropdownMenuTrigger>
@@ -100,154 +100,161 @@ type TableRequestsProps = {
 
 
 export default function TableRequests({ tableData }: TableRequestsProps) {
-    const [loading, setLoading] = useState(false);
-    const [tableArray, setTableArray] = useState(tableData);
+    // const [loading, setLoading] = useState(false);
+    // const [tableArray, setTableArray] = useState(tableData);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
-    const [searchTerm, setSearchTerm] = useState('');
-    const [startDate, setStartDate] = useState<Date | undefined>();
-    const [endDate, setEndDate] = useState<Date | undefined>();
-    const [showStatuses, setShowStatuses] = useState(false);
-    const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
-    const [appliedStatuses, setAppliedStatuses] = useState(selectedStatuses)
-    const [open, setOpen] = useState(false);
-    const [filteredData, setFiltered] = useState(tableData);
-    const [startCalendarOpen, setStartCalendarOpen] = useState(false);
-    const [endCalendarOpen, setEndCalendarOpen] = useState(false);
-    const [activeContent, setActiveContent] = useState("Status");
-    const [showTick, setShowTick] = useState("");
+    // const [searchTerm, setSearchTerm] = useState('');
+    // const [startDate, setStartDate] = useState<Date | undefined>();
+    // const [endDate, setEndDate] = useState<Date | undefined>();
+    // const [showStatuses, setShowStatuses] = useState(false);
+    // const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
+    // const [appliedStatuses, setAppliedStatuses] = useState(selectedStatuses)
+    // const [open, setOpen] = useState(false);
+    // const [filteredData, setFiltered] = useState(tableData);
+    // const [startCalendarOpen, setStartCalendarOpen] = useState(false);
+    // const [endCalendarOpen, setEndCalendarOpen] = useState(false);
+    // const [activeContent, setActiveContent] = useState("Status");
+    // const [showTick, setShowTick] = useState("");
 
-    // set active modal, click on button trigger which one is seen 
-    // always have apply and cancel buttons, what's changing is the status and date content
+    // // set active modal, click on button trigger which one is seen 
+    // // always have apply and cancel buttons, what's changing is the status and date content
 
-    function deleteTableItem(item: any) {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-      setTableArray((prevTableArray) => prevTableArray.filter((data) => data.id !== item.id)
-      );
-    }
+    // function deleteTableItem(item: any) {
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //         setLoading(false);
+    //     }, 3000);
+    //   setTableArray((prevTableArray) => prevTableArray.filter((data) => data.id !== item.id)
+    //   );
+    // }
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value);
-    };
+    // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setSearchTerm(e.target.value);
+    // };
 
-    const handleSelect = (value: string) => {
-        setSelectedStatuses((prev) =>
-            prev.includes(value) ? prev.filter((val) => val !== value) : [...prev, value]
-          );
-      };
+    // const handleSelect = (value: string) => {
+    //     setSelectedStatuses((prev) =>
+    //         prev.includes(value) ? prev.filter((val) => val !== value) : [...prev, value]
+    //       );
+    //   };
 
-    const deleteStatusUpdate = (status: String) => {
-        setAppliedStatuses((prev) => prev.filter((val) => val !== status))
-        if(appliedStatuses.length === 0)
-            {
-                setShowStatuses(false);
-            }
-    }
+    // const deleteStatusUpdate = (status: String) => {
+    //     setAppliedStatuses((prev) => prev.filter((val) => val !== status))
+    //     if(appliedStatuses.length === 0)
+    //         {
+    //             setShowStatuses(false);
+    //         }
+    // }
     
 
-    const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setStartDate(day || undefined);
-        setStartCalendarOpen(false);
-    };
+    // const handleStartDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
+    //     setStartDate(day || undefined);
+    //     setStartCalendarOpen(false);
+    // };
 
 
-    const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
-        setEndDate(day || undefined);  
-        setEndCalendarOpen(false);
-    };
+    // const handleEndDateChange: SelectSingleEventHandler = (day: Date | undefined) => {
+    //     setEndDate(day || undefined);  
+    //     setEndCalendarOpen(false);
+    // };
 
-    // format date to backend date format
-    function formatDateToDDMMYYYY(date: Date) {
-        const day = String(date.getDate()).padStart(2, '0');  // Get the day and pad with 0 if necessary
-        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-based, so add 1
-        const year = date.getFullYear();  // Get the full year
-        return `${day}-${month}-${year}`;  // Return in DD-MM-YYYY format
-    }
+    // // format date to backend date format
+    // function formatDateToDDMMYYYY(date: Date) {
+    //     const day = String(date.getDate()).padStart(2, '0');  // Get the day and pad with 0 if necessary
+    //     const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-based, so add 1
+    //     const year = date.getFullYear();  // Get the full year
+    //     return `${day}-${month}-${year}`;  // Return in DD-MM-YYYY format
+    // }
 
-    function parseDate(dateString: string) {
-        const [day, month, year] = dateString.split('-');
-        return new Date(`${year}-${month}-${day}`);
-    }
+    // function parseDate(dateString: string) {
+    //     const [day, month, year] = dateString.split('-');
+    //     return new Date(`${year}-${month}-${day}`);
+    // }
 
-    // refactor setFilters function
-    const setFilters = () => {
-        let filtered = tableData;  
+    // // refactor setFilters function
+    // const setFilters = () => {
+    //     let filtered = tableData;  
 
-        if (selectedStatuses.length > 0) {
-            filtered = filtered.filter((item) =>
-                selectedStatuses.includes(item.status)
-            )
-        }
+    //     if (selectedStatuses.length > 0) {
+    //         filtered = filtered.filter((item) =>
+    //             selectedStatuses.includes(item.status)
+    //         )
+    //     }
 
-        if (startDate && endDate) {
-            const formattedStartDate = formatDateToDDMMYYYY(startDate); // convert input date to backend date format
-            const formattedEndDate = formatDateToDDMMYYYY(endDate);
+    //     if (startDate && endDate) {
+    //         const formattedStartDate = formatDateToDDMMYYYY(startDate); // convert input date to backend date format
+    //         const formattedEndDate = formatDateToDDMMYYYY(endDate);
         
-            filtered = filtered.filter((item) => {
-                const submissionDate = parseDate(item.submission);  // Convert backend date string to Date
-                return submissionDate >= parseDate(formattedStartDate) && submissionDate <= parseDate(formattedEndDate); // use parsed dates to compare
-            });
-        } else if (startDate) {
-            const formattedStartDate = formatDateToDDMMYYYY(startDate);
+    //         filtered = filtered.filter((item) => {
+    //             const submissionDate = parseDate(item.submission);  // Convert backend date string to Date
+    //             return submissionDate >= parseDate(formattedStartDate) && submissionDate <= parseDate(formattedEndDate); // use parsed dates to compare
+    //         });
+    //     } else if (startDate) {
+    //         const formattedStartDate = formatDateToDDMMYYYY(startDate);
         
-            filtered = filtered.filter((item) => {
-                const submissionDate = parseDate(item.submission);  
-                return submissionDate >= parseDate(formattedStartDate);
-            });
-        } else if (endDate) {
-            const formattedEndDate = formatDateToDDMMYYYY(endDate);
+    //         filtered = filtered.filter((item) => {
+    //             const submissionDate = parseDate(item.submission);  
+    //             return submissionDate >= parseDate(formattedStartDate);
+    //         });
+    //     } else if (endDate) {
+    //         const formattedEndDate = formatDateToDDMMYYYY(endDate);
         
-            filtered = filtered.filter((item) => {
-                const submissionDate = parseDate(item.submission);  
-                return submissionDate <= parseDate(formattedEndDate);
-            });
-        }
+    //         filtered = filtered.filter((item) => {
+    //             const submissionDate = parseDate(item.submission);  
+    //             return submissionDate <= parseDate(formattedEndDate);
+    //         });
+    //     }
 
-        setFiltered(filtered)
-        setTableArray(filteredData);
+    //     setFiltered(filtered)
+    //     setTableArray(filteredData);
 
-    };
+    // };
 
-    const applySearch = (filteredData: typeof tableData) => {
-        if (searchTerm) {
-            const lowercasedSearchTerm = searchTerm.toLowerCase();
-            filteredData = filteredData.filter(
-                (item) =>
-                item.title.toLowerCase().includes(lowercasedSearchTerm) ||
-                item.specialization.toLowerCase().includes(lowercasedSearchTerm)
-            );
-        }
-        setTableArray(filteredData)
-    }
+    // const applySearch = (filteredData: typeof tableData) => {
+    //     if (searchTerm) {
+    //         const lowercasedSearchTerm = searchTerm.toLowerCase();
+    //         filteredData = filteredData.filter(
+    //             (item) =>
+    //             item.title.toLowerCase().includes(lowercasedSearchTerm) ||
+    //             item.specialization.toLowerCase().includes(lowercasedSearchTerm)
+    //         );
+    //     }
+    //     setTableArray(filteredData)
+    // }
 
-    const applyFilters = () => {
-        setLoading(true);
-        setTimeout(() => {
-        setFilters(); 
-        setShowStatuses(true);
-        setAppliedStatuses([...selectedStatuses]);
-        setOpen(false);
-        setLoading(false); 
-        }, 3000);
-    }
+    // const applyFilters = () => {
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //     setFilters(); 
+    //     setShowStatuses(true);
+    //     setAppliedStatuses([...selectedStatuses]);
+    //     setOpen(false);
+    //     setLoading(false); 
+    //     }, 3000);
+    // }
 
-    useEffect(() => {
-        applySearch(filteredData);
-    }, [filteredData, searchTerm])
+    // useEffect(() => {
+    //     applySearch(filteredData);
+    // }, [filteredData, searchTerm])
 
  
 
 
-    const statuses = [
-        "Draft",
-        "Pending",
-        "Approved",
-        "Under Review",
-        "Declined",
-        "Reapproved"
-    ]
+    // const statuses = [
+    //     "Draft",
+    //     "Pending",
+    //     "Approved",
+    //     "Under Review",
+    //     "Declined",
+    //     "Reapproved"
+    // ]
+
+    // const statusFilterFn = (rows, columnIds, filterValue) => {
+    //     // filterValue is the array of selected statuses
+    //     return rows.filter((row) => {
+    //       return filterValue.includes(row.values.status);
+    //     });
+    //   };
 
     const columnData: ColumnSetup<any>[]= [
         {
@@ -264,13 +271,19 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             header: () => <CustomCell value={"Submission"} className="font-bold w-full min-w-[11rem]" />,
             accessorKey: "submission",
             cell: (info) => <CustomCell value={info.getValue()} className="min-w-[11rem] w-full" />,
+            // filterFn: (row, id, filterValue) => {
+            //     const startDate = new Date(filterValue.startDate);
+            //     const endDate = new Date(filterValue.endDate);
+            //     const submissionDate = new Date(row.getValue(id));
+            //     // console.log(startDate)
+            //     return submissionDate >= startDate && submissionDate <= endDate;
+            // },
         },
         {
             header: "Status",
             accessorKey: "status",
             cell: ({ getValue }) => {
                 const item = getValue();
-                console.log(item);
                 return (
                     <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full min-w-[8.75rem]">
                         <Badge
@@ -291,6 +304,15 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                     </span>
                   );
             },
+            // filterFn: (rows, columnIds, filterValue) => {
+            //     // filterValue is the array of selected statuses
+            //     console.log(rows.values.status);
+            //     console.log(filterValue)
+            //     return rows.filter((row) => {
+            //       return filterValue.includes(row.values.status);
+            //     });
+            //   },
+
         },
         {
             accessorKey: "custom",
@@ -298,7 +320,6 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             meta: { cellType: "custom" },
             cell: ({ row }) => {
                 const item = row.original;
-                console.log(item);
                 return isMobile ? (
                   <CustomCell value={<MobileRender item={item} onDelete={deleteTableItem} loading={loading} />} className="flex justify-center items-center w-full md:max-w-[3rem]" />
                 ) : (
@@ -311,7 +332,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
                 <div className="flex gap-3 items-center">
                     <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem] w-full min-w-[13rem] md:min-w-[21rem]">
                         <SearchIcon />
@@ -360,7 +381,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                         (
                                         <div className="gap-2 flex flex-col justify-center">
                                             <div className="flex gap-3 items-center">
-                                                <DropdownMenu open={startCalendarOpen} onOpenChange={setStartCalendarOpen}>
+                                                <DropdownMenu open={startCalendarOpen} onOpenChange={setStartCalendarOpen} modal={false}>
                                                     <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">{startDate ? `${formatDateToDDMMYYYY(startDate)}` : "Start date"}</div></DropdownMenuTrigger>
                                                     <DropdownMenuContent align="start" side="bottom">
                                                         <Calendar
@@ -374,7 +395,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                                                         />
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
-                                                <DropdownMenu open={endCalendarOpen} onOpenChange={setEndCalendarOpen}>
+                                                <DropdownMenu open={endCalendarOpen} onOpenChange={setEndCalendarOpen} modal={false}>
                                                     <DropdownMenuTrigger><div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">{endDate ? `${formatDateToDDMMYYYY(endDate)}` : "End date"}</div></DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" side="bottom">
                                                         <Calendar
@@ -418,7 +439,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                         </div>
                     ))}    
                 </div>
-                }
+                } */}
             <CustomTable columns={columnData} data={tableArray} />
         </div>
     )

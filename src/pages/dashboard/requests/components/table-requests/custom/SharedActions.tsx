@@ -21,7 +21,7 @@ export default function SharedActions({ item, onDelete, redirectToSummary, isMob
     return (
       <>
         <Sheet>
-          <SheetTrigger className={`text-black flex justify-center items-start gap-2 ${isMobile ? 'p-2' : 'p-3'}`}>
+          <SheetTrigger className={`text-black flex justify-center items-center gap-2 ${isMobile ? 'p-2' : 'p-3'}`}>
             <View />
             {isMobile ? null : <span>View</span>}
           </SheetTrigger>
@@ -31,7 +31,7 @@ export default function SharedActions({ item, onDelete, redirectToSummary, isMob
         <div>
           <button
             onClick={redirectToSummary}
-            className={`${item.status === "Draft" ? "text-black" : "text-black/30"} items-start flex justify-center gap-2 ${isMobile ? 'p-2' : 'p-3'}`}
+            className={`${item.status === "Draft" ? "text-black" : "text-black/30"} items-center flex justify-center gap-2 ${isMobile ? 'p-2' : 'p-3'}`}
             disabled={item.status !== "Draft"}
           >
             <PencilEdit />
@@ -40,7 +40,7 @@ export default function SharedActions({ item, onDelete, redirectToSummary, isMob
         </div>
 
         <Sheet>
-          <SheetTrigger className={`flex justify-center items-start gap-2 text-black ${isMobile ? 'p-2' : 'p-3'}`}>
+          <SheetTrigger className={`flex justify-center items-center gap-2 text-black ${isMobile ? 'p-2' : 'p-3'}`}>
             <DeleteSmallIcon />
             {isMobile ? null : <span>Delete</span>}
           </SheetTrigger>
