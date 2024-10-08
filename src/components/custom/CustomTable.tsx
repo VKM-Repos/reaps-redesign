@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { ColumnDef, getCoreRowModel, useReactTable, flexRender, getFilteredRowModel } from "@tanstack/react-table"
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
@@ -11,6 +10,12 @@ export const CustomCell = ({ value, className }: { value: any, className: string
       {value}
     </div>
   );
+
+  const EmptyState = () => (
+    <div className="flex h-full w-full items-center justify-center p-4">
+        No data available.
+    </div>
+  )
 
 
   export type ColumnSetup<T> = ColumnDef<T, any> & {
@@ -40,7 +45,6 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
         onGlobalFilterChange: setGlobalFilter,
         getFilteredRowModel: getFilteredRowModel(), 
         getCoreRowModel: getCoreRowModel(),
-
     });
     
 
@@ -63,15 +67,21 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                     ))}
                 </TableHeader>
                 <TableBody>
-                {table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} className="flex items-center !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]">
-                    {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                {table.getRowModel().rows.length === 0 ? (
+                    <TableRow>
+                        <TableCell colSpan={columns.length}>
+                        <EmptyState />
                         </TableCell>
-                    ))}
-                    </TableRow>
-                ))}
+                    </TableRow>) : (
+                        table.getRowModel().rows.map((row) => (
+                        <TableRow key={row.id} className="flex items-center !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]">
+                        {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
+                        ))}
+                        </TableRow>
+                    )))}                    
                 </TableBody>
                 
             </Table>
