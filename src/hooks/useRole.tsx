@@ -9,7 +9,7 @@ type RoleContextType = {
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export const RoleProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [role, setRole] = useState<UserRole>('RESEARCHER');
+  const [role, setRole] = useState<UserRole>('REVIEWER');
 
   return (
     <RoleContext.Provider value={{ role, setRole }}>

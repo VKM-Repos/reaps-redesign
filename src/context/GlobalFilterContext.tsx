@@ -1,18 +1,14 @@
-import { ColumnFiltersState } from '@tanstack/react-table';
+import { ColumnFiltersState, FilterFn } from '@tanstack/react-table';
 import { createContext, useContext, useState } from 'react'
 
-type ColumnFilter = {
-    id: string;      // Column ID to be filtered
-    value: string | number | boolean | any;  // The value to filter by, can be any data type
-};
 
-type ColumnFilters = ColumnFilter[];
 
 type GlobalFilterContextInterface = {
     globalFilter: string,
     setGlobalFilter: (globalFilter: string) => void,
     columnFilters: any,
     setColumnFilters: (columnFilters: any) => void,
+    multiStatusDateFilter: FilterFn<any>,
 }
 
 const GlobalFilterContext =  createContext<GlobalFilterContextInterface>({} as GlobalFilterContextInterface);
@@ -21,8 +17,39 @@ export const GlobalFilterProvider = ({ children }: {children: React.ReactNode}) 
     const [ globalFilter, setGlobalFilter] = useState('');
     const [ columnFilters, setColumnFilters ] = useState<ColumnFiltersState>([]);
 
+
+    function parseDate(dateString: string) {
+        const [day, month, year] = dateString.split('-');
+        return new Date(`${year}-${month}-${day}`);
+    }
+  
+
+    const multiStatusDateFilter: FilterFn<any> = (row: any, columnId: any, filterValue: any) => {
+        const rowValue = row.getValue(columnId);
+      
+        if (columnId === 'status') {
+          // Filter by multiple statuses
+     
+          return filterValue.length === 0 || filterValue.includes(rowValue);
+        }
+      
+        if (columnId === 'submission') {
+          
+          const { formattedStartDate, formattedEndDate } = filterValue;
+          const rowDate = parseDate(rowValue); // Assuming rowValue is in DD-MM-YYYY format
+          const startDate = parseDate(formattedStartDate);
+          const endDate = parseDate(formattedEndDate);
+
+          // Filter by date range
+          return rowDate >= startDate && rowDate <= endDate;
+        }
+      
+        return true; // If no filters, return all rows
+      };
+  
+
     return (
-        <GlobalFilterContext.Provider value={{globalFilter, setGlobalFilter, columnFilters, setColumnFilters}}>
+        <GlobalFilterContext.Provider value={{globalFilter, setGlobalFilter, columnFilters, setColumnFilters, multiStatusDateFilter}}>
             {children}
         </GlobalFilterContext.Provider>
     )
