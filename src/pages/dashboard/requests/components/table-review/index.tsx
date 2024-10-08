@@ -30,8 +30,8 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
         const columnData: ColumnSetup<any>[]= [
             {
                 header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[18.75rem]" />,
-            accessorKey: "title",
-            cell: (info) => <CustomCell value={info.getValue()} className="min-w-[18.75rem] w-full" />,
+                accessorKey: "title",
+                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[18.75rem] w-full" />,
         
             },
             {
@@ -44,6 +44,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                 accessorKey: "submission",
                 cell: ({ getValue }) => <CustomCell value={getValue()} className="min-w-[8rem] w-full" />,
                 filterFn: multiStatusDateFilter,
+                enableGlobalFilter: false,
             },
             {
                 header: "Status",
@@ -71,6 +72,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                       );
                 },
                 filterFn: multiStatusDateFilter,
+                enableGlobalFilter: false,
             },
             {
                 accessorKey: "custom",

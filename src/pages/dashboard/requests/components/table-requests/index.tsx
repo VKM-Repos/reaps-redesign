@@ -122,6 +122,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
             accessorKey: "submission",
             cell: ({ getValue }) => <CustomCell value={getValue()} className="min-w-[11rem] w-full" />,
             filterFn: multiStatusDateFilter,
+            enableGlobalFilter: false,
         },
         {
             header: "Status",
@@ -149,6 +150,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
                   );
             },
             filterFn: multiStatusDateFilter,
+            enableGlobalFilter: false,
         },
         {
             accessorKey: "custom",
