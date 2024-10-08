@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
@@ -24,7 +24,7 @@ type SelectSingleEventHandler = (day: Date | undefined) => void;
 
 export default function Requests() {
     const { role } = useRole();
-    const [ activeTab, setActiveTab ] = useState("requests table");
+    const [ activeTab, setActiveTab ] = useState("request table");
     const [statusFilter, setStatusFilter] = useState<String[]>([]);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     const [startDate, setStartDate] = useState<Date | undefined>();
@@ -38,6 +38,7 @@ export default function Requests() {
     const [appliedStatuses, setAppliedStatuses] = useState(selectedStatuses);
     const [showStatuses, setShowStatuses] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [statuses, setStatuses] = useState<any[]>([])
     const navigate = useNavigate();
 
 
@@ -63,13 +64,16 @@ export default function Requests() {
 
       const reviewStatuses = [
         "Unreviewed",
-        "Approved",
-        "Reapproved"
+        "Reviewed",
+        "Reopened"
       ]
 
+      useEffect(() => {
+        setStatuses(activeTab === "request table" ? requestsStatuses : reviewStatuses) //set statuses based on active tab)
+      }, [activeTab])
+
     
-        const statuses = activeTab === "requests table" ? requestsStatuses : reviewStatuses //set statuses based on active tab
-     
+
       function formatDateToDDMMYYYY(date: Date) {
         const day = String(date.getDate()).padStart(2, '0');  // Get the day and pad with 0 if necessary
         const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-based, so add 1
