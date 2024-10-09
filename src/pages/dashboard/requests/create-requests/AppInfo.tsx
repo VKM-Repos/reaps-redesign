@@ -90,7 +90,7 @@ export default function AppInfo({ handleNext }: Props) {
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-8 ">
-              {questions.map((question) => (
+              {questions.map((question, index) => (
                 <CustomFormField
                   key={question.name}
                   name={question.name}
@@ -103,10 +103,19 @@ export default function AppInfo({ handleNext }: Props) {
                   }
                   subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
                   fieldType={FormFieldType.RADIO}
-                  options={[
-                    { label: "Yes", value: "yes" },
-                    { label: "No", value: "no" },
-                  ]}
+                  options={index === 0
+                    ? [
+                        { label: "Yes", value: "yes" }
+                      ]
+                    : index === 1 
+                    ? [
+                        { label: "Student", value: "yes" }, 
+                        { label: "Researcher", value: "no" }
+                      ]
+                    : [
+                        { label: "Yes", value: "yes" },
+                        { label: "No", value: "no" },
+                      ]}
                   required={true}
                 />
               ))}
