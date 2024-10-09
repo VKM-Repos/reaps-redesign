@@ -7,14 +7,14 @@ import { Props } from "@/types/forms.types";
 
 
 export default function RegisterSuccess({ handleNext }: Props) {
-    const { resetStore, loading, setLoading } = useOnboardingFormStore();
+    const { loading, setLoading } = useOnboardingFormStore();
     const navigate = useNavigate();
 
     function goToLogin() { 
         setLoading(true);
         setTimeout(() => {
             handleNext();
-            resetStore();
+            // resetStore();
             navigate("/login");
             setLoading(false);
         }, 3000) 
