@@ -27,7 +27,7 @@ export type CheckboxGroup = {
     question7: number
 };
 
-type fileGroup = {
+export type fileGroup = {
     requirement1: FileDetails,
     requirement2: FileDetails,
     requirement3: FileDetails,

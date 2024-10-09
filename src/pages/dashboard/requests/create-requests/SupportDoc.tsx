@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { useRequestsStore } from "@/store/RequestFormStore";
+import { CheckboxGroup, fileGroup, useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import { requirements } from "@/lib/helpers";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
@@ -23,46 +23,7 @@ const ACCEPTED_FILE_TYPES = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 ];
 
-const fileSchema = z
-  .instanceof(File, { message: "Please upload a file" })
-  .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
-  .refine(
-    (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-    "Only .doc, .docx, and .pdf formats are supported."
-  );
 
-
-const formSchema = z.object({
-  files: z.object({
-    requirement1: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement2: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement3: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement4: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement5: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement6: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement7: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement8: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-    requirement9: fileSchema.nullable().refine(file => file !== null, {
-      message: "This field is required."
-    }),
-  }),
-});
 
   // call api to check if file exists
   // set data to url
@@ -73,11 +34,58 @@ const formSchema = z.object({
 
 
 const SupportDoc = ({handleNext}: Props) => {
+
   const { data, setData } = useRequestsStore();
+
+  const fileSchema = z
+  .instanceof(File, { message: "Please upload a file" })
+  .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
+  .refine(
+    (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+    "Only .doc, .docx, and .pdf formats are supported."
+  );
+
+  function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup, files: fileGroup) {
+    return requirements.filter((_, index) => {
+      // Find the corresponding question in the checkbox
+      const questionKey = `question${index + 1}` as keyof CheckboxGroup;
+      return checkbox[questionKey] === "yes"; // Only include if answer is "Yes"
+    }).map((requirement) => {
+      // Map to required fields with the correct file and label
+      return {
+        fileRequirement: requirement.id,  // File requirement ID
+        label: requirement.label,         // Use label from the requirements array
+        filePath: files[requirement.id as keyof fileGroup]?.path || "No file uploaded",  // File path or fallback
+      };
+    });
+  }
+
+  const { checkbox, files } = data.requestsDetails;
+  const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup, files as fileGroup);
+
+
+  // create fileschemas based on required files
+  const createFilesSchema = () => {
+    const fileSchemas: { [key: string]: any } = {};  
+
+    requiredFiles.forEach(requirement => { // Use requiredFiles instead of requirements
+        fileSchemas[requirement.fileRequirement] = fileSchema.nullable().refine(file => file !== null, {
+            message: `${requirement.label} is required.`,
+        });
+    });
+
+    return z.object(fileSchemas);  
+};
+  
+  const formSchema = z.object({
+    files: createFilesSchema(),  // Dynamically create the files schema
+  });
+  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   });
+  
 
   const { setStepper } = useStepper();
   const { formState: { isValid, errors } } = form;
@@ -117,11 +125,11 @@ const SupportDoc = ({handleNext}: Props) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8">
             <div className="flex flex-col gap-8 ">
-              {requirements.map((requirement) => (
+              {requiredFiles.map((requirement) => (
                 <CustomFormField
-                  key={requirement.name} 
-                  name={`files.${requirement.id}`}
-                  error={(errors.files as any)?.[requirement.id] as FieldError | undefined}
+                  key={requirement.fileRequirement} 
+                  name={`files.${requirement.fileRequirement}`}
+                  error={(errors.files as any)?.[requirement.fileRequirement] as FieldError | undefined}
                   control={form.control}
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
