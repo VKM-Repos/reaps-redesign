@@ -23,6 +23,13 @@ const ACCEPTED_FILE_TYPES = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 ];
 
+const fileSchema = z
+.instanceof(File, { message: "Please upload a file" })
+.refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
+.refine(
+  (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+  "Only .doc, .docx, and .pdf formats are supported."
+);
 
 
   // call api to check if file exists
@@ -35,50 +42,42 @@ const ACCEPTED_FILE_TYPES = [
 
 const SupportDoc = ({handleNext}: Props) => {
 
-  const { data, setData } = useRequestsStore();
-
-  const fileSchema = z
-  .instanceof(File, { message: "Please upload a file" })
-  .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 3MB.")
-  .refine(
-    (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-    "Only .doc, .docx, and .pdf formats are supported."
-  );
-
+  // helper function to retrieve all questions answered "yes" 
+  // returns an array of requirements based on "yes" answers
   function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup, files: fileGroup) {
-    return requirements.filter((_, index) => {
-      // Find the corresponding question in the checkbox
-      const questionKey = `question${index + 1}` as keyof CheckboxGroup;
-      return checkbox[questionKey] === "yes"; // Only include if answer is "Yes"
-    }).map((requirement) => {
-      // Map to required fields with the correct file and label
-      return {
-        fileRequirement: requirement.id,  // File requirement ID
-        label: requirement.label,         // Use label from the requirements array
-        filePath: files[requirement.id as keyof fileGroup]?.path || "No file uploaded",  // File path or fallback
-      };
-    });
+    return requirements
+      .filter((_, index) => checkbox[`question${index + 1}` as keyof CheckboxGroup] === "yes")
+      .map(requirement => ({
+        id: requirement.id,
+        label: requirement.label,
+        path: files[requirement.id as keyof fileGroup]?.path || "No file uploaded"
+      }));
   }
+  
 
+  // destructure and define variables
+  const { data, setData } = useRequestsStore();
   const { checkbox, files } = data.requestsDetails;
   const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup, files as fileGroup);
+ 
 
 
   // create fileschemas based on required files
-  const createFilesSchema = () => {
-    const fileSchemas: { [key: string]: any } = {};  
-
-    requiredFiles.forEach(requirement => { // Use requiredFiles instead of requirements
-        fileSchemas[requirement.fileRequirement] = fileSchema.nullable().refine(file => file !== null, {
-            message: `${requirement.label} is required.`,
-        });
-    });
-
-    return z.object(fileSchemas);  
-};
+  const createFileSchema = () => {
+    // return fileschema object based on callback function
+    const fileSchemaObject = requiredFiles.reduce((schemas, requirement) => {
+      schemas[requirement.id] = fileSchema.nullable().refine(
+        file => file !== null, 
+        { message: `${requirement.label} is required.` }
+      );
+      return schemas;
+    }, {} as { [key: string]: any });
+  
+    return z.object(fileSchemaObject);  
+  };
   
   const formSchema = z.object({
-    files: createFilesSchema(),  // Dynamically create the files schema
+    files: createFileSchema(),  // Dynamically create the files schema
   });
   
 
@@ -127,9 +126,9 @@ const SupportDoc = ({handleNext}: Props) => {
             <div className="flex flex-col gap-8 ">
               {requiredFiles.map((requirement) => (
                 <CustomFormField
-                  key={requirement.fileRequirement} 
-                  name={`files.${requirement.fileRequirement}`}
-                  error={(errors.files as any)?.[requirement.fileRequirement] as FieldError | undefined}
+                  key={requirement.id} 
+                  name={`files.${requirement.id}`}
+                  error={(errors.files as any)?.[requirement.id] as FieldError | undefined}
                   control={form.control}
                   label={requirement.label}
                   fieldType={FormFieldType.UPLOAD}
