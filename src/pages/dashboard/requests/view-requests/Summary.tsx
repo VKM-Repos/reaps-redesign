@@ -3,7 +3,7 @@ import FormInput from '@/components/custom/FormInput';
 import Loader from '@/components/custom/Loader';
 import { Form } from '@/components/ui/form';
 import { useRequestsStore } from '@/store/RequestFormStore';
-import { application, requirements } from '@/lib/helpers';
+import { application } from '@/lib/helpers';
 import {  useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -22,8 +22,6 @@ const Summary = () => {
         objectives: objectives,
         checkbox: checkbox,
         files: files,
-
-
       }
     });
 
@@ -102,7 +100,7 @@ const Summary = () => {
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5 text-black">Support Docs</h1>
               </div>
               <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
-                {requirements.map((requirement) => (
+                {/* {requirements.map((requirement) => (
                   <CustomFormField
                   key={requirement.name} 
                   name={`file.${requirement.id}`}
@@ -112,7 +110,7 @@ const Summary = () => {
                   required={true}
                   disabled={true}
                 />
-                ))}
+                ))} */}
               </div>
             </form>
           </Form>

@@ -53,7 +53,7 @@ type CustomProps = {
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
   
 
-  const [selectedValue, setSelectedValue] = useState(props.options?.length === 1 ? props.options[0].value : ''); 
+  const [selectedValue, setSelectedValue] = useState(field.value); 
 
 
     switch (props.fieldType) {
@@ -72,7 +72,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                           setSelectedValue(value);
                           field.onChange(value.toString()); 
                         }}
-                        defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
+                        // defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
                       >
                          {props.options?.map((option) => {
                             const isChecked = selectedValue === option.value;

@@ -41,19 +41,23 @@ const fileSchema = z
 
 
 const SupportDoc = ({handleNext}: Props) => {
-
-  // helper function to retrieve all questions answered "yes" 
+  
   // returns an array of requirements based on "yes" answers
   function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup, files: fileGroup) {
-    return requirements
-      .filter((_, index) => checkbox[`question${index + 1}` as keyof CheckboxGroup] === "yes")
-      .map(requirement => ({
-        id: requirement.id,
-        label: requirement.label,
-        path: files[requirement.id as keyof fileGroup]?.path || "No file uploaded"
-      }));
-  }
+    // Iterate over each question in the `requirements` object and filter based on checked checkboxes
+    const requiredFiles: { id: string; label: string; path: string }[] = Object.keys(requirements)
+      .filter((questionKey) => checkbox[questionKey as keyof CheckboxGroup] === "yes") // Filter only questions marked "yes"
+      // map through each object array, returns a 1d array
+      .flatMap((questionKey) => 
+        requirements[questionKey].map((requirement) => ({
+          id: requirement.id,
+          label: requirement.label,
+          path: files[requirement.id as keyof fileGroup]?.path || "No file uploaded",
+        }))
+      );
   
+    return requiredFiles;
+  }
 
   // destructure and define variables
   const { data, setData } = useRequestsStore();

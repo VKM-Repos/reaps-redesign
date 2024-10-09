@@ -1,3 +1,14 @@
+type Requirement = {
+    id: string;
+    name: string;
+    label: string;
+  };
+  
+  type RequirementMapping = {
+    [key: string]: Requirement[];
+  };
+  
+
 export const questions = [
     {
         name: "question1",
@@ -25,53 +36,65 @@ export const questions = [
     }
 ]
 
-export const requirements = [
-    {
-        id: "requirement1",
+// ids are all unique. useful for flatmapping
+export const requirements: RequirementMapping = {
+    question1: [
+      { id: "requirement1", 
         name: "CV",
-        label: "2-page curriculum vitae",
+        label: "2-page curriculum vitae" 
     },
-    {
-        id: "requirement2",
-        name: "supervisorAttestation",
-        label: "Supervisor's attestation statement"
-    },
-    {
-        id: "requirement3",
-        name: "Cover Letter/Application Letter",
-        label: "Cover Letter/Application Letter"
-    },
-    {
-        id: "requirement4",
-        name: "Proposal",
-        label: "Proposal"
-    },
-    {
-        id: "requirement5",
-        name: "Research tools/Questionnaire",
-        label: "Research tools/Questionnaire"
-    },
-    {
-        id: "requirement6",
-        name: "Evidence of Completion",
-        label: "Evidence of Completion",
-    },
-    {
-        id: "requirement7",
-        name: "Evidence of ethics training",
-        label: "Evidence of ethics training",
-    },
-    {
-        id: "requirement8",
-        name: "Sponsor's attestation statement",
-        label: "Sponsor's attestation statement"
-    },
-    {
-        id: "requirement9",
-        name: "Materials transfer agreement form",
-        label: "Materials transfer agreement form"
-    },
-]
+      
+    ],
+    question2: [
+        {
+            id: "requirement2",
+            name: "supervisorAttestation",
+            label: "Supervisor's attestation statement"
+        }
+    ],
+    question4: [
+        {
+            id: "requirement3",
+            name: "Sponsor's attestation statement",
+            label: "Sponsor's attestation statement"
+        }
+    ],
+    question5: [
+        {
+            id: "requirement4",
+            name: "Evidence of ethics training",
+            label: "Evidence of ethics training",
+        },
+        {
+            id: "requirement5",
+            name: "Cover Letter/Application Letter",
+            label: "Cover Letter/Application Letter"
+        },
+        {
+            id: "requirement6",
+            name: "Proposal",
+            label: "Proposal"
+        },
+        {
+            id: "requirement7",
+            name: "Research tools/Questionnaire",
+            label: "Research tools/Questionnaire"
+        },
+        {
+            id: "requirement8",
+            name: "Evidence of Completion",
+            label: "Evidence of Completion"
+        },
+    ],
+    question6: [
+        {
+            id: "requirement9",
+            name: "Materials transfer agreement form",
+            label: "Materials transfer agreement form",
+        }
+    ],
+    
+}
 
 export const requestsArray = [
     "Application Info",
