@@ -40,7 +40,7 @@ export default function SharedActions({ item, onDelete, redirectToSummary, isMob
         </div>
 
         <Sheet>
-          <SheetTrigger className={`flex justify-center items-center gap-2 text-black ${isMobile ? 'p-2' : 'p-3'}`}>
+          <SheetTrigger className={`flex justify-center items-center gap-2 ${item.status === "Draft" ? "text-black" : "text-black/30"} ${isMobile ? 'p-2' : 'p-3'}`} disabled={item.status !== "Draft"}>
             <DeleteSmallIcon />
             {isMobile ? null : <span>Delete</span>}
           </SheetTrigger>
