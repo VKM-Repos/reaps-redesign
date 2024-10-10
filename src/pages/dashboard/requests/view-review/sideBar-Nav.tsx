@@ -140,7 +140,29 @@ export default function SideBar() {
                                 fieldType={FormFieldType.UPLOAD}
                                 // required={true}
                                 />
-                            
+                            </div>
+                            <div>
+                                <CustomFormField
+                                  key="reviewComment"
+                                  name="comment"
+                                  control={form.control}
+                    
+                                  // error={
+                                  //   (errors as any)?.[question.name] as
+                                  //     | FieldError
+                                  //     | undefined
+                                  // }
+                                  
+                                  className='bg-[#cdefc] hover:bg-[#83d08] border-red-500'
+                                  
+                                  fieldType={FormFieldType.RADIO}
+                                  options={[
+                                    { label: "Satisfactory", value: "Satisfactory" },
+                                    { label: "Unsatisfactory", value: "Unsatisfactory" },
+                                    { label: "Further Review", value: "Further Review" },
+                                  ]}
+                                  required={true}
+                                />
                             </div>
                             <Button variant={ "default" } type="submit" className={`my-4 focus:outline-none w-[30%] flex self-center`}>Submit review</Button>
                         </form>

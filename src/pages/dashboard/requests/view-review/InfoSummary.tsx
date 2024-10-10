@@ -101,7 +101,7 @@ const Summary = () => {
               </>
               
           </div>
-              <div className='flex justify-between gap-2 items-center text-black'>
+              <div className='flex flex-col md:flex-row justify-between gap-2 items-center text-black'>
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Documents</h1>
                   <p className='text-[#000066] flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>
               </div>

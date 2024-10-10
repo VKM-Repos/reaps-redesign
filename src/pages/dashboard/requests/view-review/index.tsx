@@ -10,18 +10,18 @@ export default function ApplicationSummary() {
         <>
             <SheetContent side="bottom" className="overflow-y-scroll h-full md:!p-0 rounded-t-lg ">
                    <section className="w-full flex relative">
-                        <main className="md:top-28 absolute w-full flex">
-                            <div className="px-10 md:w-[25%]">
+                        <main className="top-28 absolute w-full flex">
+                            <div className="px-10 md:w-[25%] hidden md:block">
                                     <SideBar />
                             </div>
-                            <div className="md:w-[75%] px-10">
+                            <div className="md:w-[75%] w-full px-10">
                                  {/* <Information />  */}
                                  <Summary />
                             </div>
                         </main>
-                        <main className="w-full border-b">
-                            <div className="flex justify-between w-[65%] md:float-end md:px-10">
-                                <h1 className="text-[1.7rem] font-semibold">Application summary</h1>
+                        <main className="w-full mx-6 md:mx-auto md:border-b  border">
+                            <div className="flex justify-between px-5 items-center md:w-[65%] md:float-end md:px-10">
+                                <h1 className="text-[1.7rem] font-semibold">Application Summary</h1>
                                 <SheetClose className="bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit"><Cancel /></SheetClose>
                             </div>
                         </main>
