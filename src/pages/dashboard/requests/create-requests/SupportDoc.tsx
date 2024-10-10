@@ -43,16 +43,16 @@ const fileSchema = z
 const SupportDoc = ({handleNext}: Props) => {
   
   // returns an array of requirements based on "yes" answers
-  function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup, files: fileGroup) {
+  function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup) {
     // Iterate over each question in the `requirements` object and filter based on checked checkboxes
-    const requiredFiles: { id: string; label: string; path: string }[] = Object.keys(requirements)
+    const requiredFiles: { id: string; label: string;  }[] = Object.keys(requirements)
       .filter((questionKey) => checkbox[questionKey as keyof CheckboxGroup] === "yes") // Filter only questions marked "yes"
       // map through each object array, returns a 1d array
       .flatMap((questionKey) => 
         requirements[questionKey].map((requirement) => ({
           id: requirement.id,
           label: requirement.label,
-          path: files[requirement.id as keyof fileGroup]?.path || "No file uploaded",
+          // path: files[requirement.id as keyof fileGroup]?.path || "No file uploaded",
         }))
       );
   
@@ -60,9 +60,9 @@ const SupportDoc = ({handleNext}: Props) => {
   }
 
   // destructure and define variables
-  const { data, setData } = useRequestsStore();
-  const { checkbox, files } = data.requestsDetails;
-  const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup, files as fileGroup);
+  const { data, setData, setFiles } = useRequestsStore();
+  const { checkbox } = data.requestsDetails;
+  const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup);
  
 
 
@@ -102,16 +102,14 @@ const SupportDoc = ({handleNext}: Props) => {
     useEffect(() => {
       updateStep();
     }, [updateStep])
+
+
   
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values.files)
     try {
-        setData({
-            requestsDetails: {
-                ...data.requestsDetails,
-                files: values.files
-            }
-        })
+        setFiles(values.files)
         handleNext();
     } catch(error) {
         console.error(error);

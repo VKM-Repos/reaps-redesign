@@ -12,8 +12,9 @@ import {
 //     };
 //   };
 
-type FileDetails = {
+export type FileDetails = {
     path: string;
+    file: File | null;
 };
 
 
@@ -54,6 +55,7 @@ export interface RequestsStore {
     };
     setStep: (step: number) => void;
     setData: (data: Partial<RequestsStore["data"]>) => void;
+    setFiles: (files: Partial<fileGroup>) => void;
     resetStore: () => void;
 }
 
@@ -78,6 +80,16 @@ type MyPersist = (
             },
             setStep: (step) => set({ step }),
             setData: (data) => set((state) => ({ data: { ...state.data, ...data } })),
+            setFiles: (files) =>
+                set((state) => ({
+                  data: {
+                    ...state.data,
+                    requestsDetails: {
+                      ...state.data.requestsDetails,
+                      files: { ...state.data.requestsDetails.files, ...files },
+                    },
+                  },
+                })),
             resetStore: () => {
             set({
                 step: 1,
