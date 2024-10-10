@@ -46,11 +46,7 @@ const formSchema = z.object({
 });
 
 
-const navLinks = [
-    "Research Information",
-    "Application Summary",
-    "Supporting Document"
-]
+
 const reviewComment = [
     {
         id: 1,
@@ -92,20 +88,18 @@ export default function SideBar() {
     
     return(
         <>
-            <aside className='text-[0.875rem] hidden flex-col md:flex gap-5 w-[20%] fixed'>
-              {navLinks.map( (links)=>
-                <a className='w-[80%] h-12 rounded-md p-2 hover:bg-slate-200 active:bg-slate-200 text-inherit' href='#'>{links}</a>
-            )}
+            <aside className='text-[0.875rem] flex-col md:flex gap-5 md:w-[20%] w-[50%] md:fixed'>
+             
             <Sheet>
                 <SheetTrigger>
-                      <Button className='rounded-full flex self-start w-[80%] h-[3.5rem]'>Write your Review</Button>
+                      <Button className='rounded-full flex self-start md:w-[80%] w-full h-[3.5rem]'>Write your Review</Button>
                 </SheetTrigger>
-                <SheetContent side="bottom" className='w-[55%] h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
+                <SheetContent side="bottom" className='md:w-[55%] w-[90%] h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
                         <h1 className='text-[1.7rem] font-bold'>Write your review</h1>
-                        <p  className=' font-bold'>how satisfied are you with the quality of the request?</p>
-                        <div className='flex w-full items-center gap-4'>
+                        <p  className=' font-bold text-center'>how satisfied are you with the quality of the request?</p>
+                        <div className='flex flex-col md:flex-row w-full items-center md:gap-4 gap-10'>
                             {reviewComment.map((item) =>
-                            <div key={item.id} className={`flex flex-col w-full items-center px-14 cursor-pointer py-3 gap-2 border-2 rounded-lg ${item.background} ${item.border} ${item.text}`}>
+                            <div key={item.id} className={`flex flex-col md:w-full items-center px-14 cursor-pointer w-[80%] py-3 gap-2 border-2 rounded-lg ${item.background} ${item.border} ${item.text}`}>
                                 <p>{item.reaction}</p>
                                 <p>{item.comment}</p>
                             </div>
@@ -118,18 +112,18 @@ export default function SideBar() {
                                 <p className='text-center font-semibold '>provide your feedback on this request</p>
                                 <textarea name="feedback" id="feedback" className='w-full min-h-28 border p-4'></textarea>
                             </div> */}
-                             <p className='text-center font-semibold  '>provide your feedback on this request</p>
+                             <p className='text-center font-semibold'>provide your feedback on this request</p>
                             <CustomFormField 
                                 fieldType={FormFieldType.TEXTAREA}
                                 name="objectives"
                                 // error={errors["objectives"]}
                                 control={form.control}
                                 // label="Objectives of the study"
-                                className="max-h-24 flex"
+                                className="max-h-24 flex md:w-full w-[90%] mx-5 md:mx-auto"
                                 // required
                             />
 
-                            <div className="flex flex-col gap-8 w-[60%]">
+                            <div className="flex flex-col gap-8 md:w-[60%] w-[90%] mx-5  md:mx-auto">
                                 {/* <p className='flex gap-4 items-center mt-5'><span>Correction/Explanatory document</span></p> */}
                                 <CustomFormField
                                 name={`document`}
@@ -141,7 +135,7 @@ export default function SideBar() {
                                 // required={true}
                                 />
                             </div>
-                            <div>
+                            <div className='hidden md:block'>
                                 <CustomFormField
                                   key="reviewComment"
                                   name="comment"
