@@ -33,6 +33,8 @@ export const CustomCell = ({ value, className }: { value: any, className: string
 
 
 export default function CustomTable({ columns, data }: CustomTableProps<any>) {
+
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
     const {  globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
   
 
@@ -50,8 +52,6 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
     
 
 
-    const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
-
     return (
         <div className={`w-full flex flex-col mb-[6rem] ${isMobile && "overflow-x-scroll"} gap-2 
         [&::-webkit-scrollbar]:h-2 
@@ -60,27 +60,37 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
         [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
             <Table className="w-full border ">
                 <TableHeader>
-
-                    <TableRow className="font-bold w-full flex items-center justify-between !border-b p-6">
-                    {columns.map((column, index) => (
-                        <TableHead key={index} className={`font-bold text-left w-full !h-auto ${column.headerClass || ''}`}>
-                            {column.header }
-                        </TableHead>
+                    {table.getHeaderGroups().map(headerGroup => (
+                        <TableRow key={headerGroup.id} className="font-bold w-full flex items-center justify-between !border-b p-6">
+                            {headerGroup.headers.map(header => (
+                                <TableHead
+                                    key={header.id}
+                                    className={`font-bold text-left w-full !h-auto`}
+                                >
+                                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())} {/* Render the header content */}
+                                </TableHead>
+                            ))}
+                        </TableRow>
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {data.map((rowData, rowIndex) => (
-                       <TableRow key={rowIndex} className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]">
-                       {columns.map((column, index) => (
-                         <TableCell key={index} className={column.cellClass}>
-                           {column.cellType === 'custom' && column.customRender
-                             ? column.customRender(rowData)
-                             : rowData[column.accessor]}
-                         </TableCell>
-                       ))}
-                     </TableRow>
-                    ))}
-                </TableBody>   
+                {table.getRowModel().rows.length === 0 ? (
+                    <TableRow>
+                        <TableCell colSpan={columns.length}>
+                        <EmptyState />
+                        </TableCell>
+                    </TableRow>) : (
+                        table.getRowModel().rows.map((row) => (
+                        <TableRow key={row.id} className="flex items-center !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]">
+                        {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
+                        ))}
+                        </TableRow>
+                    )))}                    
+                </TableBody>
+                
             </Table>
             {isMobile && <div className="w-full">&nbsp;</div>}
         </div>
