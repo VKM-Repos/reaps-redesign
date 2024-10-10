@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { CheckboxGroup, fileGroup, useRequestsStore } from "@/store/RequestFormStore";
+import { CheckboxGroup, useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import { requirements } from "@/lib/helpers";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
@@ -41,30 +41,10 @@ const fileSchema = z
 
 
 const SupportDoc = ({handleNext}: Props) => {
-  
-  // returns an array of requirements based on "yes" answers
-  function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup) {
-    // Iterate over each question in the `requirements` object and filter based on checked checkboxes
-    const requiredFiles: { id: string; label: string;  }[] = Object.keys(requirements)
-      .filter((questionKey) => checkbox[questionKey as keyof CheckboxGroup] === "yes") // Filter only questions marked "yes"
-      // map through each object array, returns a 1d array
-      .flatMap((questionKey) => 
-        requirements[questionKey].map((requirement) => ({
-          id: requirement.id,
-          label: requirement.label,
-          // path: files[requirement.id as keyof fileGroup]?.path || "No file uploaded",
-        }))
-      );
-  
-    return requiredFiles;
-  }
-
   // destructure and define variables
-  const { data, setData, setFiles } = useRequestsStore();
+  const { data, setData } = useRequestsStore();
   const { checkbox } = data.requestsDetails;
   const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup);
- 
-
 
   // create fileschemas based on required files
   const createFileSchema = () => {
@@ -94,22 +74,22 @@ const SupportDoc = ({handleNext}: Props) => {
   const { formState: { isValid, errors } } = form;
 
 
-    const updateStep = () => {
-        setStepper(2);
-      }
-
-      
-    useEffect(() => {
-      updateStep();
-    }, [updateStep])
-
-
-  
+  const updateStep = () => {
+      setStepper(2);
+    }
+    
+  useEffect(() => {
+    updateStep();
+  }, [updateStep]) 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values.files)
     try {
-        setFiles(values.files)
+        setData({
+          requestsDetails: {
+            ...data.requestsDetails,
+            files: values.files,
+        }
+        })
         handleNext();
     } catch(error) {
         console.error(error);
@@ -147,3 +127,20 @@ const SupportDoc = ({handleNext}: Props) => {
 }
 
 export default SupportDoc
+
+
+  // returns an array of requirements based on "yes" answers
+function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup) {
+  // Iterate over each question in the `requirements` object and filter based on checked checkboxes
+  const requiredFiles: { id: string; label: string;  }[] = Object.keys(requirements)
+    .filter((questionKey) => checkbox[questionKey as keyof CheckboxGroup] === "yes") // Filter only questions marked "yes"
+    // map through each object array, returns a 1d array
+    .flatMap((questionKey) => 
+      requirements[questionKey].map((requirement) => ({
+        id: requirement.id,
+        label: requirement.label,
+      }))
+    );
+
+  return requiredFiles;
+}
