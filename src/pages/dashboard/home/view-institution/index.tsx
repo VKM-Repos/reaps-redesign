@@ -29,21 +29,30 @@ export default function InstitutionAdminHome() {
 
 const InstitutionAdminHomePage = () => {
     return (
-        <div className="flex flex-col gap-10">
-            <div className="grid grid-cols-4 gap-3">
+        <div className="flex flex-col gap-10 mt-[3.25rem]">
+            <div className="grid md:grid-cols-4 gap-3">
                 <div className="gap-4 flex items-center md:flex-col">
-                    <InstitutionCards icon={GoogleDoc()} label="Submitted Requests" num="24" color="#7D462A" />
-                    <InstitutionCards icon={FileView()} label="Review Requests" num="24" color="#891D1D" />
+                    <span className="max-h-[8.75rem]">
+                        <InstitutionCards icon={GoogleDoc()} label="Submitted Requests" num="24" color="#7D462A" />
+                    </span>
+                   
+                    <span className="max-h-[8.75rem]">
+                        <InstitutionCards icon={FileView()} label="Review Requests" num="24" color="#891D1D" />
+                    </span>
                 </div>
-                <div>
+                <div className="">
                     <InstitutionCards icon={RepeatIcon()} label="Re-opened Requests" num="24" color="#56163B" />
                 </div>
                 <div>
                     <InstitutionCards icon={SignatureIcon()} label="Approved Requests" num="24" color="#0D304A" />
                 </div>
                 <div className="gap-4 flex items-center md:flex-col">
-                    <InstitutionCards icon={MoneyIcon()} label="Unconfirmed Payments" num="24" color="#0D304A" />
-                    <InstitutionCards icon={FileRemove()} label="Declined Requests" num="24" color="#55336A" />
+                    <span className="max-h-[8.75rem]">
+                        <InstitutionCards icon={MoneyIcon()} label="Unconfirmed Payments" num="24" color="#0D304A" />
+                    </span>
+                    <span className="max-h-[8.75rem]">
+                        <InstitutionCards icon={FileRemove()} label="Declined Requests" num="24" color="#55336A" />
+                    </span>    
                 </div>
             </div>
             <div className="flex flex-col gap-[3.25rem]">
@@ -74,10 +83,10 @@ const InstitutionAdminHomePage = () => {
 
 const InstitutionCards = ({ icon, label, num, color }: SummaryProps) => {
     return (
-        <div className="w-full max-w-[13rem] flex justify-between items-start rounded-2xl p-5" style={{backgroundColor: color}}>
-            <div className="px-4 py-1 text-white">
-                <div className="my-8 text-white border border-white w-[2.25rem] h-[2.25rem] rounded-[0.625rem] flex justify-center items-center">{icon}</div>
-                <div className="text-white">
+        <div className="w-full h-full  grid rounded-2xl p-5" style={{backgroundColor: color}}>
+            <div className="md:px-4 py-1 text-white flex gap-4">
+                <div className="justify-self-start text-white border border-white w-[2.25rem] h-[2.25rem] rounded-[0.625rem] flex justify-center items-center">{icon}</div>
+                <div className="text-white w-full">
                     <p className="text-sm">{label}</p>
                     <h2 className="text-[1.875rem]">{num}</h2>
                 </div>

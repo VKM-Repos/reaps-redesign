@@ -7,6 +7,7 @@ import { useRole } from "@/hooks/useRole";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import ResearcherHomePage from "./view-researcher";
+import InstitutionAdminHome from "./view-institution";
 
 
 
@@ -44,7 +45,7 @@ const [ loading, setLoading ] = useState(false);
                 </div>
                 
             </div>
-            {role === 'INSTIUTION_ADMIN' ? '' : <ResearcherHomePage />}
+            {role === 'INSTITUTION_ADMIN' ? <InstitutionAdminHome /> : <ResearcherHomePage />}
         </div>
       </> 
     )
