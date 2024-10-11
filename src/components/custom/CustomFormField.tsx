@@ -134,6 +134,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                          <span className="flex justify-between items-center w-full">
                            <span className="flex gap-2 items-center justify-center">
                              <GreenCheckmark />
+                             {/* reload causes field value name to disappear */}
                              {field.value?.name}
                            </span>
                            <span>
