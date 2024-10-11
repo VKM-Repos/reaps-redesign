@@ -18,6 +18,7 @@ import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
 import { useNavigate } from "react-router-dom";
 import { questions } from "@/lib/helpers";
 import { getRequiredFilesBasedOnYes } from "./SupportDoc";
+import { useMediaQuery } from "react-responsive";
 
 type Props = {
   handleNext?: Function;
@@ -29,6 +30,7 @@ const AppSummary = ({ handleNext }: Props) => {
   const [loading, setLoading] = useState(false);
   const [showEthicalApprovalCard, setShowEthicalApprovalCard] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
   const form = useForm({
     defaultValues: {
@@ -64,11 +66,14 @@ const AppSummary = ({ handleNext }: Props) => {
   // filter - check if file path exists, return new array
   const combinedDocData = requiredFiles.map((requirement) => {
     const file = (files as fileGroup)[requirement.id as keyof fileGroup];
+    const nameAndProfile = ["requirement1", "requirement2", "requirement3"].includes(requirement.id)
+    ? `John Doe ${requirement.name}`
+    : requirement.name;
    
     return {
       id: requirement.id,
       label: requirement.label,
-      name: requirement.name,
+      name: nameAndProfile,
       filePath: file ? file.path : null, 
     };
   }).filter((requirement) => requirement.filePath !== null);
@@ -133,7 +138,7 @@ const AppSummary = ({ handleNext }: Props) => {
           </div>
           <div className="md:4/5 w-full mx-auto my-0 flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">
+              <h1 className="text-[1.375rem] md:text-xl2 font-semibold md:py-5">
                 Research Information
               </h1>
               <Button
@@ -142,7 +147,7 @@ const AppSummary = ({ handleNext }: Props) => {
                 }}
               >
                 <span className="flex items-center justify-center gap-2 text-white">
-                  <PencilEdit /> Edit
+                  <PencilEdit /> {isMobile ? null : <span>Edit</span>}
                 </span>
               </Button>
             </div>
@@ -169,7 +174,7 @@ const AppSummary = ({ handleNext }: Props) => {
                   required
                 />
                 <div className="flex justify-between items-center">
-                  <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">
+                  <h1 className="text-[1.375rem] text-xl2 font-semibold md:py-5">
                     Application Information
                   </h1>
                   <Button
@@ -178,11 +183,11 @@ const AppSummary = ({ handleNext }: Props) => {
                     }}
                   >
                     <span className="flex items-center justify-center gap-2 text-white">
-                      <PencilEdit /> Edit
+                      <PencilEdit /> {isMobile ? null : <span>Edit</span>}
                     </span>
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 gap-8 ">
+                <div className="grid md:grid-cols-2 gap-8 ">
                   <>
                     {combinedAppInfoData
                       .map((question) => (
@@ -213,7 +218,7 @@ const AppSummary = ({ handleNext }: Props) => {
                   </>
                 </div>
                 <div className="flex justify-between items-center">
-                  <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">
+                  <h1 className="text-[1.375rem] md:text-xl2 font-semibold md:py-5">
                     Support Docs
                   </h1>
                   <Button
@@ -222,7 +227,7 @@ const AppSummary = ({ handleNext }: Props) => {
                     }}
                   >
                     <span className="flex items-center justify-center gap-2 text-white">
-                      <PencilEdit /> Edit
+                      <PencilEdit />  {isMobile ? null : <span>Edit</span>}
                     </span>
                   </Button>
                 </div>
@@ -230,7 +235,7 @@ const AppSummary = ({ handleNext }: Props) => {
                   {combinedDocData.map((file) => {
                     return (
                       <div className="flex flex-col gap-2">
-                        <div className="flex flex-col gap-2 md:flex-row md:justify-between">
+                        <div className="flex flex-col gap-1 md:gap-2 md:flex-row md:justify-between">
                           <div className="font-semibold text-sm">{file.label}<span className="text-red-500">&ensp;*</span></div>
                           <div className="text-[#868687] text-xs">.Doc, .Docx, .Pdf (Max of 3MB)</div>
                         </div>
@@ -242,7 +247,7 @@ const AppSummary = ({ handleNext }: Props) => {
                             <span>
                               <GreenCheckmark />
                             </span>
-                            <span>{file.label}</span>
+                            <span>{file.name}</span>
                           </span>
                           <span className="p-2">
                             <span className="text-[1rem]">x</span>

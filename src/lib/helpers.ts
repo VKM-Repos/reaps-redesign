@@ -45,7 +45,7 @@ export const requirements: RequirementMapping = {
     },
     {
         id: "requirement2",
-        name: "Cover Letter/Application Letter",
+        name: "Cover Letter",
         label: "Cover Letter/Application Letter"
     },
     {
@@ -55,7 +55,7 @@ export const requirements: RequirementMapping = {
     },
     {
         id: "requirement4",
-        name: "Research tools/Questionnaire",
+        name: "Research tools",
         label: "Research tools/Questionnaire"
     },
     {
