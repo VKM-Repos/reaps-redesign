@@ -43,13 +43,17 @@ const fileSchema = z
 const SupportDoc = ({handleNext}: Props) => {
   // destructure and define variables
   const { data, setData } = useRequestsStore();
-  const { checkbox } = data.requestsDetails;
+  const { checkbox, files } = data.requestsDetails;
   const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup);
 
   // create fileschemas based on required files
   const createFileSchema = () => {
     // return fileschema object based on callback function
     const fileSchemaObject = requiredFiles.reduce((schemas, requirement) => {
+      if (requirement.id === "requirement6" || requirement.id === "requirement7") {
+        return schemas;
+      }
+  
       schemas[requirement.id] = fileSchema.nullable().refine(
         file => file !== null, 
         { message: `${requirement.label} is required.` }
@@ -66,7 +70,12 @@ const SupportDoc = ({handleNext}: Props) => {
   
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      files: {
+        ...files,
+      },
+    }
   });
   
 
@@ -113,8 +122,9 @@ const SupportDoc = ({handleNext}: Props) => {
                   error={(errors.files as any)?.[requirement.id] as FieldError | undefined}
                   control={form.control}
                   label={requirement.label}
+                  labelClassName="!font-semibold !text-black"
                   fieldType={FormFieldType.UPLOAD}
-                  required={true}
+                  required={requirement.id === "requirement6" || requirement.id === "requirement7" ? false : true}
                 />
               ))}
             </div>
@@ -131,7 +141,6 @@ export default SupportDoc
 
   // returns an array of requirements based on "yes" answers
 function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup) {
-  // Iterate over each question in the `requirements` object and filter based on checked checkboxes
   const requiredFiles: { id: string; label: string;  }[] = Object.keys(requirements)
     .filter((questionKey) => checkbox[questionKey as keyof CheckboxGroup] === "yes") // Filter only questions marked "yes"
     // map through each object array, returns a 1d array

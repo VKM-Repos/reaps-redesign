@@ -279,14 +279,14 @@ const CustomFormField = (props: CustomProps) => {
             <FormItem className="gap-4">
                 <div className="flex flex-col gap-1 items-start md:flex-row md:justify-between md:items-center">
                     <div> 
-                        <FormLabel className={`${labelClassName} ${error ? 'text-red-500' : 'text-[#454745]'} font-[400]`}>{label}</FormLabel>
+                        <FormLabel className={`${labelClassName} ${error ? 'text-red-500' : 'text-[#454745]'} font-normal`}>{label}</FormLabel>
                         {required && (
                         <span className="text-error text-red-500" title="required">
                         &ensp;*
                         </span>
                         )}
                     </div>
-                    {fieldType === FormFieldType.UPLOAD && <span className={`flex font-[400] justify-end ${error ? 'text-red-500' : 'text-[#868687]'} text-sm`}>Doc, Docx, Pdf (Max of 3MB)</span>}
+                    {fieldType === FormFieldType.UPLOAD && <span className={`flex font-[400] justify-end ${error ? 'text-red-500' : 'text-[#868687]'} text-xs`}>.Doc, .Docx, .Pdf (Max of 3MB)</span>}
                 </div>
                 <RenderInput field={field} props={props}/>
                 <FormMessage/>

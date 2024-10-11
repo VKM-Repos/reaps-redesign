@@ -43,52 +43,67 @@ export const requirements: RequirementMapping = {
         name: "CV",
         label: "2-page curriculum vitae" 
     },
+    {
+        id: "requirement2",
+        name: "Cover Letter/Application Letter",
+        label: "Cover Letter/Application Letter"
+    },
+    {
+        id: "requirement3",
+        name: "Proposal",
+        label: "Proposal"
+    },
+    {
+        id: "requirement4",
+        name: "Research tools/Questionnaire",
+        label: "Research tools/Questionnaire"
+    },
+    {
+        id: "requirement5",
+        name: "Informed Consent Form",
+        label: "Informed Consent Form"
+    },
+    {
+        id: "requirement6",
+        name: "HOD Attestation",
+        label: "HOD Attestation"
+    },
+    {
+        id: "requirement7",
+        name: "One-page Plain Language Summary",
+        label: "One-page Plain Language Summary"
+    }
       
     ],
     question2: [
         {
-            id: "requirement2",
+            id: "requirement8",
             name: "supervisorAttestation",
             label: "Supervisor's attestation statement"
         }
     ],
     question4: [
         {
-            id: "requirement3",
+            id: "requirement9",
             name: "Sponsor's attestation statement",
             label: "Sponsor's attestation statement"
         }
     ],
     question5: [
         {
-            id: "requirement4",
+            id: "requirement10",
             name: "Evidence of ethics training",
             label: "Evidence of ethics training",
         },
         {
-            id: "requirement5",
-            name: "Cover Letter/Application Letter",
-            label: "Cover Letter/Application Letter"
-        },
-        {
-            id: "requirement6",
-            name: "Proposal",
-            label: "Proposal"
-        },
-        {
-            id: "requirement7",
-            name: "Research tools/Questionnaire",
-            label: "Research tools/Questionnaire"
-        },
-        {
-            id: "requirement8",
+            id: "requirement11",
             name: "Evidence of Completion",
             label: "Evidence of Completion"
         },
     ],
     question6: [
         {
-            id: "requirement9",
+            id: "requirement12",
             name: "Materials transfer agreement form",
             label: "Materials transfer agreement form",
         }

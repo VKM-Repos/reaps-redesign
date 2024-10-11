@@ -25,9 +25,14 @@ type Props = {
 
 const ResearchInfo = ({ handleNext }: Props) => {
     const { data, setData } = useRequestsStore();
+    const { title, objectives } = data.requestsDetails;
     
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            title: title,
+            objectives: objectives
+        }
     });
 
     const { formState: {isValid, errors }, register} = form;
