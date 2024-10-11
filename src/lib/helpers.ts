@@ -1,3 +1,14 @@
+type Requirement = {
+    id: string;
+    name: string;
+    label: string;
+  };
+  
+  type RequirementMapping = {
+    [key: string]: Requirement[];
+  };
+  
+
 export const questions = [
     {
         name: "question1",
@@ -25,53 +36,80 @@ export const questions = [
     }
 ]
 
-export const requirements = [
-    {
-        id: "requirement1",
+// ids are all unique. useful for flatmapping
+export const requirements: RequirementMapping = {
+    question1: [
+      { id: "requirement1", 
         name: "CV",
-        label: "2-page curriculum vitae",
+        label: "2-page curriculum vitae" 
     },
     {
         id: "requirement2",
-        name: "supervisorAttestation",
-        label: "Supervisor's attestation statement"
-    },
-    {
-        id: "requirement3",
-        name: "Cover Letter/Application Letter",
+        name: "Cover Letter",
         label: "Cover Letter/Application Letter"
     },
     {
-        id: "requirement4",
+        id: "requirement3",
         name: "Proposal",
         label: "Proposal"
     },
     {
-        id: "requirement5",
-        name: "Research tools/Questionnaire",
+        id: "requirement4",
+        name: "Research tools",
         label: "Research tools/Questionnaire"
     },
     {
+        id: "requirement5",
+        name: "Informed Consent Form",
+        label: "Informed Consent Form"
+    },
+    {
         id: "requirement6",
-        name: "Evidence of Completion",
-        label: "Evidence of Completion",
+        name: "HOD Attestation",
+        label: "HOD Attestation"
     },
     {
         id: "requirement7",
-        name: "Evidence of ethics training",
-        label: "Evidence of ethics training",
-    },
-    {
-        id: "requirement8",
-        name: "Sponsor's attestation statement",
-        label: "Sponsor's attestation statement"
-    },
-    {
-        id: "requirement9",
-        name: "Materials transfer agreement form",
-        label: "Materials transfer agreement form"
-    },
-]
+        name: "One-page Plain Language Summary",
+        label: "One-page Plain Language Summary"
+    }
+      
+    ],
+    question2: [
+        {
+            id: "requirement8",
+            name: "supervisorAttestation",
+            label: "Supervisor's attestation statement"
+        }
+    ],
+    question4: [
+        {
+            id: "requirement9",
+            name: "Sponsor's attestation statement",
+            label: "Sponsor's attestation statement"
+        }
+    ],
+    question5: [
+        {
+            id: "requirement10",
+            name: "Evidence of ethics training",
+            label: "Evidence of ethics training",
+        },
+        {
+            id: "requirement11",
+            name: "Evidence of Completion",
+            label: "Evidence of Completion"
+        },
+    ],
+    question6: [
+        {
+            id: "requirement12",
+            name: "Materials transfer agreement form",
+            label: "Materials transfer agreement form",
+        }
+    ],
+    
+}
 
 export const requestsArray = [
     "Application Info",
@@ -91,63 +129,72 @@ export const application = [
     {
         name: "question1",
         label: "Are you the principal investigator or Local Principal Investigator?",
-        options: [
-            {
-                label: "Yes",
-                value: "Yes",
-            }
-        ]
+        value: "Yes"
     },
     {
         name: "question2",
         label: "How would you describe yourself?",
-        options: [
-            {
-                label: "Student",
-                value: "Student",
-            }
-        ]
+        value: "An academic/Researcher"
     },
     {
         name: "question3",
         label: "Is there a Co-Principal Investigator?",
-        options: [
-            {
-                label: "No",
-                value: "No",
-            }
-        ]
+        value: "Yes"
     },
     {
         name: "question4",
         label: "Is the project sponsored?",
-        options: [
-            {
-                label: "No",
-                value: "No",
-            }
-        ]
+        value: "No"
     },
     {
         name: "question5",
         label: "Did You Complete Ethics Training?",
-        options: [
-            {
-                label: "No",
-                value: "No",
-            }
-        ]
+        value: "Yes"
     },
     {
         name: "question6",
         label: "Will materials or tissue specimens be shipped out of the country?",
-        options: [
-            {
-                label: "Yes",
-                value: "Yes",                
-            }
-        ]
+        value: "No"
+    },
+    {
+        name: "question7",
+        label: "What is the duration of the Research? (months)",
+        value: "8"
     }
+]
+
+export const supportDocData = [
+    {
+        id: "requirement1",
+        label: "2-page Curriculum Vitae",
+        name: "John Doe CV"
+    },
+    {
+        id: "requirement2",
+        label: "Cover Letter/Application Letter",
+        name: "Cover Letter"
+    },
+    {
+        id: "requirement3",
+        label: "Proposal",
+        name: "John Doe Proposal"
+    },
+    {
+        id: "requirement4",
+        label: "Research Tools/Questionaire",
+        name: "Research Tools"
+    },
+    {
+        id: "requirement5",
+        label: "Informed Consent Form",
+        name: "Informed Consent Form"
+    },
+    {
+        id: "requirement6",
+        label: "Materials Transfer Agreement Form",
+        name: "Materials Transfer Agreement Form"
+    },
+    
 ]
 
 export type ColumnSetup<T> = {

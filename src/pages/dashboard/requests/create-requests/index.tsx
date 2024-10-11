@@ -8,7 +8,7 @@ import AppSummary from "./AppSummary";
 import RequestsLayout from "@/layouts/RequestsLayout";
 
 const CreateRequests = () => {
-    const { step, setStep, resetStore } = useRequestsStore();
+    const { step, setStep } = useRequestsStore();
 
     const RequestsData = new FormData();
 
@@ -28,9 +28,7 @@ const CreateRequests = () => {
                 RequestsData.append("institution", institution);
                 
 
-                setTimeout(() => {
-                    resetStore();
-                }, 5000)
+               
             }
             catch (error: any) {
                 console.error("Error creating form", error);
