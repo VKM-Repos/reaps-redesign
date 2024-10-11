@@ -7,7 +7,7 @@ import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import Loader from "@/components/custom/Loader";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { CheckboxGroup, useRequestsStore } from "@/store/RequestFormStore";
+import { CheckboxGroup, fileGroup, useRequestsStore } from "@/store/RequestFormStore";
 import { useStepper } from "@/context/StepperContext";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
 import { useNavigate } from "react-router-dom";
 import { questions } from "@/lib/helpers";
+import { getRequiredFilesBasedOnYes } from "./SupportDoc";
 
 type Props = {
   handleNext?: Function;
@@ -44,8 +45,10 @@ const AppSummary = ({ handleNext }: Props) => {
 
   const { register } = form;
   const { setStepper } = useStepper();
+  const requiredFiles = getRequiredFilesBasedOnYes(checkbox as CheckboxGroup)
 
-  const combinedData = [
+  // combine checkbox values with question labels
+  const combinedAppInfoData = [
     ...questions.map((question) => ({
       ...question,
       value: (checkbox as CheckboxGroup)[question.name as keyof CheckboxGroup],
@@ -56,6 +59,19 @@ const AppSummary = ({ handleNext }: Props) => {
       value: (checkbox as CheckboxGroup).question7,
     },
   ];
+
+  // combine file data with requirements labels
+  // filter - check if file path exists, return new array
+  const combinedDocData = requiredFiles.map((requirement) => {
+    const file = (files as fileGroup)[requirement.id as keyof fileGroup];
+   
+    return {
+      id: requirement.id,
+      label: requirement.label,
+      name: requirement.name,
+      filePath: file ? file.path : null, 
+    };
+  }).filter((requirement) => requirement.filePath !== null);
   
 
   const updateStep = () => {
@@ -168,7 +184,7 @@ const AppSummary = ({ handleNext }: Props) => {
                 </div>
                 <div className="grid grid-cols-2 gap-8 ">
                   <>
-                    {combinedData
+                    {combinedAppInfoData
                       .map((question) => (
                         <div className="flex flex-col gap-2">
                           <div className="text-sm text-[#454745]">{question.label}&nbsp;<span className="text-red-500">*</span></div>
@@ -211,21 +227,27 @@ const AppSummary = ({ handleNext }: Props) => {
                   </Button>
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
-                  {Object.entries(files).map(([key, file]) => {
+                  {combinedDocData.map((file) => {
                     return (
-                      <div
-                        key={key}
-                        className="w-full flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2"
-                      >
-                        <span className="flex gap-2 items-center justify-center">
-                          <span>
-                            <GreenCheckmark />
+                      <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 md:flex-row md:justify-between">
+                          <div className="font-semibold text-sm">{file.label}<span className="text-red-500">&ensp;*</span></div>
+                          <div className="text-[#868687] text-xs">.Doc, .Docx, .Pdf (Max of 3MB)</div>
+                        </div>
+                         <div
+                          key={file.id}
+                          className="w-full flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2"
+                        >
+                          <span className="flex gap-2 items-center justify-center">
+                            <span>
+                              <GreenCheckmark />
+                            </span>
+                            <span>{file.label}</span>
                           </span>
-                          <span>{file.path}</span>
-                        </span>
-                        <span className="p-2">
-                          <span className="text-[1rem]">x</span>
-                        </span>
+                          <span className="p-2">
+                            <span className="text-[1rem]">x</span>
+                          </span>
+                        </div>
                       </div>
                     );
                   })}

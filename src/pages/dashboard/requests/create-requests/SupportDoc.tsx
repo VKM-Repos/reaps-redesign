@@ -140,12 +140,13 @@ export default SupportDoc
 
 
   // returns an array of requirements based on "yes" answers
-function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup) {
-  const requiredFiles: { id: string; label: string;  }[] = Object.keys(requirements)
+export function getRequiredFilesBasedOnYes(checkbox: CheckboxGroup) {
+  const requiredFiles: { id: string; label: string; name: string;  }[] = Object.keys(requirements)
     .filter((questionKey) => checkbox[questionKey as keyof CheckboxGroup] === "yes") // Filter only questions marked "yes"
     // map through each object array, returns a 1d array
     .flatMap((questionKey) => 
       requirements[questionKey].map((requirement) => ({
+        name: requirement.name,
         id: requirement.id,
         label: requirement.label,
       }))

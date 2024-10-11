@@ -286,7 +286,7 @@ const CustomFormField = (props: CustomProps) => {
                         </span>
                         )}
                     </div>
-                    {fieldType === FormFieldType.UPLOAD && <span className={`flex font-[400] justify-end ${error ? 'text-red-500' : 'text-[#868687]'} text-xs`}>.Doc, .Docx, .Pdf (Max of 3MB)</span>}
+                    {fieldType === FormFieldType.UPLOAD && <span className={`flex font-normal justify-end ${error ? 'text-red-500' : 'text-[#868687]'} text-xs`}>.Doc, .Docx, .Pdf (Max of 3MB)</span>}
                 </div>
                 <RenderInput field={field} props={props}/>
                 <FormMessage/>
