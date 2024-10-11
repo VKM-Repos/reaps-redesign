@@ -262,10 +262,7 @@ export default function Requests() {
                                 ))}    
                             </div>
                             }
-                        {role === 'RESEARCHER' && 
-                            <TableRequests tableData={tableData} />    
-                        }
-                        {role === 'REVIEWER' &&
+                        {role === 'REVIEWER' ?
                             <Tabs defaultValue="request table" onValueChange={(val) => setActiveTab(val)}>
                                 <TabsList className="border-b-[1.5px] w-full px-3">
                                     <TabsTrigger value="request table">My request</TabsTrigger>
@@ -279,6 +276,8 @@ export default function Requests() {
                                     <TableReview reviewTableData={reviewTableData} />
                                 </TabsContent>
                             </Tabs>
+                            :
+                            <TableRequests tableData={tableData} />
                         }
                     </div>
                     :
