@@ -2,7 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { useRequestsStore } from "@/store/RequestFormStore";
+import { CheckboxGroup, useRequestsStore } from "@/store/RequestFormStore";
 import { Button } from "@/components/ui/button";
 import CustomFormField, {
   FormFieldType,
@@ -34,8 +34,19 @@ type Props = {
 
 export default function AppInfo({ handleNext }: Props) {
   const { data, setData } = useRequestsStore();
+  const { checkbox } = data.requestsDetails;
+
   const form = useForm<z.infer<typeof checkboxGroupSchema>>({
     resolver: zodResolver(checkboxGroupSchema),
+    defaultValues: {
+      question1: (checkbox as CheckboxGroup).question1, 
+      question2: (checkbox as CheckboxGroup).question2,
+      question3: (checkbox as CheckboxGroup).question3,
+      question4: (checkbox as CheckboxGroup).question4,
+      question5: (checkbox as CheckboxGroup).question5,
+      question6: (checkbox as CheckboxGroup).question6,
+      question7: (checkbox as CheckboxGroup).question7, 
+    },
   });
 
   const {
@@ -90,7 +101,7 @@ export default function AppInfo({ handleNext }: Props) {
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-8 ">
-              {questions.map((question) => (
+              {questions.map((question, index) => (
                 <CustomFormField
                   key={question.name}
                   name={question.name}
@@ -103,10 +114,19 @@ export default function AppInfo({ handleNext }: Props) {
                   }
                   subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
                   fieldType={FormFieldType.RADIO}
-                  options={[
-                    { label: "Yes", value: "yes" },
-                    { label: "No", value: "no" },
-                  ]}
+                  options={index === 0
+                    ? [
+                        { label: "Yes", value: "yes" }
+                      ]
+                    : index === 1 
+                    ? [
+                        { label: "Student", value: "yes" }, 
+                        { label: "Researcher", value: "no" }
+                      ]
+                    : [
+                        { label: "Yes", value: "yes" },
+                        { label: "No", value: "no" },
+                      ]}
                   required={true}
                 />
               ))}

@@ -19,8 +19,8 @@ export default function ViewRequests() {
             <SheetContent side="bottom" className="h-full overflow-y-scroll md:!p-0">
                 <div className="w-full relative">
                     <StatusTracker currentStatus="Payment Confirmed" statuses={statuses}/>
-                    <div className="mx-auto p-2 border-b w-full">
-                        <div className=" w-[90%] mx-auto flex justify-between md:justify-unset">
+                    <div className="mx-auto md:p-2 md:border-b md:border-t-0 w-full">
+                        <div className="w-full md:w-[90%] mx-auto flex justify-between md:justify-unset">
                             <div className="p-2 w-full">
                                 <h1 className="md:text-center font-semibold text-xl md:text-xl2">Your application Summary</h1>
                             </div>

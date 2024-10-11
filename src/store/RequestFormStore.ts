@@ -5,15 +5,9 @@ import {
 } from "zustand/middleware";
 
 
-// export interface CheckboxGroup {
-//     [key: string]: {
-//       label: string;
-//       value: boolean;
-//     };
-//   };
-
-type FileDetails = {
+export type FileDetails = {
     path: string;
+    file: File | null;
 };
 
 
@@ -27,7 +21,7 @@ export type CheckboxGroup = {
     question7: number
 };
 
-type fileGroup = {
+export type fileGroup = {
     requirement1: FileDetails,
     requirement2: FileDetails,
     requirement3: FileDetails,
