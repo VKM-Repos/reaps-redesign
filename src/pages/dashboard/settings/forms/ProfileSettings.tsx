@@ -40,11 +40,19 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
         .regex(/^\d+$/, { message: "Phone number should contain only numbers" }),
     dob: z
         .date()
-    })
+    });
 
     const { data, setData } = useOnboardingFormStore();
+
+    const defaultValues = {
+        firstName: data.onboardingDetails.firstName || "",  
+        lastName: data.onboardingDetails.lastName || "",    
+        phoneNumber: data.onboardingDetails.phoneNumber || "",
+        dob: data.onboardingDetails.dob || undefined,        
+    };
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues,
       });
     const { register, formState: { isValid }, reset} = form;
     const [flags, setFlags] = useState<FlagData[]>([]);

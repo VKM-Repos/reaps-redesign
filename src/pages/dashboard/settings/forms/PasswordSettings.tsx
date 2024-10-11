@@ -15,13 +15,21 @@ export const PasswordSettings = ({ onSave }: { onSave: () => void }) => {
         .string({ required_error: "Password is required" })
         .min(1, { message: "Please fill this field" })
         .min(7, {message: "Password must contain a minimum of 7 characters"})
-    });
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+        .regex(/^(?=.*[a-zA-Z])(?=.*\d).+$/, {message: "Password must contain a number and a letter"})
     });
 
     const { data, setData } = useOnboardingFormStore();
+
+    const defaultValues = {
+        password: data.onboardingDetails.password,
+    }
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues
+    });
+
+
     const { register, formState: { isValid}, reset } = form;
     const [ loading, setLoader ] = useState(false);
 

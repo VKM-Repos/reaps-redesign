@@ -19,10 +19,14 @@ export const InstitutionSettings = ({ onSave }: { onSave: () => void }) => {
     
     const institutions = ["University of Abuja", "University of PortHarcourt", "University of Lagos", "University of Benin"];
     const { data, setData } = useRequestsStore();
+    const defaultValues = {
+        institution: data.requestsDetails.institution,
+    }
     const [ institute, setInstitute ] = useState("");
     const [loading, setLoader ] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues,
     });
 
     const {  setValue, formState: { isValid }, reset } = form;

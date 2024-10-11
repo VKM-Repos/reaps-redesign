@@ -13,10 +13,16 @@ export const NotificationsSettings = ({ onSave }: { onSave: () => void }) => {
             boolean()
     });
 
+    const { data, setData } = useOnboardingFormStore();
+    const defaultValues = {
+        notifications: data.onboardingDetails.notifications || false,
+    }
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues
     });
-    const { data, setData } = useOnboardingFormStore();
+    
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {

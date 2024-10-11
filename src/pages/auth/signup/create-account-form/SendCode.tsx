@@ -8,6 +8,7 @@ import FormInput from "@/components/custom/FormInput";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import Loader from "@/components/custom/Loader";
+import { useEffect, useState } from "react";
 
 type Props = {
     handleNext: Function,
@@ -24,9 +25,32 @@ const formSchema = z.object({
 export default function SendCode({ handleNext, handleGoBack }: Props) {  
     const { isMobile } = useMobileContext();
     const { data, setData, loading, setLoading } = useOnboardingFormStore();
+    const [ sendAgain, setSendAgain ] = useState(true);
+    const [countdown, setCountdown] = useState(0); 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
+
+
+    const handleResend = () => {
+      if (sendAgain) {
+        setCountdown(60);  
+        setSendAgain(false); 
+      }
+    };
+  
+
+    useEffect(() => {
+      if (countdown > 0) {
+        const timer = setInterval(() => {
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+  
+        return () => clearInterval(timer);
+      } else {
+        setSendAgain(true);  
+      }
+    }, [countdown]);
 
     const { register, formState: {isValid} } = form;
   
@@ -73,7 +97,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                                 className="no-spinner"
                             />
                             <div className="flex flex-col justify-center items-center">
-                                <p className="pt-2 pb-7 text-sm text-[#454745]">Didn't get an email? <a href="/" className="underline font-semibold text-black hover:text-black" >Send it again</a></p>
+                                <p className="pt-2 pb-7 text-sm text-[#454745]">Didn't get an email? {sendAgain ? <a onClick={handleResend} className="underline font-semibold text-black hover:text-black" >Send it again</a> : <span className="font-semibold text-black">{countdown}s</span>}</p>
                             </div>
                             <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Continue</Button>
                         </form>

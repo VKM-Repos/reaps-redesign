@@ -18,6 +18,7 @@ import EditSpecializations from "../edit-specializations";
 import { useSpecializationsStore } from "@/store/specializationsFormStore";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import Loader from "@/components/custom/Loader";
+import { useMediaQuery } from "react-responsive";
 
 type Props = {
   tableData: {
@@ -34,6 +35,8 @@ type Props = {
     const [currentEditData, setCurrentEditData] = useState<{ id: string; specialization: string; keyword: [] } | null>(null);
     const [step, setStep] = useState<number>(1);
     const { loading, setLoading } = useSpecializationsStore();
+
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
 
      function deleteTableItem(item: any) {
       setLoading(true);
@@ -84,11 +87,16 @@ type Props = {
     return (
       <>
           {loading && <Loader />}
-          <Table className="w-full border overflow-scroll">
+          <div className={`w-full flex flex-col mb-[7rem] ${isMobile && "overflow-x-scroll"} gap-2 
+        [&::-webkit-scrollbar]:h-2 
+        [&::-webkit-scrollbar-track]:rounded-full 
+        [&::-webkit-scrollbar-track]:bg-gray-10110
+        [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
+          <Table className="w-full border">
               <TableHeader>
                 <TableRow className="font-bold w-full flex gap-6 justify-between !border-b p-6">
                   <TableHead className="font-bold text-left w-full !h-auto min-w-[10rem]">Specializations</TableHead>
-                  <TableHead className="font-bold text-left w-full !h-auto">Keywords</TableHead>
+                  <TableHead className="font-bold text-left w-full !h-auto  min-w-[10rem]">Keywords</TableHead>
                   <TableHead className="font-bold w-full text-right pr-5 !h-auto ">Action</TableHead>
                 </TableRow>
               </TableHeader>
@@ -97,7 +105,7 @@ type Props = {
                   tableArray.map((data: any) => (
                     <TableRow key={data.id} className="flex items-center justify-between gap-6 !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] cursor-pointer" >
                         <TableCell className="min-w-[10rem] capitalize">{data.specialization}</TableCell>
-                        <TableCell className="flex gap-1 w-full flex-wrap items-center">
+                        <TableCell className="flex gap-1 w-full flex-wrap items-center min-w-[10rem] ">
                           {data.keyword.map((item: any, index: number) => (
                               <Badge className="capitalize text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A] !p-1.5 !rounded-lg" key={index}>{item}</Badge>
                           ))}
@@ -126,6 +134,8 @@ type Props = {
                 )}
               </TableBody>
           </Table> 
+          {isMobile && <div className="w-full">&nbsp;</div>}
+          </div>
       </> 
     )
   }
