@@ -55,7 +55,7 @@ const Summary = () => {
       {loading && <Loader />}
       <div className="w-full flex items-center justify-center">
       
-      <div className="md:4/5 md:ml-20 py-10 flex flex-col gap-10 max-w-4xl">
+      <div className="md:4/5 md:ml-20 md:my-10 mb-10 flex flex-col gap-10 max-w-4xl">
         <div className='flex justify-between items-center'>
           <h1 className="text-[1.375rem] font-semibold pt-10 md:pb-5 md:py-5 text-black">Research Information</h1>
         </div>
@@ -120,7 +120,7 @@ const Summary = () => {
               {supportDocData.map((file) => {
                     return (
                       <div className="flex flex-col gap-2">
-                        <div className="flex flex-col gap-2 md:flex-row md:justify-between">
+                        <div className="flex flex-col gap-1 md:gap-2 md:flex-row md:justify-between">
                           <div className="font-semibold text-sm">{file.label}<span className="text-red-500">&ensp;*</span></div>
                           <div className="text-[#868687] text-xs">.Doc, .Docx, .Pdf (Max of 3MB)</div>
                         </div>
