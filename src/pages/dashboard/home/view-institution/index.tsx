@@ -8,6 +8,8 @@ import SignatureIcon from "@/components/custom/Icons/Signature";
 import MoneyIcon from "@/components/custom/Icons/Money";
 import FileRemove from "@/components/custom/Icons/FileRemove";
 import { useState } from "react";
+import CustomChart from "@/components/custom/CustomChart";
+import { ChartConfig } from "@/components/ui/chart";
 
 export default function InstitutionAdminHome() {
     const [activeStatsTab, setActiveStatsTab ] = useState("yourStats");
@@ -33,9 +35,54 @@ export default function InstitutionAdminHome() {
 const InstitutionAdminHomePage = () => {
     const [activeTab, setActiveTab] = useState("allTime");
 
+    const chartConfig = {
+        requests: {
+          label: "Requests:",
+          color: "#312C33",  
+        },
+      } satisfies ChartConfig;
+      
+    const chartData = [
+        { month: 'Aug 30', requests: 1.00 },
+        { month: 'Sep 30', requests: 2.50 },
+        { month: 'Oct 31', requests: 1.50 },
+      ];
+    const xAxis = {
+        dataKey: "month",
+        tickLine: false,
+        axisLine: false,
+        tickMargin: 8,
+        interval: 0, 
+        tick: { 
+            fill: "#312C33", 
+            fontWeight: "700",  
+            fontSize: 14,  
+            fontFamily: "system-ui",
+            letterSpacing: "2.25%",
+        },
+        padding: { left: 100, right: 100 }
+    }
+
+    const yAxis = {
+        tickLine: false,
+        axisLine: false,
+        tick: { 
+            fill: "#312C33",  
+            fontWeight: "700", 
+            fontSize: 16,  
+            fontFamily: "system-ui",
+            letterSpacing: "4.25%",
+        },
+        tickMargin: 8,
+        tickFormatter: (value: any) => value.toFixed(2),
+        domain: [0, 3],
+        tickCount: 7
+    }
+
+
     return (
-        <div className="flex flex-col gap-10 mt-[3.25rem]">
-            <div className="grid md:grid-cols-4 gap-3">
+        <div className="flex flex-col gap-10 mt-[3.25rem] mb-[10rem]">
+            <div className="grid md:grid-cols-4 gap-3 my-8">
                 <div className="gap-4 flex items-center md:flex-col w-full">
                     <span className="max-h-[8.75rem] w-full">
                         <InstitutionCards icon={GoogleDoc()} label="Submitted Requests" num="24" color="#7D462A" />
@@ -60,28 +107,36 @@ const InstitutionAdminHomePage = () => {
                     </span>    
                 </div>
             </div>
-            <div className="flex flex-col gap-[3.25rem]">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-[1.375rem] font-bold">Request Submission Overview</h1>
-                    <Tabs defaultValue="allTime" onValueChange={(val) => setActiveTab(val)}>
-                        <TabsList className="flex items-start gap-3">
+            <div className=" ">
+                <Tabs defaultValue="allTime" onValueChange={(val) => setActiveTab(val)} className="flex flex-col gap-[3.25rem]">
+                    <div className="flex flex-col gap-6 md:flex-row md:justify-between md:items-center">
+                        <h1 className="text-[1.375rem] font-bold">Request Submission Overview</h1>
+                    
+                        <TabsList className="flex flex-row items-start gap-3">
                             <TabsTrigger value="allTime" className={`text-sm border border-[#0C0C0F29] py-2 px-4 rounded-[2.375rem] font-normal ${activeTab === "allTime" && "bg-[#FFD13A]"}`}>All Time</TabsTrigger>
                             <TabsTrigger value="thisMonth" className={`text-sm border border-[#0C0C0F29] py-2 px-4 rounded-[2.375rem] font-normal ${activeTab === "thisMonth" && "bg-[#FFD13A]"}`}>This Month</TabsTrigger>
                             <TabsTrigger value="oneWeek"  className={`text-sm border border-[#0C0C0F29] py-2 px-4 rounded-[2.375rem] font-normal ${activeTab === "oneWeek" && "bg-[#FFD13A]"}`}>Last 7 days</TabsTrigger>
                         </TabsList>
+                    </div>
+                    <div className="">
                         <TabsContent value="allTime">
-                            {/* <ResearcherHomePage /> */}
+                            <div className={`h-full max-h-[400px]`}>
+                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis}/>
+                            </div>
                         </TabsContent>
                         <TabsContent value="thisMonth">
-                            {/* <InstitutionAdminHomePage /> */}
+                            <div className= {` h-full max-h-[400px]`}>
+                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis}/>
+                            </div>
                         </TabsContent>
                         <TabsContent value="oneWeek">
-                            {/* <InstitutionAdminHomePage /> */}
+                            <div className= {` h-full max-h-[400px]`}>
+                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis}/>
+                            </div>
                         </TabsContent>
-                    </Tabs>
-                </div>
-                
-            </div>
+                    </div>  
+                </Tabs>
+            </div>  
         </div>
     )
 }
@@ -100,12 +155,9 @@ const InstitutionCards = ({ icon, label, num, color, image }: InstitutionCardPro
             <div className=" text-white flex flex-col gap-4">
                 <div className="text-white w-full flex justify-between items-center">
                     <p className="text-sm w-full max-w-[60%]">{label}</p>
-                    <div className="justify-self-start text-white border border-white w-[2.25rem] h-[2.25rem] rounded-[0.625rem] flex justify-center items-center p-1">{icon}</div>
-                    
+                    <div className="justify-self-start text-white border border-white w-[2.25rem] h-[2.25rem] rounded-[0.625rem] flex justify-center items-center p-1">{icon}</div>   
                 </div>
-                <h2 className="text-[1.875rem]">{num}</h2>
-                
-                
+                <h2 className="text-[1.875rem]">{num}</h2> 
             </div>
             <div className="justify-self-end absolute bottom-0 right-0"><img src={image} /></div>
         </div>
