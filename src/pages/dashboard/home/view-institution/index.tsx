@@ -81,7 +81,7 @@ const InstitutionAdminHomePage = () => {
 
 
     return (
-        <div className="flex flex-col gap-10 mt-[3.25rem] mb-[10rem]">
+        <div className="flex flex-col gap-10 mt-[3.25rem] mb-[14rem]">
             <div className="grid md:grid-cols-4 gap-3 my-8">
                 <div className="gap-4 flex items-center md:flex-col w-full">
                     <span className="max-h-[8.75rem] w-full">
