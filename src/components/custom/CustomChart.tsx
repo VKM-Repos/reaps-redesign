@@ -26,6 +26,7 @@ type ChartProps = {
   xAxis: AxisProps & {
     dataKey: string;
     interval: number;
+    tickFormatter: (value: number) => string;
     padding: {
       left: number;
       right: number;
@@ -39,16 +40,17 @@ type ChartProps = {
     domain: number[];
     tickCount: number;
   };
+  tooltipFormatter: (value: any, name: any) => any[];
 };
 
-export default function CustomChart({ chartConfig, chartData, xAxis, yAxis }: ChartProps) {
+export default function CustomChart({ chartConfig, chartData, xAxis, yAxis, tooltipFormatter }: ChartProps) {
   const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
   return (
     <div className={`w-full h-full ${isMobile && "overflow-x-scroll"} [&::-webkit-scrollbar]:h-2 
         [&::-webkit-scrollbar-track]:rounded-full 
         [&::-webkit-scrollbar-track]:bg-gray-10110
         [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
-      <ChartContainer config={chartConfig} className="w-full min-w-[750px] mb-4 border-2 border-[#0E0F0C1F] rounded-3xl pr-6 py-10 mx-auto">
+      <ChartContainer config={chartConfig} className="w-full min-w-[750px] mb-4 border-2 border-[#0E0F0C1F] rounded-3xl pr-6 pl-3 py-10 mx-auto">
         <LineChart
           data={chartData}
         >
@@ -62,14 +64,14 @@ export default function CustomChart({ chartConfig, chartData, xAxis, yAxis }: Ch
           <XAxis {...xAxis} />
           <ChartTooltip
             cursor={false}
-            content={<ChartTooltipContent hideLabel />}
+            content={<ChartTooltipContent formatter={tooltipFormatter} />}
           />
           <YAxis {...yAxis}/>
           <Line
             dataKey="requests"
             type="linear"
             stroke="url(#colorGradient)"
-            strokeWidth={2}
+            strokeWidth={3}
             dot={false}
           />
         </LineChart>
