@@ -48,7 +48,7 @@ export default function CustomChart({ chartConfig, chartData, xAxis, yAxis }: Ch
         [&::-webkit-scrollbar-track]:rounded-full 
         [&::-webkit-scrollbar-track]:bg-gray-10110
         [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
-      <ChartContainer config={chartConfig} className="w-full min-w-[800px] mb-4 border-2 border-[#0E0F0C1F] rounded-3xl pr-6 py-10 mx-auto">
+      <ChartContainer config={chartConfig} className="w-full min-w-[750px] mb-4 border-2 border-[#0E0F0C1F] rounded-3xl pr-6 py-10 mx-auto">
         <LineChart
           data={chartData}
         >
