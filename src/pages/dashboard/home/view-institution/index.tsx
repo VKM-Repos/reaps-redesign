@@ -35,7 +35,7 @@ export default function InstitutionAdminHome() {
 const InstitutionAdminHomePage = () => {
     const [activeTab, setActiveTab] = useState("allTime");
 
-    const chartConfig = {
+    const chartConfig = {    
         requests: {
           label: "Requests:",
           color: "#312C33",  
@@ -43,10 +43,21 @@ const InstitutionAdminHomePage = () => {
       } satisfies ChartConfig;
       
     const chartData = [
-        { month: 'Aug 30', requests: 1.00 },
-        { month: 'Sep 30', requests: 2.50 },
-        { month: 'Oct 31', requests: 1.50 },
+        { month: 'Aug 01', requests: 4 },
+        { month: 'Aug 15', requests: 6 },
+        { month: 'Aug 30', requests: 7 }, 
+        { month: 'Sep 01', requests: 5 },
+        { month: 'Sep 15', requests: 9 },
+        { month: 'Sep 30', requests: 10 }, 
+        { month: 'Oct 01', requests: 6 },
+        { month: 'Oct 15', requests: 8 },
+        { month: 'Oct 31', requests: 5 },
+        { month: 'Nov 01', requests: 5 },
+        { month: 'Nov 15', requests: 8 },
+        { month: 'Nov 25', requests: 10 },
+
       ];
+
     const xAxis = {
         dataKey: "month",
         tickLine: false,
@@ -60,7 +71,11 @@ const InstitutionAdminHomePage = () => {
             fontFamily: "system-ui",
             letterSpacing: "2.25%",
         },
-        padding: { left: 100, right: 100 }
+        tickFormatter: (value: any) => {
+            const day = value.split(" ")[1];
+            return day === '30' || day === '31' ? value : '';
+        },
+        padding: { left: 20, right: 20 }
     }
 
     const yAxis = {
@@ -75,13 +90,17 @@ const InstitutionAdminHomePage = () => {
         },
         tickMargin: 8,
         tickFormatter: (value: any) => value.toFixed(2),
-        domain: [0, 3],
-        tickCount: 7
+        domain: [0, 10],
+        tickCount: 7,
     }
+
+    const tooltipFormatter = (value: any, name: any) => {
+        return [`${value}  `, `${name}`];
+      };
 
 
     return (
-        <div className="flex flex-col gap-10 mt-[3.25rem] mb-[10rem]">
+        <div className="flex flex-col gap-10 mt-[3.25rem] mb-[14rem]">
             <div className="grid md:grid-cols-4 gap-3 my-8">
                 <div className="gap-4 flex items-center md:flex-col w-full">
                     <span className="max-h-[8.75rem] w-full">
@@ -121,17 +140,17 @@ const InstitutionAdminHomePage = () => {
                     <div className="">
                         <TabsContent value="allTime">
                             <div className={`h-full max-h-[400px]`}>
-                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis}/>
+                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis} tooltipFormatter={tooltipFormatter}/>
                             </div>
                         </TabsContent>
                         <TabsContent value="thisMonth">
                             <div className= {` h-full max-h-[400px]`}>
-                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis}/>
+                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis} tooltipFormatter={tooltipFormatter}/>
                             </div>
                         </TabsContent>
                         <TabsContent value="oneWeek">
                             <div className= {` h-full max-h-[400px]`}>
-                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis}/>
+                                <CustomChart chartConfig={chartConfig} chartData={chartData} xAxis={xAxis} yAxis={yAxis} tooltipFormatter={tooltipFormatter}/>
                             </div>
                         </TabsContent>
                     </div>  
