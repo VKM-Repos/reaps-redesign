@@ -197,6 +197,11 @@ button:focus, button:focus-visible {
 
   }
 
+  .card-shadow {
+    box-shadow: 0px 20px 20px 0px #00000D1A;
+
+  }
+
   .dot::before {
     content: '';
     display: block;

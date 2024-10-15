@@ -74,7 +74,7 @@ export default function Requests() {
 
     
 
-      function formatDateToDDMMYYYY(date: Date) {
+    function formatDateToDDMMYYYY(date: Date) {
         const day = String(date.getDate()).padStart(2, '0');  // Get the day and pad with 0 if necessary
         const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-based, so add 1
         const year = date.getFullYear();  // Get the full year
@@ -83,7 +83,7 @@ export default function Requests() {
 
     
 
-      const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGlobalFilter(e.target.value);
     };
 
@@ -262,10 +262,7 @@ export default function Requests() {
                                 ))}    
                             </div>
                             }
-                        {role === 'RESEARCHER' && 
-                            <TableRequests tableData={tableData} />    
-                        }
-                        {role === 'REVIEWER' &&
+                        {role === 'REVIEWER' ?
                             <Tabs defaultValue="request table" onValueChange={(val) => setActiveTab(val)}>
                                 <TabsList className="border-b-[1.5px] w-full px-3">
                                     <TabsTrigger value="request table">My request</TabsTrigger>
@@ -279,6 +276,8 @@ export default function Requests() {
                                     <TableReview reviewTableData={reviewTableData} />
                                 </TabsContent>
                             </Tabs>
+                            :
+                            <TableRequests tableData={tableData} />
                         }
                     </div>
                     :
