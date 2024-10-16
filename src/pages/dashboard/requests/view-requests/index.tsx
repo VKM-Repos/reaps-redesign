@@ -20,7 +20,7 @@ export default function ViewRequests() {
     contentRef: summaryRef,
   });
 
-  const currentStatus: string = "Approval";
+  const currentStatus: string = "Payment Confirmed";
   const isApproval = currentStatus === "Approval";
   const currentIndex = statuses.indexOf(currentStatus);
 
