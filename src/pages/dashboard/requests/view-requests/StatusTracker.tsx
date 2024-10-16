@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button";
 
 
 type StatusTrackerProps = {
+    currentIndex: number,
     currentStatus: string,
-    statuses: string[]
+    statuses: string[],
+    isApproval: boolean,
+    handlePrint: () => void
 }
-export default function StatusTracker({ currentStatus, statuses }: StatusTrackerProps) {
-    const isApproval = currentStatus === 'Approval';
-    const currentIndex = statuses.indexOf(currentStatus);
+export default function StatusTracker({ currentIndex, currentStatus, isApproval, statuses, handlePrint }: StatusTrackerProps) {
 
     return (
         <div className="max-w-[24.375rem] hidden md:block w-full flex flex-col fixed py-12 px-4 mx-auto">
@@ -42,15 +43,13 @@ export default function StatusTracker({ currentStatus, statuses }: StatusTracker
                                 </div>
                             </> 
 }
-                    </div>
-              
-                       
+                    </div>         
                     )
                    )
                 }
                 </div>
                 <div className="w-full">
-                    <Button variant={`${isApproval ? 'default' : 'outline'}`} className={`${isApproval? 'text-white rounded-2 py-3' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem] '} !max-w-[9.375rem] !w-full font-semibold px-6`}>Print</Button>
+                    <div className='w-full my-4 flex items-center justify-center'><Button onClick={handlePrint} className={`${isApproval? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem] !max-w-[9.375rem'} !w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>
                 </div>
             </div>
         </div>
