@@ -257,7 +257,7 @@ const AppSummary = ({ handleNext }: Props) => {
                     );
                   })}
                 </div>
-                <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4 ">
+                <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4">
                   <Button
                     type="submit"
                     variant="outline"
