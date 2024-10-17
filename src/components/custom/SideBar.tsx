@@ -11,7 +11,7 @@ export default function Sidebar() {
     const { role } = useRole();
 
     return (
-        <div className="max-w-[240px] hidden md:block w-full flex flex-col fixed z-[1000] h-full">
+        <div className="max-w-[240px] hidden md:block w-full flex flex-col fixed h-full">
             <div className="max-h-[124px] md:h-[130px] flex items-center my-3">
                 <div className="flex items-center justify-center w-full md:w-11/12">
                     <div className="flex items-center justify-center">
