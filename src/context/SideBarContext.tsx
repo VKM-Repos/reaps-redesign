@@ -112,7 +112,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                     subLinks: [
                         {
                             label: "My Requests",
-                            path: "/requests/my-requests",
+                            path: "/requests",
                             icon: <DocumentIcon />
                         },
                         {
@@ -148,7 +148,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                             icon: <ProfileTwo />,
                         },
                         {
-                            label: "Institution",
+                            label: "Account",
                             path: "/institution/account",
                             icon: <Bank />,
                         }

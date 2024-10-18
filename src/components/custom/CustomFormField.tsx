@@ -53,7 +53,7 @@ type CustomProps = {
 const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
   
 
-  const [selectedValue, setSelectedValue] = useState(props.options?.length === 1 ? props.options[0].value : ''); 
+  const [selectedValue, setSelectedValue] = useState(field.value); 
 
 
     switch (props.fieldType) {
@@ -72,7 +72,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                           setSelectedValue(value);
                           field.onChange(value.toString()); 
                         }}
-                        defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
+                        // defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
                       >
                          {props.options?.map((option) => {
                             const isChecked = selectedValue === option.value;
@@ -134,6 +134,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                          <span className="flex justify-between items-center w-full">
                            <span className="flex gap-2 items-center justify-center">
                              <GreenCheckmark />
+                             {/* reload causes field value name to disappear */}
                              {field.value?.name}
                            </span>
                            <span>
@@ -279,14 +280,14 @@ const CustomFormField = (props: CustomProps) => {
             <FormItem className="gap-4">
                 <div className="flex flex-col gap-1 items-start md:flex-row md:justify-between md:items-center">
                     <div> 
-                        <FormLabel className={`${labelClassName} ${error ? 'text-red-500' : 'text-[#454745]'} font-[400]`}>{label}</FormLabel>
+                        <FormLabel className={`${labelClassName} ${error ? 'text-red-500' : 'text-[#454745]'} font-normal`}>{label}</FormLabel>
                         {required && (
                         <span className="text-error text-red-500" title="required">
                         &ensp;*
                         </span>
                         )}
                     </div>
-                    {fieldType === FormFieldType.UPLOAD && <span className={`flex font-[400] justify-end ${error ? 'text-red-500' : 'text-[#868687]'} text-sm`}>Doc, Docx, Pdf (Max of 3MB)</span>}
+                    {fieldType === FormFieldType.UPLOAD && <span className={`flex font-normal justify-end ${error ? 'text-red-500' : 'text-[#868687]'} text-xs`}>.Doc, .Docx, .Pdf (Max of 3MB)</span>}
                 </div>
                 <RenderInput field={field} props={props}/>
                 <FormMessage/>

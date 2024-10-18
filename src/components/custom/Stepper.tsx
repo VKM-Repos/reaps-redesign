@@ -77,7 +77,7 @@ export default function Stepper( { setStep, step, array }: Props) {
 
 
     return (
-        <div className="flex flex-col gap-4 w-full min-w-[18.75rem] max-w-[32rem] my-0">
+        <div className="flex flex-col gap-4 w-full mx-auto min-w-[18.75rem] max-w-[32rem] my-0">
             <div className="relative h-[9px] w-full overflow-hidden rounded-full flex items-center justify-center">
                 <div className="relative bg-[#16330014] h-[2px] relative w-full rounded-full flex items-center justify-center">
                     <div
