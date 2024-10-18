@@ -112,7 +112,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                     subLinks: [
                         {
                             label: "My Requests",
-                            path: "/requests/my-requests",
+                            path: "/requests",
                             icon: <DocumentIcon />
                         },
                         {
