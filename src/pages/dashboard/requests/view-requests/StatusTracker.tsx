@@ -29,8 +29,8 @@ export default function StatusTracker({ currentIndex, currentStatus, isApproval,
                     <StatusHelp />
                 </div>
                 {isMobile && 
-                <div className="flex items-center text-[#192C8A] py-2">
-                    <div onClick={handleFunc} className="rotate-180 flex items-center"><ArrowRight /></div>
+                <div onClick={handleFunc} className="flex items-center text-[#192C8A] py-2">
+                    <div className="rotate-180 flex items-center"><ArrowRight /></div>
                     <p>Back to Summary</p>
                 </div>
 }
@@ -61,7 +61,7 @@ export default function StatusTracker({ currentIndex, currentStatus, isApproval,
                    )
                 }
                 </div>
-                {!isMobile && <div className='w-full my-4 flex items-center justify-center'><Button onClick={handlePrint} className={`${isApproval? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'} !max-w-[9.375rem] w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
+                {!isMobile && <div className='w-full my-4 flex items-center justify-start mx-auto'><Button onClick={handlePrint} className={`${isApproval? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'}  w-full max-w-[9.375rem] font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
             </div>
         </div>
     )

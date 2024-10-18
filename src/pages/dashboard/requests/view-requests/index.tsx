@@ -31,7 +31,7 @@ export default function ViewRequests() {
 
   return (
     <SheetContent side="bottom" className="h-full overflow-y-scroll md:!p-0">
-      {showTracker ?
+      {showTracker && isMobile ?
          <StatusTracker
          currentIndex={currentIndex}
          currentStatus={currentStatus}
@@ -63,9 +63,9 @@ export default function ViewRequests() {
             </SheetClose>
           </div>
           {isMobile && 
-            <div className="flex items-center text-[#192C8A] py-3 w-[95%] mx-auto">
+            <div className="flex items-center text-[#192C8A] py-3 w-[95%] mx-auto" onClick={() => {setShowTracker(true)}}>
                   <p>View Status Tracker</p>
-                  <div className="flex items-center" onClick={() => {setShowTracker(true)}}><ArrowRight /></div>
+                  <div className="flex items-center"><ArrowRight /></div>
               </div>
             }
           <div className="mx-auto my-0 md:absolute md:right-0 md:w-10/12">
