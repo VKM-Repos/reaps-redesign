@@ -1,5 +1,11 @@
 import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
+import MoreIcon from "@/components/custom/Icons/MoreIcon";
+import SignatureIcon from "@/components/custom/Icons/Signature";
+import View from "@/components/custom/Icons/View";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 // import { useState } from "react";
 
@@ -20,6 +26,34 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
     "In Progress": { bg: '#FFA165', text: '#1A1513'}
 }
 
+function RenderFunctions() {
+    return (
+        <DropdownMenu modal={false}>
+            <DropdownMenuTrigger>
+                <MoreIcon />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
+                <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
+                    <>
+                        <Sheet>
+                            <SheetTrigger className={`text-black flex justify-center items-center gap-2 p-3`}>
+                                <View />
+                                <span>View</span>
+                            </SheetTrigger>
+                        </Sheet>
+                        <Dialog>
+                            <DialogTrigger className={`text-black flex justify-center items-center gap-2 p-3`}>
+                                <SignatureIcon />
+                                <span>Reviewers</span>
+                            </DialogTrigger>
+                        </Dialog>
+                    </>
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
 export default function ManageRequests({ institutionTableData }: TableRequestsProps) {
     // const [ tableArray, setTableArray ] = useState(institutionTableData);
     const { multiStatusDateFilter } = useGlobalFilter();
@@ -32,14 +66,14 @@ export default function ManageRequests({ institutionTableData }: TableRequestsPr
     
         },
         {
-            header: () => <CustomCell value={"Applicant Name"} className="font-bold w-full min-w-[10rem]" />,
+            header: () => <CustomCell value={"Applicant Name"} className="font-bold w-full min-w-[12rem]" />,
             accessorKey: "applicantName",
-            cell: (info) => <CustomCell value={info.getValue()} className="min-w-[10rem] w-full" />,
+            cell: (info) => <CustomCell value={info.getValue()} className="min-w-[12rem] w-full" />,
         },
         {
-            header: () => <CustomCell value={"Submission"} className="font-bold w-full min-w-[8rem]" />,
+            header: () => <CustomCell value={"Submission"} className="font-bold w-full min-w-[10rem]" />,
             accessorKey: "submission",
-            cell: ({ getValue }) => <CustomCell value={getValue()} className="min-w-[8rem] w-full" />,
+            cell: ({ getValue }) => <CustomCell value={getValue()} className="min-w-[10rem] w-full" />,
             filterFn: multiStatusDateFilter,
             enableGlobalFilter: false,
         },
@@ -75,13 +109,12 @@ export default function ManageRequests({ institutionTableData }: TableRequestsPr
             accessorKey: "custom",
             header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
             meta: { cellType: "custom" },
-            cell: () => (
-                    <div className="flex justify-center gap-2 text-black p-3 cursor-pointer">
-                        {/* open a drawer to view */}
-                       
-                    </div>
-                ),
-            }
+            cell: () => {
+                return (
+                    <CustomCell value={<RenderFunctions />} className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]" />
+                );
+              }
+        }
     ]
 
     return (
