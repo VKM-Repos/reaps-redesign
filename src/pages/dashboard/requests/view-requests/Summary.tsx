@@ -1,20 +1,17 @@
 import CustomFormField, { FormFieldType } from '@/components/custom/CustomFormField';
 import FormInput from '@/components/custom/FormInput';
 import { Form } from '@/components/ui/form';
-import { FileDetails, fileGroup, useRequestsStore } from '@/store/RequestFormStore';
+import { useRequestsStore } from '@/store/RequestFormStore';
 import { application, supportDocData, tableData } from '@/lib/helpers';
 import { useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import GreenCheckmark from '@/components/custom/Icons/GreenCheckmark';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from 'react-responsive';
-import { useRole } from '@/hooks/useRole';
-import Download from '@/components/custom/Icons/Download';
-import { useLocation } from 'react-router-dom';
 
 type SummaryPageProps = {
-    isApproval?: boolean,
-    handlePrint?: () => void
+    isApproval: boolean,
+    handlePrint: () => void
 }
 const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
 
@@ -37,63 +34,12 @@ const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
   });
 
   const { register } = form;
-  const isMobile = useMediaQuery({ query: '(max-width: 767px)'});
-  const { role } = useRole();
-  const { pathname } = useLocation();
-
-
-  const handleDownload = (fileId: string) => {
-  
-
-    if (isFileGroup(files)) {
-      const fileDetails = files[fileId as keyof fileGroup];  // Directly access file using fileId as a key
-
-      if (fileDetails && fileDetails.file) {
-          downloadFile(fileDetails);  // Call the download function with the retrieved file
-      } else {
-          console.error("File not found or file is empty.");
-      }
-  } else {
-      console.error("Files is not of type fileGroup.");
-  }
-};
-
-const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
-  return (files as fileGroup).requirement1 !== undefined;
-};
-
-  
-  const downloadFile = (file: FileDetails) => {
-      if (!file || !file.file) {
-          console.error("No file available for download.");
-          return;
-      }
-  
-      // Create a URL for the file
-      const fileURL = URL.createObjectURL(file.file);
-  
-      // Create a temporary <a> element to trigger the download
-      const a = document.createElement('a');
-      a.href = fileURL;
-      a.download = file.path;  // Set the filename
-  
-      // Append the element to the body (necessary for it to work in some browsers)
-      document.body.appendChild(a);
-  
-      // Programmatically click the element to start the download
-      a.click();
-  
-      // Clean up
-      document.body.removeChild(a);
-      URL.revokeObjectURL(fileURL);
-  };
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
 
   function onSubmit() {
     try {
       setTimeout(() => {
-        if (handlePrint) {
-          handlePrint();
-        }
+      handlePrint();
       }, 3000);
     }
     catch (error) {
@@ -104,7 +50,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
     <>
       <div className="w-full flex items-center justify-center">
         {/* add status tracker */}
-        <div className="md:4/5 md:ml-20 md:my-10 mb-10 flex flex-col gap-6 max-w-4xl">
+        <div className="md:4/5 md:ml-20 md:my-10 mb-10 flex flex-col gap-10 max-w-4xl">
           <div className='flex justify-between items-center'>
             <h1 className="text-[1.375rem] font-semibold pt-10 md:pb-5 md:py-5 text-black">Research Information</h1>
           </div>
@@ -171,7 +117,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                       </div>
                       <div
                         key={file.id}
-                        className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
+                        className="w-full flex justify-between items-center border border-gray-300 p-2 rounded-md mb-2"
                       >
                         <span className="flex gap-2 items-center justify-center">
                           <span>
@@ -179,16 +125,9 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                           </span>
                           <span>{file.name}</span>
                         </span>
-                        {role === 'INSTITUTION_ADMIN' && pathname.includes('/requests/manage-requests') ?
-                          <button className="p-2" onClick={() => {handleDownload(file.id)}}>
-                            <span><Download /></span>
-                          </button>
-                           :
-                          <span className="p-2">
-                            <span className="text-[1rem]">x</span>
-                          </span>
-                        }
-                        
+                        <span className="p-2">
+                          <span className="text-[1rem]">x</span>
+                        </span>
                       </div>
                     </div>
                   );
