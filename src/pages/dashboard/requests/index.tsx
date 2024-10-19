@@ -172,7 +172,7 @@ export default function Requests() {
                                 (pathname.includes('review-requests') ? 
                                     <span>Review Requests</span> : 
                                 (pathname.includes('manage-requests') ? 
-                                    <span>Manage Request</span> :  
+                                    <span>Manage Requests</span> :  
                                     <span>My Requests</span>)
                                 ) : 
                             <span>Requests</span>
