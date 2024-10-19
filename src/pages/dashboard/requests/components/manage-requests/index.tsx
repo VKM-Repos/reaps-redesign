@@ -7,6 +7,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import InstitutionRequestSummary from "../../view-requests/institution-view";
 // import { useState } from "react";
 
 type TableRequestsProps = {
@@ -40,6 +41,7 @@ function RenderFunctions() {
                                 <View />
                                 <span>View</span>
                             </SheetTrigger>
+                            <InstitutionRequestSummary />
                         </Sheet>
                         <Dialog>
                             <DialogTrigger className={`text-black flex justify-center items-center gap-2 p-3`}>
