@@ -6,25 +6,26 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useState } from "react";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import Loader from "@/components/custom/Loader";
-import { Badge } from "@/components/ui/badge";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import SharedActions from "./custom/SharedActions";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import SharedActions from "../../requests/components/table-requests/custom/SharedActions";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import ArrowUp from "@/components/custom/Icons/ArrowUp";
+import ArrowDown from "@/components/custom/Icons/ArrowDown";
 
-type TableRequestsProps = {
-  tableData: {
-    id: string;
-    title: string;
-    specialization: string;
-    submission: string;
-    status: string;
+type usersTableDataProps = {
+  usersTableData: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
   }[];
 };
 
@@ -39,39 +40,25 @@ type RenderFunctionsProps = {
   loading: boolean;
 };
 
-const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-  Approved: { bg: "#34A85347", text: "#254D4B" },
-  Pending: { bg: "#CDD0CD", text: "#333A33" },
-  Declined: { bg: "#E7484847", text: "#BF1E2C" },
-  Draft: { bg: "#192C8A1A", text: "#040C21" },
-  "Under Review": { bg: "#F2C374", text: "#452609" },
-};
-
-function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
-  const { setStep } = useRequestsStore();
-  const navigate = useNavigate();
-
-  const redirectToSummary = () => {
-    navigate("/requests/create");
-    setStep(5);
-  };
-
+function RenderFunctions() {
   return (
     <>
-      {loading && <Loader />}
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button>
             <MoreIcon />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
+        <DropdownMenuContent className="rounded-xl rounded-r-none p-2 w-full max-w-24 .dropdown-shadow">
           <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
-            <SharedActions
-              item={item}
-              onDelete={onDelete}
-              redirectToSummary={redirectToSummary}
-            />
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <ArrowUp />
+              <span>Upgrade</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <ArrowDown />
+              <span>Downgrade</span>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -102,9 +89,11 @@ function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
   );
 }
 
-export default function TableRequests({ tableData }: TableRequestsProps) {
+export default function RequesterTable({
+  usersTableData,
+}: usersTableDataProps) {
   const [loading, setLoading] = useState(false);
-  const [tableArray, setTableArray] = useState(tableData);
+  const [tableArray, setTableArray] = useState(usersTableData);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const { multiStatusDateFilter } = useGlobalFilter();
@@ -123,11 +112,11 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     {
       header: () => (
         <CustomCell
-          value={"Title"}
+          value={"First Name"}
           className="font-bold w-full min-w-[18.75rem]"
         />
       ),
-      accessorKey: "title",
+      accessorKey: "firstName",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -138,11 +127,11 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     {
       header: () => (
         <CustomCell
-          value={"Specialization"}
+          value={"Last Name"}
           className="font-bold min-w-[9rem] w-full"
         />
       ),
-      accessorKey: "specialization",
+      accessorKey: "lastName",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[9rem] w-full" />
       ),
@@ -150,42 +139,14 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
     {
       header: () => (
         <CustomCell
-          value={"Submission"}
+          value={"Email"}
           className="font-bold w-full min-w-[11rem]"
         />
       ),
-      accessorKey: "submission",
+      accessorKey: "email",
       cell: ({ getValue }) => (
         <CustomCell value={getValue()} className="min-w-[11rem] w-full" />
       ),
-      filterFn: multiStatusDateFilter,
-      enableGlobalFilter: false,
-    },
-    {
-      header: "Status",
-      accessorKey: "status",
-      cell: ({ getValue }) => {
-        const item = getValue();
-        return (
-          <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full min-w-[8.75rem]">
-            <Badge
-              style={{
-                color: statusColorMap[item]?.text || "#000000",
-                backgroundColor: statusColorMap[item]?.bg || "#192C8A",
-              }}
-              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
-            >
-              <div
-                style={{
-                  backgroundColor: statusColorMap[item]?.text || "#192C8A",
-                }}
-                className="w-[5px] h-[5px] rounded-full"
-              ></div>
-              {item}
-            </Badge>
-          </span>
-        );
-      },
       filterFn: multiStatusDateFilter,
       enableGlobalFilter: false,
     },
@@ -208,13 +169,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
           />
         ) : (
           <CustomCell
-            value={
-              <RenderFunctions
-                item={item}
-                onDelete={deleteTableItem}
-                loading={loading}
-              />
-            }
+            value={<RenderFunctions />}
             className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
           />
         );

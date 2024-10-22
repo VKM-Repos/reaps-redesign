@@ -2,59 +2,96 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
     fontFamily: {
-      'barlow': ['Barlow Condensed', 'sans-serif']
+      barlow: ["Barlow Condensed", "sans-serif"],
+      inter: ["Inter", "sans-serif"],
     },
     fontSize: {
-      xs: ['0.75rem', {
-        lineHeight: '1.125rem'
-      }],
-      sm: ['0.875rem', {
-        lineHeight: '1.125rem',
-        letterSpacing: '0.01rem',
-      }],
-      md: ['0.9rem', {
-        lineHeight: '1.375rem'
-      }],
-      base: ['1rem', {
-        lineHeight: '1.5rem'
-      }],
-      xl: ['1.25rem', {
-        lineHeight: '1.875rem',
-        letterSpacing: '-0.015rem',
-      }],
-      xl2: ['1.5rem', {
-        lineHeight: '2.25rem',
-        letterSpacing: '-0.015rem',
-      }],
-      xl3: ['2rem', {
-        lineHeight: '3rem'
-      }],
-      xl4: ['2.5rem', {
-        lineHeight: '3.75rem'
-      }],
-      xl5: ['3rem', {
-        lineHeight: '4.5rem'
-      }],
-      xl6: ['3.5rem', {
-        lineHeight: '5.25rem'
-      }],
-      xl7: ['4rem', {
-        lineHeight: '3.375rem'
-      }],
-      xl8: ['4.5rem', {
-        lineHeight: '6.75rem'
-      }]
+      xs: [
+        "0.75rem",
+        {
+          lineHeight: "1.125rem",
+        },
+      ],
+      sm: [
+        "0.875rem",
+        {
+          lineHeight: "1.125rem",
+          letterSpacing: "0.01rem",
+        },
+      ],
+      md: [
+        "0.9rem",
+        {
+          lineHeight: "1.375rem",
+        },
+      ],
+      base: [
+        "1rem",
+        {
+          lineHeight: "1.5rem",
+        },
+      ],
+      xl: [
+        "1.25rem",
+        {
+          lineHeight: "1.875rem",
+          letterSpacing: "-0.015rem",
+        },
+      ],
+      xl2: [
+        "1.5rem",
+        {
+          lineHeight: "2.25rem",
+          letterSpacing: "-0.015rem",
+        },
+      ],
+      xl3: [
+        "2rem",
+        {
+          lineHeight: "3rem",
+        },
+      ],
+      xl4: [
+        "2.5rem",
+        {
+          lineHeight: "3.75rem",
+        },
+      ],
+      xl5: [
+        "3rem",
+        {
+          lineHeight: "4.5rem",
+        },
+      ],
+      xl6: [
+        "3.5rem",
+        {
+          lineHeight: "5.25rem",
+        },
+      ],
+      xl7: [
+        "4rem",
+        {
+          lineHeight: "3.375rem",
+        },
+      ],
+      xl8: [
+        "4.5rem",
+        {
+          lineHeight: "6.75rem",
+        },
+      ],
     },
     letterSpacing: {
-      tightest: '-.03rem'
+      tightest: "-.03rem",
     },
     container: {
       center: true,
@@ -121,4 +158,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
