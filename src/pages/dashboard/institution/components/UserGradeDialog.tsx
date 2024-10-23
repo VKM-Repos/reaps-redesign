@@ -5,32 +5,29 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import AddIcon from "@/components/custom/Icons/AddIcon";
-import { CreateUserForm } from "./CreateuserForm";
-import { useRef } from "react";
 
-export function AddNewUserButton() {
+import { useRef, useState } from "react";
+import { UserGradeForm } from "./UserGradeForm";
+
+export function UserGradeDialog({ title }: { title: string }) {
+  const [open, setOpen] = useState<boolean>(false);
   const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
 
   const handleClosDialog = () => {
     closeDialogBtn.current?.click();
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]">
-          <span>
-            <AddIcon />
-          </span>
-          Add new
-        </Button>
+        <button>{title}</button>
       </DialogTrigger>
-      <DialogContent className="w-[80%] overflow-y-scroll h-fit py-10">
-        <div className="mt-12 px-7">
-          <h2 className="text-center text-xl2 font-semibold font-inter">
-            Create New User
-          </h2>
-          <CreateUserForm handleClosDialog={handleClosDialog} />
+      <DialogContent
+        className="sm:max-w-md"
+        onInteractOutside={(event) => event.preventDefault}
+      >
+        <div className="mt-14 px-10">
+          <h2 className="text-center font-semibold text-xl">{title} User</h2>
+          <UserGradeForm handleClosDialog={handleClosDialog} action={title} />
           <DialogClose asChild>
             <Button
               ref={closeDialogBtn}

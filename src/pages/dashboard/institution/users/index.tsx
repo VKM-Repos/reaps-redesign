@@ -1,69 +1,29 @@
 import { reviewersTableData, tableData, usersData } from "@/lib/helpers";
-import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
+
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import EmptyRequests from "../../requests/components/emptystate";
-import UsersTable from "../components/RequesterTable";
-import AddIcon from "@/components/custom/Icons/AddIcon";
+
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
 import RequesterTable from "../components/RequesterTable";
 
-type SelectSingleEventHandler = (day: Date | undefined) => void;
-
 export default function Requests() {
   const { role } = useRole();
   const [activeTab, setActiveTab] = useState("review users");
-  //   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
-  const { globalFilter, setGlobalFilter, setColumnFilters } = useGlobalFilter();
+  const { globalFilter, setGlobalFilter } = useGlobalFilter();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGlobalFilter(e.target.value);
   };
-
-  //   const setFilters = () => {
-  //     const filters = [];
-  //     if (statusFilter && statusFilter.length > 0) {
-  //       filters.push({
-  //         id: "status", // The column ID
-  //         value: statusFilter, // An array of status values ['Draft', 'Pending']
-  //       });
-  //     }
-  //     if (startDate && endDate) {
-  //       const formattedStartDate = formatDateToDDMMYYYY(startDate); // convert input date to backend date format
-  //       const formattedEndDate = formatDateToDDMMYYYY(endDate);
-
-  //       filters.push({
-  //         id: "submission",
-  //         value: { formattedStartDate, formattedEndDate },
-  //       });
-  //     }
-  //     setColumnFilters(filters);
-  //   };
-
-  //   const applyFilters = () => {
-  //     setLoading(true);
-  //     setTimeout(() => {
-  //       setFilters();
-  //       setShowStatuses(true);
-  //       setAppliedStatuses([...selectedStatuses]);
-  //       setOpen(false);
-  //       setLoading(false);
-  //     }, 3000);
-  //   };
 
   return (
     <>
