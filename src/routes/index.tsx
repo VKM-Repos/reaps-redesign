@@ -14,6 +14,7 @@ import RecoverPassword from "@/pages/auth/password";
 import CreateRequests from "@/pages/dashboard/requests/create-requests";
 import ViewRequests from "@/pages/dashboard/requests/view-requests";
 import InstitutionUsers from "@/pages/dashboard/institution/users";
+import InstitutionProfile from "@/pages/dashboard/institution/profile";
 
 const router = [
   {
@@ -78,6 +79,12 @@ const router = [
             path: "institution/users",
             title: "Institution Users",
             element: InstitutionUsers,
+          },
+          {
+            name: "Institution Profile",
+            path: "institution/profile",
+            title: "Institution Profile",
+            element: InstitutionProfile,
           },
         ],
       },
