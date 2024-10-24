@@ -105,28 +105,6 @@ export const AdddressSettings = ({ onSave }: { onSave: () => void }) => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex flex-col text-xs mt-2">
-                <Select
-                  onValueChange={(value: string) => {
-                    setValue("lga", value, { shouldValidate: true });
-                    setEducation(value);
-                  }}
-                >
-                  <Label className="font-sm">Local government area</Label>
-                  <SelectTrigger className="w-full mt-2">
-                    <SelectValue placeholder={"LGA"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel></SelectLabel>
-                      {lgas &&
-                        lgas.map((lga) => (
-                          <SelectItem value={lga}>{lga}</SelectItem>
-                        ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
             <Button
               variant={isValid ? "default" : "ghost"}

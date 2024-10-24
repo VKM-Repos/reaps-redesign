@@ -6,13 +6,13 @@ import {
 import { useState } from "react";
 import { AdddressSettings } from "./forms/Address";
 import { ProfileSettings } from "./forms/ProfileSettings";
-import { InstitutionSettings } from "./forms/InstitutionSettings";
 
 import ArrowDown from "/icons/arrow-down-01.svg";
 import School from "@/components/custom/sidebar-icons/school";
 // import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Location from "@/components/custom/Icons/Location";
 import UserSetting from "@/components/custom/Icons/UserSetting";
+import { LogoSignature } from "./forms/LogoSignature";
 
 export default function InstitutionProfile() {
   const [isOpenIndex, setOpenIndex] = useState<number | null>();
@@ -43,7 +43,7 @@ export default function InstitutionProfile() {
       title: "Institution Logo & Signature",
       label: "Change logo & signature",
       icon: <UserSetting />,
-      content: <InstitutionSettings onSave={handleCloseCollapsible} />,
+      content: <LogoSignature onSave={handleCloseCollapsible} />,
     },
   ];
 

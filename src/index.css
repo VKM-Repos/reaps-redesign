@@ -1,5 +1,5 @@
 :root {
-  font-family: 'DM Sans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "DM Sans", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -10,7 +10,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -44,8 +54,6 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-
-
 
 /* remove to test dark screen problem */
 @media (prefers-color-scheme: light) {

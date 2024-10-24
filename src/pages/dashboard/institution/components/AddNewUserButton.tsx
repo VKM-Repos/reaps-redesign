@@ -25,7 +25,7 @@ export function AddNewUserButton() {
           Add new
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[80%] overflow-y-scroll h-fit py-10">
+      <DialogContent className="w-[80%] overflow-y-scroll h-full no-scrollbar py-10">
         <div className="mt-12 px-7">
           <h2 className="text-center text-xl2 font-semibold font-inter">
             Create New User
