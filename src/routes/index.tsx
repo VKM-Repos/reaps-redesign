@@ -66,6 +66,12 @@ const router = [
                     title: "View Request",
                     element: ViewRequests, 
                 },
+                {
+                    name: "Review Requests",
+                    path: 'review-requests', 
+                    title: "Review Requests",
+                    element: Requests, 
+                },
             ],
         },
         {

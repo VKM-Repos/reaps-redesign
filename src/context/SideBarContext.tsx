@@ -117,17 +117,17 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                         },
                         {
                             label: "Review Requests",
-                            path: "/requests/review-requests",
+                            path: "/review-requests",
                             icon: <FileView />
                         },
                         {
                             label: "Manage Requests",
-                            path: "/requests/manage-requests",
+                            path: "/manage-requests",
                             icon: <FileManage />
                         },
                         {
                             label: "Templates",
-                            path: "/requests/templates",
+                            path: "/templates",
                             icon: <DialPad />
                         }
                     ]
@@ -149,7 +149,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                         },
                         {
                             label: "Account",
-                            path: "/institution/account",
+                            path: "/pricing",
                             icon: <Bank />,
                         }
                     ]

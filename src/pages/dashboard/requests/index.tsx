@@ -7,7 +7,7 @@ import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab"
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -40,6 +40,7 @@ export default function Requests() {
     const [loading, setLoading] = useState(false);
     const [statuses, setStatuses] = useState<any[]>([])
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
 
 
@@ -69,8 +70,12 @@ export default function Requests() {
       ]
 
       useEffect(() => {
-        setStatuses(activeTab === "request table" ? requestsStatuses : reviewStatuses) //set statuses based on active tab)
+        setStatuses(activeTab === "request table"  ? requestsStatuses : reviewStatuses) //set statuses based on active tab)
       }, [activeTab])
+
+      useEffect(() => {
+        setStatuses(pathname.includes('review-requests') ? reviewStatuses : requestsStatuses)
+      }, [pathname]);
 
     
 
@@ -148,7 +153,7 @@ export default function Requests() {
         {loading && <Loader />}
             <div className="flex flex-col gap-12 mb-20">
                 <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-                    <h1 className="text-[1.875rem] font-bold">Requests</h1>
+                    <h1 className="text-[1.875rem] font-bold">{(role === "INSTITUTION_ADMIN") ? (pathname.includes('review-requests') ? <span>Review Requests</span> :  <span>My Requests</span>) : <span>Requests</span>}</h1>
                     {tableData.length > 0 && <Button onClick={handleFunc} className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>}
                 </div>
                 {/* tab */}
@@ -277,7 +282,7 @@ export default function Requests() {
                                 </TabsContent>
                             </Tabs>
                             :
-                            <TableRequests tableData={tableData} />
+                            (role === "INSTITUTION_ADMIN" && pathname.includes('/review-requests') ? <TableReview reviewTableData={reviewTableData} /> :<TableRequests tableData={tableData} />)
                         }
                     </div>
                     :
@@ -286,5 +291,13 @@ export default function Requests() {
                 </div>
         </>
    
+    )
+}
+
+export const ReviewTable = (reviewTableData: any) => {
+    return (
+        <>
+            <TableReview reviewTableData={reviewTableData} />
+        </>
     )
 }
