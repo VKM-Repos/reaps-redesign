@@ -35,8 +35,8 @@ export const EmailSettings = () => {
                     {...register("email", {
                     required: "This field is required"
                     })}
-                    disabled
                     className="!cursor-default"
+                    readOnly
                 />
                 </form>  
             </Form>

@@ -13,10 +13,10 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   disabled?: boolean;
-
+  readOnly?: boolean;
 }
 
-const FormInput: FC<InputProps> = ({ name, label, className, disabled, ...rest }) => {
+const FormInput: FC<InputProps> = ({ name, label, className, disabled, readOnly, ...rest }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const { control, formState: { errors } } = useFormContext();
   const error = errors[name];
@@ -57,7 +57,7 @@ const FormInput: FC<InputProps> = ({ name, label, className, disabled, ...rest }
                     error ? "border-red-500" : "border-gray-300"
                   }  placeholder:text-black/30 ${className}`}
                   disabled={disabled}
-                  
+                  readOnly={readOnly}
                   autoComplete="on"
                 />
                 {rest.type === "password" && (
