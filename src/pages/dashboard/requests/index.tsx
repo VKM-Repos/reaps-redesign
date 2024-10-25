@@ -180,7 +180,7 @@ export default function Requests() {
                     </h1>
                     {tableData.length > 0 && <Button onClick={handleFunc} className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>}
                 </div>
-                {/* tab */}
+                {/* tabs */}
                 {tableData && tableData.length > 0 ?
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center justify-between">
