@@ -1,6 +1,6 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import User from "@/components/custom/Icons/User";
 import SettingsIcon from "@/components/custom/Icons/SettingsIcon";
@@ -12,6 +12,7 @@ import BackButton from "@/components/custom/BackButton";
 import Loader from "@/components/custom/Loader";
 import ArrowDown from "/icons/arrow-down-01.svg";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import { useRole } from "@/hooks/useRole";
 
 
 
@@ -27,16 +28,34 @@ type ProfileDropdownProps = {
     handleClose: () => void;
 };
 
+const roles = ['Researcher', 'Reviewer', 'Institution Admin'];
+
 export default function ProfileDropDown() {
     const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
     const [open, setOpen] = useState(false);
+    const [currentRole, setCurrentRole] = useState('')
     const [loading, setLoading] = useState(false);
     const { data } = useOnboardingFormStore();
+    const { role } = useRole();
 
     const fullName = data.onboardingDetails.firstName + ' ' + data.onboardingDetails.lastName
+
+    const normalizeRole = (value: string): string => {
+        return value.replace(/_/g, ' ').trim().toLowerCase();
+    };
+
+    useEffect(() => {
+        for (const item of roles) {
+            if (item.toLowerCase() === normalizeRole(role)) {   
+               setCurrentRole(item);   
+            }
+        }
+    }, [role])
+   
+
     const profile = {
         name: fullName || 'John Doe',
-        role: <span className="">Researcher</span>,
+        role: <span>{currentRole}</span>,
         email: data.onboardingDetails.email || 'johndoe@gmail.com',
     };
 
