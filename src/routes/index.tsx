@@ -67,8 +67,20 @@ const router = [
                     element: ViewRequests, 
                 },
                 {
+                    name: "My Requests",
+                    path: 'requests/my-requests', 
+                    title: "My Requests",
+                    element: Requests, 
+                },
+                {
                     name: "Review Requests",
-                    path: 'review-requests', 
+                    path: 'requests/review-requests', 
+                    title: "Review Requests",
+                    element: Requests, 
+                },
+                {
+                    name: "Manage Requests",
+                    path: 'requests/manage-requests', 
                     title: "Review Requests",
                     element: Requests, 
                 },

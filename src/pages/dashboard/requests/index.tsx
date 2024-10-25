@@ -1,4 +1,4 @@
-import { reviewTableData, tableData } from "@/lib/helpers";
+import { institutionTableData, reviewTableData, tableData } from "@/lib/helpers";
 import TableRequests from "./components/table-requests";
 import TableReview from "./components/table-review";
 import EmptyRequests from "./components/emptystate";
@@ -19,6 +19,7 @@ import Tick from "@/components/custom/Icons/Tick";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import ManageRequests from "./components/manage-requests";
 
 type SelectSingleEventHandler = (day: Date | undefined) => void;
 
@@ -69,12 +70,24 @@ export default function Requests() {
         "Reopened"
       ]
 
+      const manageStatuses = [
+        'Awaiting',
+        'Reviewed',
+        'Assigned',
+        'In Progress'
+      ]
       useEffect(() => {
         setStatuses(activeTab === "request table"  ? requestsStatuses : reviewStatuses) //set statuses based on active tab)
       }, [activeTab])
 
       useEffect(() => {
-        setStatuses(pathname.includes('review-requests') ? reviewStatuses : requestsStatuses)
+        if (pathname.includes('manage-requests')) {
+            setStatuses(manageStatuses)
+        } else if (pathname.includes('review-requests')) {
+            setStatuses(reviewStatuses)
+        } else {
+            setStatuses(requestsStatuses)
+        }
       }, [pathname]);
 
     
@@ -153,7 +166,18 @@ export default function Requests() {
         {loading && <Loader />}
             <div className="flex flex-col gap-12 mb-20">
                 <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-                    <h1 className="text-[1.875rem] font-bold">{(role === "INSTITUTION_ADMIN") ? (pathname.includes('review-requests') ? <span>Review Requests</span> :  <span>My Requests</span>) : <span>Requests</span>}</h1>
+                    <h1 className="text-[1.875rem] font-bold">
+                        {
+                            (role === "INSTITUTION_ADMIN") ? 
+                                (pathname.includes('review-requests') ? 
+                                    <span>Review Requests</span> : 
+                                (pathname.includes('manage-requests') ? 
+                                    <span>Manage Requests</span> :  
+                                    <span>My Requests</span>)
+                                ) : 
+                            <span>Requests</span>
+                        }
+                    </h1>
                     {tableData.length > 0 && <Button onClick={handleFunc} className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>}
                 </div>
                 {/* tab */}
@@ -282,7 +306,19 @@ export default function Requests() {
                                 </TabsContent>
                             </Tabs>
                             :
-                            (role === "INSTITUTION_ADMIN" && pathname.includes('/review-requests') ? <TableReview reviewTableData={reviewTableData} /> :<TableRequests tableData={tableData} />)
+                            (
+                                role === "INSTITUTION_ADMIN" ? (
+                                  pathname.includes('/review-requests') ? (
+                                    <TableReview reviewTableData={reviewTableData} />
+                                  ) : pathname.includes('/manage-requests') ? (
+                                    <ManageRequests institutionTableData={institutionTableData} />
+                                  ) : (
+                                    <TableRequests tableData={tableData} />
+                                  )
+                                ) : (
+                                    <TableRequests tableData={tableData} />
+                                  )
+                            )
                         }
                     </div>
                     :
@@ -291,13 +327,5 @@ export default function Requests() {
                 </div>
         </>
    
-    )
-}
-
-export const ReviewTable = (reviewTableData: any) => {
-    return (
-        <>
-            <TableReview reviewTableData={reviewTableData} />
-        </>
     )
 }
