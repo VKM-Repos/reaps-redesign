@@ -27,10 +27,9 @@ export default function AddKeyword({handleNext}: Props) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
-    const { register, reset } = form;
+    const { register, reset, formState: { isValid } } = form;
     const [keyword, setKeyword] = useState<string>("");
     const [keywordsArray, setKeywordsArray] = useState<string[]>([]);
-
     
     function addKey(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
@@ -79,15 +78,19 @@ export default function AddKeyword({handleNext}: Props) {
                             onChange: (e) => { addKey(e as React.ChangeEvent<HTMLInputElement>) }
                             })}
                             value={keyword}
-                            className="!focus:border-none"
+                            className={`${keywordsArray.length <= 0 ? 'border-red-500' : ''} }! "focus:border-none"`}
                         />
+                        {keywordsArray.length <= 0 && (
+                            <span className="text-red-500 mt-1 text-xs">Please add at least one keyword.</span>
+                        )}
                         <div className="flex gap-2 w-full flex-wrap mt-8">
-                        {keywordsArray.map((item, index) => (
+                        {keywordsArray.map((item: string, index: number) => (
                             <Badge className="capitalize text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
                         ))}
                         </div>
-                        <SheetClose asChild disabled={keywordsArray.length === 0} type="submit">
-                            <Button variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
+                        {/* set error to so if you tap on disabled */}
+                        <SheetClose asChild disabled={keywordsArray.length <= 0} type="submit">
+                            <Button  variant={isValid && keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
                         </SheetClose> 
                     </form>
                 </Form>
