@@ -19,7 +19,7 @@ import Loader from "@/components/custom/Loader";
 export const AdddressSettings = ({ onSave }: { onSave: () => void }) => {
   const contries = ["Nigeria", "Uganda", "Kenya"];
   const states = ["Osun", "Lagos", "Sokoto"];
-  const lgas = ["Osun North", "Apapa", "Gada"];
+  // const lgas = ["Osun North", "Apapa", "Gada"];
   const formSchema = z.object({
     country: z.string().min(1, { message: "Please fill this field" }),
     state: z.string().min(1, { message: "Please fill this field" }),

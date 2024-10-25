@@ -24,6 +24,7 @@ export default function Requests() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGlobalFilter(e.target.value);
   };
+  console.log(activeTab);
 
   return (
     <>
