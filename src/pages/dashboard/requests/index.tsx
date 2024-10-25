@@ -205,14 +205,14 @@ export default function Requests() {
                                                 <div className="gap-2 flex flex-col justify-center">
                                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                                     <button onClick={() => {setActiveContent("Status")}}>
-                                                        <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>{selectedStatuses.length > 0 ? `${selectedStatuses.length} selected` : "Show All"}</span><span><ArrowRight /></span></div>
+                                                        <div className={`${activeContent === "Status" ? 'border-black' : 'border-[#0E0F0C1F]'} border w-full rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold`}><span>{selectedStatuses.length > 0 ? `${selectedStatuses.length} selected` : "Show All"}</span><span><ArrowRight /></span></div>
                                                     </button>
                                                 
                                                 </div>
                                                 <div className="gap-2 flex flex-col justify-center">
                                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Date</p>
                                                     <button onClick={() => {setActiveContent("Date")}}>
-                                                        <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Select Date</span><span><ArrowRight /></span></div>
+                                                        <div className={`${activeContent === "Date" ? 'border-black' : ' border-[#0E0F0C1F]'} border w-full rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold`}><span>Select Date</span><span><ArrowRight /></span></div>
                                                     </button>
                                                 </div>
                                             </div>
