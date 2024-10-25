@@ -3,12 +3,11 @@ import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import SignatureIcon from "@/components/custom/Icons/Signature";
 import View from "@/components/custom/Icons/View";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import InstitutionRequestSummary from "../../view-requests/institution-view";
-// import { useState } from "react";
 
 type TableRequestsProps = {
     institutionTableData: {
@@ -16,8 +15,8 @@ type TableRequestsProps = {
         applicantName: string;
         submission: string;
         status: string;
-    }[],
-}
+    }[];
+};
 
 
 const statusColorMap: { [key: string]: { bg: string; text: string } } = {
@@ -48,6 +47,7 @@ function RenderFunctions() {
                                 <SignatureIcon />
                                 <span>Reviewers</span>
                             </DialogTrigger>
+                            <DialogContent></DialogContent>
                         </Dialog>
                     </>
                 </DropdownMenuGroup>
