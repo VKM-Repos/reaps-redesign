@@ -11,8 +11,6 @@ import { useMediaQuery } from "react-responsive";
 import SharedActions from "./custom/SharedActions";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 
-
-
 type TableRequestsProps = {
     tableData: {
         id: string;
