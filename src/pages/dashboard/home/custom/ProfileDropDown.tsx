@@ -135,7 +135,7 @@ function ProfileHeader({ profile }: { profile: { name: string; role: JSX.Element
             <div className="rounded-full bg-[#14155E14] p-2">
                 <User />
             </div>
-            <div className="flex flex-col gap-1 justify-left">
+            <div className="flex flex-col gap-1 items-start">
                 <p className="text-sm inter text-[#0C0D0F]">{profile.name}</p>
                 <p className="text-sm text-[#868687] inter">
                     <span>({profile.role})</span> <span className="font-[400]">{profile.email}</span>
