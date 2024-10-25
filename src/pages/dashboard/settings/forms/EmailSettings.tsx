@@ -31,10 +31,12 @@ export const EmailSettings = () => {
             <Form {...form}>
                 <form className="flex flex-col gap-6">
                 <FormInput
-                    label="First enter your email address"
+                    label="Email address"
                     {...register("email", {
                     required: "This field is required"
                     })}
+                    disabled
+                    className="!cursor-default"
                 />
                 </form>  
             </Form>
