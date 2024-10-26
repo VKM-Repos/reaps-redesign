@@ -28,10 +28,3 @@ export default function InstitutionRequestSummary() {
         </SheetContent>
     )
 }
-
-{/* <div className={`${isMobile ? 'border border-[#0C0C0F29] !w-[95%]' : ''} w-full md:w-[90%] mx-auto flex justify-between md:justify-unset`}>
-                <div className="p-2 w-full">
-                    <h1 className="text-center font-semibold text-xl md:text-xl2">
-                    Your application Summary
-                    </h1>
-                </div> */}

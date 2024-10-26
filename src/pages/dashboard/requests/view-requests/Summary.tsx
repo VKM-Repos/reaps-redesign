@@ -11,6 +11,8 @@ import { useMediaQuery } from 'react-responsive';
 import { useRole } from '@/hooks/useRole';
 import Download from '@/components/custom/Icons/Download';
 import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import ArrowRight from '@/components/custom/Icons/ArrowRight';
 
 type SummaryPageProps = {
     isApproval?: boolean,
@@ -71,13 +73,9 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
   
       // Create a URL for the file
       const fileURL = URL.createObjectURL(file.file);
-  
-      // Create a temporary <a> element to trigger the download
       const a = document.createElement('a');
       a.href = fileURL;
-      a.download = file.path;  // Set the filename
-  
-      // Append the element to the body (necessary for it to work in some browsers)
+      a.download = file.path;
       document.body.appendChild(a);
   
       // Programmatically click the element to start the download
@@ -161,6 +159,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
               <div className='flex justify-between items-center'>
                 <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5 text-black">Support Docs</h1>
               </div>
+              {role === 'INSTITUTION_ADMIN' && pathname.includes('/requests/manage-requests') && <ActionButton />}
               <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
                 {supportDocData.map((file) => {
                   return (
@@ -204,3 +203,37 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
 }
 
 export default Summary
+
+const actions = [
+  {
+    text: "Assign",
+    color: "#FFAD3A"
+  }, 
+  {
+    text: "Review",
+    color: "#BD6BC9"
+  }, 
+  {
+    text: "Final Review",
+    color: "#566DBE"
+  }
+]
+
+const ActionButton = () => {
+  const [showButtons, setShowButtons] = useState(false);
+   return (
+       <div className='fixed bottom-0 right-0 p-8'>
+        <div className="flex flex-col gap-3">
+          {showButtons && 
+          <div className='flex flex-col gap-5 items-end '>
+            {actions.map(({text, color}) => (
+              <button className="text-black bg-white action-shadow rounded-[2.75rem] px-6 py-[1.375rem] font-semibold max-w-fit" style={{ color: color}}>
+                {text}
+              </button>
+            ))}
+          </div>}
+           <button className="text-white flex items-center gap-3 px-6 py-[1.375rem] action-shadow rounded-[2.75rem] border border-4 border-[#FFD13A] bg-primary" onClick={() => setShowButtons((prev) => !prev)}><span className="font-semibold">Action</span><span className="rounded-[36px] border border-white w-6 h-6 "><span className={`${showButtons ? 'rotate-270' : 'rotate-90'} flex items-center`}><ArrowRight /></span></span></button>
+        </div>
+       </div>
+   )
+}
