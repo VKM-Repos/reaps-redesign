@@ -38,6 +38,8 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
         .string()
         .min(1, { message: "Please fill this field"})
         .regex(/^\d+$/, { message: "Phone number should contain only numbers" }),
+    dialCode: z
+        .string(),
     dob: z
         .date()
     });
@@ -48,15 +50,18 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
         firstName: data.onboardingDetails.firstName || "",  
         lastName: data.onboardingDetails.lastName || "",    
         phoneNumber: data.onboardingDetails.phoneNumber || "",
+        dialCode: data.onboardingDetails.dialCode || "",
         dob: data.onboardingDetails.dob || undefined,        
     };
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues,
       });
-    const { register, formState: { isValid }, reset} = form;
+    const { register, formState: { isValid }, reset, setValue, watch } = form;
+   
     const [flags, setFlags] = useState<FlagData[]>([]);
     const [countriesData, setCountries] = useState<CountryListItemType[]>([])
+
 
     useEffect(() => {
         setCountries(countries);
@@ -76,10 +81,20 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
     });
 
 
+    const dialCodeValue = watch("dialCode", defaultValues.dialCode);
+      
+    useEffect(() => {
+        if (defaultValues.dialCode) {
+            const initialCountry: any = combinedData.find(country => country.dial_code === defaultValues.dialCode);
+            if (initialCountry) {
+                setDialCode(initialCountry.dial_code);
+                setSelectedFlag(initialCountry.flag);
+            }
+        }
+    }, [defaultValues.dialCode, combinedData]);
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        const dialNumber = dialCode + values.phoneNumber;
         setLoader(true);
         try {
             setData({
@@ -87,7 +102,8 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                     ...data.onboardingDetails,
                     firstName: values.firstName,
                     lastName: values.lastName,
-                    phoneNumber: dialNumber,
+                    phoneNumber: values.phoneNumber,
+                    dialCode: values.dialCode,
                     dob: values.dob,
                 }
             }); 
@@ -114,6 +130,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                     {...register("firstName", {
                     required: "This field is required",
                     })}
+                    className="!capitalize"
                     />
                     <FormInput
                     label="Your Last Name"
@@ -122,6 +139,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                     {...register("lastName", {
                     required: "This field is required",
                     })}
+                    className="!capitalize"
                     />
                     <CustomFormField 
                         name="dob"
@@ -131,11 +149,12 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                     />
                     <div className="flex gap-2">
                         <div className="flex flex-col text-xs mt-2">
-                            <Select onValueChange={(value: string) => {
+                            <Select value={dialCodeValue} onValueChange={(value: string) => {
                                     const selectedCountry: any = combinedData.find(country => country.name === value);
                                     if (selectedCountry) {
                                         setDialCode(selectedCountry.dial_code);  
                                         setSelectedFlag(selectedCountry.flag); 
+                                        setValue("dialCode", selectedCountry.dial_code);
                                     }
                                 }}>
                                 <Label className="font-md">Country Code</Label>
