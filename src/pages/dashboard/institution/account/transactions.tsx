@@ -1,13 +1,9 @@
-import { reviewTableData, tableData } from "@/lib/helpers";
-import TableRequests from "./components/table-requests";
-import TableReview from "./components/table-review";
-import EmptyRequests from "./components/emptystate";
+import { tableData, tranxData } from "@/lib/helpers";
+
 import { Button } from "@/components/ui/button";
-import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useRole } from "@/hooks/useRole";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useRole } from "@/hooks/useRole";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
 import {
@@ -16,20 +12,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Calendar } from "@/components/ui/calendar";
-import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { X } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
 import Tick from "@/components/custom/Icons/Tick";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import PageTitle from "./components/PageTitle";
-
+import EmptyRequests from "../../requests/components/emptystate";
+import BackArrow from "@/components/custom/Icons/BackArrow";
+import TransactionTable from "../components/TransactionTable";
 type SelectSingleEventHandler = (day: Date | undefined) => void;
 
-export default function Requests() {
-  const { role } = useRole();
-  const [activeTab, setActiveTab] = useState("request table");
+export default function Transactions() {
+  // const { role } = useRole();
   const [statusFilter, setStatusFilter] = useState<String[]>([]);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [startDate, setStartDate] = useState<Date | undefined>();
@@ -43,47 +38,12 @@ export default function Requests() {
   const [appliedStatuses, setAppliedStatuses] = useState(selectedStatuses);
   const [showStatuses, setShowStatuses] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [statuses, setStatuses] = useState<any[]>([]);
+  const [statuses] = useState<any[]>([]);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const { globalFilter, setGlobalFilter, setColumnFilters } = useGlobalFilter();
 
-  const handleFunc = () => {
-    setLoading(true);
-    setTimeout(() => {
-      navigate("/requests/create");
-      setLoading(false);
-    }, 5000);
-  };
-
-  const requestsStatuses = [
-    "Draft",
-    "Pending",
-    "Approved",
-    "Under Review",
-    "Declined",
-    "Reapproved",
-  ];
-
-  const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
-
-  const manageStatuses = ["Awaiting", "Reviewed", "Assigned", "In Progress"];
-  useEffect(() => {
-    setStatuses(
-      activeTab === "request table" ? requestsStatuses : reviewStatuses
-    ); //set statuses based on active tab)
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (pathname.includes("manage-requests")) {
-      setStatuses(manageStatuses);
-    } else if (pathname.includes("review-requests")) {
-      setStatuses(reviewStatuses);
-    } else {
-      setStatuses(requestsStatuses);
-    }
-  }, [pathname]);
+  // const transactionStatus = ["Confirmed", "Unconfirmed", "Declined", "Pending"];
 
   function formatDateToDDMMYYYY(date: Date) {
     const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with 0 if necessary
@@ -165,19 +125,11 @@ export default function Requests() {
     <>
       {loading && <Loader />}
       <div className="flex flex-col gap-12 mb-20">
-        <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-          <PageTitle title="Requests" />
-          {tableData.length > 0 && (
-            <Button
-              onClick={handleFunc}
-              className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
-            >
-              <span>
-                <GoogleDoc />
-              </span>
-              Request Ethical Approval
-            </Button>
-          )}
+        <div className="flex flex-col md:flex-row gap-5 md:gap-auto  md:items-center mx-auto w-full">
+          <span className="cursor-pointer" onClick={() => navigate(-1)}>
+            <BackArrow />
+          </span>
+          <h1 className="text-[1.875rem] font-bold">Payment Transactions</h1>
         </div>
         {/* tab */}
         {tableData && tableData.length > 0 ? (
@@ -220,13 +172,7 @@ export default function Requests() {
                               setActiveContent("Status");
                             }}
                           >
-                            <div
-                              className={`${
-                                activeContent === "Status"
-                                  ? "border-black"
-                                  : "border-[#0E0F0C1F]"
-                              } border w-full rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold`}
-                            >
+                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold">
                               <span>
                                 {selectedStatuses.length > 0
                                   ? `${selectedStatuses.length} selected`
@@ -247,13 +193,7 @@ export default function Requests() {
                               setActiveContent("Date");
                             }}
                           >
-                            <div
-                              className={`${
-                                activeContent === "Date"
-                                  ? "border-black"
-                                  : " border-[#0E0F0C1F]"
-                              } border w-full rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold`}
-                            >
+                            <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold">
                               <span>Select Date</span>
                               <span>
                                 <ArrowRight />
@@ -388,16 +328,6 @@ export default function Requests() {
                   <p className="font-semibold text-[#6A6A6B] inter">Filters</p>
                 </div>
               </div>
-              <div className="lg:flex items-center gap-1 hidden">
-                <span>
-                  <a href="" className="font-semibold underline text-black">
-                    The approval process
-                  </a>
-                </span>
-                <span>
-                  <LinkIcon />
-                </span>
-              </div>
             </div>
             {isMobile && showStatuses && appliedStatuses.length !== 0 && (
               <div className="flex flex-wrap justify-center items-center p-4 gap-3">
@@ -414,26 +344,7 @@ export default function Requests() {
                 ))}
               </div>
             )}
-            {role === "REVIEWER" ? (
-              <Tabs
-                defaultValue="request table"
-                onValueChange={(val) => setActiveTab(val)}
-              >
-                <TabsList className="border-b-[1.5px] w-full px-3">
-                  <TabsTrigger value="request table">My request</TabsTrigger>
-                  <TabsTrigger value="review table">Review request</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="request table">
-                  <TableRequests tableData={tableData} />
-                </TabsContent>
-                <TabsContent value="review table">
-                  <TableReview reviewTableData={reviewTableData} />
-                </TabsContent>
-              </Tabs>
-            ) : (
-              <TableRequests tableData={tableData} />
-            )}
+            <TransactionTable accountTableData={tranxData} />
           </div>
         ) : (
           <EmptyRequests />

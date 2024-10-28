@@ -1,5 +1,5 @@
-import { UserRole } from '@/context/roles';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { UserRole } from "@/context/roles";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type RoleContextType = {
   role: string;
@@ -8,8 +8,10 @@ type RoleContextType = {
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
-export const RoleProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [role, setRole] = useState<UserRole>('INSTITUTION_ADMIN');
+export const RoleProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [role, setRole] = useState<UserRole>("INSTITUTION_ADMIN");
 
   return (
     <RoleContext.Provider value={{ role, setRole }}>
@@ -21,7 +23,7 @@ export const RoleProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useRole = () => {
   const context = useContext(RoleContext);
   if (!context) {
-    throw new Error('useRole must be used within a RoleProvider');
+    throw new Error("useRole must be used within a RoleProvider");
   }
   return context;
 };
