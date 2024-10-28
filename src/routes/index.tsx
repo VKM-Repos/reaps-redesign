@@ -14,6 +14,9 @@ import RecoverPassword from "@/pages/auth/password";
 import CreateRequests from "@/pages/dashboard/requests/create-requests";
 import ViewRequests from "@/pages/dashboard/requests/view-requests";
 import InstitutionUsers from "@/pages/dashboard/institution/users";
+import InstitutionProfile from "@/pages/dashboard/institution/profile";
+import InstitutionAccount from "@/pages/dashboard/institution/account";
+import Transactions from "@/pages/dashboard/institution/account/transactions";
 
 const router = [
   {
@@ -78,6 +81,24 @@ const router = [
             path: "institution/users",
             title: "Institution Users",
             element: InstitutionUsers,
+          },
+          {
+            name: "Institution Profile",
+            path: "institution/profile",
+            title: "Institution Profile",
+            element: InstitutionProfile,
+          },
+          {
+            name: "Institution Account",
+            path: "institution/account",
+            title: "Institution Account",
+            element: InstitutionAccount,
+          },
+          {
+            name: "Institution Account Transactions",
+            path: "institution/account/transactions",
+            title: "Institution Account Transactions",
+            element: Transactions,
           },
         ],
       },

@@ -2,31 +2,19 @@ import CustomTable, {
   ColumnSetup,
   CustomCell,
 } from "@/components/custom/CustomTable";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import Loader from "@/components/custom/Loader";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import SharedActions from "../../requests/components/table-requests/custom/SharedActions";
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import ArrowUp from "@/components/custom/Icons/ArrowUp";
-import ArrowDown from "@/components/custom/Icons/ArrowDown";
-import { UserGradeDialog } from "./UserGradeDialog";
+import CreateAccountDialog from "./CreateAccountDialog";
 
-type usersTableDataProps = {
-  usersTableData: {
+type AccountTableDataProps = {
+  accountTableData: {
     id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
+    description: string;
+    amount: number;
   }[];
 };
 
@@ -41,34 +29,10 @@ type RenderFunctionsProps = {
   loading: boolean;
 };
 
-function RenderFunctions() {
+export function RenderFunctions({ item }: any) {
   return (
     <>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <button>
-            <MoreIcon />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="rounded-xl rounded-r-none py-2 px-4 w-fit .dropdown-shadow">
-          <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <ArrowUp />
-              <UserGradeDialog title="Upgrade" />
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <ArrowDown />
-              <UserGradeDialog title="Downgrade" />
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <CreateAccountDialog accountDetails={item} action="update" />
     </>
   );
 }
@@ -96,14 +60,12 @@ function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
   );
 }
 
-export default function RequesterTable({
-  usersTableData,
-}: usersTableDataProps) {
+export default function AccountTable({
+  accountTableData,
+}: AccountTableDataProps) {
   const [loading, setLoading] = useState(false);
-  const [tableArray, setTableArray] = useState(usersTableData);
+  const [tableArray, setTableArray] = useState(accountTableData);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
-  const { multiStatusDateFilter } = useGlobalFilter();
 
   function deleteTableItem(item: any) {
     setLoading(true);
@@ -119,43 +81,26 @@ export default function RequesterTable({
     {
       header: () => (
         <CustomCell
-          value={"First Name"}
-          className="font-bold w-full min-w-[18.75rem]"
+          value={"Description"}
+          className="font-bold w-full min-w-[35rem]"
         />
       ),
-      accessorKey: "firstName",
+      accessorKey: "description",
       cell: (info) => (
-        <CustomCell
-          value={info.getValue()}
-          className="min-w-[18.75rem] w-full"
-        />
+        <CustomCell value={info.getValue()} className="min-w-[35rem] w-full" />
       ),
     },
     {
       header: () => (
         <CustomCell
-          value={"Last Name"}
+          value={"Amount"}
           className="font-bold min-w-[9rem] w-full"
         />
       ),
-      accessorKey: "lastName",
+      accessorKey: "amount",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[9rem] w-full" />
       ),
-    },
-    {
-      header: () => (
-        <CustomCell
-          value={"Email"}
-          className="font-bold w-full min-w-[11rem]"
-        />
-      ),
-      accessorKey: "email",
-      cell: ({ getValue }) => (
-        <CustomCell value={getValue()} className="min-w-[11rem] w-full" />
-      ),
-      filterFn: multiStatusDateFilter,
-      enableGlobalFilter: false,
     },
     {
       accessorKey: "custom",
@@ -176,7 +121,7 @@ export default function RequesterTable({
           />
         ) : (
           <CustomCell
-            value={<RenderFunctions />}
+            value={<RenderFunctions item={item} />}
             className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
           />
         );

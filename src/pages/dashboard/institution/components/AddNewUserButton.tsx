@@ -1,9 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import AddIcon from "@/components/custom/Icons/AddIcon";
 import { CreateUserForm } from "./CreateuserForm";
+import { useRef } from "react";
 
 export function AddNewUserButton() {
+  const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
+
+  const handleClosDialog = () => {
+    closeDialogBtn.current?.click();
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -14,12 +25,22 @@ export function AddNewUserButton() {
           Add new
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[80%] overflow-y-scroll h-full">
+      <DialogContent className="w-[80%] overflow-y-scroll h-full no-scrollbar py-10">
         <div className="mt-12 px-7">
           <h2 className="text-center text-xl2 font-semibold font-inter">
             Create New User
           </h2>
-          <CreateUserForm />
+          <CreateUserForm handleClosDialog={handleClosDialog} />
+          <DialogClose asChild>
+            <Button
+              ref={closeDialogBtn}
+              type="button"
+              variant="ghost"
+              className="hidden"
+            >
+              Close
+            </Button>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>

@@ -246,7 +246,75 @@ export const usersData = [
     email: "michael.johnson@example.com",
   },
 ];
-
+export const accountData = [
+  {
+    id: 1,
+    description: "Academic - Student Nurse",
+    amount: 2000,
+  },
+  {
+    id: 2,
+    description: "Research - PhD Candidate",
+    amount: 5000,
+  },
+  {
+    id: 3,
+    description: "Clinical - Intern",
+    amount: 1000,
+  },
+  {
+    id: 4,
+    description: "Research - Postdoc",
+    amount: 10000,
+  },
+  {
+    id: 5,
+    description: "Clinical - Senior Research Associate",
+    amount: 20000,
+  },
+  {
+    id: 6,
+    description: "Clinical - Research Associate",
+    amount: 15000,
+  },
+];
+export const tranxData = [
+  {
+    id: 1,
+    applicant_name: "Sadiq Salisu",
+    submission: "19-01-2024",
+    status: "Declined",
+    receipt: "19-01-2024",
+  },
+  {
+    id: 2,
+    applicant_name: "John Doe",
+    submission: "19-02-2024",
+    status: "Unconfirmed",
+    receipt: "19-01-2024",
+  },
+  {
+    id: 3,
+    applicant_name: "Jane Doe",
+    submission: "19-03-2024",
+    status: "Confirmed",
+    receipt: "19-01-2024",
+  },
+  {
+    id: 4,
+    applicant_name: "Michael Doe",
+    submission: "19-04-2024",
+    status: "Confirmed",
+    receipt: "19-01-2024",
+  },
+  {
+    id: 5,
+    applicant_name: "Emily Johnson",
+    submission: "19-05-2024",
+    status: "Declined",
+    receipt: "19-01-2024",
+  },
+];
 export const reviewersTableData = [
   {
     id: 1,

@@ -71,17 +71,16 @@ type FlagData = {
   license: string;
 };
 const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
+  { label: "Diploma", value: "en" },
+  { label: "HND", value: "fr" },
+  { label: "Bsc", value: "fr" },
+  { label: "Msc", value: "fr" },
 ] as const;
-export function CreateUserForm() {
+export function CreateUserForm({
+  handleClosDialog,
+}: {
+  handleClosDialog: () => void;
+}) {
   const [countriesData, setCountries] = useState<CountryListItemType[]>([]);
   const [flags, setFlags] = useState<FlagData[]>([]);
   const [dialCode, setDialCode] = useState("+93");
@@ -118,7 +117,7 @@ export function CreateUserForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col ">
+        <div className="flex flex-col gap-8">
           <div className="flex items-center gap-5  ">
             <FormField
               control={form.control}
@@ -163,7 +162,7 @@ export function CreateUserForm() {
               </FormItem>
             )}
           />
-          <div className="flex">
+          <div className="flex items-center gap-1">
             <div className="flex flex-col text-xs mt-2">
               <Select
                 onValueChange={(value: string) => {
@@ -177,7 +176,7 @@ export function CreateUserForm() {
                 }}
               >
                 <FormLabel className="font-md">Country Code</FormLabel>
-                <SelectTrigger className="min-w-[7.5rem] mt-2 !gap-2 w-full">
+                <SelectTrigger className="min-w-[7.5rem] mt-2 !gap-2 w-full border border-input">
                   <SelectValue placeholder="Select a country">
                     {selectedFlag ? (
                       <div className="flex items-center gap-2 w-full">
@@ -242,7 +241,7 @@ export function CreateUserForm() {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl>
+                  <FormControl className="border border-input">
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
@@ -257,16 +256,16 @@ export function CreateUserForm() {
               </FormItem>
             )}
           />
-          <div className="w-full bg-slate-400">
+          <div className="w-full">
             <FormField
               control={form.control}
               name="qualification"
               render={({ field }) => (
                 <FormItem className="flex flex-col w-full">
-                  <FormLabel>Language</FormLabel>
+                  <FormLabel>Qualification</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <FormControl>
+                      <FormControl className="border border-input">
                         <Button
                           variant="outline"
                           role="combobox"
@@ -279,16 +278,16 @@ export function CreateUserForm() {
                             ? languages.find(
                                 (language) => language.value === field.value
                               )?.label
-                            : "Select language"}
+                            : "Select qualification"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command className="rounded-lg border shadow-md w-[1200px] max-w-[1200px]">
-                        <CommandInput placeholder="Search language..." />
+                        <CommandInput placeholder="Search qualification..." />
                         <CommandList>
-                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandEmpty>No qualification found.</CommandEmpty>
                           <CommandGroup className="w-full text-black">
                             {languages.map((language) => (
                               <CommandItem
@@ -326,7 +325,12 @@ export function CreateUserForm() {
             />
           </div>
         </div>
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-end items-center gap-5 mt-14">
+          <Button onClick={handleClosDialog} variant={"ghost"} type="button">
+            Cancel
+          </Button>
+          <Button type="submit">Done</Button>
+        </div>
       </form>
     </Form>
   );

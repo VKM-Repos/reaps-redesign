@@ -19,6 +19,7 @@ import SharedActions from "../../requests/components/table-requests/custom/Share
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import ArrowUp from "@/components/custom/Icons/ArrowUp";
 import ArrowDown from "@/components/custom/Icons/ArrowDown";
+import { UserGradeDialog } from "./UserGradeDialog";
 
 type usersTableDataProps = {
   usersTableData: {
@@ -40,7 +41,7 @@ type RenderFunctionsProps = {
   loading: boolean;
 };
 
-function RenderFunctions() {
+export function RenderFunctions() {
   return (
     <>
       <DropdownMenu modal={false}>
@@ -49,15 +50,21 @@ function RenderFunctions() {
             <MoreIcon />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="rounded-xl rounded-r-none p-2 w-full max-w-24 .dropdown-shadow">
+        <DropdownMenuContent className="rounded-xl rounded-r-none py-2 px-4 w-fit .dropdown-shadow">
           <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
-            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+            <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="flex items-center gap-2 cursor-pointer"
+            >
               <ArrowUp />
-              <span>Upgrade</span>
+              <UserGradeDialog title="Upgrade" />
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+            <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="flex items-center gap-2 cursor-pointer"
+            >
               <ArrowDown />
-              <span>Downgrade</span>
+              <UserGradeDialog title="Downgrade" />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
