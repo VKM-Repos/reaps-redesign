@@ -38,9 +38,6 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
 
     const { role } = useRole();
 
-// type Record: Array(sidebarlink)
-// export 
-
     switch (role) {
         case "RESEARCHER":
             sideBarLinks.push(
@@ -112,7 +109,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                     subLinks: [
                         {
                             label: "My Requests",
-                            path: "/requests",
+                            path: "/requests/my-requests",
                             icon: <DocumentIcon />
                         },
                         {
@@ -127,7 +124,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                         },
                         {
                             label: "Templates",
-                            path: "/requests/templates",
+                            path: "/templates",
                             icon: <DialPad />
                         }
                     ]
@@ -149,7 +146,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                         },
                         {
                             label: "Account",
-                            path: "/institution/account",
+                            path: "/pricing",
                             icon: <Bank />,
                         }
                     ]

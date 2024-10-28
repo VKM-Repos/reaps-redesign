@@ -6,7 +6,13 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+<<<<<<< HEAD
 package-lock.json
+=======
+
+package-lock.json
+
+>>>>>>> 47b0b1de18138d25095d1259bd9eb34a7b18f3af
 node_modules
 dist
 dist-ssr

@@ -24,7 +24,7 @@ import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 export default function Settings() {
     const [isOpenIndex, setOpenIndex] = useState<number | null>();
     const { data } = useOnboardingFormStore();
-    const email = data.onboardingDetails.email;
+    const email = data.onboardingDetails.email || 'johndoe@gmail.com';
     
 
     const handleToggle = (index: number) => {
@@ -46,7 +46,7 @@ export default function Settings() {
             title: "Email Settings",
             label: <span>{email}</span>,
             icon: <MailIcon />,
-            content: <EmailSettings onSave={handleCloseCollapsible} />
+            content: <EmailSettings />
         },
         {
             title: "Institution",

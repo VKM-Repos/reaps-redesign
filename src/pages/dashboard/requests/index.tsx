@@ -1,4 +1,4 @@
-import { reviewTableData, tableData } from "@/lib/helpers";
+import { institutionTableData, reviewTableData, tableData } from "@/lib/helpers";
 import TableRequests from "./components/table-requests";
 import TableReview from "./components/table-review";
 import EmptyRequests from "./components/emptystate";
@@ -7,7 +7,7 @@ import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab"
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -19,6 +19,7 @@ import Tick from "@/components/custom/Icons/Tick";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import ManageRequests from "./components/manage-requests";
 
 type SelectSingleEventHandler = (day: Date | undefined) => void;
 
@@ -40,6 +41,7 @@ export default function Requests() {
     const [loading, setLoading] = useState(false);
     const [statuses, setStatuses] = useState<any[]>([])
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
 
 
@@ -68,9 +70,25 @@ export default function Requests() {
         "Reopened"
       ]
 
+      const manageStatuses = [
+        'Awaiting',
+        'Reviewed',
+        'Assigned',
+        'In Progress'
+      ]
       useEffect(() => {
-        setStatuses(activeTab === "request table" ? requestsStatuses : reviewStatuses) //set statuses based on active tab)
+        setStatuses(activeTab === "request table"  ? requestsStatuses : reviewStatuses) //set statuses based on active tab)
       }, [activeTab])
+
+      useEffect(() => {
+        if (pathname.includes('manage-requests')) {
+            setStatuses(manageStatuses)
+        } else if (pathname.includes('review-requests')) {
+            setStatuses(reviewStatuses)
+        } else {
+            setStatuses(requestsStatuses)
+        }
+      }, [pathname]);
 
     
 
@@ -148,7 +166,18 @@ export default function Requests() {
         {loading && <Loader />}
             <div className="flex flex-col gap-12 mb-20">
                 <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-                    <h1 className="text-[1.875rem] font-bold">Requests</h1>
+                    <h1 className="text-[1.875rem] font-bold">
+                        {
+                            (role === "INSTITUTION_ADMIN") ? 
+                                (pathname.includes('review-requests') ? 
+                                    <span>Review Requests</span> : 
+                                (pathname.includes('manage-requests') ? 
+                                    <span>Manage Requests</span> :  
+                                    <span>My Requests</span>)
+                                ) : 
+                            <span>Requests</span>
+                        }
+                    </h1>
                     {tableData.length > 0 && <Button onClick={handleFunc} className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><GoogleDoc /></span>Request Ethical Approval</Button>}
                 </div>
                 {/* tab */}
@@ -176,14 +205,14 @@ export default function Requests() {
                                                 <div className="gap-2 flex flex-col justify-center">
                                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Status</p>
                                                     <button onClick={() => {setActiveContent("Status")}}>
-                                                        <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>{selectedStatuses.length > 0 ? `${selectedStatuses.length} selected` : "Show All"}</span><span><ArrowRight /></span></div>
+                                                        <div className={`${activeContent === "Status" ? 'border-black' : 'border-[#0E0F0C1F]'} border w-full rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold`}><span>{selectedStatuses.length > 0 ? `${selectedStatuses.length} selected` : "Show All"}</span><span><ArrowRight /></span></div>
                                                     </button>
                                                 
                                                 </div>
                                                 <div className="gap-2 flex flex-col justify-center">
                                                     <p className="font-semibold text-sm text-[#6A6C6A] px-1">Date</p>
                                                     <button onClick={() => {setActiveContent("Date")}}>
-                                                        <div className="w-full border border-[#0E0F0C1F] rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold"><span>Select Date</span><span><ArrowRight /></span></div>
+                                                        <div className={`${activeContent === "Date" ? 'border-black' : ' border-[#0E0F0C1F]'} border w-full rounded-lg flex justify-between items-center hover:border-black focus-visible:border-black p-[0.375rem] text-xs text-[#6A6C6A] font-semibold`}><span>Select Date</span><span><ArrowRight /></span></div>
                                                     </button>
                                                 </div>
                                             </div>
@@ -277,7 +306,19 @@ export default function Requests() {
                                 </TabsContent>
                             </Tabs>
                             :
-                            <TableRequests tableData={tableData} />
+                            (
+                                role === "INSTITUTION_ADMIN" ? (
+                                  pathname.includes('/review-requests') ? (
+                                    <TableReview reviewTableData={reviewTableData} />
+                                  ) : pathname.includes('/manage-requests') ? (
+                                    <ManageRequests institutionTableData={institutionTableData} />
+                                  ) : (
+                                    <TableRequests tableData={tableData} />
+                                  )
+                                ) : (
+                                    <TableRequests tableData={tableData} />
+                                  )
+                            )
                         }
                     </div>
                     :
