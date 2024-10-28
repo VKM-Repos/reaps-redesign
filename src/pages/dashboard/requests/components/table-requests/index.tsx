@@ -167,7 +167,7 @@ export default function TableRequests({ tableData }: TableRequestsProps) {
       cell: ({ getValue }) => {
         const item = getValue();
         return (
-          <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full min-w-[8.75rem]">
+          <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full">
             <Badge
               style={{
                 color: statusColorMap[item]?.text || "#000000",
