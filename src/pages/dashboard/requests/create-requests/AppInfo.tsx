@@ -116,12 +116,13 @@ export default function AppInfo({ handleNext }: Props) {
                   fieldType={FormFieldType.RADIO}
                   options={index === 0
                     ? [
-                        { label: "Yes", value: "yes" }
+                        { label: "Principal Investigator", value: "principal investigator" },
+                        { label: "Local Principal Investigator", value: "local principal investigator"}
                       ]
                     : index === 1 
                     ? [
-                        { label: "Student", value: "yes" }, 
-                        { label: "Researcher", value: "no" }
+                        { label: "Student", value: "student" }, 
+                        { label: "Researcher", value: "researcher" }
                       ]
                     : [
                         { label: "Yes", value: "yes" },
