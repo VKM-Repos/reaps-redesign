@@ -42,7 +42,6 @@ const router = [
   {
     layout: DashboardLayout,
     routes: [
-<<<<<<< HEAD
       {
         name: "Home",
         path: "home",
@@ -107,76 +106,5 @@ const router = [
     ],
   },
 ];
-=======
-        {
-            name: "Home",
-            path: 'home',
-            title: "home",
-            element: Home
-        },
-        {
-            name: "Requests",
-            path: 'requests',
-            title: "Requests",
-            element: Requests,
-            routes: [
-                {
-                    name: "Create Requests",
-                    path: 'requests/create', 
-                    title: "Create Requests",
-                    element: CreateRequests, 
-                },
-                {
-                    name: "View Request",
-                    path: 'requests/:id', 
-                    title: "View Request",
-                    element: ViewRequests, 
-                },
-                {
-                    name: "My Requests",
-                    path: 'requests/my-requests', 
-                    title: "My Requests",
-                    element: Requests, 
-                },
-                {
-                    name: "Review Requests",
-                    path: 'requests/review-requests', 
-                    title: "Review Requests",
-                    element: Requests, 
-                },
-                {
-                    name: "Manage Requests",
-                    path: 'requests/manage-requests', 
-                    title: "Review Requests",
-                    element: Requests, 
-                },
-            ],
-        },
-        {
-            name: "Specialization",
-            path: 'specialization',
-            title: "Specialization",
-            element: Specialization
-        },
-        {
-            name: "Pricing",
-            path: 'pricing',
-            title: "Pricing",
-            element: Pricing 
-        },
-        {
-            name: "Settings",
-            path: 'settings',
-            title: "Settings",
-            element: Settings
-        },
-        {
-            path: '*',
-            element: NotFound,
-        }
-    ]
-}
-]
->>>>>>> 47b0b1de18138d25095d1259bd9eb34a7b18f3af
 
 export const Routes = renderRoutes(router);
