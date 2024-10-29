@@ -26,12 +26,12 @@ export default function ApplicationSummary() {
                             
                             <div className="px-10 md:w-[25%] hidden md:block">
                                    
-                                   <div className='text-[0.875rem] hidden flex-col md:flex gap-5 w-[20%] fixed'>
+                                   <div className='text-[0.875rem] flex-col flex gap-5 w-[20%] fixed'>
                                          {navLinks.map( (links)=>
-                                        <a className='w-[80%] h-12 rounded-md p-2 hover:bg-slate-200 active:bg-slate-200 text-inherit' href='#'>{links}</a>
+                                        <a className='w-[80%] h-12 rounded-md p-2 hover:bg-slate-200 text-[#6A6C6A] hover:text-black active:bg-slate-200 text-inherit' href='#'>{links}</a>
                                          )}
                                    </div>
-                                   <div className=" md:absolute top-52"><SideBar /></div>
+                                   <div className=" md:absolute top-60"><SideBar /></div>
                                    
                             </div>
                             <div className="md:w-[75%] w-full px-10">

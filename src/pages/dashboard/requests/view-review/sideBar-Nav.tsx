@@ -2,21 +2,19 @@ import { Button } from '@/components/ui/button'
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
+    SheetClose,
     SheetTrigger,
   } from "@/components/ui/sheet"
   import { useForm } from 'react-hook-form'
-  import form from 'react'
+  import  { useState } from 'react'
   import Smile from "@/components/custom/Icons/Smileface"
   import Unamused from "@/components/custom/Icons/unAmusedFace"
   import Unhappy from '@/components/custom/Icons/unhappyFace' 
-  import UploadIcon from '@/components/custom/Icons/UploadIcon'
-  import { useRef } from 'react'
 import { Form } from '@/components/ui/form'
 import CustomFormField, { FormFieldType } from '@/components/custom/CustomFormField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import Cancel from '@/components/custom/Icons/Cancel'
 
 const MAX_FILE_SIZE = 3000000;
 const ACCEPTED_FILE_TYPES = [
@@ -51,7 +49,8 @@ const reviewComment = [
     {
         id: 1,
         comment: "Satisfactory",
-        background: "bg-[#e6ffe6]",
+        background: "hover:bg-[#e6ffe6]",
+        bg: "bg-[#e6ffe6]",
         border: "border-[#009900]",
         text: "text-[#34A853]",
         reaction: <Smile />
@@ -59,7 +58,8 @@ const reviewComment = [
     {
         id: 2,
         comment: "Unsatisfactory",
-        background: "bg-[#ffe6e6]",
+        background: "hover:bg-[#ffe6e6]",
+        bg: "bg-[#ffe6e6]",
         border: "border-[#ff3333]",
         text: "text-[#BF1E2C]",
         reaction: <Unhappy />
@@ -67,7 +67,8 @@ const reviewComment = [
     {
         id: 3,
         comment: "Further review",
-        background: "bg-[#e6e6ff]",
+        background: "hover:bg-[#e6f0ff]",
+        bg: "bg-[#e6f0ff]",
         border: "border-[#6666ff]",
         text: "text-[#608FEB]",
         reaction: <Unamused />
@@ -84,7 +85,7 @@ export default function SideBar() {
         console.log(data)
     
     };
-
+    const [selectedValue, setSelectedValue] = useState<string>("");
     
     return(
         <>
@@ -94,19 +95,22 @@ export default function SideBar() {
                 <SheetTrigger>
                       <Button className='rounded-full flex self-start md:w-[80%] w-full h-[3.5rem]'>Write your Review</Button>
                 </SheetTrigger>
-                <SheetContent side="bottom" className='md:w-[55%] w-[90%] h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
+                <SheetContent side="bottom" className='md:w-[60%] w-[90%] h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
+                    <SheetClose className='bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit flex self-end md:mt-[-2rem]'><Cancel /></SheetClose>
                         <h1 className='text-[1.7rem] font-bold'>Write your review</h1>
                         <p  className=' font-bold text-center'>how satisfied are you with the quality of the request?</p>
-                        <div className='flex flex-col md:flex-row w-full items-center md:gap-4 gap-10'>
-                            {reviewComment.map((item) =>
-                            <div key={item.id} className={`flex flex-col md:w-full items-center px-14 cursor-pointer w-[80%] py-3 gap-2 border-2 rounded-lg ${item.background} ${item.border} ${item.text}`}>
-                                <p>{item.reaction}</p>
-                                <p>{item.comment}</p>
-                            </div>
-                        )}
-                        </div>
+                       
                         <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
+                            <div className='flex flex-col md:flex-row w-full items-center md:gap-4 gap-10'>
+                                {reviewComment.map((item) =>
+                                <div onClick={ () => setSelectedValue(item.comment)} key={item.id} className={`flex flex-col md:w-full items-center hover:border-[3px]  px-14 cursor-pointer w-[80%] py-3 gap-2 ${selectedValue === item.comment ? `border-[3px] ${item.bg}` : "border bg-opacity-5"} rounded-lg ${item.background} ${item.border} ${item.text}`}>
+                                    <p>{item.reaction}</p>
+                                    <p>{item.comment}</p>
+                                    <input type="radio" value={item.comment} checked={selectedValue === item.comment} onChange={ () => setSelectedValue(item.comment)} className='hidden' />
+                                </div>
+                            )}
+                            </div>
                             
                             {/* <div className='flex flex-col gap-4'>
                                 <p className='text-center font-semibold '>provide your feedback on this request</p>
@@ -123,7 +127,7 @@ export default function SideBar() {
                                 // required
                             />
 
-                            <div className="flex flex-col gap-8 md:w-[60%] w-[90%] mx-5  md:mx-auto">
+                            <div className="flex flex-col gap-8 md:w-[60%] w-[90%] mx-5  md:mx-0">
                                 {/* <p className='flex gap-4 items-center mt-5'><span>Correction/Explanatory document</span></p> */}
                                 <CustomFormField
                                 name={`document`}
@@ -136,58 +140,14 @@ export default function SideBar() {
                                 />
                             </div>
                             <div className='hidden md:block'>
-                                <CustomFormField
-                                  key="reviewComment"
-                                  name="comment"
-                                  control={form.control}
-                    
-                                  // error={
-                                  //   (errors as any)?.[question.name] as
-                                  //     | FieldError
-                                  //     | undefined
-                                  // }
-                                  
-                                  className='bg-[#cdefc] hover:bg-[#83d08] border-red-500'
-                                  
-                                  fieldType={FormFieldType.RADIO}
-                                  options={[
-                                    { label: "Satisfactory", value: "Satisfactory" },
-                                    { label: "Unsatisfactory", value: "Unsatisfactory" },
-                                    { label: "Further Review", value: "Further Review" },
-                                  ]}
-                                  required={true}
-                                />
+                                <form action="">
+                                    
+                                </form>
                             </div>
                             <Button variant={ "default" } type="submit" className={`my-4 focus:outline-none w-[30%] flex self-center`}>Submit review</Button>
                         </form>
                         </Form>
-                        {/* <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col mt-5'>
-                            <div className='flex flex-col gap-4'>
-                                <p className='text-center font-semibold '>provide your feedback on this request</p>
-                                <textarea name="feedback" id="feedback" className='w-full min-h-28 border p-4'></textarea>
-                            </div>
-                            <div className='flex flex-col gap-2'>
-                                <p className='flex gap-4 items-center mt-5'><span>Correction/Explanatory document</span> <span className='text-[0.8rem]'>.Doc, .Docx, .Pdf (Max Of 3mb)</span></p>
-                                <div className='border w-[60%] h-10 rounded-lg flex gap-2 items-center pl-10 cursor-pointer hover:bg-[#f2f2f2]' onClick={handleFileClick}>
-                                    <UploadIcon /> <span>Click to Upload</span>
-                                    <input
-                                     type="file" 
-                                     ref={(e) => {
-                                        fileInputRef.current = e; 
-                                        register('document').ref(e);
-                                      }}
-                                      className="hidden" 
-                                      id="fileInput"
-                                      accept=".doc, .docx, .pdf"
-                                      onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) setValue('document', file);
-                                      }}
-                                     />
-                                </div>
-                               <button type='submit' className='mt-4'><Button className='rounded-lg w-[25%] h-[3rem]'>Submit review</Button></button>
-                            </div>
-                        </form> */}
+                       
                 </SheetContent>
             </Sheet>
             </aside>
