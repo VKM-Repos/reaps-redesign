@@ -47,7 +47,7 @@ export default function ReviewRequest() {
         <Loader />}
         <div>
           <div className="flex items-center justify-between">
-            <PageTitle title="Review requests" />
+            <PageTitle title="Review Request" />
             <Button
               onClick={handleFunc}
               className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"

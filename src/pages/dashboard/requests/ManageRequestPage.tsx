@@ -44,7 +44,7 @@ export default function ManageRequestPage() {
         <Loader />}
         <div>
           <div className="flex items-center justify-between">
-            <PageTitle title="Manage Requests" />
+            <PageTitle title="Manage Request" />
             <Button
               onClick={handleFunc}
               className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
