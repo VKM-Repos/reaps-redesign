@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import Tick from "@/components/custom/Icons/Tick";
 import { useLocation } from "react-router-dom";
 
-export default function SeachFilter({ statuses, setShowStatuses, setLoading, setAppliedStatuses }: { statuses: string[], setShowStatuses: (showStatuses: boolean ) => void, setLoading: (loading: boolean) => void, setAppliedStatuses: (appliedStatuses: string[]) => void}) {
+export default function SeachFilter({ statuses, activeTab, setShowStatuses, setLoading, setAppliedStatuses }: { statuses: string[], activeTab?: string, setShowStatuses: (showStatuses: boolean ) => void, setLoading: (loading: boolean) => void, setAppliedStatuses: (appliedStatuses: string[]) => void}) {
   const [open, setOpen] = useState(false);
   const [activeContent, setActiveContent] = useState("Status");
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
@@ -104,9 +104,11 @@ export default function SeachFilter({ statuses, setShowStatuses, setLoading, set
   }, [selectedStatuses]);
 
   useEffect(() => {
+    setSelectedStatuses([]);
+    setStatusFilter([]);
     setGlobalFilter('');
     setColumnFilters([]);
-  }, [pathname]);
+  }, [pathname, activeTab]);
 
   return (
     <>

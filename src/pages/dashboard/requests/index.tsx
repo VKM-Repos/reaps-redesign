@@ -77,7 +77,7 @@ export default function Requests() {
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-            <SeachFilter statuses={statuses} setLoading={setLoading} setShowStatuses={setShowStatuses} setAppliedStatuses={setAppliedStatuses}/>
+            <SeachFilter statuses={statuses} activeTab={activeTab} setLoading={setLoading} setShowStatuses={setShowStatuses} setAppliedStatuses={setAppliedStatuses}/>
               <div className="lg:flex items-center gap-1 hidden">
                 <span>
                   <a href="" className="font-semibold underline text-black">
