@@ -12,6 +12,7 @@ import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import Tick from "@/components/custom/Icons/Tick";
+import { useLocation } from "react-router-dom";
 
 export default function SeachFilter({ statuses, setShowStatuses, setLoading, setAppliedStatuses }: { statuses: string[], setShowStatuses: (showStatuses: boolean ) => void, setLoading: (loading: boolean) => void, setAppliedStatuses: (appliedStatuses: string[]) => void}) {
   const [open, setOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function SeachFilter({ statuses, setShowStatuses, setLoading, set
   type SelectSingleEventHandler = (day: Date | undefined) => void;
 
   const { globalFilter, setGlobalFilter, setColumnFilters } = useGlobalFilter();
+  const { pathname } = useLocation();
 
   // check if touch device 
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -99,7 +101,12 @@ export default function SeachFilter({ statuses, setShowStatuses, setLoading, set
 
   useEffect(() => {
     setAppliedStatuses([...selectedStatuses]);   
-  }, [selectedStatuses])
+  }, [selectedStatuses]);
+
+  useEffect(() => {
+    setGlobalFilter('');
+    setColumnFilters([]);
+  }, [pathname]);
 
   return (
     <>
