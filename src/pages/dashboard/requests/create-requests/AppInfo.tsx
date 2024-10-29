@@ -122,7 +122,7 @@ export default function AppInfo({ handleNext }: Props) {
                     : index === 1 
                     ? [
                         { label: "Student", value: "student" }, 
-                        { label: "Researcher", value: "researcher" }
+                        { label: "An Academic/Researcher", value: "an academic/researcher" }
                       ]
                     : [
                         { label: "Yes", value: "yes" },
