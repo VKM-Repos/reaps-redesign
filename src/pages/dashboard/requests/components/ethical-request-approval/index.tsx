@@ -1,9 +1,13 @@
 import ArrowLeft from "@/components/custom/Icons/ArrowLeft";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import PaymentCardPopup from "./PaymentCards";
 import ReceiptImage from "@/assets/ethicalrequest.png";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
+import Loader from "@/components/custom/Loader";
+import PaymentModes from "./PaymentModes";
+import { useRequestsStore } from "@/store/RequestFormStore";
+import PaymentMethod from "./PaymentCards";
 
 type Props = {
   educationLevel: string;
@@ -11,11 +15,44 @@ type Props = {
   showApproval: () => void;
 };
 
-export default function EthicalApprovalCard({
+export default function EthicalApprovalPayment({
   educationLevel,
   amountToPay,
   showApproval,
 }: Props) {
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { resetStore } = useRequestsStore();
+
+const RenderPaymentsCards = () => {
+  const handleNext = () => {
+    setStep(step + 1);
+  }
+
+  const onSubmit = () => {
+    setLoading(true);
+    setOpen(false);
+    setStep(1);
+    setTimeout(() => {
+      setLoading(false);
+      resetStore();
+    }, 5000);
+  };
+
+  // use open and openchange
+
+
+  switch (step) {
+    case 1:
+      return <PaymentMethod handleNext={handleNext}/>
+    case 2:
+      return <PaymentModes onSubmit={onSubmit} />
+    default:
+      null
+  }
+}
+
   return (
     <div className="z-[1000]">
       <div className="w-full px-4 max-w-[800px] md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6 ">
@@ -48,7 +85,7 @@ export default function EthicalApprovalCard({
           >
             Cancel
           </Button>
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="w-full md:max-w-[12.5rem] py-3 px-6 rounded-1 text-white font-semibold flex md:justify-between items-center">
                 <span>Proceed to pay</span>
@@ -56,13 +93,22 @@ export default function EthicalApprovalCard({
                   <ArrowLeft />
                 </span>
               </Button>
-            </DialogTrigger>
-            <DialogContent className="w-full max-w-[800px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-8">
-              <PaymentCardPopup />
-            </DialogContent>
+            </DialogTrigger>  
+          {loading && <Loader />}
+          <DialogContent className={`w-full ${step === 1 ? "max-w-[800px]" : "max-w-[600px]"} pt-[1.25rem] pb-[1.125rem] flex flex-col gap-8`}>
+            <RenderPaymentsCards />
+          </DialogContent>
+            
           </Dialog>
         </div>
       </div>
     </div>
   );
 }
+
+// if you click on proceed to pay it'll trigger a card, click on that card, (step 1 - etical approval card)
+// it'll trigger another card(payments), (step 2 - payments method)
+// click on that card, it'll trigger payments mode (step 3 - payments mode),
+// click on payments mode, online takes you somewhere (do whatever you want),
+// offline triggers a popup
+

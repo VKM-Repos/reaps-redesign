@@ -4,36 +4,20 @@ import Paystack from "@/assets/Paystack.png";
 import Remita from "@/assets/remita_orange_new_logo.png";
 import ArrowLeft from "@/components/custom/Icons/ArrowLeft";
 import { useState } from "react";
-import { useRequestsStore } from "@/store/RequestFormStore";
-import Loader from "@/components/custom/Loader";
 
-export default function PaymentCardPopup() {
+export default function PaymentMethod({ handleNext }: { handleNext: () => void}) {
   const [selectedPayment, setSelectedPayment] = useState<string>();
-  const [loading, setLoading] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(true);
-  const { resetStore } = useRequestsStore();
+
 
   const handleSelection = (value: string) => {
     setSelectedPayment(value);
   };
 
-  const handleNext = () => {
-    setLoading(true);
-    setIsDialogOpen(false);
-    setTimeout(() => {
-      resetStore();
-      setLoading(false);
-      setIsDialogOpen(true);
-    }, 5000);
-  };
+
 
   return (
     <>
-      {loading && <Loader />}
-      {isDialogOpen && (
-        <>
-          {" "}
-          <div className="border-[#0E0F0C1F] border-b  flex justify-between items-center text-[#040C21] w-full">
+          <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
             <p className="pb-4 px-[1.125rem] font-semibold">
               Select your Payment Method
             </p>
@@ -67,9 +51,9 @@ export default function PaymentCardPopup() {
             </RadioGroup>
             <Button
               onClick={handleNext}
-              variant={loading || !selectedPayment ? "ghost" : "default"}
+              variant={!selectedPayment ? "ghost" : "default"}
               className={`${
-                loading || !selectedPayment ? "text-[#292929]" : "text-white"
+                !selectedPayment ? "text-[#292929]" : "text-white"
               } mx-auto my-0 py-3 px-6 rounded-1 flex justify-between items-center`}
             >
               <span>Next</span>
@@ -79,7 +63,6 @@ export default function PaymentCardPopup() {
             </Button>
           </div>
         </>
-      )}
-    </>
+
   );
 }
