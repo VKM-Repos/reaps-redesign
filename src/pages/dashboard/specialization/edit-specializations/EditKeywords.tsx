@@ -38,7 +38,7 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
         },
     });
 
-    const { register, reset } = form;
+    const { register, reset, formState: { isValid } } = form;
    
     
     function addKey(e: React.ChangeEvent<HTMLInputElement>) {
@@ -88,16 +88,19 @@ export default function EditKeyword({keywordArray, handleNext, onSave}: Props) {
                             onChange: (e) => { addKey(e as React.ChangeEvent<HTMLInputElement>) }
                             })}
                             value={keyword}
-                            className="!focus:border-none"
+                            className={`${keywordsArray.length <= 0 ? 'border-red-500' : ''} }! "focus:border-none"`}
                         />
+                        {keywordsArray.length <= 0 && (
+                            <span className="text-red-500 mt-1 text-xs">Please add at least one keyword.</span>
+                        )}
                         <div className="flex gap-2 w-full flex-wrap mt-8">
                         {keywordsArray.map((item, index) => (
                             <Badge className="capitalize text-black bg-[#192C8A1A] flex gap-1 items-center justify-center hover:bg-[#192C8A1A]" key={index}><span className="cursor-pointer" onClick={() => {deleteKeyword(item)}}><X size={12}/></span>{item} </Badge>
                         ))}
                         </div>
-                        <SheetClose asChild>
-                            <Button type="submit" variant={keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
-                        </SheetClose> 
+                        <SheetClose asChild disabled={keywordsArray.length <= 0} type="submit">
+                            <Button variant={isValid && keywordsArray.length > 0 ? "default" : "ghost"} className={`focus:outline-none mt-[2rem]`}>Finish</Button>
+                        </SheetClose>
                     </form>
                 </Form>
             </div>
