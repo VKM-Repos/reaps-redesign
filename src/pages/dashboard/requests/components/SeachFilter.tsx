@@ -18,6 +18,7 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
   const [open, setOpen] = useState(false);
   const [activeContent, setActiveContent] = useState("Status");
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [tickedStatuses, setTickedStatuses] = useState<string[]>([]);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [statusFilter, setStatusFilter] = useState<String[]>([]);
   const [startCalendarOpen, setStartCalendarOpen] = useState(false);
@@ -48,6 +49,15 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
         : [...prev, status]
     );
   };
+
+  const handleTickedStatus = (status: string) => {
+    setTickedStatuses((prev) =>
+      prev.includes(status)
+        ? prev.filter((val) => val !== status)
+        : [...prev, status]
+    );
+  }
+
   function formatDateToDDMMYYYY(date: Date) {
     const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with 0 if necessary
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
@@ -199,22 +209,23 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
                       {statuses.map((status: string) => (
                         <div
                            onMouseEnter={() => {
-                              if (!isTouchDevice) handleSelectStatus(status); ;
+                              if (!isTouchDevice) handleTickedStatus(status);
                             }}
                             onMouseLeave={() => {
-                              if (!isTouchDevice) handleSelectStatus(status); ;
+                              if (!isTouchDevice) handleTickedStatus(status); ;
                             }}
                             onClick={() => {
+                              handleTickedStatus(status);
                               handleSelectStatus(status);
                             }}
                             className={`flex gap-2 py-2 items-center justify-start w-full text-xs font-[500] ${
-                            selectedStatuses.includes(status)
+                            selectedStatuses.includes(status) || tickedStatuses.includes(status)
                               ? "text-black bg-[#192C8A0D]"
                               : "text-[#6A6C6A]"
                             }`}
                             key={status}  
                         >
-                          {selectedStatuses.includes(status) ? (
+                          {selectedStatuses.includes(status) || tickedStatuses.includes(status) ? (
                             <Tick />
                           ) : (
                             <div className="w-6 h-6">&nbsp;</div>
