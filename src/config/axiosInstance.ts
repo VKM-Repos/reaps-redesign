@@ -1,48 +1,78 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import useUserStore from '@/store/user-store';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 
-import axios, { AxiosInstance } from 'axios';
+export const createApiInstance = (baseURL: string): AxiosInstance => {
+  const apiInstance = axios.create({
+    baseURL,
+  });
 
-const baseUrl = process.env.VITE_BASE_URL;
+  apiInstance.defaults.headers.common['Content-Type'] = 'application/json';
 
-export const authApi: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-});
+  apiInstance.interceptors.request.use(async config => {
+    const accessToken = useUserStore.getState().accessToken;
 
-authApi.defaults.headers.common['Content-Type'] = 'application/json';
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
 
-authApi.interceptors.request.use(async config => {
-  const userToken = '';
+    return config;
+  });
 
-  if (userToken) {
-    config.headers['Authorization'] = `Bearer ${userToken}`;
-  }
+  apiInstance.interceptors.response.use(
+    response => response,
+    async (error: AxiosError) => {
+      if (error.response) {
+        const { status, config } = error.response;
 
-  return config;
-});
+        if (status === 401 && config) {
+          try {
+            const refreshToken = useUserStore.getState().refreshToken;
 
-export const publicApi: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-});
+            if (!refreshToken) {
+              throw new Error('No refresh token available');
+            }
 
-publicApi.defaults.headers.common['Content-Type'] = 'application/json';
+            const refreshResponse = await apiInstance.post<{
+              access_token: string;
+              refresh_token: string;
+            }>('/auth/refresh', null, {
+              params: { refresh_token: refreshToken },
+              headers: {
+                'institution-context': 'default_context',
+              },
+            });
 
-export const handleApiError = (error: any) => {
-  if (error.response) {
-    console.error('Request failed with status code:', error.response.status);
-    console.error('Response data:', error.response.data);
-  } else if (error.request) {
-    console.error('No response received. Request:', error.request);
-  } else {
-    console.error('Request setup error:', error.message);
-  }
-  return Promise.reject(error);
+            const newAccessToken = refreshResponse.data.access_token;
+            const newRefreshToken = refreshResponse.data.refresh_token;
+
+            useUserStore.setState(state => ({
+              ...state,
+              accessToken: newAccessToken,
+              refreshToken: newRefreshToken,
+            }));
+
+            config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            return apiInstance(config);
+          } catch (refreshError) {
+            console.error('Failed to refresh token', refreshError);
+            return Promise.reject(refreshError);
+          }
+        }
+
+        console.error(
+          'Request failed with status:',
+          status,
+          error.response.data
+        );
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return apiInstance;
 };
-
-authApi.interceptors.response.use(
-  response => response,
-  error => handleApiError(error)
-);
-publicApi.interceptors.response.use(
-  response => response,
-  error => handleApiError(error)
-);

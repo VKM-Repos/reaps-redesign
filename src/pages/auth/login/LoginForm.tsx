@@ -1,48 +1,89 @@
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import FormInput from "../../../components/custom/FormInput";
-import { Form } from "../../../components/ui/form";
-import { useState } from "react";
-import Loader from "../../../components/custom/Loader";
-import { useNavigate } from "react-router-dom";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import FormInput from '../../../components/custom/FormInput';
+import { Form } from '../../../components/ui/form';
+import { useState, useCallback } from 'react';
+import Loader from '../../../components/custom/Loader';
+import { useNavigate } from 'react-router-dom';
+import { LoginResponseData } from '@/types/auth';
+import { toast } from '@/components/ui/use-toast';
+import useUserStore from '@/store/user-store';
 
 const formSchema = z.object({
-  username: z
+  email: z
     .string()
-    .min(1, { message: "Please fill this field" })
-    .email({ message: "Invalid email address" }),
-  password: z
-    .string({ required_error: "Password is required" })
-    .min(1, { message: "Please fill this field" }),
+    .email({ message: 'Invalid email address' })
+    .min(1, { message: 'Please fill this field' }),
+  password: z.string().min(1, { message: 'Please fill this field' }),
 });
 
-export function LoginForm() {
-  const [isLoading ,setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
+type LoginRequestData = z.infer<typeof formSchema>;
 
-  const { register, formState: { isValid } } = form;
+export function LoginForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm<LoginRequestData>({ resolver: zodResolver(formSchema) });
   const navigate = useNavigate();
 
-  function goToHome(){
-    navigate("/home");
-  }
+  const { setUser } = useUserStore();
 
-  function onSubmit() {
-    try {
-      setIsLoading(true);
-      setTimeout(() => {
+  const goToHome = useCallback(() => {
+    navigate('/home');
+  }, [navigate]);
 
-        setIsLoading(false);
+  const login = useCallback(
+    async (data: LoginRequestData) => {
+      try {
+        setIsLoading(true);
+
+        const baseURL = import.meta.env.VITE_APP_BASE_URL;
+        const response = await fetch(`${baseURL}auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'institution-context': 'default_context',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          const errorMessage = errorData.detail || 'Login failed';
+          toast({
+            title: 'Error',
+            description: errorMessage,
+            variant: 'destructive',
+          });
+          throw new Error(errorMessage);
+        }
+
+        const responseData: LoginResponseData = await response.json();
+        console.log('Login successful:', responseData);
+        toast({
+          title: 'Feedback',
+          description: 'You have been logged in successfully',
+          variant: 'default',
+        });
+
+        setUser({
+          user: responseData.user,
+          access_token: responseData.access_token,
+          refresh_token: responseData.refresh_token,
+        });
+
         goToHome();
-      }, 3000);
-     
-    } catch (error) {
-      console.error(error);
-    }
+      } catch (error) {
+        console.error('Login error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [goToHome, setUser]
+  );
+
+  function onSubmit(data: LoginRequestData) {
+    login(data);
   }
 
   return (
@@ -53,19 +94,22 @@ export function LoginForm() {
           <FormInput
             label="Your email address"
             placeholder="johndoe@email.com"
-            {...register("username", {
-              required: "This field is required",
-            })}
+            {...form.register('email')}
           />
           <FormInput
             label="Your password"
             type="password"
             placeholder="********"
-            {...register("password", {
-              required: "This field is required",
-            })}
+            {...form.register('password')}
           />
-          <Button variant={isValid ? "default" : "ghost"} className={`my-4 focus:outline-none`}>Log in</Button>
+          <Button
+            type="submit"
+            variant={form.formState.isValid ? 'default' : 'ghost'}
+            className="my-4 focus:outline-none"
+            disabled={!form.formState.isValid || isLoading}
+          >
+            Log in
+          </Button>
         </form>
       </Form>
     </>
