@@ -15,6 +15,7 @@ export interface OnboardingFormStore {
       firstName: string;
       lastName: string;
       phoneNumber: string;
+      dialCode: string;
       password: string;
       dob: Date;
       education: string;
@@ -45,6 +46,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
           firstName: "",
           lastName: "",
           phoneNumber: "",
+          dialCode: "",
           password: "",
           dob: new Date(),
           orcid: "",
@@ -66,6 +68,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
               firstName: "",
               lastName: "",
               phoneNumber: "",
+              dialCode: "",
               password: "",
               orcid: "",
               dob: new Date(),

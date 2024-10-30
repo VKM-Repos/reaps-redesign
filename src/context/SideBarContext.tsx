@@ -113,12 +113,12 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
                             icon: <DocumentIcon />
                         },
                         {
-                            label: "Review Requests",
+                            label: "Review Request",
                             path: "/requests/review-requests",
                             icon: <FileView />
                         },
                         {
-                            label: "Manage Requests",
+                            label: "Manage Request",
                             path: "/requests/manage-requests",
                             icon: <FileManage />
                         },
