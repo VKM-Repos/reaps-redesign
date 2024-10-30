@@ -1,78 +1,47 @@
-import useUserStore from '@/store/user-store';
-import axios, { AxiosInstance, AxiosError } from 'axios';
 
+// import useAppStore from "@/lib/store/app.store";
+import axios, { AxiosInstance } from "axios";
+
+// Dynamic axios instance function
 export const createApiInstance = (baseURL: string): AxiosInstance => {
   const apiInstance = axios.create({
     baseURL,
   });
 
-  apiInstance.defaults.headers.common['Content-Type'] = 'application/json';
+  // Set default headers
+  apiInstance.defaults.headers.common["Content-Type"] = "application/json";
 
-  apiInstance.interceptors.request.use(async config => {
-    const accessToken = useUserStore.getState().accessToken;
+  // Request interceptor to add Authorization header if token exists
+  apiInstance.interceptors.request.use(async (config) => {
+    // const userToken = useAppStore.getState().user?.token;
+    const userToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNzYyYzZmYy1mYzJmLTQ4ODEtOTA1Ni02OTZiZTlhNTZlZDciLCJ1c2VyX3R5cGUiOiJ1c2VyIiwiZXhwIjoxNzMyODY4NjM3fQ.5YsQIlPtUEHUPVmEZ5YSkdo-HdzbWod-g5Eu9YyrzHQ";
 
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    if (userToken) {
+      config.headers["Authorization"] = `Bearer ${userToken}`;
     }
 
     return config;
   });
 
+  // Response interceptor for handling errors
   apiInstance.interceptors.response.use(
-    response => response,
-    async (error: AxiosError) => {
-      if (error.response) {
-        const { status, config } = error.response;
-
-        if (status === 401 && config) {
-          try {
-            const refreshToken = useUserStore.getState().refreshToken;
-
-            if (!refreshToken) {
-              throw new Error('No refresh token available');
-            }
-
-            const refreshResponse = await apiInstance.post<{
-              access_token: string;
-              refresh_token: string;
-            }>('/auth/refresh', null, {
-              params: { refresh_token: refreshToken },
-              headers: {
-                'institution-context': 'default_context',
-              },
-            });
-
-            const newAccessToken = refreshResponse.data.access_token;
-            const newRefreshToken = refreshResponse.data.refresh_token;
-
-            useUserStore.setState(state => ({
-              ...state,
-              accessToken: newAccessToken,
-              refreshToken: newRefreshToken,
-            }));
-
-            config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-            return apiInstance(config);
-          } catch (refreshError) {
-            console.error('Failed to refresh token', refreshError);
-            return Promise.reject(refreshError);
-          }
-        }
-
-        console.error(
-          'Request failed with status:',
-          status,
-          error.response.data
-        );
-      } else if (error.request) {
-        console.error('No response received:', error.request);
-      } else {
-        console.error('Error setting up request:', error.message);
-      }
-
-      return Promise.reject(error);
-    }
+    (response) => response,
+    (error) => handleApiError(error)
   );
 
   return apiInstance;
+};
+
+// Shared error handler
+export const handleApiError = (error: any) => {
+  if (error.response) {
+    console.error("Request failed with status code:", error.response.status);
+    console.error("Response data:", error.response.data);
+  } else if (error.request) {
+    console.error("No response received. Request:", error.request);
+  } else {
+    console.error("Request setup error:", error.message);
+  }
+  return Promise.reject(error);
 };
