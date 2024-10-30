@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import Summary from "./Summary";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+import AssignReviewer from "../components/AssignReviewer";
 
 export default function InstitutionRequestSummary() {
   const isMobile = useMediaQuery({ query: "(max-width: 737px)" });
