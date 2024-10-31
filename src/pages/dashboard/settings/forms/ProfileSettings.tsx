@@ -55,7 +55,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
     last_name: data.onboardingDetails.last_name || "",
     phone_number: data.onboardingDetails.phone_number || "",
     country_code: data.onboardingDetails.country_code,
-    date_of_birth: data.onboardingDetails.date_of_birth || undefined,
+    date_of_birth: data.onboardingDetails.date_of_birth || new Date(data.onboardingDetails.date_of_birth) || undefined,
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
