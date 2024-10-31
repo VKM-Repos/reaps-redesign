@@ -51,11 +51,11 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const { data } = useOnboardingFormStore();
 
   const defaultValues = {
-    first_name: data.onboardingDetails.firstName || "",
-    last_name: data.onboardingDetails.lastName || "",
-    phone_number: data.onboardingDetails.phoneNumber || "",
+    first_name: data.onboardingDetails.first_name || "",
+    last_name: data.onboardingDetails.last_name || "",
+    phone_number: data.onboardingDetails.phone_number || "",
     country_code: "+234",
-    date_of_birth: data.onboardingDetails.dob || undefined,
+    date_of_birth: data.onboardingDetails.date_of_birth || undefined,
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,6 +64,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const {
     register,
     formState: { isValid },
+    watch,
     // reset,
   } = form;
   const [flags, setFlags] = useState<FlagData[]>([]);
@@ -83,6 +84,27 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
         flag: flag?.file_url || "",
       };
     });
+
+  //   const countryCode = watch("dialCode", defaultValues.country_code);
+      
+  //   useEffect(() => {
+  //       if (defaultValues.country_code) {
+  //           const initialCountry: any = combinedData.find(country => country.dial_code === defaultValues.country_code);
+  //           if (initialCountry) {
+  //               setDialCode(initialCountry.dial_code);
+  //               setSelectedFlag(initialCountry.flag);
+  //           }
+  //       }
+  //   }, [defaultValues.country_code, combinedData]);
+
+  //   value={dialCodeValue} onValueChange={(value: string) => {
+  //     const selectedCountry: any = combinedData.find(country => country.name === value);
+  //     if (selectedCountry) {
+  //         setDialCode(selectedCountry.dial_code);  
+  //         setSelectedFlag(selectedCountry.flag); 
+  //         setValue("dialCode", selectedCountry.dial_code);
+  //     }
+  // }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values, ";;;;;;");
