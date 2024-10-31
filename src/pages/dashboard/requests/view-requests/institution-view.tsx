@@ -5,9 +5,15 @@ import Summary from "./Summary";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import AssignReviewer from "../components/AssignReviewer";
+import { useRole } from "@/hooks/useRole";
+import { useLocation } from "react-router-dom";
+import ArrowRight from "@/components/custom/Icons/ArrowRight";
 
 export default function InstitutionRequestSummary() {
   const isMobile = useMediaQuery({ query: "(max-width: 737px)" });
+  const { role } = useRole();
+  const { pathname } = useLocation();
+
   return (
     <SheetContent side="bottom" className="h-full md:!p-0">
       <div className="mx-auto md:px-10 md:py-2 md:border-t-0 border border-b-[#0C0C0F29] w-full  flex justify-between md:justify-unset fixed top-0 z-[9999] bg-inherit">
@@ -28,6 +34,7 @@ export default function InstitutionRequestSummary() {
           <Cancel />
         </SheetClose>
       </div>
+      {role === 'INSTITUTION_ADMIN' && pathname.includes('/requests/manage-requests') && <ActionButton />}
       <div className="px-4">
         <Summary />
       </div>
