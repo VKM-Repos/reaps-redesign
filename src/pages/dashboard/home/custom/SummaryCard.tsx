@@ -1,6 +1,6 @@
 import { ReactElement} from "react"
 
-type Props = {
+export type SummaryProps = {
     icon: ReactElement;
     label: string;
     num: string;
@@ -8,7 +8,7 @@ type Props = {
 }
 
 
-export default function SummaryCard({ icon, label, num, color}: Props) {
+export default function SummaryCard({ icon, label, num, color }: SummaryProps) {
     return (
         <div className={`relative w-full md:max-w-[17.5rem] flex flex-col justify-left rounded-2xl`} style={{backgroundColor: color}}>
             <div className="md:block hidden absolute -right-0 top-0">
