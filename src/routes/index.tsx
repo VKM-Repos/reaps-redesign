@@ -20,6 +20,7 @@ import Transactions from "@/pages/dashboard/institution/account/transactions";
 import MyRequest from "@/pages/dashboard/requests/MyRequest";
 import ReviewRequest from "@/pages/dashboard/requests/ReviewRequest";
 import ManageRequestPage from "@/pages/dashboard/requests/ManageRequestPage";
+import Templates from "@/pages/dashboard/templates";
 
 const router = [
   {
@@ -140,6 +141,12 @@ const router = [
         path: "settings",
         title: "Settings",
         element: Settings,
+      },
+      {
+        name: "Templates",
+        path: "templates",
+        title: "Research Templates",
+        element: Templates,
       },
       {
         path: "*",
