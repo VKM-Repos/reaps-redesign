@@ -1,6 +1,6 @@
 import { useTemplateStore } from "@/store/templates-store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useForm } from "react-hook-form";
 import PdfImage from "@/assets/document-pdf-image.png";
@@ -9,14 +9,15 @@ import { Form, FormControl } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
 import { SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import Loader from "@/components/custom/Loader";
 
 const formSchema = z.object({
-    file_name: z.string().min(1, {message: "Please add the File name"}),
+    file_name: z.string().min(1, {message: "Please add the file name"}),
     template: z.instanceof(File, { message: "Please upload a file" }).nullable()
 })
 export default function UploadTemplate() {
     const [uploadProgress, setUploadProgress] = useState(0);
-    const { setTemplate, setTemplateName, setLoading } = useTemplateStore();
+    const { setTemplate, setTemplateName, setLoading, loading } = useTemplateStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
       });
@@ -38,14 +39,22 @@ export default function UploadTemplate() {
         // console.log("Current form values:", form.getValues()); 
     };
 
+    useEffect(() => {
+        console.log(loading)
+    }, [loading])
+
     function onSubmit(values: z.infer<typeof formSchema>) {
+        // console.log("Form submission values:", values);
         setLoading(true)
         try{
-            if (values.template) {
-                setTemplateName(values.file_name)
-                setTemplate(values.template)
-            } 
-            setLoading(false);
+            setTimeout(() => {
+                if (values.template) {
+                    setTemplateName(values.file_name)
+                    setTemplate(values.template)
+                } 
+                setLoading(false);
+            }, 3000);
+            
         } catch(error) {
             console.error("Error during submission:", error);
         }
@@ -53,6 +62,7 @@ export default function UploadTemplate() {
 
     return (
         <>
+            {/* {loading && <Loader />} */}
             <div className="w-full mx-auto">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-5 items-center">
@@ -109,7 +119,9 @@ export default function UploadTemplate() {
                         </FormControl>
                         <div className="flex w-full justify-end gap-3">
                             <SheetClose><Button variant="ghost" className="!py-3 !px-6 rounded">Cancel</Button></SheetClose>
-                            <Button variant={isValid ? "default" : "ghost"} type="submit" className="!py-3 !px-6 rounded">Finish</Button>
+                            <SheetClose>
+                                <Button variant={isValid ? "default" : "ghost"} type="submit" className="!py-3 !px-6 rounded">Finish</Button>
+                            </SheetClose>
                         </div>
                     </form>
                     
