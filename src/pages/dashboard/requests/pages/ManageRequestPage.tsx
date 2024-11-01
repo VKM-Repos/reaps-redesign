@@ -43,7 +43,7 @@ export default function ManageRequestPage() {
       {loading &&
         <Loader />}
         <div>
-          <div className="flex items-center justify-between">
+          <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">
             <PageTitle title="Manage Request" />
             <Button
               onClick={handleFunc}
