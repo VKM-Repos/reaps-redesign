@@ -8,10 +8,11 @@ import CustomFormField, {
   FormFieldType,
 } from "@/components/custom/CustomFormField";
 import { questions } from "@/lib/helpers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useStepper } from "@/context/StepperContext";
 import SavingLoader from "../components/SavingLoader";
+import AddInvestigator from "../components/AddInvestigator";
 
 
 const checkboxGroupSchema = z.object({
@@ -35,6 +36,8 @@ type Props = {
 export default function AppInfo({ handleNext }: Props) {
   const { data, setData } = useRequestsStore();
   const { checkbox } = data.requestsDetails;
+  const [ addInvestigator, showAddInvestigator ] = useState(false);
+  // const [ index, setIndex ] = useState(0);
 
   const form = useForm<z.infer<typeof checkboxGroupSchema>>({
     resolver: zodResolver(checkboxGroupSchema),
@@ -58,6 +61,21 @@ export default function AppInfo({ handleNext }: Props) {
     setStepper(0);
   };
 
+  const handleValueChange = (value: string, index: number) => {
+    if (index === 2 && value === "yes") {
+      showAddInvestigator(true);
+      console.log("falsee")
+      // setIndex(2);
+      console.log(addInvestigator)
+    } else if (index === 1 && value === "no") {
+      showAddInvestigator(false);
+    }
+    return (
+    <>
+      <AddInvestigator />
+    </>)
+
+  }
   
 
   useEffect(() => {
@@ -129,8 +147,11 @@ export default function AppInfo({ handleNext }: Props) {
                         { label: "No", value: "no" },
                       ]}
                   required={true}
+                  onChange={(value: string) => handleValueChange(value, index)}
                 />
-              ))}
+                // {index === 2 && addInvestigator && <div className="w-full"><AddInvestigator /></div>}
+              ))} 
+              {/* if investigator is added, show another add component */}
               <CustomFormField
                 name="question7"
                 fieldType={FormFieldType.COUNTER}
@@ -156,3 +177,5 @@ export default function AppInfo({ handleNext }: Props) {
     </div>
   );
 }
+
+

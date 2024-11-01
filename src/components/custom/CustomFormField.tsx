@@ -47,6 +47,7 @@ type CustomProps = {
    disabled?: boolean;
    error?: FieldError;
    labelClassName?: string;
+   onChange?: (value: string) => void;
    
 }
 
@@ -71,8 +72,8 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                          onValueChange={(value: string) => {
                           setSelectedValue(value);
                           field.onChange(value.toString()); 
+                          props.onChange?.(value);
                         }}
-                        // defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
                       >
                          {props.options?.map((option) => {
                             const isChecked = selectedValue === option.value;
