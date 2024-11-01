@@ -5,13 +5,14 @@ import Summary from "./Summary";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import AssignReviewer from "../components/AssignReviewer";
-import { useRole } from "@/hooks/useRole";
 import { useLocation } from "react-router-dom";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
+import useUserStore from "@/store/user-store";
+import WriteReview from "../components/WriteReview";
 
 export default function InstitutionRequestSummary() {
   const isMobile = useMediaQuery({ query: "(max-width: 737px)" });
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const { pathname } = useLocation();
 
   return (
@@ -34,7 +35,7 @@ export default function InstitutionRequestSummary() {
           <Cancel />
         </SheetClose>
       </div>
-      {role === 'INSTITUTION_ADMIN' && pathname.includes('/requests/manage-requests') && <ActionButton />}
+      {activeRole === 'admin' && pathname.includes('/requests/manage-requests') && <ActionButton />}
       <div className="px-4">
         <Summary />
       </div>
@@ -51,7 +52,7 @@ const actions = [
   {
     text: "Review",
     color: "#BD6BC9",
-    content: ""
+    content: <WriteReview />
   }, 
   {
     text: "Final Review",
