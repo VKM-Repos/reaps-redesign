@@ -49,14 +49,16 @@ export default function OnboardingPage() {
           country_code: data?.onboardingDetails?.country_code,
           education_level: data?.onboardingDetails?.education_level,
           password: data?.onboardingDetails?.password,
+          // date_of_birth: '2024-10-30',
+          // gender: 'male',
         };
 
         const baseURL = import.meta.env.VITE_APP_BASE_URL;
-        const response = await fetch(`${baseURL}auth/signup`, {
+        const response = await fetch(`${baseURL}users/signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'institution-context': 'default_context',
+            'Institution-Context': 'default_context',
           },
           body: JSON.stringify(payload),
         });
@@ -72,10 +74,10 @@ export default function OnboardingPage() {
           throw new Error(errorMessage);
         }
 
-        const responseData = await response.json();
+        // const responseData = await response.json();
         toast({
           title: 'Feedback',
-          description: `${responseData.detail}`,
+          description: `user created`,
           variant: 'default',
         });
         resetStore();
