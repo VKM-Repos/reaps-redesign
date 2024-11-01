@@ -92,7 +92,7 @@ const RenderInput = ({ field, props }: { field: any, props: CustomProps}) => {
                                     id={`${field.name}-${option.value}`}
                                     disabled={props.disabled}
                                 />
-                                <Label className={`text-base ${props.error && "text-red-500"}`} htmlFor={`${field.name}-${option.value}`}>
+                                <Label className={`text-base ${props.error && "text-red-500"} whitespace-normal w-full min-w-fit`} htmlFor={`${field.name}-${option.value}`}>
                                     {option.label}
                                 </Label>
                                 </div>
