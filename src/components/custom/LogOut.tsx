@@ -1,45 +1,105 @@
-import { SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "../ui/sheet";
-import { Button } from "../ui/button";
-import { useMediaQuery } from "react-responsive";
-import LogOutLarge from "./Icons/LogOutLarge";
-import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
-import { useNavigate } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '../ui/sheet';
+import { Button } from '../ui/button';
+import { useMediaQuery } from 'react-responsive';
+import LogOutLarge from './Icons/LogOutLarge';
+import { useNavigate } from 'react-router-dom';
+import useUserStore from '@/store/user-store';
+import { useCallback } from 'react';
+import { toast } from '../ui/use-toast';
 
-export default function Logout( {setLoading}: {setLoading: any} ) {
-    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-    const { resetStore } = useOnboardingFormStore();
-    const navigate = useNavigate();
-    
+export default function Logout({ setLoading }: { setLoading: any }) {
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const { reset, refreshToken } = useUserStore();
+  const navigate = useNavigate();
 
-    const handleLogOut = () => {
-        setLoading(true);
-        setTimeout(() => {
-            resetStore();
-            navigate('/login');
-            setLoading(false);
-          }, 3000);  
+  const revokeToken = useCallback(async () => {
+    setLoading(true);
+    try {
+      const baseURL = import.meta.env.VITE_APP_BASE_URL;
+      const response = await fetch(
+        `${baseURL}auth/token/revoke?token=${refreshToken}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Institution-Context': 'default_context',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = errorData.detail || 'error logging out';
+        toast({
+          title: 'Error',
+          description: errorMessage,
+          variant: 'destructive',
+        });
+        throw new Error(errorMessage);
+      }
+
+      toast({
+        title: 'See you again!',
+        description: `Thanks for sticking around!`,
+        variant: 'default',
+      });
+      reset();
+      navigate('/login');
+    } catch (error) {
+      console.error('Log out error:', error);
+    } finally {
+      setLoading(false);
     }
+  }, [refreshToken, navigate, reset, setLoading]);
 
-    return (
-        <>
-            <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pt-0"} mx-auto px-2 w-full h-full md:max-w-[30rem] md:max-h-[20.5rem] flex flex-col justify-center items-center`}>
-            <div className="border-none flex flex-col justify-center items-center gap-[2.5rem] md:rounded-3xl">
-            
-                <div className="flex flex-col items-center md:gap-7 gap-[9.75rem]">
-                    <div className="flex flex-col items-center gap-7">
-                        <LogOutLarge />
-                        <SheetHeader className="flex flex-col items-center justify-center gap-3">
-                            <SheetTitle className="font-bold text-xl2">Log Out</SheetTitle>
-                            <SheetDescription className="text-[454745] text-sm md:text-center">Are you sure you want to log out? You will lose any unsaved changes</SheetDescription>
-                        </SheetHeader>
-                    </div> 
-                    <div className="flex gap-10 w-full items-center justify-center">
-                        <SheetClose className="w-full max-w-[12rem] p-0"><Button variant="destructive" className="w-full rounded-[2.75rem] !py-3 !px-6" onClick={() => {handleLogOut()}}>Log out</Button></SheetClose>
-                        <SheetClose className="w-full max-w-[12rem] !py-3 !px-6 border border-[#0C0C0F29] rounded-[2.75rem] text-sm">Cancel</SheetClose>
-                    </div>
-                </div>
+  const handleLogOut = () => {
+    revokeToken();
+  };
+
+  return (
+    <>
+      <SheetContent
+        side={isMobile ? 'bottom' : 'top'}
+        className={` ${isMobile ? 'inset-x-auto inset-y-0' : 'inset-x-[30%] inset-y-auto rounded-3xl md:!pt-0'} mx-auto flex h-full w-full flex-col items-center justify-center px-2 md:max-h-[20.5rem] md:max-w-[30rem]`}
+      >
+        <div className="flex flex-col items-center justify-center gap-[2.5rem] border-none md:rounded-3xl">
+          <div className="flex flex-col items-center gap-[9.75rem] md:gap-7">
+            <div className="flex flex-col items-center gap-7">
+              <LogOutLarge />
+              <SheetHeader className="flex flex-col items-center justify-center gap-3">
+                <SheetTitle className="text-xl2 font-bold">Log Out</SheetTitle>
+                <SheetDescription className="text-sm text-[454745] md:text-center">
+                  Are you sure you want to log out? You will lose any unsaved
+                  changes
+                </SheetDescription>
+              </SheetHeader>
             </div>
-            </SheetContent>
-      </>
-       )
+            <div className="flex w-full items-center justify-center gap-10">
+              <SheetClose className="w-full max-w-[12rem] p-0">
+                <Button
+                  variant="destructive"
+                  className="w-full rounded-[2.75rem] !px-6 !py-3"
+                  onClick={() => {
+                    handleLogOut();
+                  }}
+                >
+                  Log out
+                </Button>
+              </SheetClose>
+              <SheetClose className="w-full max-w-[12rem] rounded-[2.75rem] border border-[#0C0C0F29] !px-6 !py-3 text-sm">
+                Cancel
+              </SheetClose>
+            </div>
+          </div>
+        </div>
+      </SheetContent>
+    </>
+  );
 }
