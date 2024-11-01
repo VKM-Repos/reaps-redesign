@@ -14,10 +14,10 @@ import Loader from "@/components/custom/Loader";
 export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
     const educationLevels = ["Undergraduate", "Postgraduate", "Graduate"]
     const formSchema = z.object({
-        education: z
+        education_level: z
             .string()
             .min(1, { message: "Please fill this field"}),
-        orcid: z
+        orcid_number: z
             .string()
             .min(1, { message: "Please fill this field"})
     });
@@ -25,8 +25,8 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
     const [ loading, setLoader ] = useState(false);
     const { data, setData } = useOnboardingFormStore();
     const defaultValues = {
-        education: data.onboardingDetails.education,
-        orcid: data.onboardingDetails.orcid,
+        education_level: data.onboardingDetails.education_level,
+        orcid_number: data.onboardingDetails.orcid_number,
 
     }
     const [ education, setEducation ] = useState("Graduate");
@@ -43,8 +43,8 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
         setData({
             onboardingDetails: {
                 ...data.onboardingDetails,
-                education: values.education,
-                orcid: values.orcid
+                education_level: values.education_level,
+                orcid_number: values.orcid_number
             }
         });
         setTimeout(() => {
@@ -67,7 +67,7 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
             <div className="mt-2 flex flex-col gap-6">
                 <div className="flex flex-col text-xs mt-2">
                     <Select onValueChange={(value: string) => {
-                        setValue("education", value, { shouldValidate: true });
+                        setValue("education_level", value, { shouldValidate: true });
                         setEducation(value);
                     }}>
                         <Label className="font-sm">Select your Education</Label>
@@ -86,7 +86,7 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
                 </div>
                 <FormInput 
                     label="ORCID ID"
-                    {...register("orcid", {
+                    {...register("orcid_number", {
                     required: "This field is required",
                     })}
                 />

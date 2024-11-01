@@ -38,7 +38,7 @@ export default function ProfileDropDown() {
     const { data } = useOnboardingFormStore();
     const { role } = useRole();
 
-    const fullName = data.onboardingDetails.firstName + ' ' + data.onboardingDetails.lastName
+    const fullName = data.onboardingDetails.first_name + ' ' + data.onboardingDetails.last_name
 
     const normalizeRole = (value: string): string => {
         return value.replace(/_/g, ' ').trim().toLowerCase();

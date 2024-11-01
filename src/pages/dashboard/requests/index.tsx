@@ -98,7 +98,7 @@ export default function Requests() {
                       {status}
                     </span>
                     <span onClick={() => deleteStatusUpdate(status)}>
-                      <X size={10} />
+                      <X size={10}  />
                     </span>
                   </div>
                 ))}
