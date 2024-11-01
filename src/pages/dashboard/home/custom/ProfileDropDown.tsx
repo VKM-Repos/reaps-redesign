@@ -74,6 +74,7 @@ export default function ProfileDropDown() {
       handleClose={handleClose}
     />
   );
+
 }
 
 // Desktop dropdown for profile
