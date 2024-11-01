@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import Loader from "@/components/custom/Loader";
 import useUserStore from "@/store/user-store";
 import { usePATCH } from "@/hooks/usePATCH.hook";
+import { toast } from "@/components/ui/use-toast";
 
 export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
   const educationLevels = [
@@ -31,7 +32,7 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
     orcid_number: z.string().min(1, { message: "Please fill this field" }),
   });
 
-  const { user } = useUserStore();
+  const { user, updateUser } = useUserStore();
   const defaultValues = {
     education_level: user?.education_level || "",
     orcid_number: user?.orcid_number || "",
@@ -55,11 +56,22 @@ export const EducationSettings = ({ onSave }: { onSave: () => void }) => {
       country_code: "+234",
     };
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        updateUser(response);
         onSave();
+        toast({
+          title: "Feedback",
+          description: "You have updated your Education Details",
+          variant: "default",
+        });
       },
       onError: (error) => {
         console.log(error);
+        toast({
+          title: "Error",
+          description: "Error updating your profile",
+          variant: "destructive",
+        });
       },
     });
   }

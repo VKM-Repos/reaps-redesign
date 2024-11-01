@@ -10,4 +10,5 @@ export type User = {
   date_of_birth: string;
   education_level: string;
   user_type: string;
+  institution_context: string;
 };

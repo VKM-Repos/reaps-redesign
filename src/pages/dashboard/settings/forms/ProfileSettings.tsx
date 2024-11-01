@@ -25,6 +25,7 @@ import Loader from "@/components/custom/Loader";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import { formatISODate } from "@/lib/utils";
 import useUserStore from "@/store/user-store";
+import { toast } from "@/components/ui/use-toast";
 
 type FlagData = {
   url: string;
@@ -37,7 +38,7 @@ type FlagData = {
 export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const [dialCode, setDialCode] = useState("+93");
   const [selectedFlag, setSelectedFlag] = useState();
-  const { user } = useUserStore();
+  const { user, updateUser } = useUserStore();
   const formSchema = z.object({
     first_name: z.string().min(1, { message: "Please fill this field" }),
     last_name: z.string().min(1, { message: "Please fill this field" }),
@@ -111,11 +112,22 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.date_of_birth = formatISODate(values.date_of_birth);
     mutate(values, {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        updateUser(response);
         onSave();
+        toast({
+          title: "Feedback",
+          description: "You have updated your profile",
+          variant: "default",
+        });
       },
       onError: (error) => {
         console.log(error);
+        toast({
+          title: "Error",
+          description: "Error updating your profile",
+          variant: "destructive",
+        });
       },
     });
   }

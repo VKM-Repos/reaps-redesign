@@ -1,3 +1,4 @@
+import useUserStore from "@/store/user-store";
 import axios, { AxiosInstance } from "axios";
 
 export const createApiInstance = (baseURL: string): AxiosInstance => {
@@ -8,13 +9,12 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
   apiInstance.defaults.headers.common["Content-Type"] = "application/json";
 
   apiInstance.interceptors.request.use(async (config) => {
-    // const userToken = useAppStore.getState().user?.token;
-    const userToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NGMzNGQ1MS0yNzU0LTRmYzEtOTUxNy0zNTc3Zjk3ZTAyY2MiLCJ1c2VyX3R5cGUiOiJ1c2VyIiwiZXhwIjoxNzMwNDc0NDMyfQ.PFgc7kdG1QIlu72MgFes_uG1ZfVDtcVWUUYBex1ZLY4";
-
+    const userToken = useUserStore.getState().accessToken;
+    const userInstitutionContext =
+      useUserStore.getState().user?.institution_context;
     if (userToken) {
       config.headers["Authorization"] = `Bearer ${userToken}`;
-      config.headers["institution-context"] = "default_context";
+      config.headers["institution-context"] = userInstitutionContext;
     }
 
     return config;
