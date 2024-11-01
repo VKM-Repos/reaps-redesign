@@ -31,6 +31,10 @@ enum EducationLevel {
   MASTERS = 'masters',
   PHD = 'phd',
 }
+enum dob {
+  MALE = 'male',
+  FEMALE = 'female',
+}
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: 'Please fill this field' }),
@@ -43,6 +47,8 @@ const formSchema = z.object({
     })
     .regex(/^\d+$/, { message: 'Phone number should contain only numbers' }),
   education_level: z.nativeEnum(EducationLevel),
+  dob: z.string().min(1, { message: 'Please select your date of birth' }),
+  gender: z.enum(['male', 'female'], { message: 'Please select your gender' }),
 });
 
 type FlagData = {
@@ -60,6 +66,14 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
   const { data, setData, loading, setLoading } = useOnboardingFormStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: data?.onboardingDetails.first_name ?? '',
+      lastName: data?.onboardingDetails.last_name ?? '',
+      phoneNumber: data?.onboardingDetails.phone_number ?? '',
+      education_level: data?.onboardingDetails.education_level ?? '',
+      dob: data?.onboardingDetails.date_of_birth ?? '',
+      gender: data?.onboardingDetails.gender ?? '',
+    },
   });
 
   const {
@@ -86,7 +100,6 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
     });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // const dialNumber = dialCode + values.phoneNumber;
     setLoading(true);
     try {
       setData({
@@ -97,6 +110,8 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           phone_number: values.phoneNumber,
           country_code: dialCode,
           education_level: values.education_level,
+          date_of_birth: values.dob,
+          gender: values.gender,
         },
       });
       setTimeout(() => {
@@ -225,6 +240,34 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="flex gap-2">
+                <div className="w-full">
+                  <FormInput
+                    label="Date of Birth"
+                    type="date"
+                    {...register('dob', {
+                      required: 'This field is required',
+                    })}
+                  />
+                </div>
+                <div className="w-full">
+                  <Label>Gender</Label>
+                  <Select
+                    onValueChange={value =>
+                      form.setValue('gender', value as dob)
+                    }
+                  >
+                    <SelectTrigger className="mt-2 w-full">
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <Button

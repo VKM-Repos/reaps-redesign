@@ -59,7 +59,7 @@ export function LoginForm() {
         }
 
         const responseData: LoginResponseData = await response.json();
-        console.log('Login successful:', responseData);
+
         toast({
           title: 'Feedback',
           description: 'You have been logged in successfully',

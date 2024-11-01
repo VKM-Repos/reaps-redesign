@@ -15,10 +15,21 @@ import { Props } from '@/types/forms.types';
 const formSchema = z.object({
   password: z
     .string({ required_error: 'Password is required' })
-    .min(1, { message: 'Please fill this field' })
-    .min(7, { message: 'Password must contain a minimum of 7 characters' })
-    .regex(/^(?=.*[a-zA-Z])(?=.*\d).+$/, {
-      message: 'Password must contain a number and a letter',
+    .min(8, { message: 'Password must contain a minimum of 8 characters' })
+    .refine(value => /[A-Z]/.test(value), {
+      message: 'Password must contain at least one uppercase letter',
+    })
+    .refine(value => /[a-z]/.test(value), {
+      message: 'Password must contain at least one lowercase letter',
+    })
+    .refine(value => /\d/.test(value), {
+      message: 'Password must contain at least one number',
+    })
+    .refine(value => /[@$!%*?&]/.test(value), {
+      message: 'Password must contain at least one special character',
+    })
+    .refine(value => !/\s/.test(value), {
+      message: 'Password must not contain spaces',
     }),
 });
 
@@ -81,11 +92,13 @@ export default function NewPassword({ handleNext, handleGoBack }: Props) {
                 })}
               />
               <p className="my-5 text-center text-sm">
-                Password must contain a{' '}
-                <span className="font-semibold">letter</span> and a{' '}
-                <span className="font-semibold">number</span>, and be minimum of
-                7 <span className="font-semibold">characters</span> long
+                Password must contain <strong>uppercase</strong> and{' '}
+                <strong>lowercase</strong>{' '}
+                <span className="font-semibold">letters</span>, a{' '}
+                <span className="font-semibold">number</span>, and be at least 8{' '}
+                <span className="font-semibold">characters</span> long.
               </p>
+
               <Button
                 variant={isValid ? 'default' : 'ghost'}
                 className={`my-4 focus:outline-none`}
