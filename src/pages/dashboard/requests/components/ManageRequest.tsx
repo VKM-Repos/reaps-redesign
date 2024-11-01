@@ -15,8 +15,10 @@ import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import View from "@/components/custom/Icons/View";
 import InstitutionRequestSummary from "../view-requests/institution-view";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import SignatureIcon from "@/components/custom/Icons/Signature";
+import { useRequestsStore } from "@/store/RequestFormStore";
+import Loader from "@/components/custom/Loader";
 
 type TableRequestsProps = {
   institutionTableData: {
@@ -72,6 +74,12 @@ export default function ManageRequests({
 }: TableRequestsProps) {
   // const [ tableArray, setTableArray ] = useState(institutionTableData);
   const { multiStatusDateFilter } = useGlobalFilter();
+  const { loading, success, reviewer, setSuccess, setReviewer } = useRequestsStore();
+
+  const closeDialog = () => {
+      setSuccess(false);
+      setReviewer({ firstName: '', lastName: '' }); // Reset reviewer when closing
+  };
 
   const columnData: ColumnSetup<any>[] = [
     {
@@ -160,6 +168,16 @@ export default function ManageRequests({
 
   return (
     <>
+      {loading && <Loader />}
+      {reviewer &&
+        <Dialog open={success && reviewer?.firstName !== ''} >
+          <DialogContent className="z-[999999] w-full max-w-[20rem] pt-6 pb-2 px-4 flex flex-col items-center gap-[2.25rem]" showCloseButton={false}>
+              <h1 className="text-center font-bold text-[1.625rem]">Assigned</h1>
+              <p className="text-sm text-center">Reviewer ({reviewer.firstName} {reviewer.lastName}) has been assigned to this request</p>
+                  <DialogClose onClick={closeDialog} className="bg-primary rounded text-white font-semibold py-3 px-6 w-full max-w-[8rem]">Done</DialogClose>
+          </DialogContent>
+      </Dialog>
+      }
       <CustomTable columns={columnData} data={institutionTableData} />
     </>
   );
