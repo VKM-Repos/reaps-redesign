@@ -3,13 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import FormInput from '@/components/custom/FormInput';
-import { useCallback, useState } from 'react';
 import Loader from '@/components/custom/Loader';
 import { Form } from '@/components/ui/form';
-import { usePasswordStore } from '@/store/recoverPasswordStore';
+import { useOnboardingFormStore } from '@/store/CreateOnboardingFormStore';
 import Cancel from '@/components/custom/Icons/Cancel';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
+import { useCallback, useState } from 'react';
 
 type Props = {
   handleNext: () => void;
@@ -22,11 +22,10 @@ const formSchema = z.object({
     .email({ message: 'Invalid email address' }),
 });
 
-export default function AddEmail({ handleNext }: Props) {
-  const { data, setData } = usePasswordStore();
+export default function CheckEmail({ handleNext }: Props) {
+  const { data, setData } = useOnboardingFormStore();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -42,7 +41,7 @@ export default function AddEmail({ handleNext }: Props) {
 
         const baseURL = import.meta.env.VITE_APP_BASE_URL;
         const response = await fetch(
-          `${baseURL}auth/forget-password?email=${email}`,
+          `${baseURL}auth/verification-code?email=${email}`,
           {
             method: 'POST',
             headers: {
@@ -71,8 +70,8 @@ export default function AddEmail({ handleNext }: Props) {
         });
 
         setData({
-          passwordDetails: {
-            ...data.passwordDetails,
+          onboardingDetails: {
+            ...data.onboardingDetails,
             email: email,
           },
         });
@@ -84,7 +83,7 @@ export default function AddEmail({ handleNext }: Props) {
         setLoading(false);
       }
     },
-    [data.passwordDetails, handleNext, setData]
+    [data.onboardingDetails, handleNext, setData]
   );
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -105,35 +104,30 @@ export default function AddEmail({ handleNext }: Props) {
             />
           </div>
           <div>
-            <button
-              className="bg-inherit notransition hover:bg-accent border-none p-2.5 hover:rounded-full hover:border focus:outline-none"
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
+            <button className="bg-inherit notransition hover:bg-accent border-none p-2.5 hover:rounded-full hover:border focus:outline-none">
               <Cancel />
             </button>
           </div>
         </div>
       </div>
       <div className="mx-auto my-0 w-full px-4 antialiased md:w-4/5 md:px-0">
-        <div className="flex flex-col items-center justify-center pt-[2.5rem]">
-          <div className="flex h-[96px] w-[96px] items-center justify-center rounded-full bg-[#FFD13A]">
-            <img
-              className="h-[2.125rem] w-[2.5rem]"
-              src="icons/square-lock-01.svg"
-              alt="padlock in yellow background"
-            />
-          </div>
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="text-xl2 pb-5 pt-10 text-center font-semibold md:py-5">
+            Create your Reaps account
+          </h1>
+          <p className="pb-10 pt-2 text-sm text-[#454745]">
+            Already have an account?{' '}
+            <a
+              onClick={() => {
+                navigate('/login');
+              }}
+              className="text-black hover:text-black font-semibold underline"
+            >
+              Log in
+            </a>
+          </p>
         </div>
         <div className="mx-auto my-0 w-full max-w-[358px] md:w-3/5 md:max-w-[526px]">
-          <h1 className="text-xl2 pb-5 pt-10 text-center font-semibold md:py-5">
-            Reset password
-          </h1>
-          <p className="pb-10 pt-2 text-center text-sm">
-            Just enter the email address you registered with and we'll send you
-            a 6-digit code to reset your password
-          </p>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -150,19 +144,26 @@ export default function AddEmail({ handleNext }: Props) {
                 variant={isValid ? 'default' : 'ghost'}
                 className={`my-4 focus:outline-none`}
               >
-                Send Password reset code
+                Next
               </Button>
             </form>
           </Form>
         </div>
         <div className="flex flex-col items-center justify-center">
           <p className="pb-10 pt-2 text-sm">
-            Need help?{' '}
+            By registering, you accept our{' '}
             <a
               href="/"
               className="text-black hover:text-black font-semibold underline"
             >
-              Contact us
+              Terms of use
+            </a>{' '}
+            and{' '}
+            <a
+              href="/"
+              className="text-black hover:text-black font-semibold underline"
+            >
+              Privacy Policy
             </a>
           </p>
         </div>
