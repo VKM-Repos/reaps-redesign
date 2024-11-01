@@ -54,7 +54,7 @@ const ActionButton = () => {
                 <DialogTrigger>
                   <button className="bg-white action-shadow rounded-[2.75rem] px-6 py-[1.375rem] font-semibold max-w-fit"
                    onClick={() => handleStepForward(index)}
-                   disabled={index > currentStep}
+                  //  disabled={index > currentStep}
                    style={{
                     color: color,
                     backgroundColor: index === 2 && currentStep >= 3 ? '#14155E' : ''
