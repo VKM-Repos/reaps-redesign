@@ -1,5 +1,5 @@
 import SearchIcon from "@/components/custom/Icons/Search";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import {
@@ -12,29 +12,30 @@ import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import Tick from "@/components/custom/Icons/Tick";
+import { useLocation } from "react-router-dom";
 
-export default function SeachFilter() {
+export default function SeachFilter({ statuses, activeTab, setShowStatuses, setLoading, setAppliedStatuses }: { statuses: string[], activeTab?: string, setShowStatuses: (showStatuses: boolean ) => void, setLoading: (loading: boolean) => void, setAppliedStatuses: (appliedStatuses: string[]) => void}) {
   const [open, setOpen] = useState(false);
   const [activeContent, setActiveContent] = useState("Status");
-  const [selectedStatuses, setSelectedStatuses] = useState<String[]>([]);
-  const [statuses, setStatuses] = useState<any[]>([]);
-  const [showTick, setShowTick] = useState("");
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [statusFilter, setStatusFilter] = useState<String[]>([]);
   const [startCalendarOpen, setStartCalendarOpen] = useState(false);
   const [endCalendarOpen, setEndCalendarOpen] = useState(false);
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [showStatuses, setShowStatuses] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [appliedStatuses, setAppliedStatuses] = useState(selectedStatuses);
 
   type SelectSingleEventHandler = (day: Date | undefined) => void;
 
   const { globalFilter, setGlobalFilter, setColumnFilters } = useGlobalFilter();
+  const { pathname } = useLocation();
+
+  // check if touch device 
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGlobalFilter(e.target.value);
   };
+  
   const handleSelectStatus = (status: string) => {
     setSelectedStatuses((prev) =>
       prev.includes(status)
@@ -97,6 +98,17 @@ export default function SeachFilter() {
       setLoading(false);
     }, 3000);
   };
+
+  useEffect(() => {
+    setAppliedStatuses([...selectedStatuses]);   
+  }, [selectedStatuses]);
+
+  useEffect(() => {
+    setSelectedStatuses([]);
+    setStatusFilter([]);
+    setGlobalFilter('');
+    setColumnFilters([]);
+  }, [pathname, activeTab]);
 
   return (
     <>
@@ -186,23 +198,23 @@ export default function SeachFilter() {
                     <ul className="flex flex-col items-start">
                       {statuses.map((status: string) => (
                         <div
-                          onMouseEnter={() => {
-                            setShowTick(status);
-                          }}
-                          onMouseLeave={() => {
-                            setShowTick("");
-                          }}
-                          className={`flex gap-2 py-2 items-center justify-start w-full text-xs font-[500] ${
-                            showTick === status ||
+                           onMouseEnter={() => {
+                              if (!isTouchDevice) handleSelectStatus(status); ;
+                            }}
+                            onMouseLeave={() => {
+                              if (!isTouchDevice) handleSelectStatus(status); ;
+                            }}
+                            onClick={() => {
+                              handleSelectStatus(status);
+                            }}
+                            className={`flex gap-2 py-2 items-center justify-start w-full text-xs font-[500] ${
                             selectedStatuses.includes(status)
                               ? "text-black bg-[#192C8A0D]"
                               : "text-[#6A6C6A]"
-                          }`}
-                          key={status}
-                          onClick={() => handleSelectStatus(status)}
+                            }`}
+                            key={status}  
                         >
-                          {selectedStatuses.includes(status) ||
-                          showTick === status ? (
+                          {selectedStatuses.includes(status) ? (
                             <Tick />
                           ) : (
                             <div className="w-6 h-6">&nbsp;</div>

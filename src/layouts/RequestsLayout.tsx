@@ -20,9 +20,9 @@ export default function RequestsLayout({ children }: Props) {
 
     const goBackRequests = () => {
         navigate(-1);
-        if (step === 5) {
+        setTimeout(() => {
             resetStore();
-        } 
+        }, 2000)
     }
 
     return (
