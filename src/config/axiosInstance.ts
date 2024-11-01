@@ -1,24 +1,20 @@
-
-// import useAppStore from "@/lib/store/app.store";
 import axios, { AxiosInstance } from "axios";
 
-// Dynamic axios instance function
 export const createApiInstance = (baseURL: string): AxiosInstance => {
   const apiInstance = axios.create({
     baseURL,
   });
 
-  // Set default headers
   apiInstance.defaults.headers.common["Content-Type"] = "application/json";
 
-  // Request interceptor to add Authorization header if token exists
   apiInstance.interceptors.request.use(async (config) => {
     // const userToken = useAppStore.getState().user?.token;
     const userToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNzYyYzZmYy1mYzJmLTQ4ODEtOTA1Ni02OTZiZTlhNTZlZDciLCJ1c2VyX3R5cGUiOiJ1c2VyIiwiZXhwIjoxNzMyODY4NjM3fQ.5YsQIlPtUEHUPVmEZ5YSkdo-HdzbWod-g5Eu9YyrzHQ";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NGMzNGQ1MS0yNzU0LTRmYzEtOTUxNy0zNTc3Zjk3ZTAyY2MiLCJ1c2VyX3R5cGUiOiJ1c2VyIiwiZXhwIjoxNzMwNDc0NDMyfQ.PFgc7kdG1QIlu72MgFes_uG1ZfVDtcVWUUYBex1ZLY4";
 
     if (userToken) {
       config.headers["Authorization"] = `Bearer ${userToken}`;
+      config.headers["institution-context"] = "default_context";
     }
 
     return config;

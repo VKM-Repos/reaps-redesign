@@ -1,4 +1,9 @@
-import { reviewersTableData, tableData, usersData } from "@/lib/helpers";
+import {
+  adminsTableData,
+  reviewersTableData,
+  tableData,
+  usersData,
+} from "@/lib/helpers";
 import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useState } from "react";
@@ -12,6 +17,7 @@ import FilterIcon from "@/components/custom/Icons/Filter";
 import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
 import RequesterTable from "../components/RequesterTable";
+import AdminsTable from "../components/AdminsTable";
 
 export default function Requests() {
   const { role } = useRole();
@@ -45,6 +51,7 @@ export default function Requests() {
                 <TabsList className="border-b-[1.5px] w-full px-3">
                   <TabsTrigger value="request users">Researchers</TabsTrigger>
                   <TabsTrigger value="review users">Reviewers</TabsTrigger>
+                  <TabsTrigger value="admin users">Admins</TabsTrigger>
                 </TabsList>
                 <div className="flex items-center justify-between my-5">
                   <div className="flex gap-3 items-center">
@@ -72,6 +79,9 @@ export default function Requests() {
                 </TabsContent>
                 <TabsContent value="review users">
                   <ReviwersTable usersTableData={reviewersTableData} />
+                </TabsContent>
+                <TabsContent value="admin users">
+                  <AdminsTable usersTableData={adminsTableData} />
                 </TabsContent>
               </Tabs>
             ) : (

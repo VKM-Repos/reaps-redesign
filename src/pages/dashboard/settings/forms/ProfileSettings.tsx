@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+
 import {
   Select,
   SelectContent,
@@ -22,6 +22,9 @@ import CustomFormField, {
   FormFieldType,
 } from "@/components/custom/CustomFormField";
 import Loader from "@/components/custom/Loader";
+import { usePATCH } from "@/hooks/usePATCH.hook";
+import { formatISODate } from "@/lib/utils";
+import useUserStore from "@/store/user-store";
 
 type FlagData = {
   url: string;
@@ -34,7 +37,7 @@ type FlagData = {
 export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const [dialCode, setDialCode] = useState("+93");
   const [selectedFlag, setSelectedFlag] = useState();
-  const [loading] = useState(false);
+  const { user } = useUserStore();
   const formSchema = z.object({
     first_name: z.string().min(1, { message: "Please fill this field" }),
     last_name: z.string().min(1, { message: "Please fill this field" }),
@@ -45,17 +48,15 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
         message: "Phone number should contain only numbers",
       }),
     country_code: z.string().min(1, { message: "Please enter a country code" }),
-    date_of_birth: z.date(),
+    date_of_birth: z.any(),
   });
 
-  const { data } = useOnboardingFormStore();
-
   const defaultValues = {
-    first_name: data.onboardingDetails.firstName || "",
-    last_name: data.onboardingDetails.lastName || "",
-    phone_number: data.onboardingDetails.phoneNumber || "",
-    country_code: "+234",
-    date_of_birth: data.onboardingDetails.dob || undefined,
+    first_name: user?.first_name || "",
+    last_name: user?.last_name || "",
+    phone_number: user?.phone_number || "",
+    country_code: user?.country_code || "+234",
+    date_of_birth: user?.date_of_birth || "2024-10-27T23:00:00.000Z",
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -83,33 +84,21 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
         flag: flag?.file_url || "",
       };
     });
-
+  const { mutate, isPending } = usePATCH("users/me", { method: "PUT" });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values, ";;;;;;");
-    onSave();
-    // setLoader(true);
-    // try {
-    //     setData({
-    //         onboardingDetails: {
-    //             ...data.onboardingDetails,
-    //             firstName: values.firstName,
-    //             lastName: values.lastName,
-    //             phoneNumber: dialNumber,
-    //             dob: values.dob,
-    //         }
-    //     });
-    //     setTimeout(() => {
-    //         setLoader(false);
-    //         onSave();
-    //         reset();
-    //     }, 3000);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    values.date_of_birth = formatISODate(values.date_of_birth);
+    mutate(values, {
+      onSuccess: () => {
+        onSave();
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   }
   return (
     <>
-      {loading && <Loader />}
+      {isPending && <Loader />}
       <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
         <Form {...form}>
           <form
