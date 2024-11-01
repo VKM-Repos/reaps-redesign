@@ -100,36 +100,6 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
       try {
         setLoading(true);
 
-        const baseURL = import.meta.env.VITE_APP_BASE_URL;
-        const response = await fetch(
-          `${baseURL}auth/verify?verification_code=${code}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'institution-context': 'default_context',
-            },
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          const errorMessage = errorData.detail || 'error in verifying code';
-          toast({
-            title: 'Error',
-            description: errorMessage,
-            variant: 'destructive',
-          });
-          throw new Error(errorMessage);
-        }
-
-        const responseData = await response.json();
-        toast({
-          title: 'Feedback',
-          description: `${responseData.detail}`,
-          variant: 'default',
-        });
-
         setData({
           passwordDetails: {
             ...data.passwordDetails,

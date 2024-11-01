@@ -37,14 +37,17 @@ export default function RecoverPassword() {
         };
 
         const baseURL = import.meta.env.VITE_APP_BASE_URL;
-        const response = await fetch(`${baseURL}auth/reset-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Institution-Context': 'default_context',
-          },
-          body: JSON.stringify(payload),
-        });
+        const response = await fetch(
+          `${baseURL}auth/reset-password?email=${payload.email}&verification_code=${payload.verification_code}&new_password=${payload.new_password}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Institution-Context': 'default_context',
+            },
+            body: JSON.stringify(payload),
+          }
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -57,12 +60,6 @@ export default function RecoverPassword() {
           throw new Error(errorMessage);
         }
 
-        // const responseData = await response.json();
-        toast({
-          title: 'Feedback',
-          description: `user created`,
-          variant: 'default',
-        });
         resetStore();
 
         handleNext();
