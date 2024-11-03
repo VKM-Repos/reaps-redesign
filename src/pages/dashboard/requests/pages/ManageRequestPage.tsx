@@ -7,7 +7,7 @@ import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import ManageRequests from "../components/ManageRequest";
+import ManageRequests from "../components/manage-requests";
 import { useMediaQuery } from "react-responsive";
 import { X } from "lucide-react";
 

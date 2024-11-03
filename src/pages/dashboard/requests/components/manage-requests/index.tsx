@@ -2,20 +2,20 @@ import CustomTable, {
   ColumnSetup,
   CustomCell,
 } from "@/components/custom/CustomTable";
-import MoreIcon from "@/components/custom/Icons/MoreIcon";
-import SignatureIcon from "@/components/custom/Icons/Signature";
-import View from "@/components/custom/Icons/View";
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import MoreIcon from "@/components/custom/Icons/MoreIcon";
+import { Badge } from "@/components/ui/badge";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import View from "@/components/custom/Icons/View";
 import InstitutionRequestSummary from "../../view-requests/institution-view";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import SignatureIcon from "@/components/custom/Icons/Signature";
 
 type TableRequestsProps = {
   institutionTableData: {
@@ -39,7 +39,7 @@ function RenderFunctions() {
       <DropdownMenuTrigger>
         <MoreIcon />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
+      <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-fit .dropdown-shadow">
         <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
           <>
             <Sheet>
@@ -71,7 +71,7 @@ export default function ManageRequests({
 }: TableRequestsProps) {
   // const [ tableArray, setTableArray ] = useState(institutionTableData);
   const { multiStatusDateFilter } = useGlobalFilter();
-
+  
   const columnData: ColumnSetup<any>[] = [
     {
       header: () => (
