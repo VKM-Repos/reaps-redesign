@@ -9,14 +9,12 @@ import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormFi
 import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
-    review_remarks: z.array(z.string()).refine((value) => value.some((item) => item), {
-        message: "You have to select at least one item.",
-      }),
+    review_remark: z.string().min(1, { message: "You have to select one item"}),
     feedback: z.string().min(1, { message: "Please input some feedback"}),
-    correction_doc: z.instanceof(File, { message: "Please upload a file" })
+    correction_doc: z.instanceof(File, { message: "Please upload a file" }).optional()
 })
 
-export default function WriteReview() {
+export default function WriteReview({ setLoader }: { setLoader: (loading: boolean) => void}) {
     const review_remarks = [
         { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
         { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
@@ -28,10 +26,11 @@ export default function WriteReview() {
         // defaultValues,
       });
 
-    const { formState: { isValid, errors } } = form;
+    const { formState: { isValid, errors }, reset } = form;
+
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // setLoader(true);
+        setLoader(true);
         try {
             console.log(values)
             // setData({
@@ -40,11 +39,11 @@ export default function WriteReview() {
             //         email: values.email,
             //     }
             // }); 
-            // setTimeout(() => {
-            //     setLoader(false);
-            //     onSave();
-            //     reset();
-            // }, 3000)
+            setTimeout(() => {
+                setLoader(false);
+                // onSave();
+                reset();
+            }, 3000)
         } catch (error) {
           console.error(error);
         }
@@ -60,26 +59,18 @@ export default function WriteReview() {
                             <div className="flex flex-col gap-5">
                                 <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
                                 <div className="!w-full">
-                                <FormField control={form.control} name="review_remarks" render={() => (
+                                <FormField control={form.control} name="review_remark" render={() => (
                                     <FormItem className="w-full grid md:grid-cols-3 grids-col-1 gap-3 items-center justify-center">
                                         {review_remarks.map((remark) => (
-                                            <FormField key={remark.id} control={form.control} name="review_remarks" render={({ field }) => (
+                                            <FormField key={remark.id} control={form.control} name="review_remark" render={({ field }) => (
                                                 <FormItem className="!w-full min-w-[28rem] md:min-w-0 justify-self-end !my-0">
                                                     <FormControl>
                                                         <label className={"h-[5.5rem] w-full flex flex-col items-center justify-center rounded-lg gap-1 w-full cursor-pointer !my-0"}
-                                                              style={{ border: field.value?.includes(remark.id) ? "2px solid " + remark.color : "0.5px solid " + remark.color, color: `${remark.color}` }}>
+                                                              style={{ border: field.value === remark.id ? "2px solid " + remark.color : "0.5px solid " + remark.color, color: `${remark.color}` }}>
                                                             <input
-                                                                type="checkbox"
-                                                                checked={field.value?.includes(remark.id)}
-                                                                onChange={(e) => {
-                                                                    const isChecked = e.target.checked;
-                                                                    const currentValues = field.value || [];
-                                                                    if (isChecked) {
-                                                                        field.onChange([...currentValues, remark.id]);
-                                                                    } else {
-                                                                        field.onChange(currentValues.filter((value) => value !== remark.id));
-                                                                    }
-                                                                }}
+                                                                type="radio"
+                                                                checked={field.value === remark.id}
+                                                                onChange={() => field.onChange(remark.id)}
                                                                 hidden
                                                             />
                                                             <span style={{ color: `${remark.color}` }}><img src={remark.icon} style={{ color: `${remark.color}` }}/></span>
