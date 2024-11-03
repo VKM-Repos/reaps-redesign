@@ -26,6 +26,8 @@ export const CustomCell = ({ value, className }: { value: any, className: string
   type CustomTableProps<T> = {
     columns: ColumnDef<T>[]; // Define columns using ColumnDef 
     data: T[]; // Table data
+    localSearch?: string;
+    setLocalSearch?: (localSearch: string) => void;
     customTableClassName?: string;
     customRowClassName?: string;
     customHeaderRowClassName?: string;
@@ -35,20 +37,20 @@ export const CustomCell = ({ value, className }: { value: any, className: string
 
 
 
-export default function CustomTable({ columns, data, customTableClassName, customHeaderRowClassName, customRowClassName }: CustomTableProps<any>) {
+export default function CustomTable({ columns, data, localSearch, setLocalSearch, customTableClassName, customHeaderRowClassName, customRowClassName }: CustomTableProps<any>) {
 
     const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
-    const {  globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
+    const { globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
   
 
     const table = useReactTable({ 
         columns, 
         data,  
         state: {
-            globalFilter: globalFilter,
+            globalFilter: localSearch ?? globalFilter,
             columnFilters: columnFilters,
         },
-        onGlobalFilterChange: setGlobalFilter,
+        onGlobalFilterChange: setLocalSearch ?? setGlobalFilter,
         getFilteredRowModel: getFilteredRowModel(), 
         getCoreRowModel: getCoreRowModel(),
     });
