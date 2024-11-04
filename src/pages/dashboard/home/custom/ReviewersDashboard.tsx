@@ -22,22 +22,22 @@ export default function AssignedReuqustCard ({ name, reviewed, pending }: Props 
                     <p className="text-[0.88rem]">Here's an overview of the request that have been assigned to you.</p>
                 </div>
                 <div className="flex flex-col gap-5 md:gap-0 md:flex-row justify-between">
-                    <div className="flex  gap-[0.5rem] md:hover:bg-[#bfbfbf] group p-[0.5rem] rounded-[10px]">
+                    <a href="/request" className="text-black"><div className="flex  gap-[0.5rem] md:hover:bg-[#bfbfbf] group p-[0.5rem] rounded-[10px]">
                         <div className="w-[3rem] h-[3rem] rounded-[0.63rem] bg-[#66FFFF] flex justify-center items-center">{Icons.reviewed()}</div>
                         <div>
                             <p className="text-[0.8rem]">Reviewed Request</p>
                             <p className="text-[1.4rem] font-bold">{reviewed}</p>
                         </div>
                         <div className="hidden md:group-hover:block "><BsArrowUpRight /></div>
-                    </div>
-                    <div className="flex gap-[0.5rem] md:hover:bg-[#bfbfbf] p-[0.5rem] rounded-[10px] group">
+                    </div></a>
+                    <a href="request" className="text-black"><div className="flex gap-[0.5rem] md:hover:bg-[#bfbfbf] p-[0.5rem] rounded-[10px] group">
                         <div className="w-[3rem] h-[3rem] rounded-[0.63rem] bg-[#FFCCFF] flex justify-center items-center">{Icons.pending()}</div>
                         <div>
                             <p className="text-[0.8rem]">Pending Request</p>
                             <p className="text-[1.4rem] font-bold">{pending}</p>
                         </div>
                         <div className="hidden md:group-hover:block "><BsArrowUpRight /></div>
-                    </div>
+                    </div></a>
                 </div>
                 <img src="/img/note1.png" alt="" className="absolute bottom-[0px] left-[40%] md:hidden" />
                 <img src="/img/reviewerAnimeMobile.webp" className="h-[] absolute bottom-[0px] md:hidden left-[64%]" alt="" />

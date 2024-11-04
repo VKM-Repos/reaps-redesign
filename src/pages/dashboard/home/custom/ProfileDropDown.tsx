@@ -1,6 +1,6 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import User from "@/components/custom/Icons/User";
 import SettingsIcon from "@/components/custom/Icons/SettingsIcon";
@@ -11,17 +11,15 @@ import { Link } from "react-router-dom";
 import BackButton from "@/components/custom/BackButton";
 import Loader from "@/components/custom/Loader";
 import ArrowDown from "/icons/arrow-down-01.svg";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import { useRole } from "@/hooks/useRole";
 
-const profile = {
-    name: "John Doe",
-    role: "Researcher",
-    email: "johndoe@gmail.com",
-};
+
 
 type ProfileDropdownProps = {
     profile: {
         name: string;
-        role: string;
+        role: JSX.Element;
         email: string;
     };
     open: boolean;
@@ -30,10 +28,36 @@ type ProfileDropdownProps = {
     handleClose: () => void;
 };
 
+const roles = ['Researcher', 'Reviewer', 'Institution Admin'];
+
 export default function ProfileDropDown() {
     const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
     const [open, setOpen] = useState(false);
+    const [currentRole, setCurrentRole] = useState('')
     const [loading, setLoading] = useState(false);
+    const { data } = useOnboardingFormStore();
+    const { role } = useRole();
+
+    const fullName = data.onboardingDetails.firstName + ' ' + data.onboardingDetails.lastName
+
+    const normalizeRole = (value: string): string => {
+        return value.replace(/_/g, ' ').trim().toLowerCase();
+    };
+
+    useEffect(() => {
+        for (const item of roles) {
+            if (item.toLowerCase() === normalizeRole(role)) {   
+               setCurrentRole(item);   
+            }
+        }
+    }, [role])
+   
+
+    const profile = {
+        name: fullName || 'John Doe',
+        role: <span>{currentRole}</span>,
+        email: data.onboardingDetails.email || 'johndoe@gmail.com',
+    };
 
     const handleClose = () => setOpen(false);
 
@@ -68,7 +92,7 @@ function DesktopProfileDropDown({
 }: ProfileDropdownProps) {
     return (
         <div className="relative">
-            <DropdownMenu open={open} onOpenChange={setOpen}>
+            <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
                 <div className="flex items-center max-w-fit">
                     <DropdownMenuTrigger asChild>
                         <button className="border-none hover:border hover:bg-accent hover:rounded-2xl py-2 px-2 bg-inherit focus:outline-none notransition flex items-center">
@@ -124,13 +148,13 @@ function MobileProfileSheet({
 }
 
 // Profile Header Component
-function ProfileHeader({ profile }: { profile: { name: string; role: string; email: string } }) {
+function ProfileHeader({ profile }: { profile: { name: string; role: JSX.Element; email: string } }) {
     return (
         <div className="flex gap-4 items-center justify-left py-3 px-4">
             <div className="rounded-full bg-[#14155E14] p-2">
                 <User />
             </div>
-            <div className="flex flex-col gap-1 justify-left">
+            <div className="flex flex-col gap-1 items-start">
                 <p className="text-sm inter text-[#0C0D0F]">{profile.name}</p>
                 <p className="text-sm text-[#868687] inter">
                     <span>({profile.role})</span> <span className="font-[400]">{profile.email}</span>

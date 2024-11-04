@@ -1,25 +1,41 @@
+import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import BlueCheckmark from "@/components/custom/Icons/BlueCheckmark";
 import Line from "@/components/custom/Icons/Line";
 import Record from "@/components/custom/Icons/Record";
 import StatusHelp from "@/components/custom/Icons/StatusHelp";
 import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "react-responsive";
 
 
 type StatusTrackerProps = {
+    currentIndex: number,
     currentStatus: string,
-    statuses: string[]
+    statuses: string[],
+    isApproval: boolean,
+    handlePrint: () => void,
+    setShowTracker: React.Dispatch<React.SetStateAction<boolean>>,
 }
-export default function StatusTracker({ currentStatus, statuses }: StatusTrackerProps) {
-    const isApproval = currentStatus === 'Approval';
-    const currentIndex = statuses.indexOf(currentStatus);
+export default function StatusTracker({ currentIndex, currentStatus, isApproval, statuses, handlePrint, setShowTracker }: StatusTrackerProps) {
+    const isMobile = useMediaQuery({ query: '(max-width: 737px)'});
+    const handleFunc = () => {
+        setShowTracker(false);
+    }
 
     return (
+        <div className={`${isMobile ? '' : 'md:block hidden max-w-[24.375rem] py-12 fixed'}  w-full flex flex-col px-4 mx-auto`}>
+            <div className={`${isMobile ? 'gap-6' : 'gap-8 max-w-[14.7rem] py-16'} w-full mx-auto flex flex-col `}>
         <div className="max-w-[24.375rem] hidden w-full md:flex flex-col fixed py-12 px-4 mx-auto">
             <div className="max-w-[14.7rem] w-full mx-auto flex flex-col gap-8 py-16">
                 <div className="flex gap-2 items-center justify-start">
                     <h1 className="font-semibold border-b-2 border-[#FFD13A] text-[1.625rem]">Status Tracker</h1>
                     <StatusHelp />
                 </div>
+                {isMobile && 
+                <div onClick={handleFunc} className="flex items-center text-[#192C8A] py-2">
+                    <div className="rotate-180 flex items-center"><ArrowRight /></div>
+                    <p>Back to Summary</p>
+                </div>
+}
                 <div className="flex flex-col justify-start items-start">
                    {statuses.map((status, index) => (
                      <div key={index}>
@@ -42,16 +58,12 @@ export default function StatusTracker({ currentStatus, statuses }: StatusTracker
                                 </div>
                             </> 
 }
-                    </div>
-              
-                       
+                    </div>         
                     )
                    )
                 }
                 </div>
-                <div className="w-full">
-                    <Button variant={`${isApproval ? 'default' : 'outline'}`} className={`${isApproval? 'text-white rounded-2 py-3' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem] '} !max-w-[9.375rem] !w-full font-semibold px-6`}>Print</Button>
-                </div>
+                {!isMobile && <div className='w-full my-4 flex items-center justify-start mx-auto'><Button onClick={handlePrint} className={`${isApproval? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'}  w-full max-w-[9.375rem] font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
             </div>
         </div>
     )

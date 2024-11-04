@@ -14,9 +14,16 @@ type Props = {
 }
 export default function RequestsLayout({ children }: Props) {
     const navigate = useNavigate();
-    const { step, setStep } = useRequestsStore();
+    const { step, setStep, resetStore } = useRequestsStore();
     const { stepper } = useStepper();
     const isLarge = useMediaQuery({query: '(max-width: 1024px)'});
+
+    const goBackRequests = () => {
+        navigate(-1);
+        if (step === 5) {
+            resetStore();
+        } 
+    }
 
     return (
         <main className="overflow-y-scroll fixed top-0 left-0 bg-white h-full w-full z-40">
@@ -38,7 +45,7 @@ export default function RequestsLayout({ children }: Props) {
                         </div>
                         <div className="flex items-center justify-end w-full max-w-fit gap-1">
                             <ProfileDropDown />
-                            <button className="h-fit bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5" onClick={() => {navigate(-1)}}><Cancel /></button>
+                            <button className="h-fit bg-inherit focus:outline-none notransition border-none hover:border hover:bg-accent hover:rounded-full p-2.5" onClick={goBackRequests}><Cancel /></button>
                         </div>
                     </div>
                     {step >= 2 &&

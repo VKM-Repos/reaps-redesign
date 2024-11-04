@@ -1,8 +1,9 @@
 import View from "@/components/custom/Icons/View";
 import { Badge } from "@/components/ui/badge";
-import CustomTable, { ColumnSetup } from "@/components/custom/CustomTable";
+import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
 import ApplicationSummary from "../../view-review";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
+import { useGlobalFilter } from "@/context/GlobalFilterContext";
 
 
 type TableRequestsProps = {
@@ -24,77 +25,75 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
     export default function TableReview( { reviewTableData }: TableRequestsProps) {
+        const { multiStatusDateFilter } = useGlobalFilter()
 
         const columnData: ColumnSetup<any>[]= [
             {
-                header: "Title",
-                accessor: "title",
-                cellType: 'text',
-                headerClass: "font-bold w-full min-w-[18rem] ",
-                cellClass: " min-w-[18rem] w-full "
+                header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[18.75rem]" />,
+                accessorKey: "title",
+                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[18.75rem] w-full" />,
         
             },
             {
-                header: "Applicant Name",
-                accessor: "applicantName",
-                cellType: "text",
-                headerClass: "font-bold w-full min-w-[8rem]",
-                cellClass: "min-w-[8rem] w-full"
+                header: () => <CustomCell value={"Applicant Name"} className="font-bold w-full min-w-[10rem]" />,
+                accessorKey: "applicantName",
+                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[10rem] w-full" />,
             },
             {
-                header: "Submission",
-                accessor: "submission",
-                cellType: "text",
-                headerClass: "font-bold w-full min-w-[8rem]",
-                cellClass: "min-w-[8rem] w-full"
+                header: () => <CustomCell value={"Submission"} className="font-bold w-full min-w-[8rem]" />,
+                accessorKey: "submission",
+                cell: ({ getValue }) => <CustomCell value={getValue()} className="min-w-[8rem] w-full" />,
+                filterFn: multiStatusDateFilter,
+                enableGlobalFilter: false,
             },
             {
                 header: "Status",
-                accessor: "status",
-                cellType: "custom",
-                customRender: (item: any) => {
+                accessorKey: "status",
+                cell: ({ getValue }) => {
+                const item = getValue();
                     return (
-                        <>
+                        <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
                             <Badge
                               style={{
-                                color: statusColorMap[item.status]?.text || '#000000',
-                                backgroundColor: statusColorMap[item.status]?.bg || '#192C8A',
+                                color: statusColorMap[item]?.text || '#000000',
+                                backgroundColor: statusColorMap[item]?.bg || '#192C8A',
                               }}
                               className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
                             >
                               <div
                                 style={{
-                                  backgroundColor: statusColorMap[item.status]?.text || '#192C8A',
+                                  backgroundColor: statusColorMap[item]?.text || '#192C8A',
                                 }}
                                 className="w-[5px] h-[5px] rounded-full"
                               ></div>
-                              {item.status}
+                              {item}
                             </Badge>
-                        </>
+                        </span>
                       );
                 },
-                 headerClass: "font-bold w-full min-w-[8.75rem]",
-                cellClass: "text-left min-w-[8.75rem] flex justify-left !text-xs"
+                filterFn: multiStatusDateFilter,
+                enableGlobalFilter: false,
             },
             {
-                accessor: "custom",
-                cellType: "custom",
-                customRender: () => (
-                    <div className="flex justify-center gap-2 text-black p-3 cursor-pointer">
-                        {/* open a sheet to view */}
-                        <Sheet>
-                            <SheetTrigger className="flex gap-2">
-                                <View /> <span>View</span>
-                            </SheetTrigger>
-                            <ApplicationSummary />
-                        </Sheet>
-                    </div>
-                  ),
-            }
+                accessorKey: "custom",
+                header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
+                meta: { cellType: "custom" },
+                cell: () => (
+                        <div className="flex justify-center gap-2 text-black p-3 cursor-pointer">
+                            {/* open a drawer to view */}
+                            <Sheet>
+                                <SheetTrigger className="flex gap-2">
+                                    <View /> <span>View</span>
+                                </SheetTrigger>
+                                <ApplicationSummary />
+                            </Sheet>
+                        </div>
+                    ),
+                }
         ]
 
         return(
-            <>  
+            <div id='open'>  
                                 {/* <div className="flex gap-3 items-center">
                     <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem] w-full min-w-[13rem] md:min-w-[21rem]">
                         <SearchIcon />
@@ -177,6 +176,6 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                     </div>
                 </div> */}
                 <CustomTable columns={columnData} data={reviewTableData} />
-            </>
+            </div>
         )
     }
