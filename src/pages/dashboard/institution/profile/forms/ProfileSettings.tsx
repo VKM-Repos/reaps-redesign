@@ -5,7 +5,6 @@ import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import {
   Select,
   SelectContent,
@@ -33,22 +32,18 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const [selectedFlag, setSelectedFlag] = useState();
   const [loading, setLoader] = useState(false);
   const formSchema = z.object({
-    firstName: z.string().min(1, { message: "Please fill this field" }),
-    lastName: z.string().min(1, { message: "Please fill this field" }),
+    institution_name: z.string().min(1, { message: "Please fill this field" }),
+    institution_email: z.string().min(1, { message: "Please fill this field" }),
     phoneNumber: z
       .string()
       .min(1, { message: "Please fill this field" })
       .regex(/^\d+$/, { message: "Phone number should contain only numbers" }),
-    dob: z.date(),
   });
 
-  const { data, setData } = useOnboardingFormStore();
-
   const defaultValues = {
-    firstName: data.onboardingDetails.firstName || "",
-    lastName: data.onboardingDetails.lastName || "",
-    phoneNumber: data.onboardingDetails.phoneNumber || "",
-    dob: data.onboardingDetails.dob || undefined,
+    institution_name: "",
+    institution_email: "",
+    phoneNumber: "",
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,7 +52,6 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const {
     register,
     formState: { isValid },
-    reset,
   } = form;
   const [flags, setFlags] = useState<FlagData[]>([]);
   const [countriesData, setCountries] = useState<CountryListItemType[]>([]);
@@ -78,26 +72,10 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
     });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const dialNumber = dialCode + values.phoneNumber;
+    // const dialNumber = dialCode + values.phoneNumber;
     setLoader(true);
-    try {
-      setData({
-        onboardingDetails: {
-          ...data.onboardingDetails,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          phoneNumber: dialNumber,
-          dob: values.dob,
-        },
-      });
-      setTimeout(() => {
-        setLoader(false);
-        onSave();
-        reset();
-      }, 3000);
-    } catch (error) {
-      console.error(error);
-    }
+    onSave();
+    console.log(values);
   }
   return (
     <>
@@ -113,7 +91,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                 label="Institution Name"
                 type="text"
                 placeholder="Name"
-                {...register("lastName", {
+                {...register("institution_name", {
                   required: "This field is required",
                 })}
               />
@@ -121,7 +99,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                 label="Institution Email"
                 type="text"
                 placeholder="email@example.com"
-                {...register("lastName", {
+                {...register("institution_email", {
                   required: "This field is required",
                 })}
               />
