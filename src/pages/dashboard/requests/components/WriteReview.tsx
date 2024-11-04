@@ -7,6 +7,7 @@ import Unamused from "@/assets/unamused.svg";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { Button } from "@/components/ui/button";
+import { DialogContent } from "@/components/ui/dialog";
 
 const formSchema = z.object({
     review_remark: z.string().min(1, { message: "You have to select one item"}),
@@ -50,75 +51,78 @@ export default function WriteReview({ setLoader }: { setLoader: (loading: boolea
     }
 
     return (
-        <div className="pb-6 px-6 mt-12 overflow-y-scroll">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
-                    <div className="py-2 px-4 flex flex-col gap-6 w-full">
-                        <div className="flex flex-col gap-[3.125rem] w-full">
-                            <p className="text-xl2 font-semibold text-center">Write your review</p>
-                            <div className="flex flex-col gap-5">
-                                <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
-                                <div className="!w-full">
-                                <FormField control={form.control} name="review_remark" render={() => (
-                                    <FormItem className="w-full grid md:grid-cols-3 grids-col-1 gap-3 items-center justify-center">
-                                        {review_remarks.map((remark) => (
-                                            <FormField key={remark.id} control={form.control} name="review_remark" render={({ field }) => (
-                                                <FormItem className="!w-full min-w-[28rem] md:min-w-0 justify-self-end !my-0">
-                                                    <FormControl>
-                                                        <label className={"h-[5.5rem] w-full flex flex-col items-center justify-center rounded-lg gap-1 w-full cursor-pointer !my-0"}
-                                                              style={{ border: field.value === remark.id ? "2px solid " + remark.color : "0.5px solid " + remark.color, color: `${remark.color}` }}>
-                                                            <input
-                                                                type="radio"
-                                                                checked={field.value === remark.id}
-                                                                onChange={() => field.onChange(remark.id)}
-                                                                hidden
-                                                            />
-                                                            <span style={{ color: `${remark.color}` }}><img src={remark.icon} style={{ color: `${remark.color}` }}/></span>
-                                                            <span style={{ color: `${remark.color}` }}>{remark.text}</span>
-                                                        </label>
-                                                    </FormControl>
-                                                </FormItem>
-                                            )} />
-                                        ))}
-                                    </FormItem>
-                                )} 
-                                    /> 
+        <DialogContent className='fixed !w-full !max-w-[80%] h-[90%] mx-auto'>
+            <div className="pb-6 px-6 mt-12 overflow-y-scroll">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
+                        <div className="py-2 px-4 flex flex-col gap-6 w-full">
+                            <div className="flex flex-col gap-[3.125rem] w-full">
+                                <p className="text-xl2 font-semibold text-center">Write your review</p>
+                                <div className="flex flex-col gap-5">
+                                    <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
+                                    <div className="!w-full">
+                                    <FormField control={form.control} name="review_remark" render={() => (
+                                        <FormItem className="w-full grid md:grid-cols-3 grids-col-1 gap-3 items-center justify-center">
+                                            {review_remarks.map((remark) => (
+                                                <FormField key={remark.id} control={form.control} name="review_remark" render={({ field }) => (
+                                                    <FormItem className="!w-full min-w-[28rem] md:min-w-0 justify-self-end !my-0">
+                                                        <FormControl>
+                                                            <label className={"h-[5.5rem] w-full flex flex-col items-center justify-center rounded-lg gap-1 w-full cursor-pointer !my-0"}
+                                                                style={{ border: field.value === remark.id ? "0.2rem solid " + remark.color : "0.5px solid " + remark.color, color: `${remark.color}` }}>
+                                                                <input
+                                                                    type="radio"
+                                                                    checked={field.value === remark.id}
+                                                                    onChange={() => field.onChange(remark.id)}
+                                                                    hidden
+                                                                />
+                                                                <span style={{ color: `${remark.color}` }}><img src={remark.icon} style={{ color: `${remark.color}` }}/></span>
+                                                                <span style={{ color: `${remark.color}` }}>{remark.text}</span>
+                                                            </label>
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )} />
+                                            ))}
+                                        </FormItem>
+                                    )} 
+                                        /> 
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-col gap-5">
-                                <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
-                                <div>
-                                    <CustomFormField 
-                                        fieldType={FormFieldType.TEXTAREA}
-                                        name="feedback"
-                                        error={errors["feedback"]}
+                                <div className="flex flex-col gap-5">
+                                    <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
+                                    <div>
+                                        <CustomFormField 
+                                            fieldType={FormFieldType.TEXTAREA}
+                                            name="feedback"
+                                            error={errors["feedback"]}
+                                            control={form.control}
+                                            placeholder="Enter message"
+                                            className="!pb-[5rem] flex"
+                                            />
+                                    </div>
+                                </div>
+                                <div className="w-full max-w-[28rem]">
+                                    <CustomFormField
+                                        fieldType={FormFieldType.UPLOAD}
+                                        name="correction_doc"
+                                        error={errors["correction_doc"]}
                                         control={form.control}
-                                        placeholder="Enter message"
-                                        className="!pb-[5rem] flex"
-                                        />
+                                        label="Correction/Explanatory Document"
+                                        labelClassName="!font-semibold text-sm text-[#040C21]"
+                                    />
                                 </div>
                             </div>
-                            <div className="w-full max-w-[28rem]">
-                                <CustomFormField
-                                    fieldType={FormFieldType.UPLOAD}
-                                    name="correction_doc"
-                                    error={errors["correction_doc"]}
-                                    control={form.control}
-                                    label="Correction/Explanatory Document"
-                                    labelClassName="!font-semibold text-sm text-[#040C21]"
-                                />
+                            <div className="w-full flex items-center justify-center">
+                                <Button variant={isValid ? "default" : "ghost"} className="w-full max-w-[9.375rem]">Submit review</Button>
                             </div>
-                        </div>
-                        <div className="w-full flex items-center justify-center">
-                            <Button variant={isValid ? "default" : "ghost"} className="w-full max-w-[9.375rem]">Submit review</Button>
+                            
                         </div>
                         
-                    </div>
-                    
-                </form>
-            </Form>
-            
-            
-        </div>
+                    </form>
+                </Form>
+                
+                
+            </div>
+        </DialogContent>
+        
     )
 }

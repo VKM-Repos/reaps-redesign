@@ -42,6 +42,7 @@ export interface RequestsStore {
     step: number;
     loading: boolean;
     reviewer: Reviewer | null;
+    reviewers: Reviewer[];
     success: boolean;
     data: {
       requestsDetails: {
@@ -55,6 +56,7 @@ export interface RequestsStore {
      
     };
     setReviewer: (reviewer: Reviewer | null) => void;
+    setReviewers: (reviewer: Reviewer[] ) => void;
     setSuccess: (success: boolean) => void
     setLoading: (loading: boolean) => void;
     setStep: (step: number) => void;
@@ -74,6 +76,7 @@ type MyPersist = (
             loading: false,
             success: false,
             reviewer: null,
+            reviewers: [],
             data: {
                 requestsDetails: {
                     checkbox: {},
@@ -86,6 +89,7 @@ type MyPersist = (
             },
             setSuccess: (success) => set({ success }),
             setReviewer: (reviewer) => set({ reviewer }),
+            setReviewers: (reviewers) => set({ reviewers }),
             setLoading: (loading) => set({ loading }),
             setStep: (step) => set({ step }),
             setData: (data) => set((state) => ({ data: { ...state.data, ...data } })),

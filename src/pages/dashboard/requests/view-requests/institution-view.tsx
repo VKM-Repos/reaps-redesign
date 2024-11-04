@@ -13,6 +13,10 @@ import { useRequestsStore } from "@/store/RequestFormStore";
 import Loader from "@/components/custom/Loader";
 import { useRole } from "@/hooks/useRole";
 
+// view requests should be specific to each table id
+// view should receive and store these values based on id
+// store an array of reviewers
+// store the review specific to the request
 // assign reviewer popover, write review popover and then final review
 
 const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => void}) => {
@@ -59,20 +63,25 @@ const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => void}) =
                    onClick={() => handleStepForward(index)}
                   //  disabled={index > currentStep}
                    style={{
-                    color: color,
+                    color: index === 2 && currentStep >= 3 ? 'white' : color,
                     backgroundColor: index === 2 && currentStep >= 3 ? '#14155E' : ''
                   }}>
                     {text}
                   </button>
-                </DialogTrigger>
-                <DialogContent className='fixed !w-full !max-w-[80%] h-[90%] mx-auto'>
+                </DialogTrigger>                
                   {content}
-                </DialogContent>
               </Dialog>
              
             ))}
           </div>}
-          <button className="max-w-fit text-white flex items-center gap-3 px-6 py-[1.375rem] action-shadow rounded-[2.75rem] border border-4 border-[#FFD13A] bg-primary" onClick={() => setShowButtons((prev) => !prev)}><span className="font-semibold">Action</span><span className="rounded-[36px] border border-white w-6 h-6 "><span className={`${!showButtons ? 'rotate-90' : 'rotate-270'} flex items-center`}><ArrowRight /></span></span></button>
+          <button className="max-w-fit text-white flex items-center gap-3 px-6 py-[1.375rem] action-shadow rounded-[2.75rem] border border-4 border-[#FFD13A] bg-primary" onClick={() => setShowButtons((prev) => !prev)}>
+            <span className="font-semibold">Action</span>
+            <span className="rounded-[36px] border border-white w-6 h-6 ">
+              <span className={`${!showButtons ? 'rotate-90' : 'rotate-270'} flex items-center`}>
+                <ArrowRight />
+              </span>
+            </span>
+          </button>
         </div>
        </div>
    )
@@ -85,8 +94,10 @@ export default function InstitutionRequestSummary() {
   const { role } = useRole();
   const { pathname } = useLocation();
   const [loading, setLoader] = useState(false);
-  const { success, reviewer, setSuccess, setReviewer } = useRequestsStore();
+  const { reviewer, success, setReviewer, setSuccess } = useRequestsStore();
+  // const [ reviewer, setReviewer ] = useState()
 // set success and reviewer from store into state
+
   const closeDialog = () => {
       setSuccess(false);
       setReviewer({ firstName: '', lastName: '' }); // Reset reviewer when closing
