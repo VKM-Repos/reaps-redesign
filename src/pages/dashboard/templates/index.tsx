@@ -7,14 +7,18 @@ import { useMediaQuery } from "react-responsive";
 import UploadTemplate from "./components/upload-templates";
 import EmptyState from "./components/emptystate";
 import UploadedTemplates from "./components/uploaded-templates";
+import { useState } from "react";
 
 
 
 
 export default function Templates() {
-    const { loading } = useTemplateStore();
+    const { loading, data } = useTemplateStore();
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
+    const { template } = data;
+
+    const [ imagePreview, setImagePreview] = useState('')
     const templates = [];
 
     return (
@@ -30,13 +34,13 @@ export default function Templates() {
                             <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden`}>
                                 {/* <SheetClose className="absolute right-6 w-fit mx-auto py-0 !px-0 flex opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose> */}
                                 <div className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}>
-                                    <UploadTemplate />
+                                    <UploadTemplate setImagePreview={setImagePreview}/>
                                 </div>
                             </SheetContent>  
                         </Sheet>
                 </div>
-                {templates.length > 0 ? 
-                <UploadedTemplates />
+                {template !== null ? 
+                <UploadedTemplates imagePreview={imagePreview}/>
                 :
                 <EmptyState />
                 }

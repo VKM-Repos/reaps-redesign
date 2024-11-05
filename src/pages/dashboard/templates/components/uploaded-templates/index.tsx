@@ -3,40 +3,42 @@ import RedFile from "@/assets/red-file.svg"
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import View from "@/components/custom/Icons/View";
 import Delete from "@/components/custom/Icons/Delete";
+import Pdf from "@/components/custom/PdfViewer";
 
-export default function UploadedTemplates() {
+export default function UploadedTemplates({ imagePreview }: { imagePreview: string}) {
     return (
         <div className="flex flex-col md:flex-row gap-5 w-full">
-            <UploadedTemplate />
+            <UploadedTemplate imagePreview={imagePreview}/>
         </div>
     )
 }
 
-const UploadedTemplate = () => {
+const UploadedTemplate = ({ imagePreview }: { imagePreview: string}) => {
     const { data } = useTemplateStore();
     const { template_name, template } = data;
-    const [ previewUrl, setPreviewUrl ] = useState('');
+    console.log(imagePreview)
+    // const [ previewUrl, setPreviewUrl ] = useState('');
 
-    const handlePreview = () => {
-        if (template && template.type.startsWith('image/')) {
-            const preview = URL.createObjectURL(template);
-            setPreviewUrl(preview);
-        } else {
-            setPreviewUrl('');
-        }
-    }
+    // const handlePreview = () => {
+    //     if (template && template.type.startsWith('image/')) {
+    //         const preview = URL.createObjectURL(template);
+    //         setPreviewUrl(preview);
+    //     } else {
+    //         setPreviewUrl('');
+    //     }
+    // }
 
-    useEffect(() => {
-        handlePreview();
-        return () => {
-            if (previewUrl) {
-                URL.revokeObjectURL(previewUrl);
-            }
-        };
-    }, [template])
+    // useEffect(() => {
+    //     handlePreview();
+    //     return () => {
+    //         if (previewUrl) {
+    //             URL.revokeObjectURL(previewUrl);
+    //         }
+    //     };
+    // }, [template])
 
     return (
         <div className="py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl">
@@ -60,7 +62,10 @@ const UploadedTemplate = () => {
                                     <View />
                                     <span>View</span>
                                 </DialogTrigger>
-                                <img src={previewUrl} alt="Image of Research Template"/>
+                                <DialogContent>
+                                    <Pdf pdfUrl={imagePreview} />
+                                </DialogContent>
+                                
                                 </Dialog>
                             <Dialog>
                             <DialogTrigger
@@ -80,7 +85,7 @@ const UploadedTemplate = () => {
                     </DropdownMenu>
             </div>
             <div className="h-full max-h-[13.25rem] w-full">
-                <img src={previewUrl} alt="Cropped Image of Template" />
+                <Pdf pdfUrl={imagePreview} />
             </div>
         </div>
     )

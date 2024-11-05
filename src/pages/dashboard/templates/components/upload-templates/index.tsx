@@ -9,13 +9,12 @@ import { Form, FormControl } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
 import { SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import Loader from "@/components/custom/Loader";
 
 const formSchema = z.object({
     file_name: z.string().min(1, {message: "Please add the file name"}),
     template: z.instanceof(File, { message: "Please upload a file" }).nullable()
 })
-export default function UploadTemplate() {
+export default function UploadTemplate({ setImagePreview }: { setImagePreview: (imagePreview: string) => void }) {
     const [uploadProgress, setUploadProgress] = useState(0);
     const { setTemplate, setTemplateName, setLoading, loading } = useTemplateStore();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -36,6 +35,7 @@ export default function UploadTemplate() {
                 return prevProgress + 10; 
             });
         }, 300);
+
         // console.log("Current form values:", form.getValues()); 
     };
 
@@ -88,6 +88,8 @@ export default function UploadTemplate() {
                                         const file = acceptedFiles[0];
                                         if (file) {
                                             setValue("template", file, { shouldValidate: true });
+                                            const url = URL.createObjectURL(file);
+                                            setImagePreview(url);
                                             simulateUpload();
                                         }
                                     }}
