@@ -15,7 +15,7 @@ const statuses = [
   "Approval"
 ];
 
-export default function ViewRequests() {
+export default function ResearcherRequestSummary() {
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const handleSummaryPrint = useReactToPrint({
