@@ -16,7 +16,7 @@ import { toast } from '../ui/use-toast';
 
 export default function Logout({ setLoading }: { setLoading: any }) {
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const { reset, accessToken } = useUserStore();
+  const { reset, refreshToken } = useUserStore();
   const navigate = useNavigate();
 
   const revokeToken = useCallback(async () => {
@@ -24,7 +24,7 @@ export default function Logout({ setLoading }: { setLoading: any }) {
     try {
       const baseURL = import.meta.env.VITE_APP_BASE_URL;
       const response = await fetch(
-        `${baseURL}auth/token/revoke?token=${accessToken}`,
+        `${baseURL}auth/token/revoke?token=${refreshToken}`,
         {
           method: 'DELETE',
           headers: {
@@ -57,7 +57,7 @@ export default function Logout({ setLoading }: { setLoading: any }) {
     } finally {
       setLoading(false);
     }
-  }, [accessToken, navigate, reset, setLoading]);
+  }, [refreshToken, navigate, reset, setLoading]);
 
   const handleLogOut = () => {
     revokeToken();
