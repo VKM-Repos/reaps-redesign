@@ -49,7 +49,7 @@ export default function ProfileDropDown() {
 
   const profile = {
     name: fullName || 'John Doe',
-    role: <span>{normalizeRole(activeRole!)}</span>,
+    role: <span>{activeRole}</span>,
     email: user?.email || 'johndoe@gmail.com',
   };
 

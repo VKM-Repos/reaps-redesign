@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import View from "@/components/custom/Icons/View";
-import InstitutionRequestSummary from "../../view-requests/institution-view";
+import InstitutionRequestSummary from "../../view-requests/admin";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import SignatureIcon from "@/components/custom/Icons/Signature";
 

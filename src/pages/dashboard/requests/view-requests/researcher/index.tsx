@@ -1,7 +1,7 @@
 import Cancel from "@/components/custom/Icons/Cancel";
 import StatusTracker from "./StatusTracker";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
-import Summary from "./Summary";
+import Summary from "../Summary";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useMediaQuery } from "react-responsive";
