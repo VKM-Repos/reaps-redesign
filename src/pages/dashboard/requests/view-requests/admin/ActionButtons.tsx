@@ -1,4 +1,4 @@
-import ArrowRight from "@/components/custom/Icons/ArrowRight";
+import CircleArrowDown from "@/assets/circle-arrow-down-01.svg"
 import AssignReviewer from "../../components/AssignReviewer";
 import WriteReview from "../../components/WriteReview";
 import { useState } from "react";
@@ -61,11 +61,9 @@ export const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => v
             </div>}
             <button className="max-w-fit text-white flex items-center gap-3 px-6 py-[1.375rem] action-shadow rounded-[2.75rem] border border-4 border-[#FFD13A] bg-primary" onClick={() => setShowButtons((prev) => !prev)}>
               <span className="font-semibold">Action</span>
-              <span className="rounded-[36px] border border-white w-6 h-6 ">
-                <span className={`${!showButtons ? 'rotate-90' : 'rotate-270'} flex items-center`}>
-                  <ArrowRight />
+                <span className={`${!showButtons ? 'rotate-180' : 'rotate-0'} flex items-center`}>
+                    <img src={CircleArrowDown} />
                 </span>
-              </span>
             </button>
           </div>
          </div>

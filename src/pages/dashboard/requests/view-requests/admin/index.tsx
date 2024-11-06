@@ -50,7 +50,7 @@ export default function InstitutionRequestSummary() {
       <div className="mx-auto md:px-10 md:py-2 md:border-t-0 border border-b-[#0C0C0F29] w-full flex justify-between md:justify-unset fixed top-0 z-[9999] bg-inherit">
         <div
           className={`${
-            isMobile ? "border border-[#0C0C0F29] !w-[95%]" : ""
+            isMobile ? "!w-[95%]" : ""
           } w-full`}
         >
           <div className="mx-auto flex justify-between md:justify-unset w-[90%]">
