@@ -6,7 +6,7 @@ import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/
 import { useState } from "react";
 import AssignReviewer from "../components/AssignReviewer";
 import { useLocation } from "react-router-dom";
-import ArrowRight from "@/components/custom/Icons/ArrowRight";
+import CircleArrowDown from "@/assets/circle-arrow-down-01.svg"
 // import useUserStore from "@/store/user-store";
 import WriteReview from "../components/WriteReview";
 import { useRequestsStore } from "@/store/RequestFormStore";
@@ -76,11 +76,9 @@ const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => void}) =
           </div>}
           <button className="max-w-fit text-white flex items-center gap-3 px-6 py-[1.375rem] action-shadow rounded-[2.75rem] border border-4 border-[#FFD13A] bg-primary" onClick={() => setShowButtons((prev) => !prev)}>
             <span className="font-semibold">Action</span>
-            <span className="rounded-[36px] border border-white w-6 h-6 ">
-              <span className={`${!showButtons ? 'rotate-90' : 'rotate-270'} flex items-center`}>
-                <ArrowRight />
+              <span className={`${!showButtons ? 'rotate-180' : 'rotate-0'} flex items-center`}>
+                <img src={CircleArrowDown} />
               </span>
-            </span>
           </button>
         </div>
        </div>
@@ -121,7 +119,7 @@ export default function InstitutionRequestSummary() {
       <div className="mx-auto md:px-10 md:py-2 md:border-t-0 border border-b-[#0C0C0F29] w-full flex justify-between md:justify-unset fixed top-0 z-[9999] bg-inherit">
         <div
           className={`${
-            isMobile ? "border border-[#0C0C0F29] !w-[95%]" : ""
+            isMobile ? "!w-[95%]" : ""
           } w-full`}
         >
           <div className="mx-auto flex justify-between md:justify-unset w-[90%]">

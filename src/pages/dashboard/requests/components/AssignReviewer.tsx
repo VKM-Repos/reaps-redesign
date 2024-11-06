@@ -40,9 +40,9 @@ export default function AssignReviewer(
             cell: (info) => <CustomCell value={info.getValue()} className="w-full min-w-[15rem] text-black" />
         },
         {
-            header: () => <CustomCell value={"Email"} className="w-full min-w-[24rem] font-semibold text-[#0C0D0F]"/>,
+            header: () => <CustomCell value={"Email"} className="w-full min-w-[22rem] font-semibold text-[#0C0D0F]"/>,
             accessorKey: "email",
-            cell: (info) => <CustomCell value={info.getValue()} className="w-full min-w-[24rem] text-black" />
+            cell: (info) => <CustomCell value={info.getValue()} className="w-full min-w-[22rem] text-black" />
         },
         {
             accessorKey: "custom",
@@ -75,7 +75,7 @@ export default function AssignReviewer(
     };
 
     return (
-        <DialogContent className='fixed !w-full !max-w-[80%] h-[90%] mx-auto'>
+        <DialogContent className='fixed !w-full !max-w-[70rem] h-[90%] mx-auto'>
             <div className="w-full mt-[5.5rem] px-[3.5rem] overflow-y-scroll">
                 <div className="flex flex-col justify-start gap-[1.875rem] mx-auto">
                     <div className="flex flex-col justify-start gap-[1.875rem] bg-white z-[99] w-full mx-auto">
@@ -98,13 +98,13 @@ export default function AssignReviewer(
                             </DialogClose>  */}
                         </div>   
                     </div>
-                    <div className="w-full">
+                    <div className="w-full max-w-[95%] ">
                         <CustomTable 
                             columns={columnData} 
                             data={assignReviewerData} 
                             localSearch={searchTerm}
                             setLocalSearch={setSearchTerm}
-                            customTableClassName="p-5 w-full max-w-fit"
+                            customTableClassName="p-5 w-full"
                             customHeaderRowClassName="bg-[#14155E14] border-b-[#0E0F0C1F] !my-3 !py-2 !px-6 rounded-[.625rem]"
                             customRowClassName="!border-b-[#0E0F0C1F] !border !border-b !my-3 !px-6 !py-0 hover:bg-[#14155E14] !rounded-[.625rem]"
                         /> 
