@@ -1,51 +1,70 @@
-import { useTemplateStore } from "@/store/templates-store"
 import RedFile from "@/assets/red-file.svg"
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import View from "@/components/custom/Icons/View";
-import Delete from "@/components/custom/Icons/Delete";
-import Pdf from "@/components/custom/PdfViewer";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
+import RenderDeleteSheet from "@/components/custom/DeleteSheet";
+import { useMediaQuery } from "react-responsive";
+import { mock_templates } from "@/lib/helpers";
+import { Viewer } from '@react-pdf-viewer/core';
+import PencilEdit from "@/components/custom/Icons/PencilEdit";
+import UploadTemplate from "../upload-templates";
+import { useTemplateStore } from "@/store/templates-store";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function UploadedTemplates({ imagePreview }: { imagePreview: string}) {
+export default function UploadedTemplates() {
+    const [ templateArray, setTemplateArray ] = useState(mock_templates);
     return (
-        <div className="flex flex-col md:flex-row gap-5 w-full">
-            <UploadedTemplate imagePreview={imagePreview}/>
+        <div className="flex flex-col md:flex-row flex-wrap gap-5 w-full">
+            {templateArray.map((template) => (
+                <div key={template.id}>
+                    <UploadedTemplate item={template} setTemplateArray={setTemplateArray} templateName={template.name} templateUrl={template.file}/>
+                </div> 
+            ))}
+            
         </div>
     )
 }
 
-const UploadedTemplate = ({ imagePreview }: { imagePreview: string}) => {
-    const { data } = useTemplateStore();
-    const { template_name, template } = data;
-    console.log(imagePreview)
-    // const [ previewUrl, setPreviewUrl ] = useState('');
+const UploadedTemplate = (
+    { item, setTemplateArray, templateName, templateUrl }: 
+    { 
+        item: any, 
+        setTemplateArray: (template: any) => void, 
+        templateName: string | undefined, 
+        templateUrl: string
+    }) => {
 
-    // const handlePreview = () => {
-    //     if (template && template.type.startsWith('image/')) {
-    //         const preview = URL.createObjectURL(template);
-    //         setPreviewUrl(preview);
-    //     } else {
-    //         setPreviewUrl('');
-    //     }
-    // }
+    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+    const { setLoading } = useTemplateStore();
+    const [isViewerLoading, setIsViewerLoading] = useState(false);
 
-    // useEffect(() => {
-    //     handlePreview();
-    //     return () => {
-    //         if (previewUrl) {
-    //             URL.revokeObjectURL(previewUrl);
-    //         }
-    //     };
-    // }, [template])
+    function deleteTableItem(item: any) {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          setTemplateArray((prevTemplateArray: any) =>
+            prevTemplateArray.filter((data: any) => data.id !== item.id)
+          );
+        }, 3000); 
+    }
+
+    useEffect(() => {
+        if (templateUrl) {
+            setIsViewerLoading(true);
+            setTimeout(() => setIsViewerLoading(false), 4000); 
+        }
+    }, [templateUrl])
 
     return (
-        <div className="py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl">
+        <div className="py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
             <div className="py-3 flex justify-between">
                 <div className="flex gap-3">
                     <img src={RedFile} />
-                    <p className="">{template_name}</p>
+                    <p className="">{templateName}</p>
                    
                 </div>
                 <DropdownMenu modal={false}>
@@ -62,30 +81,53 @@ const UploadedTemplate = ({ imagePreview }: { imagePreview: string}) => {
                                     <View />
                                     <span>View</span>
                                 </DialogTrigger>
-                                <DialogContent>
-                                    <Pdf pdfUrl={imagePreview} />
+                                <DialogContent className="w-auto h-[95%] mx-auto my-auto overflow-y-scroll no-scrollbar">
+                                    <div className="w-full mx-auto rounded-full">
+                                        {isViewerLoading ? (
+                                                <Skeleton className="w-full h-[400px] rounded-lg" />
+                                            ) : (
+                                                <Viewer
+                                                    initialPage={0}
+                                                    defaultScale={1}
+                                                    fileUrl={templateUrl}
+                                                />
+                                            )}
+                                    </div>
+                                   
                                 </DialogContent>
                                 
                                 </Dialog>
-                            <Dialog>
-                            <DialogTrigger
+                            <Sheet>
+                            <SheetTrigger
                                 className={`text-black flex justify-center items-center gap-2 p-3`}
                             >
-                                {/* <SignatureIcon /> */}
+                                <PencilEdit />
                                 <span>Change</span>
-                            </DialogTrigger>
-                            </Dialog>
-                            <div  className={`text-black flex justify-center items-center gap-2 p-3`}>
-                                <Delete />
-                                <span>Delete</span>
-                            </div>
+                                <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden`}>
+                                    <div className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}>
+                                        <UploadTemplate />
+                                    </div>
+                                </SheetContent>
+                            </SheetTrigger>
+                            </Sheet>
+                            <Sheet>
+                                <SheetTrigger className={`flex justify-center items-center gap-2 text-black ${isMobile ? 'p-2' : 'p-3'}`}>
+                                    <DeleteSmallIcon />
+                                    <span>Delete</span>
+                                </SheetTrigger>
+                                <RenderDeleteSheet text="Are you sure you want to delete this template?" data={item} deleteItem={deleteTableItem} />
+                            </Sheet>
                         </>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                     </DropdownMenu>
             </div>
-            <div className="h-full max-h-[13.25rem] w-full">
-                <Pdf pdfUrl={imagePreview} />
+            <div className="h-full max-h-[13.25rem] w-[25.875rem] rounded-lg overflow-hidden ">
+                {isViewerLoading ? (
+                    <Skeleton className="w-full h-full rounded-lg" />
+                ) : (
+                    <Viewer initialPage={0} defaultScale={1} fileUrl={templateUrl} />
+                )}
             </div>
         </div>
     )

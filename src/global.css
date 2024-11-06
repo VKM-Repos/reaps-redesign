@@ -232,6 +232,15 @@ input[type="number"]::-webkit-outer-spin-button {
   background: linear-gradient(90deg, #f7d45b 35%, #192c8a 100%);
 }
 
+.rpv-core__text-layer,
+.rpv-core__annotation-layer {
+    display: none !important;
+}
+
+.rpv-core__inner-page {
+  position: relative !important
+}
+
 @keyframes leapFrog {
   0% {
     transform: translateX(0) rotate(0deg);

@@ -1,6 +1,6 @@
 import { useTemplateStore } from "@/store/templates-store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dropzone from "react-dropzone";
 import { useForm } from "react-hook-form";
 import PdfImage from "@/assets/document-pdf-image.png";
@@ -14,9 +14,9 @@ const formSchema = z.object({
     file_name: z.string().min(1, {message: "Please add the file name"}),
     template: z.instanceof(File, { message: "Please upload a file" }).nullable()
 })
-export default function UploadTemplate({ setImagePreview }: { setImagePreview: (imagePreview: string) => void }) {
+export default function UploadTemplate() {
     const [uploadProgress, setUploadProgress] = useState(0);
-    const { setTemplate, setTemplateName, setLoading, loading } = useTemplateStore();
+    const { setTemplate, setTemplateName, setLoading } = useTemplateStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
       });
@@ -35,16 +35,11 @@ export default function UploadTemplate({ setImagePreview }: { setImagePreview: (
                 return prevProgress + 10; 
             });
         }, 300);
-
-        // console.log("Current form values:", form.getValues()); 
     };
 
-    useEffect(() => {
-        console.log(loading)
-    }, [loading])
+
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // console.log("Form submission values:", values);
         setLoading(true)
         try{
             setTimeout(() => {
@@ -62,7 +57,6 @@ export default function UploadTemplate({ setImagePreview }: { setImagePreview: (
 
     return (
         <>
-            {/* {loading && <Loader />} */}
             <div className="w-full mx-auto">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-5 items-center">
@@ -88,8 +82,7 @@ export default function UploadTemplate({ setImagePreview }: { setImagePreview: (
                                         const file = acceptedFiles[0];
                                         if (file) {
                                             setValue("template", file, { shouldValidate: true });
-                                            const url = URL.createObjectURL(file);
-                                            setImagePreview(url);
+                                            // const url = URL.createObjectURL(file);
                                             simulateUpload();
                                         }
                                     }}
