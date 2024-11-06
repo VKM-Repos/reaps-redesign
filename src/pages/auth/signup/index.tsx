@@ -49,8 +49,8 @@ export default function OnboardingPage() {
           country_code: data?.onboardingDetails?.country_code,
           education_level: data?.onboardingDetails?.education_level,
           password: data?.onboardingDetails?.password,
-          // date_of_birth: '2024-10-30',
-          // gender: 'male',
+          date_of_birth: data?.onboardingDetails.date_of_birth,
+          gender: data?.onboardingDetails.gender,
         };
 
         const baseURL = import.meta.env.VITE_APP_BASE_URL;

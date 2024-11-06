@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create, StateCreator } from 'zustand';
 import { persist, PersistOptions } from 'zustand/middleware';
 
@@ -7,7 +8,7 @@ export interface OnboardingFormStore {
   data: {
     onboardingDetails: {
       email: string;
-      gender: string;
+      gender: any;
       verification_code: string;
       country_code: string;
       orcid_number: string;
@@ -15,8 +16,8 @@ export interface OnboardingFormStore {
       last_name: string;
       phone_number: string;
       password: string;
-      date_of_birth: Date;
-      education_level: string;
+      date_of_birth: string;
+      education_level: any;
       notifications: boolean;
     };
   };
@@ -47,7 +48,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
           last_name: '',
           phone_number: '',
           password: '',
-          date_of_birth: new Date(),
+          date_of_birth: '',
           education_level: '',
           notifications: false,
         },
@@ -69,7 +70,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
               last_name: '',
               phone_number: '',
               password: '',
-              date_of_birth: new Date(),
+              date_of_birth: '',
               education_level: '',
               notifications: false,
             },

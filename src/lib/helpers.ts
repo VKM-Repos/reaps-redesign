@@ -353,6 +353,38 @@ export const reviewersTableData = [
     email: "frank.miller@example.com",
   },
 ];
+export const adminsTableData = [
+  {
+    id: 1,
+    firstName: "Admin",
+    lastName: "User",
+    email: "admin.user@example.com",
+  },
+  {
+    id: 2,
+    firstName: "Super",
+    lastName: "Admin",
+    email: "super.admin@example.com",
+  },
+  {
+    id: 3,
+    firstName: "Moderator",
+    lastName: "User",
+    email: "moderator.user@example.com",
+  },
+  {
+    id: 4,
+    firstName: "User",
+    lastName: "Admin",
+    email: "user.admin@example.com",
+  },
+  {
+    id: 5,
+    firstName: "Guest",
+    lastName: "User",
+    email: "guest.user@example.com",
+  },
+];
 export const tableData = [
   {
     id: "1",
