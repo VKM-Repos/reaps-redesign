@@ -518,20 +518,14 @@ export const assignReviewerData = [
     email: "mariamcatherine@gmail.com",
   },
   {
-    id: "1",
+    id: "2",
     firstName: "Jooney",
     lastName: "Catherine",
     email: "mariamcatherine@gmail.com",
   },
   {
-    id: "2",
-    firstName: "Jerome",
-    lastName: "Catherine",
-    email: "mariamcatherine@gmail.com",
-  },
-  {
     id: "3",
-    firstName: "Mariam",
+    firstName: "Jerome",
     lastName: "Catherine",
     email: "mariamcatherine@gmail.com",
   },
@@ -555,6 +549,12 @@ export const assignReviewerData = [
   },
   {
     id: "7",
+    firstName: "Mariam",
+    lastName: "Catherine",
+    email: "mariamcatherine@gmail.com",
+  },
+  {
+    id: "8",
     firstName: "Mariam",
     lastName: "Catherine",
     email: "mariamcatherine@gmail.com",

@@ -17,9 +17,9 @@ import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
 import InstitutionAccount from "@/pages/dashboard/institution/account";
 import Transactions from "@/pages/dashboard/institution/account/transactions";
-import MyRequest from "@/pages/dashboard/requests/MyRequest";
-import ReviewRequest from "@/pages/dashboard/requests/ReviewRequest";
-import ManageRequestPage from "@/pages/dashboard/requests/ManageRequestPage";
+import MyRequest from "@/pages/dashboard/requests/pages/MyRequest";
+import ReviewRequest from "@/pages/dashboard/requests/pages/ReviewRequest";
+import ManageRequestPage from "@/pages/dashboard/requests/pages/ManageRequestPage";
 
 const router = [
   {
