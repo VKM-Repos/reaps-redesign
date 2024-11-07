@@ -52,31 +52,32 @@ type CustomProps = {
   disabled?: boolean;
   error?: FieldError;
   labelClassName?: string;
+   onChange?: (value: string) => void;
 };
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   const [selectedValue, setSelectedValue] = useState(field.value);
 
-  switch (props.fieldType) {
-    case FormFieldType.INPUT:
-      return (
-        <FormControl>
-          <Input placeholder={props.placeholder} {...field} />
-        </FormControl>
-      );
-    case FormFieldType.RADIO:
-      return (
-        <FormControl>
-          <RadioGroup
-            value={selectedValue}
-            onValueChange={(value: string) => {
-              setSelectedValue(value);
-              field.onChange(value.toString());
-            }}
-            // defaultValue={props.options?.length === 1 ? props.options[0].value : field.value}
-          >
-            {props.options?.map((option) => {
-              const isChecked = selectedValue === option.value;
+    switch (props.fieldType) {
+        case FormFieldType.INPUT:
+            return (
+                <FormControl>
+                    <Input placeholder={props.placeholder} {...field}/>
+                    
+                </FormControl>
+            );
+        case FormFieldType.RADIO:
+            return (
+                <FormControl>
+                    <RadioGroup value={selectedValue} 
+                         onValueChange={(value: string) => {
+                          setSelectedValue(value);
+                          field.onChange(value.toString()); 
+                          props.onChange?.(value);
+                        }}
+                      >
+                         {props.options?.map((option) => {
+                            const isChecked = selectedValue === option.value;
 
               return (
                 <div

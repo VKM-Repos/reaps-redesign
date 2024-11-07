@@ -78,13 +78,13 @@ export const requirements: RequirementMapping = {
       label: "Supervisor's attestation statement",
     },
   ],
-  question4: [
-    {
-      id: "requirement9",
-      name: "Sponsor's attestation statement",
-      label: "Sponsor's attestation statement",
-    },
-  ],
+  // question4: [
+  //   {
+  //     id: "requirement9",
+  //     name: "Sponsor's attestation statement",
+  //     label: "Sponsor's attestation statement",
+  //   },
+  // ],
   question5: [
     {
       id: "requirement10",
