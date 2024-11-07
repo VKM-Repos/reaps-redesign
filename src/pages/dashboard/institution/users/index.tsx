@@ -2,7 +2,6 @@ import {
   adminsTableData,
   reviewersTableData,
   tableData,
-  usersData,
 } from "@/lib/helpers";
 import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
