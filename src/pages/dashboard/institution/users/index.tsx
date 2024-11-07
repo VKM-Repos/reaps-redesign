@@ -18,23 +18,28 @@ import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
 import RequesterTable from "../components/RequesterTable";
 import AdminsTable from "../components/AdminsTable";
+import { useGET } from "@/hooks/useGET.hook";
 
 export default function Requests() {
   const { role } = useRole();
   const [activeTab, setActiveTab] = useState("review users");
 
-  const [loading] = useState(false);
-
   const { globalFilter, setGlobalFilter } = useGlobalFilter();
+
+  const { data: users, isPending } = useGET({
+    url: "users",
+    queryKey: ["GET_USERS_IN_USERS_PAGE"],
+  });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGlobalFilter(e.target.value);
   };
   console.log(activeTab);
+  console.log(users, ">>>>><<<");
 
   return (
     <>
-      {loading && <Loader />}
+      {isPending && <Loader />}
       <div className="flex flex-col gap-12 mb-20 w-full max-w-full ">
         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
           <h1 className="text-[1.875rem] font-bold">Users</h1>
@@ -75,7 +80,7 @@ export default function Requests() {
                   </div>
                 </div>
                 <TabsContent value="request users">
-                  <RequesterTable usersTableData={usersData} />
+                  <RequesterTable usersTableData={users?.items} />
                 </TabsContent>
                 <TabsContent value="review users">
                   <ReviwersTable usersTableData={reviewersTableData} />
@@ -85,7 +90,7 @@ export default function Requests() {
                 </TabsContent>
               </Tabs>
             ) : (
-              <RequesterTable usersTableData={usersData} />
+              <RequesterTable usersTableData={users?.items} />
             )}
           </div>
         ) : (
