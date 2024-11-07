@@ -12,7 +12,7 @@ import OnboardingPage from "@/pages/auth/signup";
 import NotFound from "@/pages/errors/notfound";
 import RecoverPassword from "@/pages/auth/password";
 import CreateRequests from "@/pages/dashboard/requests/create-requests";
-import ViewRequests from "@/pages/dashboard/requests/view-requests";
+import ViewRequests from "@/pages/dashboard/requests/view-requests/researcher";
 import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
 import InstitutionAccount from "@/pages/dashboard/institution/account";
