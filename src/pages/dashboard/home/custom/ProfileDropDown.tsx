@@ -43,9 +43,9 @@ export default function ProfileDropDown() {
 
   const fullName = user?.first_name + ' ' + user?.last_name;
 
-  const normalizeRole = (value: string): string => {
-    return value?.replace(/_/g, ' ').trim().toLowerCase();
-  };
+  // const normalizeRole = (value: string): string => {
+  //   return value?.replace(/_/g, ' ').trim().toLowerCase();
+  // };
 
   const profile = {
     name: fullName || 'John Doe',
