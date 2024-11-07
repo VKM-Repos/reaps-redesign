@@ -22,7 +22,7 @@ export default function Templates() {
                     <h1 className="text-[1.875rem] font-bold">Research Templates</h1>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"><span><AddIcon /></span>Upload</Button>
+                            <Button className="flex gap-4 items-center justify-center py-3 px-6 max-w-fit md:max-w-[16.75rem]"><span><AddIcon /></span>Upload</Button>
                         </SheetTrigger>
                         <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden`}>
                             <div className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}>
@@ -31,7 +31,7 @@ export default function Templates() {
                         </SheetContent>  
                     </Sheet>
                 </div>
-                <div className="mb-14">
+                <div className="mb-24">
                 {mock_templates.length !== 0 ? 
                     <UploadedTemplates />
                     :

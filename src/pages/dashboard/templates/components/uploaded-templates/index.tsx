@@ -72,7 +72,7 @@ const UploadedTemplate = (
                         <MoreIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
-                        <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
+                        <DropdownMenuGroup className="flex flex-col justify-center items-start">
                         <>
                                 <Dialog>
                                 <DialogTrigger
@@ -122,7 +122,7 @@ const UploadedTemplate = (
                     </DropdownMenuContent>
                     </DropdownMenu>
             </div>
-            <div className="h-full max-h-[13.25rem] w-[25.875rem] rounded-lg overflow-hidden ">
+            <div className={`h-full max-h-[13.25rem] w-full  md:max-w-[25.875rem] rounded-lg overflow-hidden`}>
                 {isViewerLoading ? (
                     <Skeleton className="w-full h-full rounded-lg" />
                 ) : (
