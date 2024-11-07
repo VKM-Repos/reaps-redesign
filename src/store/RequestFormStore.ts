@@ -10,6 +10,11 @@ export type FileDetails = {
     file: File | null;
 };
 
+type Reviewer = {
+    firstName: string;
+    lastName: string;
+}
+
 
 export type CheckboxGroup = {
     question1: string,
@@ -35,6 +40,10 @@ export type fileGroup = {
 export interface RequestsStore {
     
     step: number;
+    loading: boolean;
+    reviewer: Reviewer | null;
+    reviewers: Reviewer[];
+    success: boolean;
     data: {
       requestsDetails: {
         checkbox: CheckboxGroup | {};
@@ -46,6 +55,10 @@ export interface RequestsStore {
       };
      
     };
+    setReviewer: (reviewer: Reviewer | null) => void;
+    setReviewers: (reviewer: Reviewer[] ) => void;
+    setSuccess: (success: boolean) => void
+    setLoading: (loading: boolean) => void;
     setStep: (step: number) => void;
     setData: (data: Partial<RequestsStore["data"]>) => void;
     resetStore: () => void;
@@ -60,6 +73,10 @@ type MyPersist = (
     (persist as MyPersist)(
         (set) => ({
             step: 1,
+            loading: false,
+            success: false,
+            reviewer: null,
+            reviewers: [],
             data: {
                 requestsDetails: {
                     checkbox: {},
@@ -70,6 +87,10 @@ type MyPersist = (
                     files: {}
                 },
             },
+            setSuccess: (success) => set({ success }),
+            setReviewer: (reviewer) => set({ reviewer }),
+            setReviewers: (reviewers) => set({ reviewers }),
+            setLoading: (loading) => set({ loading }),
             setStep: (step) => set({ step }),
             setData: (data) => set((state) => ({ data: { ...state.data, ...data } })),
             resetStore: () => {
