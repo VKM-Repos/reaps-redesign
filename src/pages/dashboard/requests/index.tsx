@@ -104,7 +104,7 @@ export default function Requests() {
                 ))}
               </div>
             )}
-            {/* change tables to completed state */}
+            {/* change tables to completed state  */}
             {role === "REVIEWER" ? (
               <Tabs
                 defaultValue="request table"
