@@ -113,7 +113,7 @@ export default function UploadTemplate() {
                             </div>
                         </FormControl>
                         <div className="flex w-full justify-end gap-3">
-                            <SheetClose><Button variant="ghost" className="!py-3 !px-6 rounded">Cancel</Button></SheetClose>
+                            <SheetClose><Button type="button" variant="ghost" className="!py-3 !px-6 rounded">Cancel</Button></SheetClose>
                             <SheetClose>
                                 <Button variant={isValid ? "default" : "ghost"} type="submit" className="!py-3 !px-6 rounded">Finish</Button>
                             </SheetClose>
