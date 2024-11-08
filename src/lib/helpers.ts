@@ -1,3 +1,8 @@
+import PdfUrl from "@/lib/mockfiles/ResearchTemplate.pdf"
+import PdfUrl2 from "@/lib/mockfiles/Research-Paper-Outline-Template.pdf"
+import PdfUrl3 from "@/lib/mockfiles/Research Paper Outline Template.pdf"
+
+
 type Requirement = {
   id: string;
   name: string;
@@ -78,13 +83,13 @@ export const requirements: RequirementMapping = {
       label: "Supervisor's attestation statement",
     },
   ],
-  question4: [
-    {
-      id: "requirement9",
-      name: "Sponsor's attestation statement",
-      label: "Sponsor's attestation statement",
-    },
-  ],
+  // question4: [
+  //   {
+  //     id: "requirement9",
+  //     name: "Sponsor's attestation statement",
+  //     label: "Sponsor's attestation statement",
+  //   },
+  // ],
   question5: [
     {
       id: "requirement10",
@@ -518,20 +523,14 @@ export const assignReviewerData = [
     email: "mariamcatherine@gmail.com",
   },
   {
-    id: "1",
+    id: "2",
     firstName: "Jooney",
     lastName: "Catherine",
     email: "mariamcatherine@gmail.com",
   },
   {
-    id: "2",
-    firstName: "Jerome",
-    lastName: "Catherine",
-    email: "mariamcatherine@gmail.com",
-  },
-  {
     id: "3",
-    firstName: "Mariam",
+    firstName: "Jerome",
     lastName: "Catherine",
     email: "mariamcatherine@gmail.com",
   },
@@ -559,4 +558,29 @@ export const assignReviewerData = [
     lastName: "Catherine",
     email: "mariamcatherine@gmail.com",
   },
+  {
+    id: "8",
+    firstName: "Mariam",
+    lastName: "Catherine",
+    email: "mariamcatherine@gmail.com",
+  },
 ];
+
+
+export const mock_templates = [
+  { 
+    id: "1",
+    name: "Registration/Submission Guidelines",
+    file: PdfUrl
+  },
+  { 
+    id: "2",
+    name: "Registration/Submission Guidelines",
+    file: PdfUrl2
+  },
+  { 
+    id: "3",
+    name: "Registration/Submission Guidelines",
+    file: PdfUrl3
+  },
+]

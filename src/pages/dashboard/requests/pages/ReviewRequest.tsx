@@ -1,24 +1,25 @@
-import { tableData } from "@/lib/helpers";
-import TableRequests from "./components/table-requests";
-import PageTitle from "./components/PageTitle";
-import SeachFilter from "./components/SeachFilter";
+import { reviewTableData } from "@/lib/helpers";
+import PageTitle from "../components/PageTitle";
+import SeachFilter from "../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import { X } from "lucide-react";
+import TableReview from "../components/table-review";
 import { useMediaQuery } from "react-responsive";
+import { X } from "lucide-react";
 
-export default function MyRequest() {
+export default function ReviewRequest() {
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<string[]>([])
   const [showStatuses, setShowStatuses] = useState(false);
   const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const requestsStatuses = [ "Draft", "Pending", "Approved", "Under Review", "Declined", "Reapproved",];
   const navigate = useNavigate();
+  const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
+
   const handleFunc = () => {
     setLoading(true);
     setTimeout(() => {
@@ -26,8 +27,7 @@ export default function MyRequest() {
       setLoading(false);
     }, 5000);
   };
-
-
+  
   const deleteStatusUpdate = (status: String) => {
     setAppliedStatuses((prev) => prev.filter((val) => val !== status));
     if (appliedStatuses.length === 0) {
@@ -36,7 +36,7 @@ export default function MyRequest() {
   };
 
   useEffect(() => {
-    setStatuses(requestsStatuses);
+    setStatuses(reviewStatuses);
   }, [])
 
 
@@ -47,7 +47,7 @@ export default function MyRequest() {
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">
-            <PageTitle title="My Requests" />
+            <PageTitle title="Review Request" />
             <Button
               onClick={handleFunc}
               className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -86,9 +86,8 @@ export default function MyRequest() {
                 ))}
               </div>
             )}
-          <TableRequests tableData={tableData} />
+          <TableReview reviewTableData={reviewTableData} />
         </div>
-      
     </>
   );
 }
