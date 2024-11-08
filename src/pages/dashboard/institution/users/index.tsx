@@ -1,8 +1,4 @@
-import {
-  adminsTableData,
-  reviewersTableData,
-  tableData,
-} from "@/lib/helpers";
+import { tableData } from "@/lib/helpers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
@@ -14,9 +10,9 @@ import EmptyRequests from "../../requests/components/emptystate";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
-import RequesterTable from "../components/RequesterTable";
 import AdminsTable from "../components/AdminsTable";
 import { useGET } from "@/hooks/useGET.hook";
+import ResearchersTable from "../components/ResearchersTable";
 import useUserStore from "@/store/user-store";
 
 export default function Requests() {
@@ -25,16 +21,18 @@ export default function Requests() {
 
   const { globalFilter, setGlobalFilter } = useGlobalFilter();
 
-  const { data: users, isPending } = useGET({
+  const {
+    data: users,
+    isPending,
+    refetch,
+  } = useGET({
     url: "users",
     queryKey: ["GET_USERS_IN_USERS_PAGE"],
   });
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGlobalFilter(e.target.value);
   };
   console.log(activeTab);
-  console.log(users, ">>>>><<<");
 
   return (
     <>
@@ -42,14 +40,14 @@ export default function Requests() {
       <div className="flex flex-col gap-12 mb-20 w-full max-w-full ">
         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
           <h1 className="text-[1.875rem] font-bold">Users</h1>
-          {tableData.length > 0 && <AddNewUserButton />}
+          {tableData.length > 0 && <AddNewUserButton refetch={refetch} />}
         </div>
         {/* tab */}
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
             {activeRole === 'admin' ? (
               <Tabs
-                defaultValue="review users"
+                defaultValue="request users"
                 onValueChange={(val) => setActiveTab(val)}
               >
                 <TabsList className="border-b-[1.5px] w-full px-3">
@@ -79,17 +77,45 @@ export default function Requests() {
                   </div>
                 </div>
                 <TabsContent value="request users">
-                  <RequesterTable usersTableData={users?.items} />
+                  <ResearchersTable
+                    usersTableData={
+                      users?.items.filter(
+                        (user: any) => user.user_type == "user"
+                      ) || []
+                    }
+                    refetch={refetch}
+                  />
                 </TabsContent>
                 <TabsContent value="review users">
-                  <ReviwersTable usersTableData={reviewersTableData} />
+                  <ReviwersTable
+                    usersTableData={
+                      users?.items.filter(
+                        (user: any) => user.user_type == "reviewer"
+                      ) || []
+                    }
+                    refetch={refetch}
+                  />
                 </TabsContent>
                 <TabsContent value="admin users">
-                  <AdminsTable usersTableData={adminsTableData} />
+                  <AdminsTable
+                    usersTableData={
+                      users?.items.filter(
+                        (user: any) => user.user_type == "admin"
+                      ) || []
+                    }
+                    refetch={refetch}
+                  />
                 </TabsContent>
               </Tabs>
             ) : (
-              <RequesterTable usersTableData={users?.items} />
+              <ResearchersTable
+                usersTableData={
+                  users?.items.filter(
+                    (user: any) => user.user_type == "user"
+                  ) || []
+                }
+                refetch={refetch}
+              />
             )}
           </div>
         ) : (
