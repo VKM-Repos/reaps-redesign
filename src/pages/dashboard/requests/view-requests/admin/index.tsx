@@ -7,9 +7,8 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import Loader from "@/components/custom/Loader";
-import { useRole } from "@/hooks/useRole";
 import { ActionButton } from "./ActionButtons";
-// import useUserStore from "@/store/user-store";
+import useUserStore from "@/store/user-store";
 
 // view requests should be specific to each table id
 // view should receive and store these values based on id
@@ -21,8 +20,7 @@ import { ActionButton } from "./ActionButtons";
 
 export default function InstitutionRequestSummary() {
   const isMobile = useMediaQuery({ query: "(max-width: 737px)" });
-  // const { activeRole } = useUserStore();
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const { pathname } = useLocation();
   const [loading, setLoader] = useState(false);
   const { reviewer, success, setReviewer, setSuccess } = useRequestsStore();
@@ -65,7 +63,7 @@ export default function InstitutionRequestSummary() {
           <Cancel />
         </SheetClose>
       </div>
-      {role === "INSTITUTION_ADMIN" && pathname.includes('/requests/manage-requests') && <ActionButton setLoader={setLoader}/>}
+      {activeRole === 'admin' && pathname.includes('/requests/manage-requests') && <ActionButton setLoader={setLoader}/>}
       <div className="px-4">
         <Summary />
       </div>

@@ -1,5 +1,4 @@
 import { tableData } from "@/lib/helpers";
-import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
@@ -14,9 +13,10 @@ import { AddNewUserButton } from "../components/AddNewUserButton";
 import AdminsTable from "../components/AdminsTable";
 import { useGET } from "@/hooks/useGET.hook";
 import ResearchersTable from "../components/ResearchersTable";
+import useUserStore from "@/store/user-store";
 
 export default function Requests() {
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const [activeTab, setActiveTab] = useState("review users");
 
   const { globalFilter, setGlobalFilter } = useGlobalFilter();
@@ -45,7 +45,7 @@ export default function Requests() {
         {/* tab */}
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {role === "INSTITUTION_ADMIN" ? (
+            {activeRole === 'admin' ? (
               <Tabs
                 defaultValue="request users"
                 onValueChange={(val) => setActiveTab(val)}
