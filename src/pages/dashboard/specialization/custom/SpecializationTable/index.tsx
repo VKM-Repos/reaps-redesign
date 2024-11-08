@@ -1,6 +1,6 @@
 import CustomTable from '@/components/custom/CustomTable';
 import EmptySpecializations from '../EmptySpecialization';
-import { columns } from './columns';
+import columns from './columns';
 import { SpecializationItems } from '@/types/specialization';
 import AddSpecialization from '../AddSpecialization';
 
@@ -10,7 +10,7 @@ type Props = {
 
 const SpecializationTable = ({ data }: Props) => {
   return (
-    <div>
+    <div className="w-full">
       {data.length > 0 ? (
         <CustomTable data={data} columns={columns} />
       ) : (

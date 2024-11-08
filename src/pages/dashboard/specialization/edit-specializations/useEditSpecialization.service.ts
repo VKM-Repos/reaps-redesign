@@ -1,14 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { usePOST } from '@/hooks/usePOST.hook';
 import { toast } from '@/components/ui/use-toast';
 import { queryClient } from '@/providers';
+import { usePATCH } from '@/hooks/usePATCH.hook';
+import { SpecializationItems } from '@/types/specialization';
 
-export const useCreateSpecialization = () => {
-  const { mutate, isPending } = usePOST('specializations', {
-    contentType: 'application/json',
-  });
+export const useEditSpecialization = (specialization: SpecializationItems) => {
+  const { mutate, isPending } = usePATCH(
+    `specializations/${specialization?.id}`,
+    {
+      contentType: 'application/json',
+      method: 'PUT',
+    }
+  );
 
-  const createSpecialization = async (data: any) => {
+  const editSpecialization = async (data: any) => {
     return new Promise<void>((resolve, reject) => {
       mutate(data, {
         onSuccess: response => {
@@ -20,7 +25,7 @@ export const useCreateSpecialization = () => {
 
           toast({
             title: 'Success',
-            description: `You have successfully created the specialization, ${title}, with the keywords - ${keywords}.`,
+            description: `You have successfully modified the specialization, ${title}, with the keywords - ${keywords}.`,
             variant: 'default',
           });
 
@@ -32,13 +37,13 @@ export const useCreateSpecialization = () => {
           resolve();
         },
         onError: (error: any) => {
-          const errorMessage = Array.isArray(error.detail)
-            ? error.detail[0]?.msg || 'An error occurred'
-            : error.detail || 'An unexpected error occurred';
+          const errorMessages = Array.isArray(error.detail)
+            ? error.detail.map((err: { msg: string }) => err.msg).join(', ')
+            : 'An unexpected error occurred';
 
           toast({
             title: 'Error',
-            description: errorMessage,
+            description: errorMessages,
             variant: 'destructive',
           });
 
@@ -48,5 +53,5 @@ export const useCreateSpecialization = () => {
     });
   };
 
-  return { createSpecialization, isPending };
+  return { editSpecialization, isPending };
 };

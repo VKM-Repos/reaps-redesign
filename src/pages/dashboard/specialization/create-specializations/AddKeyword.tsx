@@ -16,14 +16,13 @@ import {
 
 type Props = {
   handleNext: () => void;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const formSchema = z.object({
   keywords: z.string(),
 });
 
-export default function AddKeyword({ handleNext, setOpen }: Props) {
+export default function AddKeyword({ handleNext }: Props) {
   const { data, setData } = useSpecializationsStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +48,7 @@ export default function AddKeyword({ handleNext, setOpen }: Props) {
         ...prev,
         ...uniqueKeywords.filter(kw => !prev.includes(kw)),
       ]);
+
       reset({ keywords: '' });
     }
   }
@@ -58,18 +58,13 @@ export default function AddKeyword({ handleNext, setOpen }: Props) {
   }
 
   function onSubmit() {
-    try {
-      setData({
-        specializationsDetails: {
-          ...data.specializationsDetails,
-          keyword: keywordsArray,
-        },
-      });
-      handleNext();
-      setOpen(false);
-    } catch (error) {
-      console.error(error);
-    }
+    setData({
+      specializationsDetails: {
+        ...data.specializationsDetails,
+        keyword: keywordsArray,
+      },
+    });
+    handleNext();
   }
 
   return (
@@ -126,6 +121,7 @@ export default function AddKeyword({ handleNext, setOpen }: Props) {
               variant={
                 isValid && keywordsArray.length > 0 ? 'default' : 'ghost'
               }
+              disabled={!isValid && keywordsArray.length < 1}
               className={`mt-[2rem] focus:outline-none`}
             >
               Finish

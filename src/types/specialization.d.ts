@@ -9,7 +9,7 @@ export type SpecializationData = {
 export type SpecializationItems = {
   id: string;
   title: string;
-  keywords: KeywordItems;
+  keywords: KeywordItems[];
 };
 
 export type KeywordItems = {

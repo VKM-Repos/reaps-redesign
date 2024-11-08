@@ -6,7 +6,7 @@ type Props = {
 
 export default function EmptySpecializations({ children }: Props) {
   return (
-    <>
+    <div className="mx-auto w-fit">
       <div className="mx-auto my-[6rem] flex h-[96px] w-[96px] items-center justify-center rounded-full bg-[#FFD13A] pl-2 ">
         <Puzzle />
       </div>
@@ -21,6 +21,6 @@ export default function EmptySpecializations({ children }: Props) {
 
         <div className="mx-auto w-fit">{children}</div>
       </div>
-    </>
+    </div>
   );
 }
