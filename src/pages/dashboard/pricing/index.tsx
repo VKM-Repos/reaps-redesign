@@ -5,15 +5,13 @@ import { useState } from "react";
 import ViewTransactions from "./view-transactions";
 // import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import { useRole } from "@/hooks/useRole";
-// import useUserStore from "@/store/user-store";
+import useUserStore from "@/store/user-store";
 
 export default function Pricing() {
     const [ showTransactions, setShowTransactions ] = useState(false);
     const [ loading, setLoading ] = useState(false);
     // const navigate = useNavigate();
-    // const { activeRole } = useUserStore(); 
-    const { role } = useRole();
+    const { activeRole } = useUserStore(); 
 
     const handleFunc = () => {
         setShowTransactions(true);
@@ -37,11 +35,11 @@ export default function Pricing() {
                 <div className="flex flex-col gap-14 items-center">
                     <div className="flex flex-col gap-[1.25rem] mx-auto w-full">
                         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center">
-                            <h1 className="text-[1.875rem] font-bold">{role === "INSTITUTION_ADMIN" ? <span>Account</span> : <span>Pricing</span>}</h1>
+                            <h1 className="text-[1.875rem] font-bold">{activeRole === 'admin' ? <span>Account</span> : <span>Pricing</span>}</h1>
                             <p onClick={handleFunc}><a className="text-sm text-[#192C8A]  font-semibold underline">View your transactions</a></p>
                         </div>
                         <p className="text-sm text-[#454745]">The pricing page helps you to get information on what you will be charged based on your category as a researcher.</p>
-                            {role === "INSTITUTION_ADMIN" && <Button onClick={newCategory} className="flex gap-4 items-center justify-center py-3 px-6 w-full max-w-[10rem]">New Category</Button>}
+                            {activeRole === 'admin' && <Button onClick={newCategory} className="flex gap-4 items-center justify-center py-3 px-6 w-full max-w-[10rem]">New Category</Button>}
                     </div>
                     <CategoryTable categories={categories}/>
                 </div>
