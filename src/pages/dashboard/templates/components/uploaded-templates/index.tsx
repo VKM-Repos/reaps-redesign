@@ -19,7 +19,7 @@ import Cancel from "@/components/custom/Icons/Cancel";
 export default function UploadedTemplates() {
     const [ templateArray, setTemplateArray ] = useState(mock_templates);
     return (
-        <div className="flex flex-col md:flex-row flex-wrap gap-5 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 w-full">
             {templateArray.map((template) => (
                 <div key={template.id} className="w-full md:max-w-[25.875rem]">
                     <UploadedTemplate item={template} setTemplateArray={setTemplateArray} templateName={template.name} templateUrl={template.file}/>
