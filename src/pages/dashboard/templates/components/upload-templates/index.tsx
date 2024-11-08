@@ -14,11 +14,15 @@ const formSchema = z.object({
     file_name: z.string().min(1, {message: "Please add the file name"}),
     template: z.instanceof(File, { message: "Please upload a file" }).nullable()
 })
-export default function UploadTemplate() {
+export default function UploadTemplate({ templateUrl, templateName }: { templateUrl?: any, templateName?: string }) {
     const [uploadProgress, setUploadProgress] = useState(0);
     const { setTemplate, setTemplateName, setLoading } = useTemplateStore();
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            file_name: templateName ?? "",
+            template: templateUrl ?? null
+        }
       });
 
     const { register, formState: {isValid, errors}, setValue } = form;
@@ -113,9 +117,12 @@ export default function UploadTemplate() {
                             </div>
                         </FormControl>
                         <div className="flex w-full justify-end gap-3">
-                            <SheetClose><Button type="button" variant="ghost" className="!py-3 !px-6 rounded">Cancel</Button></SheetClose>
+                            <SheetClose
+                                className="bg-[hsl(var(--ghost))] text-[hsl(var(--ghost-foreground))] !py-2 !px-6 rounded">
+                                    Cancel
+                                </SheetClose>
                             <SheetClose>
-                                <Button variant={isValid ? "default" : "ghost"} type="submit" className="!py-3 !px-6 rounded">Finish</Button>
+                                <Button variant={isValid && uploadProgress === 100 ? "default" : "ghost"} type="submit" className="!py-3 !px-6 rounded">Finish</Button>
                             </SheetClose>
                         </div>
                     </form>

@@ -2,7 +2,7 @@ import RedFile from "@/assets/red-file.svg"
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import View from "@/components/custom/Icons/View";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
@@ -14,13 +14,14 @@ import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import UploadTemplate from "../upload-templates";
 import { useTemplateStore } from "@/store/templates-store";
 import { Skeleton } from "@/components/ui/skeleton";
+import Cancel from "@/components/custom/Icons/Cancel";
 
 export default function UploadedTemplates() {
     const [ templateArray, setTemplateArray ] = useState(mock_templates);
     return (
         <div className="flex flex-col md:flex-row flex-wrap gap-5 w-full">
             {templateArray.map((template) => (
-                <div key={template.id}>
+                <div key={template.id} className="w-full md:max-w-[25.875rem]">
                     <UploadedTemplate item={template} setTemplateArray={setTemplateArray} templateName={template.name} templateUrl={template.file}/>
                 </div> 
             ))}
@@ -53,14 +54,14 @@ const UploadedTemplate = (
     }
 
     useEffect(() => {
-        if (templateUrl) {
+        if (item) {
             setIsViewerLoading(true);
             setTimeout(() => setIsViewerLoading(false), 4000); 
         }
-    }, [templateUrl])
+    }, [item])
 
     return (
-        <div className="py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
+        <div className="w-full md:max-w-[25.875rem] py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
             <div className="py-3 flex justify-between">
                 <div className="flex gap-3">
                     <img src={RedFile} />
@@ -81,8 +82,9 @@ const UploadedTemplate = (
                                     <View />
                                     <span>View</span>
                                 </DialogTrigger>
-                                <DialogContent className="w-auto h-[95%] mx-auto my-auto overflow-y-scroll no-scrollbar">
-                                    <div className="w-full mx-auto rounded-full">
+                                <DialogContent className={` ${isMobile ? 'w-full h-full' : 'w-auto h-[95%]'}  mx-auto my-auto overflow-y-scroll scrollbar scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-w-1.5 scrollbar-thumb-gray-500`} showCloseButton={false}>
+                                    {isMobile && <DialogClose className="fixed top-[2.5rem] right-[2rem] z-[100]"><Cancel /></DialogClose>}
+                                    <div className={`${isMobile ? 'overflow-scroll' : ''} w-full mx-auto`}>
                                         {isViewerLoading ? (
                                                 <Skeleton className="w-full h-[400px] rounded-lg" />
                                             ) : (
@@ -98,17 +100,18 @@ const UploadedTemplate = (
                                 
                                 </Dialog>
                             <Sheet>
-                            <SheetTrigger
-                                className={`text-black flex justify-center items-center gap-2 p-3`}
-                            >
-                                <PencilEdit />
-                                <span>Change</span>
-                                <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden`}>
+                                <SheetTrigger
+                                    className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
+
+                                >
+                                    <PencilEdit />
+                                    <span>Change</span>
+                                </SheetTrigger>
+                                <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden z-[9999]`}>
                                     <div className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}>
-                                        <UploadTemplate />
+                                        <UploadTemplate templateName={item?.name} templateUrl={item?.file}/>
                                     </div>
                                 </SheetContent>
-                            </SheetTrigger>
                             </Sheet>
                             <Sheet>
                                 <SheetTrigger className={`flex justify-center items-center gap-2 text-black ${isMobile ? 'p-2' : 'p-3'}`}>
@@ -122,7 +125,7 @@ const UploadedTemplate = (
                     </DropdownMenuContent>
                     </DropdownMenu>
             </div>
-            <div className={`h-full max-h-[13.25rem] w-full  md:max-w-[25.875rem] rounded-lg overflow-hidden`}>
+            <div className={`h-full max-h-[13.25rem] w-full md:max-w-[25.875rem] rounded-lg overflow-hidden`}>
                 {isViewerLoading ? (
                     <Skeleton className="w-full h-full rounded-lg" />
                 ) : (
