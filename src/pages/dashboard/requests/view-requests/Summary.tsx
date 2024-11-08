@@ -14,12 +14,13 @@ import { useLocation } from 'react-router-dom';
 
 type SummaryPageProps = {
     isApproval?: boolean,
-    handlePrint?: () => void
+    handlePrint?: () => void,
 }
 const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
 
   const { data } = useRequestsStore();
   const { objectives, checkbox, files } = data.requestsDetails;
+  // receive table row prop in here and populate the fields
 
   const { title } = tableData[1];
 
@@ -41,13 +42,11 @@ const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
   const { role } = useRole();
   const { pathname } = useLocation();
 
-
+// change handleDownload function to receive file from table data instead not localstorage
+//  isFileGroup will no longer be useful
   const handleDownload = (fileId: string) => {
-  
-
     if (isFileGroup(files)) {
       const fileDetails = files[fileId as keyof fileGroup];  // Directly access file using fileId as a key
-
       if (fileDetails && fileDetails.file) {
           downloadFile(fileDetails);  // Call the download function with the retrieved file
       } else {
@@ -68,18 +67,14 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
           console.error("No file available for download.");
           return;
       }
-  
       // Create a URL for the file
       const fileURL = URL.createObjectURL(file.file);
-  
       // Create a temporary <a> element to trigger the download
       const a = document.createElement('a');
       a.href = fileURL;
       a.download = file.path;  // Set the filename
-  
       // Append the element to the body (necessary for it to work in some browsers)
       document.body.appendChild(a);
-  
       // Programmatically click the element to start the download
       a.click();
   

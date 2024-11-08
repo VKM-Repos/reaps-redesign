@@ -24,9 +24,10 @@ import { UserGradeDialog } from "./UserGradeDialog";
 type usersTableDataProps = {
   usersTableData: {
     id: number;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
+    user_type: string;
   }[];
 };
 
@@ -104,6 +105,9 @@ export default function RequesterTable({
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const { multiStatusDateFilter } = useGlobalFilter();
+  usersTableData.map((user) => {
+    if (user.user_type == "user") console.log(user, "??????????");
+  });
 
   function deleteTableItem(item: any) {
     setLoading(true);
@@ -123,7 +127,7 @@ export default function RequesterTable({
           className="font-bold w-full min-w-[18.75rem]"
         />
       ),
-      accessorKey: "firstName",
+      accessorKey: "first_name",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -138,7 +142,7 @@ export default function RequesterTable({
           className="font-bold min-w-[9rem] w-full"
         />
       ),
-      accessorKey: "lastName",
+      accessorKey: "last_name",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[9rem] w-full" />
       ),

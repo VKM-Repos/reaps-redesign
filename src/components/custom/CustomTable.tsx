@@ -26,26 +26,31 @@ export const CustomCell = ({ value, className }: { value: any, className: string
   type CustomTableProps<T> = {
     columns: ColumnDef<T>[]; // Define columns using ColumnDef 
     data: T[]; // Table data
+    localSearch?: string;
+    setLocalSearch?: (localSearch: string) => void;
+    customTableClassName?: string;
+    customRowClassName?: string;
+    customHeaderRowClassName?: string;
   };
 
 
 
 
 
-export default function CustomTable({ columns, data }: CustomTableProps<any>) {
+export default function CustomTable({ columns, data, localSearch, setLocalSearch, customTableClassName, customHeaderRowClassName, customRowClassName }: CustomTableProps<any>) {
 
     const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
-    const {  globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
+    const { globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
   
 
     const table = useReactTable({ 
         columns, 
         data,  
         state: {
-            globalFilter: globalFilter,
+            globalFilter: localSearch ?? globalFilter,
             columnFilters: columnFilters,
         },
-        onGlobalFilterChange: setGlobalFilter,
+        onGlobalFilterChange: setLocalSearch ?? setGlobalFilter,
         getFilteredRowModel: getFilteredRowModel(), 
         getCoreRowModel: getCoreRowModel(),
     });
@@ -58,10 +63,10 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
         [&::-webkit-scrollbar-track]:rounded-full 
         [&::-webkit-scrollbar-track]:bg-gray-10110
         [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
-            <Table className="w-full border ">
+            <Table className={`w-full border ${customTableClassName}`}>
                 <TableHeader>
                     {table.getHeaderGroups().map(headerGroup => (
-                        <TableRow key={headerGroup.id} className="font-bold w-full flex items-center justify-between !border-b p-6">
+                        <TableRow key={headerGroup.id} className={`font-bold w-full flex items-center justify-between !border-b p-6 ${customHeaderRowClassName}`}>
                             {headerGroup.headers.map(header => (
                                 <TableHead
                                     key={header.id}
@@ -81,7 +86,7 @@ export default function CustomTable({ columns, data }: CustomTableProps<any>) {
                         </TableCell>
                     </TableRow>) : (
                         table.getRowModel().rows.map((row) => (
-                        <TableRow key={row.id} className="flex items-center !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]">
+                        <TableRow key={row.id} className={`flex items-center !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] ${customRowClassName}`}>
                         {row.getVisibleCells().map((cell) => (
                             <TableCell key={cell.id}>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
