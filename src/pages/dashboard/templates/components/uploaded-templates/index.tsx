@@ -109,7 +109,7 @@ const UploadedTemplate = (
                                 </SheetTrigger>
                                 <SheetContent side={isMobile ? "bottom" : "top"} className={` ${isMobile ? "inset-y-0 inset-x-auto" : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"} w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden z-[9999]`}>
                                     <div className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}>
-                                        <UploadTemplate templateName={item?.name} templateUrl={item?.file}/>
+                                        <UploadTemplate templateName={item?.name} templateFile={item?.file}/>
                                     </div>
                                 </SheetContent>
                             </Sheet>

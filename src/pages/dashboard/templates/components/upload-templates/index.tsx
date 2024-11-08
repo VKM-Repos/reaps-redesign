@@ -14,14 +14,14 @@ const formSchema = z.object({
     file_name: z.string().min(1, {message: "Please add the file name"}),
     template: z.instanceof(File, { message: "Please upload a file" }).nullable()
 })
-export default function UploadTemplate({ templateUrl, templateName }: { templateUrl?: any, templateName?: string }) {
+export default function UploadTemplate({ templateFile, templateName }: { templateFile?: any, templateName?: string }) {
     const [uploadProgress, setUploadProgress] = useState(0);
     const { setTemplate, setTemplateName, setLoading } = useTemplateStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             file_name: templateName ?? "",
-            template: templateUrl ?? null
+            template: templateFile ?? null
         }
       });
 
