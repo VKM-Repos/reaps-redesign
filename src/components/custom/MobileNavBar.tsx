@@ -39,9 +39,9 @@ export default function MobileNavbar() {
             }
             <div className="w-full fixed bottom-0 flex flex-col justify-center bg-white min-h-[76px] px-3 py-4">
                 <ul className="flex items-center justify-between px-3 py-4">
-                    {links.map(({ path, icon, label }) => (
+                    {links.map(({ path, icon, label }, index) => (
                         <Link
-                            key={label}
+                            key={index}
                             to={path}
                             onClick={() => handleLinkClick(label)}
                             className={`${
