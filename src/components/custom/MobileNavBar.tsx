@@ -31,7 +31,8 @@ export default function MobileNavbar() {
             {activeRole === 'admin' && activeLabel && (pathname === '/requests' || pathname === '/institution') &&
                 links.map(({ label, subLinks, path }) => 
                     activeLabel === label && (pathname === path || pathname === path) && subLinks ? (
-                        <div key={label} className="mt-14">
+                        <div key={label} className="py-[1.625rem] px-4 flex flex-col gap-6">
+                            <h1 className="font-semibold text-[1.875rem]">{label}</h1>
                             <NavComponent subLinks={subLinks} />
                         </div>
                     ) : null
@@ -45,11 +46,11 @@ export default function MobileNavbar() {
                             to={path}
                             onClick={() => handleLinkClick(label)}
                             className={`${
-                                path.includes(pathname) ? 'text-black' : 'text-black/30'
+                                pathname.startsWith(path) ? 'text-black' : 'text-black/30'
                             } hover:text-black flex space-x-4 px-2 items-center justify-between`}
                         >
                             <span>{icon}</span>
-                            {path.includes(pathname) && <span>{label}</span>}
+                            {pathname.startsWith(path) && <span>{label}</span>}
                         </Link>
                     ))}
                 </ul>
@@ -63,7 +64,7 @@ const NavComponent = ({ subLinks }: { subLinks: any[] }) => {
 
     return (
         <div className="h-full w-full">
-            <div className="px-6 py-1 w-full">
+            <div className="py-1 w-full flex-col flex gap-4">
                 <div className="w-full flex flex-col gap-4">
                     {subLinks.map(({ path, icon, label }) => (
                         <Link

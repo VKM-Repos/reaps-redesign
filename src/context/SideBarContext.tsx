@@ -146,7 +146,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
             },
             {
               label: 'Account',
-              path: '/pricing',
+              path: '/institution/account',
               icon: <Bank />,
             },
           ],
