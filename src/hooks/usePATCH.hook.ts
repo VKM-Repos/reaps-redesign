@@ -7,6 +7,7 @@ export interface PatchOptions {
   method?: string;
   contentType?: string;
   callback?: (data: any) => void;
+  errorCallBack?: (data: any) => void;
 }
 export const usePATCH = (
   url: string,
@@ -15,6 +16,7 @@ export const usePATCH = (
     method = "PUT",
     contentType = "application/json",
     callback,
+    errorCallBack,
   }: PatchOptions = {}
 ) => {
   const { mutate, isPending, isError, isSuccess, data, error } = useMutation({
@@ -44,7 +46,7 @@ export const usePATCH = (
     },
     onError: (err) => {
       // (err?.data?.message instanceof Array) ? toast.error(err?.data?.message[0]) : toast.error(err?.data?.message)
-      console.log(err);
+      errorCallBack && errorCallBack(err);
     },
   });
 
