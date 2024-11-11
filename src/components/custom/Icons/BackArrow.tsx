@@ -11,9 +11,9 @@ export default function BackArrow() {
       <path
         d="M16 24H32M16 24C16 25.3176 21 29 21 29M16 24C16 22.6824 21 19 21 19"
         stroke="black"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
