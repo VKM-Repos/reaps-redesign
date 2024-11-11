@@ -30,7 +30,7 @@ export const renderRoutes = (mainRoutes: any) => {
                                     subRoutes.map(({ element: Element, path, name }: any) => {
                                         return (
                                             Element && path && (
-                                                <Route key={name} element={<Element />} path={path} />
+                                                <Route key={`route-${name}-${path}`} element={<Element />} path={path} />
                                             )
                                         )
                                         
