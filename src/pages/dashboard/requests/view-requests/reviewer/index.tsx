@@ -1,8 +1,8 @@
 import SideBar from "./sideBar-Nav";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
 import Cancel from "@/components/custom/Icons/Cancel";
-import Summary from "./InfoSummary";
-
+// import Summary from "./InfoSummary";
+import Summary from "../Summary";
 
 const navLinks = [
     {
@@ -18,6 +18,8 @@ const navLinks = [
         url: "supportingDocument"
     }
 ]
+
+
 
 export default function ApplicationSummary() {
     return(
@@ -45,7 +47,8 @@ export default function ApplicationSummary() {
                             </div>
                             <div className="md:w-[75%] w-full px-10">
                                  {/* <Information />  */}
-                                 <Summary />
+                                 {/* <Summary /> */}
+                                 <Summary  />
                             </div>
                         </main>
                         <main className="w-full hidden md:block mx-6 md:mx-auto border-b">
