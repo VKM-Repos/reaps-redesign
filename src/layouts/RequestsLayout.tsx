@@ -7,6 +7,7 @@ import { useMediaQuery } from "react-responsive";
 import { requestsArray } from "@/lib/helpers";
 import { useStepper } from "@/context/StepperContext";
 import ProfileDropDown from "@/pages/dashboard/home/custom/ProfileDropDown";
+import { useDonorInvestigatorStore } from "@/store/DonorsandInvestigatorsStore";
 
 
 type Props = {
@@ -15,14 +16,16 @@ type Props = {
 export default function RequestsLayout({ children }: Props) {
     const navigate = useNavigate();
     const { step, setStep, resetStore } = useRequestsStore();
+    const { resetDonorInvestigatorStore } = useDonorInvestigatorStore();
     const { stepper } = useStepper();
     const isLarge = useMediaQuery({query: '(max-width: 1024px)'});
 
     const goBackRequests = () => {
         navigate(-1);
-        if (step === 5) {
+        setTimeout(() => {
             resetStore();
-        } 
+            resetDonorInvestigatorStore();
+        }, 2000)
     }
 
     return (

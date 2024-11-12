@@ -1,48 +1,43 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import useUserStore from "@/store/user-store";
+import axios, { AxiosInstance } from "axios";
 
-import axios, { AxiosInstance } from 'axios';
+export const createApiInstance = (baseURL: string): AxiosInstance => {
+  const apiInstance = axios.create({
+    baseURL,
+  });
 
-const baseUrl = process.env.VITE_BASE_URL;
+  apiInstance.defaults.headers.common["Content-Type"] = "application/json";
 
-export const authApi: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-});
+  apiInstance.interceptors.request.use(async (config) => {
+    const userToken = useUserStore.getState().accessToken;
+    const userInstitutionContext =
+      useUserStore.getState().user?.institution_context;
+    if (userToken) {
+      config.headers["Authorization"] = `Bearer ${userToken}`;
+      config.headers["institution-context"] = userInstitutionContext;
+    }
 
-authApi.defaults.headers.common['Content-Type'] = 'application/json';
+    return config;
+  });
 
-authApi.interceptors.request.use(async config => {
-  const userToken = '';
+  // Response interceptor for handling errors
+  apiInstance.interceptors.response.use(
+    (response) => response,
+    (error) => handleApiError(error)
+  );
 
-  if (userToken) {
-    config.headers['Authorization'] = `Bearer ${userToken}`;
-  }
+  return apiInstance;
+};
 
-  return config;
-});
-
-export const publicApi: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-});
-
-publicApi.defaults.headers.common['Content-Type'] = 'application/json';
-
+// Shared error handler
 export const handleApiError = (error: any) => {
   if (error.response) {
-    console.error('Request failed with status code:', error.response.status);
-    console.error('Response data:', error.response.data);
+    console.error("Request failed with status code:", error.response.status);
+    console.error("Response data:", error.response.data);
   } else if (error.request) {
-    console.error('No response received. Request:', error.request);
+    console.error("No response received. Request:", error.request);
   } else {
-    console.error('Request setup error:', error.message);
+    console.error("Request setup error:", error.message);
   }
   return Promise.reject(error);
 };
-
-authApi.interceptors.response.use(
-  response => response,
-  error => handleApiError(error)
-);
-publicApi.interceptors.response.use(
-  response => response,
-  error => handleApiError(error)
-);

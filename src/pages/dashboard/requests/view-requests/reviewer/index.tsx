@@ -1,14 +1,25 @@
 import SideBar from "./sideBar-Nav";
 import { SheetClose, SheetContent } from "@/components/ui/sheet";
 import Cancel from "@/components/custom/Icons/Cancel";
-import Summary from "./InfoSummary";
-
+// import Summary from "./InfoSummary";
+import Summary from "../Summary";
 
 const navLinks = [
-    "Research Information",
-    "Application Summary",
-    "Supporting Document"
+    {
+        label: "Research Information",
+        url: "researchInfo"  
+    },
+    {
+        label: "Application Summary",
+        url: "applicationSummary"
+    },
+    {
+        label: "Supporting Document",
+        url: "supportingDocument"
+    }
 ]
+
+
 
 export default function ApplicationSummary() {
     return(
@@ -28,7 +39,7 @@ export default function ApplicationSummary() {
                                    
                                    <div className='text-[0.875rem] flex-col flex gap-5 w-[20%] fixed'>
                                          {navLinks.map( (links)=>
-                                        <a className='w-[80%] h-12 rounded-md p-2 hover:bg-slate-200 text-[#6A6C6A] hover:text-black active:bg-slate-200 text-inherit' href='#'>{links}</a>
+                                        <a className='w-[80%] h-12 rounded-md p-2 hover:bg-slate-200 text-[#6A6C6A] hover:text-black active:bg-slate-200 text-inherit' href='#'>{links.label}</a>
                                          )}
                                    </div>
                                    <div className=" md:absolute top-60"><SideBar /></div>
@@ -36,7 +47,8 @@ export default function ApplicationSummary() {
                             </div>
                             <div className="md:w-[75%] w-full px-10">
                                  {/* <Information />  */}
-                                 <Summary />
+                                 {/* <Summary /> */}
+                                 <Summary  />
                             </div>
                         </main>
                         <main className="w-full hidden md:block mx-6 md:mx-auto border-b">

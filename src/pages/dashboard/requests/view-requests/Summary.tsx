@@ -11,15 +11,17 @@ import { useMediaQuery } from 'react-responsive';
 import { useRole } from '@/hooks/useRole';
 import Download from '@/components/custom/Icons/Download';
 import { useLocation } from 'react-router-dom';
+import GoogleDoc from '@/components/custom/Icons/GoogleDoc';
 
 type SummaryPageProps = {
     isApproval?: boolean,
-    handlePrint?: () => void
+    handlePrint?: () => void,
 }
 const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
 
   const { data } = useRequestsStore();
   const { objectives, checkbox, files } = data.requestsDetails;
+  // receive table row prop in here and populate the fields
 
   const { title } = tableData[1];
 
@@ -41,13 +43,11 @@ const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
   const { role } = useRole();
   const { pathname } = useLocation();
 
-
+// change handleDownload function to receive file from table data instead not localstorage
+//  isFileGroup will no longer be useful
   const handleDownload = (fileId: string) => {
-  
-
     if (isFileGroup(files)) {
       const fileDetails = files[fileId as keyof fileGroup];  // Directly access file using fileId as a key
-
       if (fileDetails && fileDetails.file) {
           downloadFile(fileDetails);  // Call the download function with the retrieved file
       } else {
@@ -68,18 +68,14 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
           console.error("No file available for download.");
           return;
       }
-  
       // Create a URL for the file
       const fileURL = URL.createObjectURL(file.file);
-  
       // Create a temporary <a> element to trigger the download
       const a = document.createElement('a');
       a.href = fileURL;
       a.download = file.path;  // Set the filename
-  
       // Append the element to the body (necessary for it to work in some browsers)
       document.body.appendChild(a);
-  
       // Programmatically click the element to start the download
       a.click();
   
@@ -158,9 +154,15 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
 
                 </>
               </div>
-              <div className='flex justify-between items-center'>
-                <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5 text-black">Support Docs</h1>
-              </div>
+             {role === 'REVIEWER' ? 
+                   <div className='flex flex-col md:flex-row justify-between gap-2 items-center text-black'>
+                      <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Documents</h1>
+                      <p className='text-[#000066] flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>
+                  </div>
+                  : 
+                <div className='flex justify-between items-center'>
+                  <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5 text-black">Support Docs</h1>
+                </div> }
               <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
                 {supportDocData.map((file) => {
                   return (
@@ -174,12 +176,18 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                         className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                       >
                         <span className="flex gap-2 items-center justify-center">
+                          {role === 'REVIEWER' ?
+                              <span className='text-black text-[0.8rem]'>
+                                <GoogleDoc />
+                              </span>
+                               :
                           <span>
                             <GreenCheckmark />
                           </span>
+                        } 
                           <span>{file.name}</span>
                         </span>
-                        {role === 'INSTITUTION_ADMIN' && pathname.includes('/requests/manage-requests') ?
+                        {role === 'INSTITUTION_ADMIN'  && pathname.includes('/requests/manage-requests') ?
                           <button className="p-2" onClick={() => {handleDownload(file.id)}}>
                             <span><Download /></span>
                           </button>

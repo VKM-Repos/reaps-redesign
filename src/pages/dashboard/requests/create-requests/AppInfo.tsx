@@ -8,10 +8,17 @@ import CustomFormField, {
   FormFieldType,
 } from "@/components/custom/CustomFormField";
 import { questions } from "@/lib/helpers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useStepper } from "@/context/StepperContext";
 import SavingLoader from "../components/SavingLoader";
+import AddInvestigator from "../components/AddInvestigator";
+import AddDonor from "../components/AddDonor";
+import AddedInvestigator from "../components/AddedInvestigator";
+import { useDonorInvestigatorStore } from "@/store/DonorsandInvestigatorsStore";
+import QuestionLoader from "@/assets/loader.svg"
+import Loader from "@/components/custom/Loader";
+
 
 
 const checkboxGroupSchema = z.object({
@@ -34,8 +41,10 @@ type Props = {
 
 export default function AppInfo({ handleNext }: Props) {
   const { data, setData } = useRequestsStore();
-  const { checkbox } = data.requestsDetails;
-
+  const { donor_investigator_data, addInvestigator, setAddInvestigator, showDonor, setShowDonor } = useDonorInvestigatorStore();
+  const { co_principal_investigators } = donor_investigator_data.details;
+  const { checkbox  } = data.requestsDetails;
+  const [ loading, setLoading ] = useState(false);
   const form = useForm<z.infer<typeof checkboxGroupSchema>>({
     resolver: zodResolver(checkboxGroupSchema),
     defaultValues: {
@@ -58,6 +67,14 @@ export default function AppInfo({ handleNext }: Props) {
     setStepper(0);
   };
 
+  const handleValueChange = (value: string, index: number) => {
+    if (index === 2) { 
+      setAddInvestigator(value === "yes");
+    }
+    if (index === 3) {
+      setShowDonor(value === "yes");
+    }
+  };
   
 
   useEffect(() => {
@@ -87,6 +104,8 @@ export default function AppInfo({ handleNext }: Props) {
   }
 
   return (
+    <>
+    {loading && <Loader />}
     <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
       <SavingLoader />
       <div className="flex flex-col justify-center items-center">
@@ -101,35 +120,75 @@ export default function AppInfo({ handleNext }: Props) {
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-8 ">
-              {questions.map((question, index) => (
-                <CustomFormField
-                  key={question.name}
-                  name={question.name}
-                  control={form.control}
-                  label={question.label}
-                  error={
-                    (errors as any)?.[question.name] as
-                      | FieldError
-                      | undefined
+            {questions.map((question, index) => (
+                <div key={question.name} className="flex flex-col gap-5">
+                  <div className="w-full flex justify-between items-center">
+                    <CustomFormField
+                      name={question.name}
+                      control={form.control}
+                      label={question.label}
+                      error={(errors as any)?.[question.name] as FieldError | undefined}
+                      subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
+                      fieldType={FormFieldType.RADIO}
+                      options={
+                        index === 0
+                          ? [
+                              { label: "Principal Investigator", value: "principal investigator" },
+                              { label: "Local Principal Investigator", value: "local principal investigator" },
+                            ]
+                          : index === 1
+                          ? [
+                              { label: "Student", value: "student" },
+                              { label: "An Academic/Researcher", value: "an academic/researcher" },
+                            ]
+                          : [
+                              { label: "Yes", value: "yes" },
+                              { label: "No", value: "no" },
+                            ]
+                      }
+                      required={true}
+                      onChange={(value: string) => handleValueChange(value, index)}
+                    />
+                     {(index === 2 && addInvestigator) && (
+                      <img src={QuestionLoader} className="spinning-loader"/>
+                     )}
+                     {(index === 3 && showDonor) && (
+                      <img src={QuestionLoader} className="spinning-loader"/>
+                     )}
+                  </div>
+                  {index === 2 && addInvestigator && (
+                    <>
+                      {co_principal_investigators.length === 0 ? (
+                        <div className="w-full">
+                          <AddInvestigator setLoading={setLoading}/>
+                        </div>
+                      ) : (
+                        <div className="w-full flex flex-col gap-5">
+                        {co_principal_investigators.map((investigator, idx) => (
+                          <AddedInvestigator
+                            key={idx}
+                            first_name={investigator.first_name}
+                            last_name={investigator.last_name}
+                            email={investigator.email}
+                            phone_number={investigator.phone_number}
+                          />
+                        ))}
+                        <AddInvestigator setLoading={setLoading}/>
+                      </div>
+                    )}
+                    </>
+                  )}
+                  {
+                    index === 3 && showDonor && (
+                      <div className="w-full">
+                        <AddDonor />
+                      </div>
+                    )
                   }
-                  subClassName="h-[0.875rem] w-[0.875rem] !bg-black"
-                  fieldType={FormFieldType.RADIO}
-                  options={index === 0
-                    ? [
-                        { label: "Yes", value: "yes" }
-                      ]
-                    : index === 1 
-                    ? [
-                        { label: "Student", value: "yes" }, 
-                        { label: "Researcher", value: "no" }
-                      ]
-                    : [
-                        { label: "Yes", value: "yes" },
-                        { label: "No", value: "no" },
-                      ]}
-                  required={true}
-                />
+                </div>
               ))}
+              
+              {/* if investigator is added, show another add component */}
               <CustomFormField
                 name="question7"
                 fieldType={FormFieldType.COUNTER}
@@ -153,5 +212,7 @@ export default function AppInfo({ handleNext }: Props) {
         </Form>
       </div>
     </div>
+    </>
   );
 }
+

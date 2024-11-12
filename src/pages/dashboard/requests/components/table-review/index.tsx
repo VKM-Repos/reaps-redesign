@@ -1,7 +1,7 @@
 import View from "@/components/custom/Icons/View";
 import { Badge } from "@/components/ui/badge";
 import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
-import ApplicationSummary from "../../view-review";
+import ApplicationSummary from "../../view-requests/reviewer";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 
