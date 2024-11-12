@@ -22,3 +22,9 @@ export function revertToISODate(yyyyMMddString: any) {
 
   return date.toISOString();
 }
+export function getFileExtension(url: string): string {
+  // Use regular expression to capture the file extension
+  const match: any = url.match(/\.([a-zA-Z0-9]+)(?:\?|$)/);
+  // If there is a match, return the file extension in lowercase
+  return match ? match[1].toLowerCase() : " ";
+}

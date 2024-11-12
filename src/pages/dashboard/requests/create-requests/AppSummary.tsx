@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { questions } from "@/lib/helpers";
 import { getRequiredFilesBasedOnYes } from "./SupportDoc";
 import { useMediaQuery } from "react-responsive";
-import { useRole } from "@/hooks/useRole";
+import useUserStore from "@/store/user-store";
 
 type Props = {
   handleNext?: Function;
@@ -31,7 +31,7 @@ const AppSummary = ({ handleNext }: Props) => {
   const [loading, setLoading] = useState(false);
   const [showEthicalApprovalCard, setShowEthicalApprovalCard] = useState(false);
   const navigate = useNavigate();
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
   const form = useForm({
@@ -101,7 +101,7 @@ const AppSummary = ({ handleNext }: Props) => {
         if (handleNext) {
           handleNext();
         }
-        if (role === "INSTITUTION_ADMIN") {
+        if (activeRole === 'admin') {
           navigate('/requests/my-requests')
         } else { 
           navigate('/requests')

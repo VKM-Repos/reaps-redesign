@@ -21,15 +21,6 @@ import ArrowUp from "@/components/custom/Icons/ArrowUp";
 import ArrowDown from "@/components/custom/Icons/ArrowDown";
 import { UserGradeDialog } from "./UserGradeDialog";
 
-type usersTableDataProps = {
-  usersTableData: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-};
-
 type RenderFunctionsProps = {
   item: {
     title: string;
@@ -41,7 +32,13 @@ type RenderFunctionsProps = {
   loading: boolean;
 };
 
-export function RenderFunctions() {
+export function RenderFunctions({
+  item,
+  refetch,
+}: {
+  item: any;
+  refetch: () => void;
+}) {
   return (
     <>
       <DropdownMenu modal={false}>
@@ -57,14 +54,18 @@ export function RenderFunctions() {
               className="flex items-center gap-2 cursor-pointer"
             >
               <ArrowUp />
-              <UserGradeDialog title="Upgrade" />
+              <UserGradeDialog refetch={refetch} user={item} title="Upgrade" />
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={(e) => e.preventDefault()}
               className="flex items-center gap-2 cursor-pointer"
             >
               <ArrowDown />
-              <UserGradeDialog title="Downgrade" />
+              <UserGradeDialog
+                refetch={refetch}
+                user={item}
+                title="Downgrade"
+              />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
@@ -96,7 +97,18 @@ function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
   );
 }
 
-export default function AdminsTable({ usersTableData }: usersTableDataProps) {
+export default function AdminsTable({
+  usersTableData,
+  refetch,
+}: {
+  usersTableData: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+  }[];
+  refetch: () => void;
+}) {
   const [loading, setLoading] = useState(false);
   const [tableArray, setTableArray] = useState(usersTableData);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -121,7 +133,7 @@ export default function AdminsTable({ usersTableData }: usersTableDataProps) {
           className="font-bold w-full min-w-[18.75rem]"
         />
       ),
-      accessorKey: "firstName",
+      accessorKey: "first_name",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -136,7 +148,7 @@ export default function AdminsTable({ usersTableData }: usersTableDataProps) {
           className="font-bold min-w-[9rem] w-full"
         />
       ),
-      accessorKey: "lastName",
+      accessorKey: "last_name",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[9rem] w-full" />
       ),
@@ -174,7 +186,7 @@ export default function AdminsTable({ usersTableData }: usersTableDataProps) {
           />
         ) : (
           <CustomCell
-            value={<RenderFunctions />}
+            value={<RenderFunctions refetch={refetch} item={item} />}
             className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
           />
         );

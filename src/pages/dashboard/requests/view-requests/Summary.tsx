@@ -8,9 +8,9 @@ import { Label } from '@/components/ui/label';
 import GreenCheckmark from '@/components/custom/Icons/GreenCheckmark';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from 'react-responsive';
-import { useRole } from '@/hooks/useRole';
 import Download from '@/components/custom/Icons/Download';
 import { useLocation } from 'react-router-dom';
+import useUserStore from '@/store/user-store';
 import GoogleDoc from '@/components/custom/Icons/GoogleDoc';
 
 type SummaryPageProps = {
@@ -40,7 +40,7 @@ const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
 
   const { register } = form;
   const isMobile = useMediaQuery({ query: '(max-width: 767px)'});
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const { pathname } = useLocation();
 
 // change handleDownload function to receive file from table data instead not localstorage
@@ -154,7 +154,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
 
                 </>
               </div>
-             {role === 'REVIEWER' ? 
+             {activeRole === 'reviewer' ? 
                    <div className='flex flex-col md:flex-row justify-between gap-2 items-center text-black'>
                       <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Documents</h1>
                       <p className='text-[#000066] flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>
@@ -176,7 +176,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                         className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                       >
                         <span className="flex gap-2 items-center justify-center">
-                          {role === 'REVIEWER' ?
+                          {activeRole === 'reviewer' ?
                               <span className='text-black text-[0.8rem]'>
                                 <GoogleDoc />
                               </span>
@@ -187,7 +187,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                         } 
                           <span>{file.name}</span>
                         </span>
-                        {role === 'INSTITUTION_ADMIN'  && pathname.includes('/requests/manage-requests') ?
+                        {activeRole === 'admin' && pathname.includes('/requests/manage-requests') ?
                           <button className="p-2" onClick={() => {handleDownload(file.id)}}>
                             <span><Download /></span>
                           </button>
