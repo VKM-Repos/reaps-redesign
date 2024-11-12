@@ -195,7 +195,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                   })}
                 </div>
               </section>
-              {isMobile && <div className='w-full my-4 flex items-center justify-center'><Button className={`${isApproval ? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'} !max-w-[9.375rem] w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
+              {isMobile && activeRole === 'user' && <div className='w-full my-4 flex items-center justify-center'><Button className={`${isApproval ? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'} !max-w-[9.375rem] w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
             </form>
           </Form>
         </div>

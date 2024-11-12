@@ -74,7 +74,7 @@ const reviewComment = [
         reaction: <Unamused />
     }
 ]
-export default function SideBar() {
+export default function ReviewerWriteReview() {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
@@ -89,11 +89,11 @@ export default function SideBar() {
     
     return(
         <>
-            <aside className='text-[0.875rem] flex-col md:flex gap-5 md:w-[20%] w-[50%] md:fixed'>
+            <aside className='text-[0.875rem] flex-col md:flex gap-5 w-full'>
              
             <Sheet>
                 <SheetTrigger>
-                      <Button className='rounded-full flex self-start md:w-[80%] w-full h-[3.5rem]'>Write your Review</Button>
+                      <Button className='rounded-full flex items-center max-w-[90%] px-6 py-[1.375rem] w-full h-[3.5rem]'>Write your Review</Button>
                 </SheetTrigger>
                 <SheetContent side="bottom" className='md:w-[60%] w-[90%] h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
                     <SheetClose className='bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit flex self-end md:mt-[-2rem]'><Cancel /></SheetClose>
