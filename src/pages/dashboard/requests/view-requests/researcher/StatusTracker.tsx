@@ -24,8 +24,6 @@ export default function StatusTracker({ currentIndex, currentStatus, isApproval,
     return (
         <div className={`${isMobile ? '' : 'md:block hidden max-w-[24.375rem] py-12 fixed'}  w-full flex flex-col px-4 mx-auto`}>
             <div className={`${isMobile ? 'gap-6' : 'gap-8 max-w-[14.7rem] py-16'} w-full mx-auto flex flex-col `}>
-        <div className="max-w-[24.375rem] hidden w-full md:flex flex-col fixed py-12 px-4 mx-auto">
-            <div className="max-w-[14.7rem] w-full mx-auto flex flex-col gap-8 py-16">
                 <div className="flex gap-2 items-center justify-start">
                     <h1 className="font-semibold border-b-2 border-[#FFD13A] text-[1.625rem]">Status Tracker</h1>
                     <StatusHelp />
@@ -65,9 +63,6 @@ export default function StatusTracker({ currentIndex, currentStatus, isApproval,
                 </div>
                 {!isMobile && <div className='w-full my-4 flex items-center justify-start mx-auto'><Button onClick={handlePrint} className={`${isApproval? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'}  w-full max-w-[9.375rem] font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
             </div>
-             </div>
-         </div>
         </div>
-
     )
 }
