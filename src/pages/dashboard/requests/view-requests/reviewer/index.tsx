@@ -38,7 +38,7 @@ export default function ReviewerRequestSummary() {
                             </div>
                         </div>
                         <main className="md:absolute w-full flex flex-col md:flex-row">
-                            <div className="md:hidden border w-[90%] mx-6 mb-10 fixed z-[100] bg-white top-0">
+                            <div className="md:hidden border w-[90%] mx-6">
                                 <div className=" flex justify-between px-5 items-center">
                                     <h1 className="text-[1.5rem] font-semibold">Application Summary</h1>
                                     <SheetClose className="bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit"><Cancel /></SheetClose>
@@ -54,7 +54,7 @@ export default function ReviewerRequestSummary() {
                                     </div>
                                 </div>    
                             </div>
-                            <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[75%]">
+                            <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
                                  <Summary  />
                             </div>
                         </main>

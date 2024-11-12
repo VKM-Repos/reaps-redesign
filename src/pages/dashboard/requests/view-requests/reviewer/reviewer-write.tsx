@@ -90,66 +90,47 @@ export default function ReviewerWriteReview() {
     return(
         <>
             <aside className='text-[0.875rem] flex-col md:flex gap-5 w-full'>
-             
-            <Sheet>
-                <SheetTrigger>
-                      <Button className='rounded-full flex items-center max-w-[90%] px-6 py-[1.375rem] w-full h-[3.5rem]'>Write your Review</Button>
-                </SheetTrigger>
-                <SheetContent side="bottom" className='md:w-[60%] w-[90%] h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
-                    <SheetClose className='bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit flex self-end md:mt-[-2rem]'><Cancel /></SheetClose>
+                <Sheet>
+                    <SheetTrigger>
+                        <button className='bg-primary text-white rounded-full flex items-center justify-center max-w-[13rem] md:max-w-[90%] px-6 py-[1.375rem] w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6'>Write your Review</button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className='md:w-[60%] w-full h-full md:h-[95%] flex flex-col justify-self-center rounded-t-lg items-center'>
+                        <SheetClose className='bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit flex self-end md:mt-[-2rem]'><Cancel /></SheetClose>
                         <h1 className='text-[1.7rem] font-bold'>Write your review</h1>
-                        <p  className=' font-bold text-center'>how satisfied are you with the quality of the request?</p>
-                       
+                        <p  className=' font-bold text-center'>How satisfied are you with the quality of the request?</p>
+                
                         <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
-                            <div className='flex flex-col md:flex-row w-full items-center md:gap-4 gap-10'>
-                                {reviewComment.map((item) =>
-                                <div onClick={ () => setSelectedValue(item.comment)} key={item.id} className={`flex flex-col md:w-full items-center hover:border-[3px]  px-14 cursor-pointer w-[80%] py-3 gap-2 ${selectedValue === item.comment ? `border-[3px] ${item.bg}` : "border bg-opacity-5"} rounded-lg ${item.background} ${item.border} ${item.text}`}>
-                                    <p>{item.reaction}</p>
-                                    <p>{item.comment}</p>
-                                    <input type="radio" value={item.comment} checked={selectedValue === item.comment} onChange={ () => setSelectedValue(item.comment)} className='hidden' />
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
+                                <div className='flex flex-col md:flex-row w-full items-center md:gap-4 gap-10'>
+                                    {reviewComment.map((item) =>
+                                    <div onClick={ () => setSelectedValue(item.comment)} key={item.id} className={`flex flex-col md:w-full items-center hover:border-[3px]  px-14 cursor-pointer w-[80%] py-3 gap-2 ${selectedValue === item.comment ? `border-[3px] ${item.bg}` : "border bg-opacity-5"} rounded-lg ${item.background} ${item.border} ${item.text}`}>
+                                        <p>{item.reaction}</p>
+                                        <p>{item.comment}</p>
+                                        <input type="radio" value={item.comment} checked={selectedValue === item.comment} onChange={ () => setSelectedValue(item.comment)} className='hidden' />
+                                    </div>
+                                )}
                                 </div>
-                            )}
-                            </div>
-                            
-                            {/* <div className='flex flex-col gap-4'>
-                                <p className='text-center font-semibold '>provide your feedback on this request</p>
-                                <textarea name="feedback" id="feedback" className='w-full min-h-28 border p-4'></textarea>
-                            </div> */}
-                             <p className='text-center font-semibold'>provide your feedback on this request</p>
-                            <CustomFormField 
-                                fieldType={FormFieldType.TEXTAREA}
-                                name="objectives"
-                                // error={errors["objectives"]}
-                                control={form.control}
-                                // label="Objectives of the study"
-                                className="max-h-24 flex md:w-full w-[90%] mx-5 md:mx-auto"
-                                // required
-                            />
-
-                            <div className="flex flex-col gap-8 md:w-[60%] w-[90%] mx-5  md:mx-0">
-                                {/* <p className='flex gap-4 items-center mt-5'><span>Correction/Explanatory document</span></p> */}
-                                <CustomFormField
-                                name={`document`}
-                                
-                                // error={(errors.files as any)?.[requirement.id] as FieldError | undefined}
-                                control={form.control}
-                                label={'Correction/Explanatory document'}
-                                fieldType={FormFieldType.UPLOAD}
-                                // required={true}
+                                <p className='text-center font-semibold'>Provide your feedback on this request</p>
+                                <CustomFormField 
+                                    fieldType={FormFieldType.TEXTAREA}
+                                    name="objectives"
+                                    control={form.control}
+                                    className="max-h-24 flex md:w-full w-[90%] mx-5 md:mx-auto"
                                 />
-                            </div>
-                            <div className='hidden md:block'>
-                                <form action="">
-                                    
-                                </form>
-                            </div>
-                            <Button variant={ "default" } type="submit" className={`my-4 focus:outline-none w-[30%] flex self-center`}>Submit review</Button>
-                        </form>
-                        </Form>
-                       
-                </SheetContent>
-            </Sheet>
+
+                                <div className="flex flex-col gap-8 md:w-[60%] w-[90%] mx-5  md:mx-0">
+                                    <CustomFormField
+                                    name={`document`}
+                                    control={form.control}
+                                    label={'Correction/Explanatory document'}
+                                    fieldType={FormFieldType.UPLOAD}
+                                    />
+                                </div>
+                                <Button variant={ "default" } type="submit" className={`my-4 focus:outline-none w-[30%] flex self-center`}>Submit review</Button>
+                            </form>
+                        </Form> 
+                    </SheetContent>
+                </Sheet>
             </aside>
         </>
     );

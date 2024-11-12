@@ -152,9 +152,9 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                 </div>
               </section>
               <section id="supporting-document" className='flex flex-col gap-4'>
-                <div className='flex flex-col md:flex-row justify-between gap-2 items-center text-black'>
-                    <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Documents</h1>
-                    {activeRole !== 'user' && <p className='text-[#000066] flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>}
+                <div className='flex flex-col md:flex-row justify-between gap-2 md:items-center text-black'>
+                    <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Document</h1>
+                    {activeRole !== 'user' && <p className='text-[#000066] justify-center flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>}
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
                   {supportDocData.map((file) => {
