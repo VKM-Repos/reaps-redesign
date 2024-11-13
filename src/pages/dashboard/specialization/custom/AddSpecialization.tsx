@@ -1,7 +1,6 @@
-import EditKeyword from "./EditKeywords";
-import EditSpecialization from "./EditSpecialization";
-import Loader from "../../../../components/custom/Loader";
+import AddIcon from "@/components/custom/Icons/AddIcon";
 import HoverCancel from "@/components/custom/Icons/HoverCancel";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -9,41 +8,32 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useMediaQuery } from "react-responsive";
-import { SpecializationItems } from "@/types/specialization";
-import { useState } from "react";
-import PencilEdit from "@/components/custom/Icons/PencilEdit";
-import { ChevronLeft } from "lucide-react";
-import { useEditSpecialization } from "./useEditSpecialization.service";
-import { useGET } from "@/hooks/useGET.hook";
+import Specialization from "../create-specializations/CreateSpecializaton";
+import AddKeyword from "../create-specializations/AddKeyword";
 import { useSpecializationsStore } from "@/store/specializationsFormStore";
+import { useState } from "react";
+import { useCreateSpecialization } from "../create-specializations/useCreateSpecialization.service";
+import Loader from "@/components/custom/Loader";
+import { ChevronLeft } from "lucide-react";
+import { useGET } from "@/hooks/useGET.hook";
 
-type Props = {
-  specialization: SpecializationItems;
-};
-
-const ModifySpecialization = ({ specialization }: Props) => {
-  const { resetStore } = useSpecializationsStore();
-  const { editSpecialization, isPending } =
-    useEditSpecialization(specialization);
+const AddSpecialization = () => {
+  const { step, setStep, resetStore } = useSpecializationsStore();
+  const { createSpecialization, isPending } = useCreateSpecialization();
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(1);
 
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleNext = () => setStep(step + 1);
+  const handlePrevious = () => setStep(step - 1);
   const { refetch } = useGET({
     queryKey: ["specialization", "keywords"],
     url: "specializations",
     withAuth: true,
   });
-  // const { data: specializationDetails } = useGET({
-  //   queryKey: ["specialization-details", "keywords"],
-  //   url: `specializations/${specialization?.id}`,
-  //   withAuth: true,
-  // });
-
-  const handleNext = () => setStep(step + 1);
-  const handlePrevious = () => setStep(step - 1);
-
-  const handleSubmit = async () => {
+  const onSubmitHandler = async () => {
+    setLoading(true);
     try {
       const { data } = useSpecializationsStore.getState();
       const payload = {
@@ -53,23 +43,23 @@ const ModifySpecialization = ({ specialization }: Props) => {
           : data?.specializationsDetails.keyword ?? "",
       };
 
-      await editSpecialization(payload);
+      await createSpecialization(payload);
       refetch();
       resetStore();
       setOpen(false);
     } catch (error) {
-      console.error("Error modifying specialization", error);
+      console.error("Error creating specialization", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const RenderEdit = () => {
+  const RenderDialog = () => {
     switch (step) {
       case 1:
-        return (
-          <EditSpecialization data={specialization} handleNext={handleNext} />
-        );
+        return <Specialization handleNext={handleNext} />;
       case 2:
-        return <EditKeyword data={specialization} handleNext={handleSubmit} />;
+        return <AddKeyword handleNext={onSubmitHandler} />;
       default:
         return null;
     }
@@ -77,16 +67,19 @@ const ModifySpecialization = ({ specialization }: Props) => {
 
   return (
     <>
-      {isPending && <Loader />}
+      {isPending || (loading && <Loader />)}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <button>
-            <PencilEdit />
-          </button>
+          <Button className="flex max-w-[16.75rem] items-center justify-center gap-4 px-6 py-3">
+            <span>
+              <AddIcon />
+            </span>
+            Add New specialization
+          </Button>
         </SheetTrigger>
         <SheetContent
           side={isMobile ? "bottom" : "top"}
-          className={`${
+          className={` ${
             isMobile
               ? "inset-x-auto inset-y-0"
               : "inset-x-[30%] inset-y-auto rounded-3xl md:!pb-12 md:!pt-0"
@@ -105,7 +98,7 @@ const ModifySpecialization = ({ specialization }: Props) => {
             <HoverCancel />
           </SheetClose>
           <div className="flex h-full w-full flex-col gap-[2.5rem] border-none md:max-h-[26.5rem]">
-            <RenderEdit />
+            <RenderDialog />
           </div>
         </SheetContent>
       </Sheet>
@@ -113,4 +106,4 @@ const ModifySpecialization = ({ specialization }: Props) => {
   );
 };
 
-export default ModifySpecialization;
+export default AddSpecialization;
