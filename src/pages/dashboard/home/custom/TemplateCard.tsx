@@ -10,7 +10,7 @@ export default function TemplateCard({template}: {template: any} ) {
                 <a href={template.file_path}><Download /></a>
             </div>
             <div className="text-black">
-                <p className="text-sm font-bold">Registration/Submission guideline</p>
+                <p className="text-sm font-bold w-[200px] max-w-[200px] min-w-[200px]">{template?.title}</p>
             </div>
         </div>
     )
