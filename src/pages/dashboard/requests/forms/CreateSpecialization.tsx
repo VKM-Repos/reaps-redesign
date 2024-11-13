@@ -18,7 +18,7 @@ import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 
 type Props = {
-  handleSpecNext: Function;
+  handleSpecNext: () => void;
 };
 
 const RequestSpecialization = ({ handleSpecNext }: Props) => {
@@ -36,8 +36,7 @@ const RequestSpecialization = ({ handleSpecNext }: Props) => {
       setLoading(true);
       try {
         const { data } = useSpecializationsStore.getState();
-        const specialization =
-          data?.specializationsDetails.specialization ?? "";
+        const specialization = data?.specializationsDetails.title ?? "";
         DrawerData.append("specialization", specialization);
         const keywords = Array.isArray(data?.specializationsDetails.keyword)
           ? data?.specializationsDetails.keyword.join(", ")
@@ -63,7 +62,7 @@ const RequestSpecialization = ({ handleSpecNext }: Props) => {
       case 1:
         return <Specialization handleNext={handleNext} />;
       case 2:
-        return <AddKeyword handleNext={onSubmitHandler} />;
+        return <AddKeyword handleNext={() => onSubmitHandler} />;
       default:
         return null;
     }
