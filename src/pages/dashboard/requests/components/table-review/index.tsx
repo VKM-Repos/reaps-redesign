@@ -1,9 +1,9 @@
 import View from "@/components/custom/Icons/View";
 import { Badge } from "@/components/ui/badge";
 import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
-import ApplicationSummary from "../../view-review";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import ReviewerRequestSummary from "../../view-requests/reviewer";
 
 
 type TableRequestsProps = {
@@ -13,6 +13,7 @@ type TableRequestsProps = {
         submission: string;
         status: string;
     }[],
+    activeTab?: string,
 }
 
 
@@ -24,7 +25,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
 
-    export default function TableReview( { reviewTableData }: TableRequestsProps) {
+    export default function TableReview( { reviewTableData, activeTab="request table" }: TableRequestsProps) {
         const { multiStatusDateFilter } = useGlobalFilter()
 
         const columnData: ColumnSetup<any>[]= [
@@ -85,7 +86,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                                 <SheetTrigger className="flex gap-2">
                                     <View /> <span>View</span>
                                 </SheetTrigger>
-                                <ApplicationSummary />
+                                <ReviewerRequestSummary activeTab={activeTab} />
                             </Sheet>
                         </div>
                     ),
@@ -93,8 +94,8 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
         ]
 
         return(
-            <>
+            <div id='open'>
                 <CustomTable columns={columnData} data={reviewTableData} />
-            </>
+            </div>
         )
     }
