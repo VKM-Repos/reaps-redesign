@@ -8,18 +8,19 @@ import { Label } from '@/components/ui/label';
 import GreenCheckmark from '@/components/custom/Icons/GreenCheckmark';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from 'react-responsive';
-import { useRole } from '@/hooks/useRole';
 import Download from '@/components/custom/Icons/Download';
 import { useLocation } from 'react-router-dom';
+import useUserStore from '@/store/user-store';
 
 type SummaryPageProps = {
     isApproval?: boolean,
-    handlePrint?: () => void
+    handlePrint?: () => void,
 }
 const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
 
   const { data } = useRequestsStore();
   const { objectives, checkbox, files } = data.requestsDetails;
+  // receive table row prop in here and populate the fields
 
   const { title } = tableData[1];
 
@@ -38,16 +39,14 @@ const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
 
   const { register } = form;
   const isMobile = useMediaQuery({ query: '(max-width: 767px)'});
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const { pathname } = useLocation();
 
-
+// change handleDownload function to receive file from table data instead not localstorage
+//  isFileGroup will no longer be useful
   const handleDownload = (fileId: string) => {
-  
-
     if (isFileGroup(files)) {
       const fileDetails = files[fileId as keyof fileGroup];  // Directly access file using fileId as a key
-
       if (fileDetails && fileDetails.file) {
           downloadFile(fileDetails);  // Call the download function with the retrieved file
       } else {
@@ -68,18 +67,14 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
           console.error("No file available for download.");
           return;
       }
-  
       // Create a URL for the file
       const fileURL = URL.createObjectURL(file.file);
-  
       // Create a temporary <a> element to trigger the download
       const a = document.createElement('a');
       a.href = fileURL;
       a.download = file.path;  // Set the filename
-  
       // Append the element to the body (necessary for it to work in some browsers)
       document.body.appendChild(a);
-  
       // Programmatically click the element to start the download
       a.click();
   
@@ -179,7 +174,7 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                           </span>
                           <span>{file.name}</span>
                         </span>
-                        {role === 'INSTITUTION_ADMIN' && pathname.includes('/requests/manage-requests') ?
+                        {activeRole === 'admin' && pathname.includes('/requests/manage-requests') ?
                           <button className="p-2" onClick={() => {handleDownload(file.id)}}>
                             <span><Download /></span>
                           </button>

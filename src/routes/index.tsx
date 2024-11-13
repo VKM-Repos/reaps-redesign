@@ -12,14 +12,15 @@ import OnboardingPage from "@/pages/auth/signup";
 import NotFound from "@/pages/errors/notfound";
 import RecoverPassword from "@/pages/auth/password";
 import CreateRequests from "@/pages/dashboard/requests/create-requests";
-import ViewRequests from "@/pages/dashboard/requests/view-requests";
+import ViewRequests from "@/pages/dashboard/requests/view-requests/researcher";
 import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
 import InstitutionAccount from "@/pages/dashboard/institution/account";
 import Transactions from "@/pages/dashboard/institution/account/transactions";
-import MyRequest from "@/pages/dashboard/requests/MyRequest";
-import ReviewRequest from "@/pages/dashboard/requests/ReviewRequest";
-import ManageRequestPage from "@/pages/dashboard/requests/ManageRequestPage";
+import MyRequest from "@/pages/dashboard/requests/pages/MyRequest";
+import ReviewRequest from "@/pages/dashboard/requests/pages/ReviewRequest";
+import ManageRequestPage from "@/pages/dashboard/requests/pages/ManageRequestPage";
+import Templates from "@/pages/dashboard/templates";
 
 const router = [
   {
@@ -140,6 +141,12 @@ const router = [
         path: "settings",
         title: "Settings",
         element: Settings,
+      },
+      {
+        name: "Templates",
+        path: "templates",
+        title: "Research Templates",
+        element: Templates,
       },
       {
         path: "*",

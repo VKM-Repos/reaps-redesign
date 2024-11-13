@@ -1,4 +1,4 @@
-import { FC, InputHTMLAttributes, useState } from "react";
+import { forwardRef, InputHTMLAttributes, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormControl, 
         FormField, 
@@ -16,7 +16,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   readOnly?: boolean;
 }
 
-const FormInput: FC<InputProps> = ({ name, label, className, disabled, readOnly, ...rest }) => {
+const FormInput = forwardRef<HTMLInputElement, InputProps>(
+  ({ name, label, className, disabled, readOnly, ...rest }, ref) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const { control, formState: { errors } } = useFormContext();
   const error = errors[name];
@@ -42,7 +43,8 @@ const FormInput: FC<InputProps> = ({ name, label, className, disabled, readOnly,
             <FormControl>
               <div className="relative">
                 <Input
-                
+                  {...field}
+                  ref={ref}
                   type={
                     type === "password"
                       ? isPasswordVisible
@@ -80,6 +82,7 @@ const FormInput: FC<InputProps> = ({ name, label, className, disabled, readOnly,
       }}
     />
   );
-};
+}
+);
 
 export default FormInput;

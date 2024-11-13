@@ -1,6 +1,6 @@
 import View from "@/components/custom/Icons/View";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import ViewRequests from "../../../view-requests";
+import ViewRequests from "../../../view-requests/researcher";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";

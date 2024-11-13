@@ -1,7 +1,1 @@
-export type UserRole =
-  | 'SYSTEM_ADMIN'
-  | 'INSTITUTION_ADMIN'
-  | 'RESEARCHER'
-  | 'REVIEWER'
-  | 'USER'
-  | '';
+export type UserRole = 'super_admin' | 'admin' | 'reviewer' | 'user' | '';

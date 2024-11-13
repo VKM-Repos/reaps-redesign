@@ -1,28 +1,28 @@
-import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useCallback, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import {
   OnboardingFormStore,
   useOnboardingFormStore,
-} from "@/store/CreateOnboardingFormStore";
-import Loader from "@/components/custom/Loader";
-import RegisterUser from "@/pages/auth/signup/create-account-form/RegisterUser";
-import SendCode from "@/pages/auth/signup/create-account-form/SendCode";
-import Password from "@/pages/auth/signup/create-account-form/RegisterPassword";
-import RegisterSuccess from "@/pages/auth/signup/create-account-form/RegisterSuccess";
-import PersonalInfo from "@/pages/auth/signup/create-account-form/PersonalInfo";
-import TopBar from "@/components/custom/TopBar";
+} from '@/store/CreateOnboardingFormStore';
+import Loader from '@/components/custom/Loader';
+import SendCode from '@/pages/auth/signup/create-account-form/SendCode';
+import Password from '@/pages/auth/signup/create-account-form/RegisterPassword';
+import RegisterSuccess from '@/pages/auth/signup/create-account-form/RegisterSuccess';
+import PersonalInfo from '@/pages/auth/signup/create-account-form/PersonalInfo';
+import TopBar from '@/components/custom/TopBar';
+import CheckEmail from '@/pages/auth/signup/create-account-form/CheckEmail';
+import { toast } from '@/components/ui/use-toast';
 
 export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { step, setStep, resetStore } = useOnboardingFormStore();
-//   const { token } = useAppContext();
 
-  const stepTitles:  Record<number, string> = {
-    1: "",
-    2: "Email",
-    3: "Verification",
-    4: "Personal Info",
+  const stepTitles: Record<number, string> = {
+    1: '',
+    2: 'Email',
+    3: 'Verification',
+    4: 'Personal Info',
   };
 
   const RenderForm = () => {
@@ -36,104 +36,92 @@ export default function OnboardingPage() {
       }
     };
 
-    const CreateOnboardingPage = async () => {
-      setIsLoading(true);
+    const createOnboardingPage = useCallback(async () => {
       try {
+        setIsLoading(true);
         const { data } = useOnboardingFormStore.getState();
-        // const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        // const endpoint = ${apiUrl}events;
 
-        let formData = new FormData();
-        formData.append("email", data?.onboardingDetails?.email);
-        formData.append("code", data?.onboardingDetails?.code);
-        formData.append("firstName", data?.onboardingDetails?.firstName);
-        formData.append("lastName", data?.onboardingDetails?.lastName);
-        formData.append("phoneNumber", data?.onboardingDetails?.phoneNumber);
-        formData.append("password", data?.onboardingDetails?.password)
-        
+        const payload = {
+          email: data?.onboardingDetails?.email,
+          first_name: data?.onboardingDetails?.first_name,
+          last_name: data?.onboardingDetails?.last_name,
+          phone_number: data?.onboardingDetails?.phone_number,
+          country_code: data?.onboardingDetails?.country_code,
+          education_level: data?.onboardingDetails?.education_level,
+          password: data?.onboardingDetails?.password,
+          date_of_birth: data?.onboardingDetails.date_of_birth,
+          gender: data?.onboardingDetails.gender,
+        };
 
-        setTimeout(() => {
-          setIsLoading(false);
-          resetStore()
-        }, 5000)
-        // wrap form components with transition framer-motion
-        // if (data.image) {
-        //   formData.append("image", data.image);
-        // }
+        const baseURL = import.meta.env.VITE_APP_BASE_URL;
+        const response = await fetch(`${baseURL}users/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Institution-Context': 'default_context',
+          },
+          body: JSON.stringify(payload),
+        });
 
-    //     const response: any = await axios.post(endpoint, formData, {
-    //       headers: {
-    //         Authorization: Bearer ${token},
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     });
+        if (!response.ok) {
+          const errorData = await response.json();
+          const errorMessage = errorData.detail || 'error in creating account';
+          toast({
+            title: 'Error',
+            description: errorMessage,
+            variant: 'destructive',
+          });
+          throw new Error(errorMessage);
+        }
 
-    //     if (response.status === 200) {
-    //       setIsLoading(false);
-    //       // console.log(response);
-    //       const { id } = response?.data;
-    //       // Handle success
-    //       resetStore();
-    //     } else {
-    //       setIsLoading(false);
-    //       // Handle other response statuses or errors
-    //       toast.error(` ${response?.status}`);
-        
-      } catch (error: any) {
-        // Handle network or other errors
-        console.error("Error creating account:", error);
-    
-        // if (error?.response?.status == 401) {
-        // }
+        // const responseData = await response.json();
+        toast({
+          title: 'Feedback',
+          description: `user created`,
+          variant: 'default',
+        });
+        resetStore();
+
+        handleNext();
+      } catch (error) {
+        console.error('Sign up error:', error);
       } finally {
         setIsLoading(false);
       }
-    };
+    }, []);
 
     const { handleSubmit } = useForm<OnboardingFormStore>();
     const onSubmitHandler: SubmitHandler<OnboardingFormStore> = async () => {
-      await handleSubmit(CreateOnboardingPage)();
+      await handleSubmit(createOnboardingPage)();
     };
 
     switch (step) {
       case 1:
-        return <RegisterUser handleNext={handleNext} />;
+        return <CheckEmail handleNext={handleNext} />;
       case 2:
-        return (
-          <SendCode handleNext={handleNext} handleGoBack={handleGoBack} />
-        );
-      case 3: 
+        return <SendCode handleNext={handleNext} handleGoBack={handleGoBack} />;
+      case 3:
         return (
           <PersonalInfo handleNext={handleNext} handleGoBack={handleGoBack} />
         );
       case 4:
         return (
-          <Password handleNext={handleNext} handleGoBack={handleGoBack}
-          />
+          <Password handleNext={onSubmitHandler} handleGoBack={handleGoBack} />
         );
-        case 5: 
-         return (
-          <RegisterSuccess handleNext={onSubmitHandler}/>
-         )
+      case 5:
+        return <RegisterSuccess />;
       default:
         return null;
     }
-  }
+  };
 
-  
   return (
-      <AnimatePresence initial={true} mode="wait">
-          {isLoading && <Loader />}
-          <>
-            {step !== 1 && !(step >= 5) && <TopBar title={stepTitles[step]} />}
-            <RenderForm />
-          </>
-      </AnimatePresence>    
+    <AnimatePresence initial={true} mode="wait">
+      {isLoading && <Loader />}
+      <>
+        {step !== 1 && !(step >= 5) && <TopBar title={stepTitles[step]} />}
+        <RenderForm />
+      </>
+    </AnimatePresence>
   );
 }
-
-
-// import toast from "react-hot-toast";
-// import axios from "axios";
-// import { useAppContext } from "@/lib/context/app-context";
-// import { redirect, useRoutes } from "react-router-dom";

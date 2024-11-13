@@ -4,7 +4,6 @@ import TableReview from "./components/table-review";
 import EmptyRequests from "./components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useRole } from "@/hooks/useRole";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,9 +13,10 @@ import { X } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
 import PageTitle from "./components/PageTitle";
 import SeachFilter from "./components/SeachFilter";
+import useUserStore from "@/store/user-store";
 
 export default function Requests() {
-  const { role } = useRole();
+  const { activeRole } = useUserStore();
   const [activeTab, setActiveTab] = useState("request table");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
@@ -98,13 +98,14 @@ export default function Requests() {
                       {status}
                     </span>
                     <span onClick={() => deleteStatusUpdate(status)}>
-                      <X size={10} />
+                      <X size={10}  />
                     </span>
                   </div>
                 ))}
               </div>
             )}
-            {role === "REVIEWER" ? (
+            {/* change tables to completed state  */}
+            {activeRole === 'reviewer' ? (
               <Tabs
                 defaultValue="request table"
                 onValueChange={(val) => setActiveTab(val)}

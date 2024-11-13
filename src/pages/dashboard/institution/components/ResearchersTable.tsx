@@ -8,40 +8,41 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
-import Loader from "@/components/custom/Loader";
-import { useRequestsStore } from "@/store/RequestFormStore";
-import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import SharedActions from "../../requests/components/table-requests/custom/SharedActions";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import ArrowUp from "@/components/custom/Icons/ArrowUp";
 import ArrowDown from "@/components/custom/Icons/ArrowDown";
 import { UserGradeDialog } from "./UserGradeDialog";
 
-type usersTableDataProps = {
-  usersTableData: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-};
+// type usersTableDataProps = {
+//   usersTableData: {
+//     id: number;
+//     first_name: string;
+//     last_name: string;
+//     email: string;
+//     user_type: string;
+//   } | any[];
+// };
 
-type RenderFunctionsProps = {
-  item: {
-    title: string;
-    specialization: string;
-    submission: string;
-    status: string;
-  };
-  onDelete: (item: any) => void;
-  loading: boolean;
-};
+// type RenderFunctionsProps = {
+//   item: {
+//     title: string;
+//     specialization: string;
+//     submission: string;
+//     status: string;
+//   };
+//   onDelete: (item: any) => void;
+//   loading: boolean;
+// };
 
-function RenderFunctions() {
+function RenderFunctions({
+  item,
+  refetch,
+}: {
+  item: any;
+  refetch: () => void;
+}) {
   return (
     <>
       <DropdownMenu modal={false}>
@@ -57,14 +58,18 @@ function RenderFunctions() {
               className="flex items-center gap-2 cursor-pointer"
             >
               <ArrowUp />
-              <UserGradeDialog title="Upgrade" />
+              <UserGradeDialog refetch={refetch} user={item} title="Upgrade" />
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={(e) => e.preventDefault()}
               className="flex items-center gap-2 cursor-pointer"
             >
               <ArrowDown />
-              <UserGradeDialog title="Downgrade" />
+              <UserGradeDialog
+                refetch={refetch}
+                user={item}
+                title="Downgrade"
+              />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
@@ -72,49 +77,20 @@ function RenderFunctions() {
     </>
   );
 }
-function MobileRender({ item, onDelete, loading }: RenderFunctionsProps) {
-  const { setStep } = useRequestsStore();
-  const navigate = useNavigate();
-
-  const redirectToSummary = () => {
-    navigate("/requests/create");
-    setStep(5);
-  };
-
-  return (
-    <>
-      {loading && <Loader />}
-      <div className="flex gap-2 justify-center items-center">
-        <SharedActions
-          item={item}
-          onDelete={onDelete}
-          redirectToSummary={redirectToSummary}
-          isMobile
-        />
-      </div>
-    </>
-  );
-}
-
-export default function RequesterTable({
+export default function ResearchersTable({
   usersTableData,
-}: usersTableDataProps) {
-  const [loading, setLoading] = useState(false);
-  const [tableArray, setTableArray] = useState(usersTableData);
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
+  refetch,
+}: {
+  usersTableData: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    user_type: string;
+  }[];
+  refetch: () => void;
+}) {
   const { multiStatusDateFilter } = useGlobalFilter();
-
-  function deleteTableItem(item: any) {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-    setTableArray((prevTableArray) =>
-      prevTableArray.filter((data) => data.id !== item.id)
-    );
-  }
-
   const columnData: ColumnSetup<any>[] = [
     {
       header: () => (
@@ -123,7 +99,7 @@ export default function RequesterTable({
           className="font-bold w-full min-w-[18.75rem]"
         />
       ),
-      accessorKey: "firstName",
+      accessorKey: "first_name",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -138,7 +114,7 @@ export default function RequesterTable({
           className="font-bold min-w-[9rem] w-full"
         />
       ),
-      accessorKey: "lastName",
+      accessorKey: "last_name",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[9rem] w-full" />
       ),
@@ -163,20 +139,9 @@ export default function RequesterTable({
       meta: { cellType: "custom" },
       cell: ({ row }) => {
         const item = row.original;
-        return isMobile ? (
+        return (
           <CustomCell
-            value={
-              <MobileRender
-                item={item}
-                onDelete={deleteTableItem}
-                loading={loading}
-              />
-            }
-            className="flex justify-center items-center w-full md:max-w-[3rem]"
-          />
-        ) : (
-          <CustomCell
-            value={<RenderFunctions />}
+            value={<RenderFunctions refetch={refetch} item={item} />}
             className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
           />
         );
@@ -186,7 +151,7 @@ export default function RequesterTable({
 
   return (
     <>
-      <CustomTable columns={columnData} data={tableArray} />
+      <CustomTable columns={columnData} data={usersTableData} />
     </>
   );
 }
