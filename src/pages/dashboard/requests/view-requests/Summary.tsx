@@ -16,8 +16,9 @@ import GoogleDoc from '@/components/custom/Icons/GoogleDoc';
 type SummaryPageProps = {
     isApproval?: boolean,
     handlePrint?: () => void,
+    activeTab?: string,
 }
-const Summary = ({ handlePrint, isApproval } : SummaryPageProps) => {
+const Summary = ({ handlePrint, isApproval, activeTab = "request table" } : SummaryPageProps) => {
 
   const { data } = useRequestsStore();
   const { objectives, checkbox, files } = data.requestsDetails;
@@ -102,6 +103,9 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
         <div className="md:4/5 md:ml-20 md:my-10 mb-10 flex flex-col gap-6 max-w-4xl">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 text-sm text-[#454745]">
+
+
+              {/* Research Information Section */}
               <section id="research-info" className='flex flex-col gap-4'>
                 <h1 className="text-[1.375rem] font-semibold pt-10 md:pb-5 md:py-5 text-black">Research Information</h1>
                 <FormInput
@@ -120,6 +124,9 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                   className="!pb-[12rem] flex pointer-events-none"
                   required />
               </section>
+
+
+              {/* Application Information Section */}
               <section id="application-info" className='flex flex-col gap-4'>
                 <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5 text-black">Application Information</h1>
                   <div className="grid md:grid-cols-2 gap-8 ">
@@ -151,10 +158,13 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                   </>
                 </div>
               </section>
+
+
+              {/* Supporting Document Section */}
               <section id="supporting-document" className='flex flex-col gap-4'>
                 <div className='flex flex-col md:flex-row justify-between gap-2 md:items-center text-black'>
                     <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Supporting Document</h1>
-                    {activeRole !== 'user' && <p className='text-[#000066] justify-center flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>}
+                    {(activeRole !== 'user' && activeTab === 'review table') && <p className='text-[#000066] justify-center flex gap-2 items-center font-semibold cursor-pointer'> <span className='underline'>download all supporting documents</span> <Download /></p>}
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
                   {supportDocData.map((file) => {
@@ -164,12 +174,12 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                           <div className="font-semibold text-sm">{file.label}<span className="text-red-500">&ensp;*</span></div>
                           <div className="text-[#868687] text-xs">.Doc, .Docx, .Pdf (Max of 3MB)</div>
                         </div>
-                        <div
-                          key={file.id}
+                        <div key={file.id}
                           className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                         >
                           <span className="flex gap-2 items-center justify-center">
-                            {activeRole === 'reviewer' ?
+                            {activeTab === 'review table' || 
+                              pathname.includes('/requests/review-requests') ?
                                 <span className='text-black text-[0.8rem]'>
                                   <GoogleDoc />
                                 </span>
@@ -180,14 +190,14 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                           } 
                             <span>{file.name}</span>
                           </span>
-                          {!(activeRole === 'admin' && pathname.includes('/requests/manage-requests')) ?
-                          <span className="p-2">
-                            <span className="text-[1rem]">x</span>
-                          </span>
+                          {(activeTab === "review table" || 
+                            (activeRole === 'admin' && 
+                              (pathname.includes('/requests/manage-requests') || pathname.includes('/requests/review-requests')))) ? 
+                              <button className="p-2" onClick={() => handleDownload(file.id)}>
+                                <span><Download /></span>
+                              </button>
                             :
-                            <button className="p-2" onClick={() => {handleDownload(file.id)}}>
-                              <span><Download /></span>
-                            </button> 
+                              <span className="p-2"><span className="text-[1rem]">x</span></span> 
                           } 
                         </div>
                       </div>
@@ -195,7 +205,17 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                   })}
                 </div>
               </section>
-              {isMobile && activeRole === 'user' && <div className='w-full my-4 flex items-center justify-center'><Button className={`${isApproval ? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'} !max-w-[9.375rem] w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} disabled={isApproval ? false : true}>Print</Button></div>}
+
+
+              {/* Print Button for Researcher */}
+              {isMobile && activeTab === 'request table' && 
+                <div className='w-full my-4 flex items-center justify-center'>
+                  <Button 
+                    className={`${isApproval ? 'text-white rounded-2 py-3 !bg-primary ' : 'text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]'} !max-w-[9.375rem] w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`} 
+                    disabled={isApproval ? false : true}>
+                      Print
+                  </Button>
+                </div>}
             </form>
           </Form>
         </div>

@@ -6,7 +6,7 @@ import ReviewerWriteReview from "./reviewer-write";
 
 
 
-export default function ReviewerRequestSummary() {
+export default function ReviewerRequestSummary({ activeTab }: { activeTab: string }) {
     const [activeSection, setActiveSection] = useState('');
 
     // navigate to sections on summary page
@@ -55,7 +55,7 @@ export default function ReviewerRequestSummary() {
                                 </div>    
                             </div>
                             <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
-                                 <Summary  />
+                                 <Summary activeTab={activeTab}/>
                             </div>
                         </main>
                    </section>

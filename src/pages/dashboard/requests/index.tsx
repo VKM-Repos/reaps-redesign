@@ -119,7 +119,7 @@ export default function Requests() {
                   <TableRequests tableData={tableData} />
                 </TabsContent>
                 <TabsContent value="review table">
-                  <TableReview reviewTableData={reviewTableData} />
+                  <TableReview reviewTableData={reviewTableData} activeTab={activeTab}/>
                 </TabsContent>
               </Tabs>
             ) : (
