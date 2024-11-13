@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom';
 import Marklogo from '/icons/mark.svg';
 
 export default function DashboardLayout() {
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
   return (
     <MobileProvider>

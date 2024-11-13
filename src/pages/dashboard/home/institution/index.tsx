@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import ResearcherHomePage from "../view-researcher";
+import ResearcherHomePage from "../researcher";
 import InstitutionCardBg  from "/img/InstitutionCardBg.png"
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import FileView from "@/components/custom/Icons/FileView";

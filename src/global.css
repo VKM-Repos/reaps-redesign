@@ -97,6 +97,12 @@ body,
   width: 100%;
 }
 
+#application-info,
+#research-info,
+#supporting-document {
+  scroll-margin-top: 3.5rem; 
+}
+
 :-webkit-scrollbar {
   width: 2rem;
 }

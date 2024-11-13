@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 
 import { useNavigate } from "react-router-dom";
-import AssignedReuqustCard from "./custom/ReviewersDashboard";
+import AssignedReuqustCard from "./reviewer/ReviewersDashboard";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
-import ResearcherHomePage from "./view-researcher";
-import InstitutionAdminHome from "./view-institution";
+import ResearcherHomePage from "./researcher";
+import InstitutionAdminHome from "./institution";
 import useUserStore from "@/store/user-store";
 
 
