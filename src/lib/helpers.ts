@@ -1,3 +1,8 @@
+import PdfUrl from "@/lib/mockfiles/ResearchTemplate.pdf"
+import PdfUrl2 from "@/lib/mockfiles/Research-Paper-Outline-Template.pdf"
+import PdfUrl3 from "@/lib/mockfiles/Research Paper Outline Template.pdf"
+
+
 type Requirement = {
   id: string;
   name: string;
@@ -560,3 +565,22 @@ export const assignReviewerData = [
     email: "mariamcatherine@gmail.com",
   },
 ];
+
+
+export const mock_templates = [
+  { 
+    id: "1",
+    name: "Registration/Submission Guidelines",
+    file: PdfUrl
+  },
+  { 
+    id: "2",
+    name: "Registration/Submission Guidelines",
+    file: PdfUrl2
+  },
+  { 
+    id: "3",
+    name: "Registration/Submission Guidelines",
+    file: PdfUrl3
+  },
+]

@@ -9,11 +9,20 @@ import {
 import { useRef, useState } from "react";
 import { UserGradeForm } from "./UserGradeForm";
 
-export function UserGradeDialog({ title }: { title: string }) {
+export function UserGradeDialog({
+  title,
+  user,
+  refetch,
+}: {
+  title: string;
+  user: any;
+  refetch: () => void;
+}) {
   const [open, setOpen] = useState<boolean>(false);
   const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
 
   const handleClosDialog = () => {
+    refetch();
     closeDialogBtn.current?.click();
   };
   return (
@@ -26,8 +35,12 @@ export function UserGradeDialog({ title }: { title: string }) {
         onInteractOutside={(event) => event.preventDefault}
       >
         <div className="mt-14 px-10">
-          <h2 className="text-center font-semibold text-xl">{title} User</h2>
-          <UserGradeForm handleClosDialog={handleClosDialog} action={title} />
+          <h2 className="text-center font-semibold text-xl">{title} User</h2>{" "}
+          <UserGradeForm
+            handleClosDialog={handleClosDialog}
+            user={user}
+            action={title}
+          />
           <DialogClose asChild>
             <Button
               ref={closeDialogBtn}

@@ -1,3 +1,4 @@
+
 import { useMediaQuery } from 'react-responsive';
 import {
   Table,
@@ -13,6 +14,7 @@ import {
   useReactTable,
   flexRender,
   getFilteredRowModel,
+
 } from '@tanstack/react-table';
 import { useGlobalFilter } from '@/context/GlobalFilterContext';
 
@@ -52,6 +54,7 @@ export default function CustomTable({
   customHeaderRowClassName,
   customRowClassName,
 }: CustomTableProps<any>) {
+
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const { globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
 

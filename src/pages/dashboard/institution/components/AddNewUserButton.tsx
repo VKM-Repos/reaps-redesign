@@ -9,10 +9,11 @@ import AddIcon from "@/components/custom/Icons/AddIcon";
 import { CreateUserForm } from "./CreateuserForm";
 import { useRef } from "react";
 
-export function AddNewUserButton() {
+export function AddNewUserButton({ refetch }: { refetch: () => void }) {
   const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
 
   const handleClosDialog = () => {
+    refetch();
     closeDialogBtn.current?.click();
   };
   return (
