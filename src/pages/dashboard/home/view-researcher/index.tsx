@@ -4,6 +4,7 @@ import SummaryCard from "@/pages/dashboard/home/custom/SummaryCard";
 import Loading from "@/components/custom/Icons/Loading";
 import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
 import NotificationCard from "@/pages/dashboard/home/custom/NotificationCard"
+import {useGET} from "@/hooks/useGET.hook.ts";
 
 const notifications = [
     {
@@ -36,6 +37,12 @@ const notifications = [
 
 
 export default function ResearcherHomePage() {
+    const {
+        data: templates,
+    } = useGET({
+        url: "templates",
+        queryKey: ["GET_TEMPLATES_DASHBOARD"],
+    });
     return (
         <div className="flex flex-col gap-10">
             <div className="mt-[3.25rem]">
@@ -49,10 +56,10 @@ export default function ResearcherHomePage() {
             </div>
             <div className="flex flex-col gap-[3.25rem]">
                 <h1 className="text-[1.375rem] font-bold">Institution Research Template</h1>
-                <div className="w-full mx-auto flex flex-col md:flex-row justify-between items-center gap-7">
-                    <TemplateCard />
-                    <TemplateCard />
-                    <TemplateCard />
+                <div className="w-full mx-auto flex flex-col md:flex-row justify-between overflow-x-scroll scrollbar-hide items-center gap-7">
+                    {
+                        templates?.items?.map((template: never )=>(<TemplateCard template={template}/>))
+                    }
                 </div>
             </div>
             <div className="flex flex-col gap-4">
