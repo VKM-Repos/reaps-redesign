@@ -1,6 +1,4 @@
-
-import { adminsTableData, reviewersTableData, tableData } from "@/lib/helpers";
-import { useRole } from "@/hooks/useRole";
+import { tableData } from "@/lib/helpers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useState } from "react";
 import Loader from "@/components/custom/Loader";
@@ -47,7 +45,7 @@ export default function Requests() {
         {/* tab */}
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {activeRole === 'admin' ? (
+            {activeRole === "admin" ? (
               <Tabs
                 defaultValue="request users"
                 onValueChange={(val) => setActiveTab(val)}
