@@ -91,6 +91,7 @@ const router = [
             title: "Manage Request",
             element: ManageRequestPage,
           },
+          // add templates
         ],
       },
       {
@@ -142,6 +143,7 @@ const router = [
         title: "Settings",
         element: Settings,
       },
+      // change templates path to requests/templates
       {
         name: "Templates",
         path: "templates",
