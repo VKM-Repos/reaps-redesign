@@ -27,7 +27,7 @@ export default function AssignedReuqustCard ({ name, reviewed, pending }: Props 
                         <div className="flex gap-[0.5rem] md:hover:bg-[#bfbfbf] group p-[0.5rem] rounded-[10px]">
                             <div className="w-[3rem] h-[3rem] rounded-[0.63rem] bg-[#66FFFF] flex justify-center items-center">{Icons.reviewed()}</div>
                             <div>
-                                <p className="text-[0.8rem]">Reviewed Request</p>
+                                <p className="text-[0.8rem]">Reviewed Requests</p>
                                 <p className="text-[1.4rem] font-bold">{reviewed}</p>
                             </div>
                             <div className="group-hover:block mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"><BsArrowUpRight /></div>
@@ -38,7 +38,7 @@ export default function AssignedReuqustCard ({ name, reviewed, pending }: Props 
                         <div className="flex gap-[0.5rem] md:hover:bg-[#bfbfbf] p-[0.5rem] rounded-[10px] group">
                             <div className="w-[3rem] h-[3rem] rounded-[0.63rem] bg-[#FFCCFF] flex justify-center items-center">{Icons.pending()}</div>
                             <div>
-                                <p className="text-[0.8rem]">Pending Request</p>
+                                <p className="text-[0.8rem]">Pending Requests</p>
                                 <p className="text-[1.4rem] font-bold">{pending}</p>
                             </div>
                             <div className="group-hover:block mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"><BsArrowUpRight /></div>
