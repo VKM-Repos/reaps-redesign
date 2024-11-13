@@ -23,7 +23,7 @@ export default function AssignedReuqustCard ({ name, reviewed, pending }: Props 
                     <p className="text-[0.88rem]">Here's an overview of the request that have been assigned to you.</p>
                 </div>
                 <div className="flex flex-col gap-5 md:gap-0 md:flex-row justify-between w-full">
-                    <Link to="/requests" className="text-black hover:text-black flex justify-between w-full max-w-[14rem]">
+                    <Link to="/requests" className="text-black hover:text-black flex justify-between w-full min-w-[14rem]">
                         <div className="flex gap-[0.5rem] md:hover:bg-[#bfbfbf] group p-[0.5rem] rounded-[10px]">
                             <div className="w-[3rem] h-[3rem] rounded-[0.63rem] bg-[#66FFFF] flex justify-center items-center">{Icons.reviewed()}</div>
                             <div>
@@ -34,7 +34,7 @@ export default function AssignedReuqustCard ({ name, reviewed, pending }: Props 
                         </div>
                         
                     </Link>
-                    <Link to="/requests" className="text-black hover:text-black w-full flex justify-between max-w-[14rem]">
+                    <Link to="/requests" className="text-black hover:text-black w-full flex justify-between min-w-[14rem]">
                         <div className="flex gap-[0.5rem] md:hover:bg-[#bfbfbf] p-[0.5rem] rounded-[10px] group">
                             <div className="w-[3rem] h-[3rem] rounded-[0.63rem] bg-[#FFCCFF] flex justify-center items-center">{Icons.pending()}</div>
                             <div>
@@ -51,9 +51,9 @@ export default function AssignedReuqustCard ({ name, reviewed, pending }: Props 
 
            <aside className="w-[40%] relative hidden md:block">
                 <img src="/img/lines.png" alt="" className="hidden md:block" />
-                <img src="/img/note2.png" alt="" className=" absolute left-[300px] top-[0px]" />
-                <img src="/img/note1.png" alt="" className="absolute bottom-[0px]" />
-                <img src="/img/reviewerAnime.webp" className="h-[] absolute bottom-[0px] md:left-[80px]" alt="" />
+                <img src="/img/note2.png" alt="" className=" absolute right-0 top-0" />
+                <img src="/img/note1.png" alt="" className="absolute bottom-0" />
+                <img src="/img/reviewerAnime.webp" className="absolute bottom-0 md:right-0" alt="" />
            </aside>
         </section>
     </div>
