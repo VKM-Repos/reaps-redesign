@@ -1,18 +1,19 @@
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import FormInput from '@/components/custom/FormInput';
-import { Form } from '@/components/ui/form';
-import { useSpecializationsStore } from '@/store/specializationsFormStore';
-import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
-import { X } from 'lucide-react';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import FormInput from "@/components/custom/FormInput";
+import { Form } from "@/components/ui/form";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { X } from "lucide-react";
 import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
   handleNext: () => void;
@@ -24,6 +25,7 @@ const formSchema = z.object({
 
 export default function AddKeyword({ handleNext }: Props) {
   const { data, setData } = useSpecializationsStore();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,42 +35,49 @@ export default function AddKeyword({ handleNext }: Props) {
     reset,
     formState: { isValid },
   } = form;
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>("");
   const [keywordsArray, setKeywordsArray] = useState<string[]>([]);
 
   function addKey(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setKeyword(value);
-    if (value.endsWith(',')) {
-      const newKeywords = value.slice(0, -1).trim().split(',');
+    if (value.endsWith(",")) {
+      const newKeywords = value.slice(0, -1).trim().split(",");
       const uniqueKeywords = newKeywords
-        .filter(kw => kw.trim())
-        .map(kw => kw.trim());
-      setKeywordsArray(prev => [
+        .filter((kw) => kw.trim())
+        .map((kw) => kw.trim());
+      setKeywordsArray((prev) => [
         ...prev,
-        ...uniqueKeywords.filter(kw => !prev.includes(kw)),
+        ...uniqueKeywords.filter((kw) => !prev.includes(kw)),
       ]);
 
-      reset({ keywords: '' });
+      reset({ keywords: "" });
     }
   }
 
   function deleteKeyword(item: string) {
-    setKeywordsArray(keywordsArray.filter(keywords => keywords !== item));
+    setKeywordsArray(keywordsArray.filter((keywords) => keywords !== item));
   }
 
   function onSubmit() {
-    setData({
-      specializationsDetails: {
-        ...data.specializationsDetails,
-        keyword: keywordsArray,
-      },
-    });
-    handleNext();
+    setLoading(true);
+    try {
+      setData({
+        specializationsDetails: {
+          ...data.specializationsDetails,
+          keyword: keywordsArray,
+        },
+      });
+
+      handleNext();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <>
+      {loading && <Loader />}
       <SheetHeader className="mt-16 px-1">
         <SheetTitle className="inter text-left text-[1.5rem] font-bold md:text-center">
           Awesome, now add some keywords
@@ -85,14 +94,13 @@ export default function AddKeyword({ handleNext }: Props) {
             className="!focus:border-none flex flex-col"
           >
             <FormInput
-              {...register('keywords', {
-                required: 'This field is required',
-                onChange: e => {
+              {...register("keywords", {
+                required: "This field is required",
+                onChange: (e) => {
                   addKey(e as React.ChangeEvent<HTMLInputElement>);
                 },
               })}
               value={keyword}
-              className={`${keywordsArray.length <= 0 ? 'border-red-500' : ''} }! "focus:border-none"`}
             />
             {keywordsArray.length <= 0 && (
               <span className="text-red-500 mt-1 text-xs">
@@ -113,13 +121,13 @@ export default function AddKeyword({ handleNext }: Props) {
                   >
                     <X size={12} />
                   </span>
-                  {item}{' '}
+                  {item}{" "}
                 </Badge>
               ))}
             </div>
             <Button
               variant={
-                isValid && keywordsArray.length > 0 ? 'default' : 'ghost'
+                isValid && keywordsArray.length > 0 ? "default" : "ghost"
               }
               disabled={!isValid && keywordsArray.length < 1}
               className={`mt-[2rem] focus:outline-none`}

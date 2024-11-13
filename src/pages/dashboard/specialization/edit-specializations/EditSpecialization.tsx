@@ -2,33 +2,35 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import FormInput from '@/components/custom/FormInput';
-import { Form } from '@/components/ui/form';
+} from "@/components/ui/sheet";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import FormInput from "@/components/custom/FormInput";
+import { Form } from "@/components/ui/form";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
+import { SpecializationItems } from "@/types/specialization";
 
 type Props = {
-  data: string;
   handleNext: () => void;
-  setData: (title: string) => void;
+  data: SpecializationItems;
 };
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: 'Please fill this field' }),
+  title: z.string().min(1, { message: "Please fill this field" }),
 });
 
 export default function EditSpecialization({
-  data,
   handleNext,
-  setData,
+  data: specializationDetails,
 }: Props) {
+  const { data, setData } = useSpecializationsStore();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: data,
+      title: specializationDetails?.title ?? "",
     },
   });
 
@@ -38,8 +40,13 @@ export default function EditSpecialization({
   } = form;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    setData(values.title); // Update the parent state with the new title
-    handleNext(); // Move to the next step
+    setData({
+      specializationsDetails: {
+        ...data.specializationsDetails,
+        title: values.title,
+      },
+    });
+    handleNext();
   };
 
   return (
@@ -60,12 +67,12 @@ export default function EditSpecialization({
             className="!focus:border-none flex flex-col gap-[3.75rem]"
           >
             <FormInput
-              {...register('title')}
+              {...register("title")}
               placeholder="Specialization Title"
             />
             <Button
               type="submit"
-              variant={isValid ? 'default' : 'ghost'}
+              variant={isValid ? "default" : "ghost"}
               disabled={!isValid}
               className="focus:outline-none"
             >

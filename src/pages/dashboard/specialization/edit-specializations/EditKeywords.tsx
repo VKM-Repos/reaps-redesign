@@ -1,39 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import FormInput from '@/components/custom/FormInput';
-import { Form } from '@/components/ui/form';
-import { Badge } from '@/components/ui/badge';
-import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
-import { KeywordItems } from '@/types/specialization';
+} from "@/components/ui/sheet";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import FormInput from "@/components/custom/FormInput";
+import { Form } from "@/components/ui/form";
+import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
+import { SpecializationItems } from "@/types/specialization";
 
 type Props = {
-  data: KeywordItems[];
+  data: SpecializationItems;
   handleNext: () => void;
-  setData: (keywords: KeywordItems[]) => void;
 };
 
 const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
-export default function EditKeyword({ data, handleNext, setData }: Props) {
-  const [keyword, setKeyword] = useState<string>('');
+export default function EditKeyword({
+  data: specializationDetails,
+  handleNext,
+}: Props) {
+  const { data, setData } = useSpecializationsStore();
+  const [keyword, setKeyword] = useState<string>("");
+
   const [keywordsArray, setKeywordsArray] = useState<string[]>(
-    data.map(item => item.keyword)
+    specializationDetails?.keywords.map((item) => item.keyword)
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: '',
+      keyword: "",
     },
   });
 
@@ -51,32 +57,31 @@ export default function EditKeyword({ data, handleNext, setData }: Props) {
   function addKey(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setKeyword(value);
-    if (value.endsWith(',')) {
-      const newKeywords = value.slice(0, -1).trim().split(',');
+    if (value.endsWith(",")) {
+      const newKeywords = value.slice(0, -1).trim().split(",");
       const uniqueKeywords = newKeywords
-        .filter(kw => kw.trim())
-        .map(kw => kw.trim());
-      setKeywordsArray(prev => [
+        .filter((kw) => kw.trim())
+        .map((kw) => kw.trim());
+      setKeywordsArray((prev) => [
         ...prev,
-        ...uniqueKeywords.filter(kw => !prev.includes(kw)),
+        ...uniqueKeywords.filter((kw) => !prev.includes(kw)),
       ]);
-      reset({ keyword: '' });
+      reset({ keyword: "" });
     }
   }
 
   function deleteKeyword(item: string) {
-    setKeywordsArray(keywordsArray.filter(keywords => keywords !== item));
+    setKeywordsArray(keywordsArray.filter((keywords) => keywords !== item));
   }
 
   function onSubmit() {
     if (keywordsArray.length > 0) {
-      const updatedKeywords: KeywordItems[] = keywordsArray.map(
-        (kw, index) => ({
-          id: `${index}-${kw}`,
-          keyword: kw,
-        })
-      );
-      setData(updatedKeywords);
+      setData({
+        specializationsDetails: {
+          ...data.specializationsDetails,
+          keyword: keywordsArray,
+        },
+      });
       handleNext();
     }
   }
@@ -99,11 +104,10 @@ export default function EditKeyword({ data, handleNext, setData }: Props) {
             className="!focus:border-none flex flex-col"
           >
             <FormInput
-              {...register('keyword', {
+              {...register("keyword", {
                 onChange: addKey,
               })}
               value={keyword}
-              className={`${keywordsArray.length <= 0 ? 'border-red-500' : ''} focus:border-none`}
             />
             {keywordsArray.length <= 0 && (
               <span className="text-red-500 mt-1 text-xs">
@@ -130,7 +134,7 @@ export default function EditKeyword({ data, handleNext, setData }: Props) {
             <Button
               type="submit"
               variant={
-                isValid && keywordsArray.length > 0 ? 'default' : 'ghost'
+                isValid && keywordsArray.length > 0 ? "default" : "ghost"
               }
               disabled={!isValid || keywordsArray.length <= 0}
               className="mt-[2rem] focus:outline-none"

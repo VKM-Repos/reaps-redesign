@@ -43,7 +43,7 @@ export default function InstitutionProfile() {
       title: "Institution Logo & Signature",
       label: "Change logo & signature",
       icon: <UserSetting />,
-      content: <LogoSignature onSave={handleCloseCollapsible} />,
+      content: <LogoSignature />,
     },
   ];
 

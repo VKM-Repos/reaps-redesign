@@ -1,52 +1,56 @@
-import AddIcon from '@/components/custom/Icons/AddIcon';
-import HoverCancel from '@/components/custom/Icons/HoverCancel';
-import { Button } from '@/components/ui/button';
+import AddIcon from "@/components/custom/Icons/AddIcon";
+import HoverCancel from "@/components/custom/Icons/HoverCancel";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { useMediaQuery } from 'react-responsive';
-import Specialization from '../create-specializations/CreateSpecializaton';
-import AddKeyword from '../create-specializations/AddKeyword';
-import { useSpecializationsStore } from '@/store/specializationsFormStore';
-import { useState } from 'react';
-import { useCreateSpecialization } from '../create-specializations/useCreateSpecialization.service';
-import Loader from '@/components/custom/Loader';
-import { ChevronLeft } from 'lucide-react';
-import { useGET } from '@/hooks/useGET.hook';
+} from "@/components/ui/sheet";
+import { useMediaQuery } from "react-responsive";
+import Specialization from "../create-specializations/CreateSpecializaton";
+import AddKeyword from "../create-specializations/AddKeyword";
+import { useSpecializationsStore } from "@/store/specializationsFormStore";
+import { useState } from "react";
+import { useCreateSpecialization } from "../create-specializations/useCreateSpecialization.service";
+import Loader from "@/components/custom/Loader";
+import { ChevronLeft } from "lucide-react";
+import { useGET } from "@/hooks/useGET.hook";
 
 const AddSpecialization = () => {
-  const { data, step, setStep, resetStore } = useSpecializationsStore();
+  const { step, setStep, resetStore } = useSpecializationsStore();
   const { createSpecialization, isPending } = useCreateSpecialization();
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);
   const { refetch } = useGET({
-    queryKey: ['specialization', 'keywords'],
-    url: 'specializations',
+    queryKey: ["specialization", "keywords"],
+    url: "specializations",
     withAuth: true,
   });
   const onSubmitHandler = async () => {
-    const formData = new FormData();
+    setLoading(true);
     try {
-      const specialization = data?.specializationsDetails.title ?? '';
-      formData.append('title', specialization);
-      const keywords = Array.isArray(data?.specializationsDetails.keyword)
-        ? data?.specializationsDetails.keyword.join(', ')
-        : data?.specializationsDetails.keyword ?? '';
+      const { data } = useSpecializationsStore.getState();
+      const payload = {
+        title: data?.specializationsDetails?.title,
+        keywords: Array.isArray(data?.specializationsDetails.keyword)
+          ? data?.specializationsDetails.keyword.join(", ")
+          : data?.specializationsDetails.keyword ?? "",
+      };
 
-      formData.append('keywords', keywords);
-      await createSpecialization(formData);
+      await createSpecialization(payload);
       refetch();
       resetStore();
       setOpen(false);
     } catch (error) {
-      console.error('Error creating specialization', error);
+      console.error("Error creating specialization", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,7 +67,7 @@ const AddSpecialization = () => {
 
   return (
     <>
-      {isPending && <Loader />}
+      {isPending || (loading && <Loader />)}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button className="flex max-w-[16.75rem] items-center justify-center gap-4 px-6 py-3">
@@ -74,8 +78,12 @@ const AddSpecialization = () => {
           </Button>
         </SheetTrigger>
         <SheetContent
-          side={isMobile ? 'bottom' : 'top'}
-          className={` ${isMobile ? 'inset-x-auto inset-y-0' : 'inset-x-[30%] inset-y-auto rounded-3xl md:!pb-12 md:!pt-0'} mx-auto overflow-y-hidden px-2 focus-visible:outline-none md:max-w-[30rem]`}
+          side={isMobile ? "bottom" : "top"}
+          className={` ${
+            isMobile
+              ? "inset-x-auto inset-y-0"
+              : "inset-x-[30%] inset-y-auto rounded-3xl md:!pb-12 md:!pt-0"
+          } mx-auto overflow-y-hidden px-2 focus-visible:outline-none md:max-w-[30rem]`}
         >
           {step > 1 && (
             <button

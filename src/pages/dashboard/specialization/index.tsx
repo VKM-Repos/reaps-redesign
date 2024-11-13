@@ -1,17 +1,15 @@
-import Loader from '@/components/custom/Loader';
-import { useGET } from '@/hooks/useGET.hook';
-import AddSpecialization from './custom/AddSpecialization';
-import SpecializationTable from './custom/SpecializationTable';
-import { SpecializationItems } from '@/types/specialization';
+import Loader from "@/components/custom/Loader";
+import { useGET } from "@/hooks/useGET.hook";
+import AddSpecialization from "./custom/AddSpecialization";
+import SpecializationTable from "./custom/SpecializationTable";
+import { SpecializationItems } from "@/types/specialization";
 
 export default function SpecializationPage() {
   const { data: specializationData, isPending } = useGET({
-    queryKey: ['specialization', 'keywords'],
-    url: 'specializations',
+    queryKey: ["specialization", "keywords"],
+    url: "specializations",
     withAuth: true,
   });
-
-  console.log(specializationData);
 
   const specializations: SpecializationItems[] =
     specializationData?.items || [];
