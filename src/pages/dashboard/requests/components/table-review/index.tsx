@@ -13,7 +13,7 @@ type TableRequestsProps = {
         submission: string;
         status: string;
     }[],
-    activeTab: string,
+    activeTab?: string,
 }
 
 
@@ -25,7 +25,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
 
-    export default function TableReview( { reviewTableData, activeTab }: TableRequestsProps) {
+    export default function TableReview( { reviewTableData, activeTab="request table" }: TableRequestsProps) {
         const { multiStatusDateFilter } = useGlobalFilter()
 
         const columnData: ColumnSetup<any>[]= [
