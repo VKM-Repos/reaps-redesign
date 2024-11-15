@@ -1,4 +1,5 @@
-import { useMediaQuery } from "react-responsive";
+
+import { useMediaQuery } from 'react-responsive';
 import {
   Table,
   TableBody,
@@ -6,15 +7,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from '../ui/table';
 import {
   ColumnDef,
   getCoreRowModel,
   useReactTable,
   flexRender,
   getFilteredRowModel,
-} from "@tanstack/react-table";
-import { useGlobalFilter } from "@/context/GlobalFilterContext";
+
+} from '@tanstack/react-table';
+import { useGlobalFilter } from '@/context/GlobalFilterContext';
 
 export const CustomCell = ({
   value,
@@ -52,7 +54,8 @@ export default function CustomTable({
   customHeaderRowClassName,
   customRowClassName,
 }: CustomTableProps<any>) {
-  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const { globalFilter, setGlobalFilter, columnFilters } = useGlobalFilter();
 
   const table = useReactTable({
@@ -69,32 +72,30 @@ export default function CustomTable({
 
   return (
     <div
-      className={`w-full flex flex-col mb-[6rem] ${
-        isMobile && "overflow-x-scroll"
-      } gap-2 
-        [&::-webkit-scrollbar]:h-2 
-        [&::-webkit-scrollbar-track]:rounded-full 
-        [&::-webkit-scrollbar-track]:bg-gray-10110
-        [&::-webkit-scrollbar-thumb]:bg-[#868687]`}
+      className={`mb-[6rem] flex w-full flex-col ${isMobile && 'overflow-x-scroll'} [&::-webkit-scrollbar-track]:bg-gray-10110 
+        gap-2 
+        [&::-webkit-scrollbar-thumb]:bg-[#868687] 
+        [&::-webkit-scrollbar-track]:rounded-full
+        [&::-webkit-scrollbar]:h-2`}
     >
       <Table className={`w-full border ${customTableClassName}`}>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <TableRow
               key={headerGroup.id}
-              className={`font-bold w-full flex items-center justify-between !border-b p-6 ${customHeaderRowClassName}`}
+              className={`flex w-full items-center justify-between !border-b p-6 font-bold ${customHeaderRowClassName}`}
             >
-              {headerGroup.headers.map((header) => (
+              {headerGroup.headers.map(header => (
                 <TableHead
                   key={header.id}
-                  className={`font-bold text-left w-full !h-auto`}
+                  className={`!h-auto w-full text-left font-bold`}
                 >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
                         header.getContext()
-                      )}{" "}
+                      )}{' '}
                   {/* Render the header content */}
                 </TableHead>
               ))}
@@ -109,12 +110,12 @@ export default function CustomTable({
               </TableCell>
             </TableRow>
           ) : (
-            table.getRowModel().rows.map((row) => (
+            table.getRowModel().rows.map(row => (
               <TableRow
                 key={row.id}
-                className={`flex items-center !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14] ${customRowClassName}`}
+                className={`flex items-center rounded-3xl !border-none !px-6 !py-4 hover:bg-[#14155E14] ${customRowClassName}`}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
