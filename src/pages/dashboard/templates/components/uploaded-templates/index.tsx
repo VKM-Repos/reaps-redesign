@@ -197,9 +197,9 @@ const UploadedTemplate = ({
                 header: {
                   disableHeader: true,
                   disableFileName: true,
+                  retainURLParams: false,
                 },
               }}
-              // style={{ width: 400, height: 400 }}
               className="w-[400px] h-[400px] aspect-square object-cover rounded-lg"
             />
           </div>
