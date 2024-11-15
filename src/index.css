@@ -21,6 +21,18 @@
   scrollbar-width: none;
   /* Firefox */
 }
+/* Hide the zoom controls */
+
+/* You can add more CSS to hide other controls or elements as needed */
+.cui-statusbar{
+  display: none !important;
+}
+.WACStatusBarContainer{
+  display: none !important;
+}
+#WordViewerStatusBar{
+  display: none;
+}
 a {
   font-weight: 500;
   color: #646cff;
