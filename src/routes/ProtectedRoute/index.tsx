@@ -1,21 +1,12 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 type Props = {
-  isPublic?: boolean;
   isAuthorized: boolean;
+  children: React.ReactNode;
 };
 
-const ProtectedRoute = ({ isPublic, isAuthorized }: Props) => {
-  return isPublic || isAuthorized ? (
-    <>
-      <Outlet />
-    </>
-  ) : (
-    <>
-      <Navigate to="/login" />
-      <Outlet />
-    </>
-  );
+const ProtectedRoute = ({ isAuthorized, children }: Props) => {
+  return isAuthorized ? children : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;
