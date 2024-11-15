@@ -126,6 +126,43 @@ const router = [
         ],
       },
       {
+        name: "Super Admin",
+        path: "super-admin",
+        title: "Super Admin",
+        routes: [
+          {
+            name: "Institutions",
+            path: "super-admin/institutions",
+            title: "Institutions",
+            element: InstitutionUsers,
+          },
+          {
+            name: "Users",
+            path: "super-admin/users",
+            title: "Users",
+            element: InstitutionUsers,
+          },
+          {
+            name: "Institution Profile",
+            path: "institution/profile",
+            title: "Institution Profile",
+            element: InstitutionProfile,
+          },
+          {
+            name: "Institution Account",
+            path: "institution/account",
+            title: "Institution Account",
+            element: InstitutionAccount,
+          },
+          {
+            name: "Institution Account Transactions",
+            path: "institution/account/transactions",
+            title: "Institution Account Transactions",
+            element: Transactions,
+          },
+        ],
+      },
+      {
         name: "Specialization",
         path: "specialization",
         title: "Specialization",
