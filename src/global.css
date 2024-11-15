@@ -3,6 +3,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.cui-statusbar{
+  display: none !important;
+}
+.WACStatusBarContainer{
+  display: none !important;
+}
+#WordViewerStatusBar{
+  display: none;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
