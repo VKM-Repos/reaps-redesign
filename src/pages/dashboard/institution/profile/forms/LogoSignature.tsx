@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useRef, useState, useEffect } from "react";
+import { useForm, SubmitHandler, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,9 @@ const logoSchema = z.object({
         message: "Logo must be a JPG or PNG image",
       }
     ),
+});
+
+const signatureSchema = z.object({
   signature: z
     .instanceof(File)
     .optional()
@@ -31,7 +34,10 @@ const logoSchema = z.object({
     ),
 });
 
-type LogoSignatureFormValues = z.infer<typeof logoSchema>;
+type LogoSignatureFormValues = {
+  logo?: File;
+  signature?: File;
+};
 
 export const LogoSignature = () => {
   const logoRef = useRef<HTMLInputElement>(null);
@@ -39,21 +45,28 @@ export const LogoSignature = () => {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [signaturePreview, setSignaturePreview] = useState<string | null>(null);
 
-  const { data: logoData } = useGET({
+  const {
+    data: logoData,
+    isPending: isLogoLoading,
+    isError: logoError,
+    refetch: refetchLogo,
+  } = useGET({
     url: "logos/details",
     queryKey: ["logo"],
     withAuth: true,
     enabled: true,
   });
-  const { data: signatureData } = useGET({
+  const {
+    data: signatureData,
+    isPending: isSignatureLoading,
+    isError: signatureError,
+    refetch: refetchSignature,
+  } = useGET({
     url: "signatures/details",
     queryKey: ["signature"],
     withAuth: true,
     enabled: true,
   });
-
-  console.log(logoData);
-  console.log(signatureData);
 
   const { mutate: uploadLogo, isPending: isPendingLogo } = usePOST("logos", {
     contentType: "multipart/form-data",
@@ -85,9 +98,29 @@ export const LogoSignature = () => {
     handleSubmit,
     setValue,
     formState: { errors },
+    control,
   } = useForm<LogoSignatureFormValues>({
-    resolver: zodResolver(logoSchema),
+    resolver: zodResolver(z.union([logoSchema, signatureSchema])),
   });
+
+  const watchedLogo = useWatch({
+    control,
+    name: "logo",
+  });
+
+  const watchedSignature = useWatch({
+    control,
+    name: "signature",
+  });
+
+  useEffect(() => {
+    if (logoData?.logo_path) {
+      setLogoPreview(logoData.logo_path);
+    }
+    if (signatureData?.signature_path) {
+      setSignaturePreview(signatureData.signature_path);
+    }
+  }, [logoData, signatureData]);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -120,8 +153,6 @@ export const LogoSignature = () => {
       signatureFormData.append("file", signature);
       uploadSignature(signatureFormData);
     }
-
-    // onSave();
   };
 
   return (
@@ -136,11 +167,15 @@ export const LogoSignature = () => {
 
             <div className="flex gap-7 items-center">
               <div className="bg-slate-300 rounded-full flex justify-center w-[100px] aspect-square object-cover">
-                <img
-                  src={logoPreview || ins_logo}
-                  alt="Institution Logo"
-                  className="w-[100px] aspect-square object-cover rounded-full"
-                />
+                {isLogoLoading ? (
+                  <div className="w-[100px] aspect-square bg-gray-200 animate-pulse rounded-full" />
+                ) : (
+                  <img
+                    src={logoPreview || ins_logo}
+                    alt="Institution Logo"
+                    className="w-[100px] aspect-square object-cover rounded-full"
+                  />
+                )}
                 <div className="relative flex items-end">
                   <span
                     onClick={() => logoRef.current?.click()}
@@ -168,6 +203,18 @@ export const LogoSignature = () => {
                   </span>
                 </span>
                 <span>Supports JPG,PNG.</span>
+                <span className="text-red-500">{errors.logo?.message}</span>
+                {logoError && (
+                  <p className="text-red-500">
+                    Cannot fetch logo{" "}
+                    <span
+                      className="text-black font-semibold cursor-pointer hover:underline"
+                      onClick={() => refetchLogo()}
+                    >
+                      Try Again
+                    </span>
+                  </p>
+                )}
               </div>
               <input
                 type="file"
@@ -175,7 +222,6 @@ export const LogoSignature = () => {
                 {...register("logo")}
                 onChange={handleLogoChange}
               />
-              <span className="text-red-500">{errors.logo?.message}</span>
             </div>
           </div>
 
@@ -186,14 +232,15 @@ export const LogoSignature = () => {
             </span>
             <div className="flex gap-7 items-center">
               <div className="bg-slate-300 rounded-full flex justify-center w-[100px] aspect-square object-cover">
-                <img
-                  src={
-                    // signatureData.signature_path ||
-                    signaturePreview || ins_signature
-                  }
-                  alt="Institution Signature"
-                  className="w-[100px] aspect-square object-cover rounded-full"
-                />
+                {isSignatureLoading ? (
+                  <div className="w-[100px] aspect-square bg-gray-200 animate-pulse rounded-full" />
+                ) : (
+                  <img
+                    src={signaturePreview || ins_signature}
+                    alt="Institution Signature"
+                    className="w-[100px] aspect-square object-cover rounded-full"
+                  />
+                )}
                 <div className="relative flex items-end">
                   <span
                     onClick={() => signatureRef.current?.click()}
@@ -222,6 +269,20 @@ export const LogoSignature = () => {
                   </span>
                 </span>
                 <span>Supports JPG,PNG.</span>
+                <span className="text-red-500">
+                  {errors.signature?.message}
+                </span>
+                {signatureError && (
+                  <p className="text-red-500">
+                    Cannot fetch signature{" "}
+                    <span
+                      className="text-black font-semibold cursor-pointer hover:underline"
+                      onClick={() => refetchSignature()}
+                    >
+                      Try Again
+                    </span>
+                  </p>
+                )}
               </div>
               <input
                 type="file"
@@ -229,17 +290,18 @@ export const LogoSignature = () => {
                 {...register("signature")}
                 onChange={handleSignatureChange}
               />
-              <span className="text-red-500">{errors.signature?.message}</span>
             </div>
           </div>
         </div>
         <Button
           type="submit"
-          variant={logoPreview || signaturePreview ? "default" : "ghost"}
+          variant={`${watchedLogo || watchedSignature ? "default" : "ghost"}`}
           className="my-4 focus:outline-none py-4"
           disabled={isPendingLogo || isPendingSignature}
         >
-          {isPendingLogo || isPendingSignature ? "Saving..." : "Save"}
+          {isPendingLogo || isPendingSignature
+            ? "Uploading..."
+            : "Save Changes"}
         </Button>
       </form>
     </div>
