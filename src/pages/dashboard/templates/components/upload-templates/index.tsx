@@ -56,7 +56,6 @@ export default function UploadTemplate({
     }, 300);
   };
   const successCallBack = () => {
-    refetch();
     toast({
       title: "Feedback",
       description:
@@ -65,15 +64,19 @@ export default function UploadTemplate({
           : "Your template has been changed.",
       variant: "default",
     });
+    refetch();
   };
 
-  const errorCallBack = () => {
-    refetch();
+  const errorCallBack = (error: any) => {
+    const message = error?.response?.data?.detail;
+    console.log(message);
+
     toast({
       title: "Error",
-      description: "Error submitting your template",
+      description: message,
       variant: "destructive",
     });
+    refetch();
   };
 
   const { mutate, isPending } = usePOST("templates", {
@@ -81,12 +84,16 @@ export default function UploadTemplate({
     callback: successCallBack,
     errorCallBack: errorCallBack,
   });
+  console.log(template?.id, "?????");
 
-  const { mutate: update, isPending: updating } = usePATCH("templates", {
-    contentType: " multipart/form-data",
-    callback: successCallBack,
-    errorCallBack: errorCallBack,
-  });
+  const { mutate: update, isPending: updating } = usePATCH(
+    `templates?template_id=${template?.id}`,
+    {
+      contentType: " multipart/form-data",
+      callback: successCallBack,
+      errorCallBack: errorCallBack,
+    }
+  );
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const formData = new FormData();
