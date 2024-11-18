@@ -85,9 +85,9 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
             },
         },
         {
-            header: () => <CustomCell value="Amount" className="text-[#454747] font-semibold text-lg text-xl flex items-center justify-center max-w-[6rem]" />,
+            header: () => <CustomCell value="Amount" className="text-[#454747] font-semibold text-lg text-xl flex items-center justify-center w-[6rem]" />,
             accessorKey: "amount",
-            cell: (info) => <CustomCell value={info.getValue()} className="flex items-center justify-center text-[#868687] text-sm font-normal max-w-[6rem]" />
+            cell: (info) => <CustomCell value={info.getValue()} className="flex items-center justify-center text-[#868687] text-sm font-normal w-[6rem]" />
         },
         {
             accessorKey: "custom",
@@ -96,7 +96,7 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
             cell: ({ row }) => {
                 const item = row.original;
                 return (
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center min-w-[6rem]">
                     {isMobile ?
                     <Sheet>
                         <SheetTrigger className="text-sm text-[#192C8A]">
