@@ -12,6 +12,7 @@ import Download from '@/components/custom/Icons/Download';
 import { useLocation } from 'react-router-dom';
 import useUserStore from '@/store/user-store';
 import GoogleDoc from '@/components/custom/Icons/GoogleDoc';
+import AddedInvestigator from '../components/AddedInvestigator';
 
 type SummaryPageProps = {
     isApproval?: boolean,
@@ -132,8 +133,8 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                   <div className="grid md:grid-cols-2 gap-8 ">
                   <>
                     {application
-                      .map((question) => (
-                        <div className="flex flex-col gap-2">
+                      .map((question, index) => (
+                        <div key={index} className="flex flex-col gap-4">
                           <div className="text-sm text-[#454745]">{question.label}&nbsp;<span className="text-red-500">*</span></div>
                           <div
                             key={question.name}
@@ -153,6 +154,27 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                                 </Label>
                               </>}
                           </div>
+                          {(index === 2 && question.name === "question3" && question.value === "Yes") && 
+                            investigators && investigators.map((investigator) => (
+                              <div key={investigator.id} className='w-full'>
+                                  <AddedInvestigator
+                                    first_name={investigator.first_name}
+                                    last_name={investigator.last_name}
+                                    email={investigator.email}
+                                    phone_number={investigator.phone_number}/>
+                              </div>
+                            ))
+                          }
+                          {(index === 3 && question.name === "question4" && question.value === 'Yes') &&
+                            sponsors && sponsors.map((sponsor) => (
+                              <div key={sponsor.id} className="flex items-center gap-2">
+                                <label>{sponsor.name}</label>
+                                <input 
+                                  type="checkbox"
+                                  checked={true}
+                                  onChange={() => {}}/>
+                              </div>
+                            ))}
                         </div>
                       ))}
                   </>
@@ -225,3 +247,43 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
 }
 
 export default Summary
+
+const investigators = [
+  {
+    id: "1",
+    first_name: "Mary",
+    last_name: "Catherine",
+    email: "marycatherine@gmail.com",
+    phone_number: "010000020"
+  },
+  {
+    id: "2",
+    first_name: "June",
+    last_name: "Catherine",
+    email: "junecatherine@gmail.com",
+    phone_number: "010000020"
+  },
+  {
+    id: "3",
+    first_name: "July",
+    last_name: "Catherine",
+    email: "julycatherine@gmail.com",
+    phone_number: "010000020"
+  },
+]
+
+const sponsors = [
+  {
+    id: "1",
+    name: "WHO"
+  },
+  {
+    id: "2",
+    name: "USAID"
+  },
+  {
+    id: "3",
+    name: "UNICEF"
+  },
+
+]
