@@ -3,10 +3,28 @@ import AssignReviewer from "../../components/AssignReviewer";
 import WriteReview from "../../components/WriteReview";
 import { useState } from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { useMediaQuery } from "react-responsive";
+import Smile from "@/assets/smile.svg";
+import Unhappy from "@/assets/unhappy.svg";
+import Unamused from "@/assets/unamused.svg";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+
+const review_remarks = [
+  { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
+  { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
+  { id: "3", text: "Unamused", color: "#608FEB", icon: Unamused },
+];
+
+const final_review_remarks = [
+  { id: "1", text: "Approve", color: "#34A853", icon: Smile },
+  { id: "2", text: "Decline", color: "#D03238", icon: Unhappy },
+]
+
 
 export const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => void}) => {
     const [showButtons, setShowButtons] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
   
   
     const handleStepForward = (index: number) => {
@@ -25,12 +43,13 @@ export const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => v
         id: "2",
         text: "Review",
         color: "#BD6BC9",
-        content: <WriteReview setLoader={setLoader}/>
+        content: <WriteReview setLoader={setLoader} remarks={review_remarks} buttonText="Submit review"/>
       }, 
       {
         id: "3",
         text: "Final Review",
-        color: "#566DBE" 
+        color: "#566DBE",
+        content: <WriteReview setLoader={setLoader} remarks={final_review_remarks} buttonText="Submit final review" />
       }
     ]
   
@@ -42,7 +61,9 @@ export const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => v
             {showButtons && 
             <div className='flex flex-col gap-5 items-end w-full'>
               {actions.map(({text, color, content}, index) => (
-                <Dialog key={index}>
+                (isMobile ?
+
+                (<Dialog key={index}>
                   <DialogTrigger>
                     <button className="bg-white action-shadow rounded-[2.75rem] px-6 py-[1.375rem] font-semibold max-w-fit"
                      onClick={() => handleStepForward(index)}
@@ -55,7 +76,25 @@ export const ActionButton = ({ setLoader }: { setLoader: (loading: boolean) => v
                     </button>
                   </DialogTrigger>                
                     {content}
-                </Dialog>
+                </Dialog>)
+               :
+               (
+                <Sheet key={index}>
+                  <SheetTrigger>
+                    <button className="bg-white action-shadow rounded-[2.75rem] px-6 py-[1.375rem] font-semibold max-w-fit"
+                     onClick={() => handleStepForward(index)}
+                    //  disabled={index > currentStep}
+                     style={{
+                      color: index === 2 && currentStep >= 3 ? 'white' : color,
+                      backgroundColor: index === 2 && currentStep >= 3 ? '#14155E' : ''
+                    }}>
+                      {text}
+                    </button>
+                  </SheetTrigger>                
+                    {content}
+                </Sheet>
+               )
+              )
                
               ))}
             </div>}
