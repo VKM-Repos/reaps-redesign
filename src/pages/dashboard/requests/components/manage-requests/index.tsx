@@ -16,6 +16,9 @@ import View from "@/components/custom/Icons/View";
 import InstitutionRequestSummary from "../../view-requests/admin";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import SignatureIcon from "@/components/custom/Icons/Signature";
+import AssignReviewer from "../AssignReviewer";
+import Loader from "@/components/custom/Loader";
+import { useState } from "react";
 
 type TableRequestsProps = {
   institutionTableData: {
@@ -33,7 +36,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
   "In Progress": { bg: "#FFA165", text: "#1A1513" },
 };
 
-function RenderFunctions() {
+function RenderFunctions({setLoading}: { setLoading: (loading: boolean) => void}) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
@@ -58,6 +61,7 @@ function RenderFunctions() {
                 <SignatureIcon />
                 <span>Reviewers</span>
               </DialogTrigger>
+              <AssignReviewer setLoader={setLoading}/>
             </Dialog>
           </>
         </DropdownMenuGroup>
@@ -71,6 +75,7 @@ export default function ManageRequests({
 }: TableRequestsProps) {
   // const [ tableArray, setTableArray ] = useState(institutionTableData);
   const { multiStatusDateFilter } = useGlobalFilter();
+  const [loading, setLoading] = useState(false);
   
   const columnData: ColumnSetup<any>[] = [
     {
@@ -149,7 +154,7 @@ export default function ManageRequests({
       cell: () => {
         return (
           <CustomCell
-            value={<RenderFunctions />}
+            value={<RenderFunctions setLoading={setLoading}/>}
             className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
           />
         );
@@ -159,6 +164,7 @@ export default function ManageRequests({
 
   return (
     <>
+    {loading && <Loader />}
       <CustomTable columns={columnData} data={institutionTableData} />
     </>
   );
