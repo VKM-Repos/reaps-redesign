@@ -6,23 +6,23 @@ export default function AddedInvestigator(
     return (
             <div className="w-full py-5 px-1 border border-[#0E0F0C1F] rounded-[1.25rem]">
                 <div className="flex flex-col gap-[1.875rem] p-[0.625rem]">
-                    <div className="flex flex-col gap-[0.625rem] justify-center items-start">
-                        <div className="flex gap-[1.875rem] w-full">
-                            <div className="flex gap-[0.625rem] w-full max-w-[14.625rem] text-[#040C21] font-semibold items-center">
+                    <div className="flex flex-col flex-wrap gap-4 md:gap-[0.625rem] justify-center items-start">
+                        <div className="flex flex-col md:flex-row gap-4 md:gap-[1.875rem] w-full">
+                            <div className="flex flex-wrap gap-[0.625rem] w-full max-w-[11.875rem] text-[#040C21] font-semibold items-center">
                                 <p className="text-xs">First Name:</p>
                                 <p className="text-xs">{first_name}</p>
                             </div>
-                            <div className="flex gap-[0.625rem] w-full max-w-[14.625rem] text-[#040C21] font-semibold items-center">
+                            <div className="flex gap-[0.625rem] w-full max-w-[11.875rem] text-[#040C21] font-semibold items-center">
                                 <p className="text-xs">Last Name:</p>
                                 <p className="text-xs">{last_name}</p>
                             </div>
                         </div>
-                        <div className="flex gap-[1.875rem] w-full text-[#040C21] font-semibold">
-                            <div className="flex gap-[0.625rem] w-full max-w-[14.625rem] items-center">
+                        <div className="flex flex-col md:flex-row gap-4 md:gap-[1.875rem] w-full text-[#040C21] font-semibold">
+                            <div className="flex gap-[0.625rem] w-full flex-wrap min-w-[10.875rem] items-center">
                                 <p className="text-xs">Email:</p>
-                                <p className="text-xs">{email}</p>
+                                <p className="text-xs text-wrap">{email}</p>
                             </div>
-                            <div className="flex gap-[0.625rem] w-full max-w-[14.625rem] items-center">
+                            <div className="flex gap-[0.625rem] w-full min-w-[10.875rem] items-center">
                                 <p className=" text-xs">Phone Number:</p>
                                 <p className="text-xs">{phone_number}</p>
                             </div>

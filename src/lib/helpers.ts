@@ -145,7 +145,7 @@ export const application = [
   {
     name: "question4",
     label: "Is the project sponsored?",
-    value: "No",
+    value: "Yes",
   },
   {
     name: "question5",

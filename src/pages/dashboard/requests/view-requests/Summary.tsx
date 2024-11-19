@@ -1,7 +1,7 @@
 import CustomFormField, { FormFieldType } from '@/components/custom/CustomFormField';
 import FormInput from '@/components/custom/FormInput';
 import { Form } from '@/components/ui/form';
-import { FileDetails, fileGroup, useRequestsStore } from '@/store/RequestFormStore';
+import { useRequestsStore } from '@/store/RequestFormStore';
 import { application, supportDocData, tableData } from '@/lib/helpers';
 import { useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
@@ -45,46 +45,12 @@ const Summary = ({ handlePrint, isApproval, activeTab = "request table" } : Summ
   const { activeRole } = useUserStore();
   const { pathname } = useLocation();
 
-// change handleDownload function to receive file from table data instead not localstorage
-//  isFileGroup will no longer be useful
+
   const handleDownload = (fileId: string) => {
-    if (isFileGroup(files)) {
-      const fileDetails = files[fileId as keyof fileGroup];  // Directly access file using fileId as a key
-      if (fileDetails && fileDetails.file) {
-          downloadFile(fileDetails);  // Call the download function with the retrieved file
-      } else {
-          console.error("File not found or file is empty.");
-      }
-  } else {
-      console.error("Files is not of type fileGroup.");
-  }
+    console.log(fileId)
 };
 
-const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
-  return (files as fileGroup).requirement1 !== undefined;
-};
 
-  
-  const downloadFile = (file: FileDetails) => {
-      if (!file || !file.file) {
-          console.error("No file available for download.");
-          return;
-      }
-      // Create a URL for the file
-      const fileURL = URL.createObjectURL(file.file);
-      // Create a temporary <a> element to trigger the download
-      const a = document.createElement('a');
-      a.href = fileURL;
-      a.download = file.path;  // Set the filename
-      // Append the element to the body (necessary for it to work in some browsers)
-      document.body.appendChild(a);
-      // Programmatically click the element to start the download
-      a.click();
-  
-      // Clean up
-      document.body.removeChild(a);
-      URL.revokeObjectURL(fileURL);
-  };
 
   function onSubmit() {
     try {
@@ -154,31 +120,44 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                                 </Label>
                               </>}
                           </div>
-                          {(index === 2 && question.name === "question3" && question.value === "Yes") && 
-                            investigators && investigators.map((investigator) => (
-                              <div key={investigator.id} className='w-full'>
-                                  <AddedInvestigator
-                                    first_name={investigator.first_name}
-                                    last_name={investigator.last_name}
-                                    email={investigator.email}
-                                    phone_number={investigator.phone_number}/>
-                              </div>
-                            ))
-                          }
-                          {(index === 3 && question.name === "question4" && question.value === 'Yes') &&
+                          <div className="flex flex-wrap w-full items-center gap-4">
+                          {(question.name === "question4" && question.value === 'Yes') &&
                             sponsors && sponsors.map((sponsor) => (
                               <div key={sponsor.id} className="flex items-center gap-2">
-                                <label>{sponsor.name}</label>
-                                <input 
-                                  type="checkbox"
-                                  checked={true}
-                                  onChange={() => {}}/>
+                               
+                                  <label>{sponsor.name}</label>
+                                  <input 
+                                    type="checkbox"
+                                    checked={true}
+                                    onChange={() => {}}/>
+                              
+
                               </div>
                             ))}
+                          </div>
+                          
                         </div>
                       ))}
+                      
                   </>
+
                 </div>
+                {investigators && investigators.length > 0 && (
+                  <>
+                    <div className="text-sm text-[#454745] font-bold mt-4">Co-principal Investigators</div>
+                        <div className="w-full grid md:grid-cols-2 gap-4 justify-center">
+                          {investigators.map((investigator) => (
+                            <AddedInvestigator
+                              key={investigator.id}
+                              first_name={investigator.first_name}
+                              last_name={investigator.last_name}
+                              email={investigator.email}
+                              phone_number={investigator.phone_number}
+                            />
+                          ))}
+                    </div>
+                  </>
+                )}
               </section>
 
 
@@ -283,6 +262,14 @@ const sponsors = [
   },
   {
     id: "3",
+    name: "UNICEF"
+  },
+  {
+    id: "4",
+    name: "UNICEF"
+  },
+  {
+    id: "5",
     name: "UNICEF"
   },
 
