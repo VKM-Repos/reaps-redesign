@@ -7,10 +7,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useMediaQuery } from "react-responsive";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import CustomTable, { CustomCell, ColumnSetup } from "@/components/custom/CustomTable";
-
-type ViewTransactionsProps = {
-    setShowTransactions: (value: boolean) => void;
-}
+import { useNavigate } from "react-router-dom";
 
 export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
     Failed: { bg: '#FC8D94', text: '#320104' },
@@ -21,13 +18,14 @@ export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
   
-export default function ViewTransactions({ setShowTransactions }: ViewTransactionsProps) {
+export default function ViewTransactions() {
     const { data, setTransactions } = useTransactionStore();
     const { transactions } = data;
     const isMobile = useMediaQuery({query: '(max-width: 767px)'});
+    const navigate = useNavigate();
   
     const handleFunc = () => {
-        setShowTransactions(false);
+        navigate('/pricing');
     }
 
     useEffect(() => {

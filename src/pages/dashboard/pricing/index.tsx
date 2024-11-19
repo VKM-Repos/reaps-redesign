@@ -1,13 +1,12 @@
 import CategoryTable from "./view-pricing";
 import { categories } from "../requests/components/ethical-request-approval/data/categories";
-import { useState } from "react";
-import ViewTransactions from "./view-transactions";
+import { useNavigate } from "react-router-dom";
 
 export default function Pricing() {
-    const [ showTransactions, setShowTransactions ] = useState(false);
+    const navigate = useNavigate();
 
     const handleFunc = () => {
-        setShowTransactions(true);
+        navigate('/pricing/your-transactions')
     }
 
     
@@ -15,8 +14,6 @@ export default function Pricing() {
     return (
         <>
             <div className="flex flex-col gap-[1.5rem] mb-20">
-                {showTransactions ?
-                    <ViewTransactions setShowTransactions={setShowTransactions}/> :
                 <div className="flex flex-col gap-14 items-center">
                     <div className="flex flex-col gap-[1.25rem] mx-auto w-full">
                         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center">
@@ -27,7 +24,6 @@ export default function Pricing() {
                     </div>
                     <CategoryTable categories={categories}/>
                 </div>
-            }     
             </div>
         </>
         
