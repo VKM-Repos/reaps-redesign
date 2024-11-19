@@ -27,7 +27,7 @@ export default function InstitutionRequestSummary() {
 
   const closeDialog = () => {
       setSuccess(false);
-      setReviewer({ firstName: '', lastName: '' }); // Reset reviewer when closing
+      setReviewer({ id: '', firstName: '', lastName: '' }); // Reset reviewer when closing
   };
 
 

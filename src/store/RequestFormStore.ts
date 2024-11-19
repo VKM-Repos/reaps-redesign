@@ -11,6 +11,7 @@ export type FileDetails = {
 };
 
 type Reviewer = {
+    id: string;
     firstName: string;
     lastName: string;
 }
@@ -57,6 +58,7 @@ export interface RequestsStore {
     };
     setReviewer: (reviewer: Reviewer | null) => void;
     setReviewers: (reviewer: Reviewer[] ) => void;
+    unassignReviewer: (id: string) => void;
     setSuccess: (success: boolean) => void
     setLoading: (loading: boolean) => void;
     setStep: (step: number) => void;
@@ -109,6 +111,12 @@ type MyPersist = (
             });
             localStorage.removeItem("requestsStore");
         },
+        unassignReviewer: (id: string) =>
+            set((state) => ({
+                reviewers: state.reviewers.filter(
+                    (reviewer) => reviewer.id !== id
+                ),
+            })),
     }),
     {
         name: "RequestsStore",

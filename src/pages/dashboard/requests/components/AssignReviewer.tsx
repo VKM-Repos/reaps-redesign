@@ -5,25 +5,48 @@ import { assignReviewerData } from "@/lib/helpers";
 import { useRequestsStore } from "@/store/RequestFormStore";
 import { useState } from "react";
 
+
 export default function AssignReviewer(
     { setLoader }: 
     { setLoader: (loading: boolean) => void }) {
-    const { reviewers, setReviewer, setReviewers, setSuccess } = useRequestsStore();
+    const { reviewers, setReviewer, setReviewers, unassignReviewer, setSuccess } = useRequestsStore();
     const [ numOfReviewers, setNumOfReviewers ] = useState(0);
     const [assignedReviewers, setAssignedReviewers] = useState<{ [key: string]: boolean }>({});
+    const num = 0;
 
-    function submitReviewerData(reviewer: { id: string, firstName: string, lastName: string, email: string }) {
-        if (numOfReviewers >= 2 || assignedReviewers[reviewer.id]) return;
+    function assign(reviewer: { id: string; firstName: string; lastName: string; email: string }) {
+        if (numOfReviewers >= 3 || assignedReviewers[reviewer.id]) return;
+        
+    
         setLoader(true);
-        setReviewer({ firstName: reviewer.firstName, lastName: reviewer.lastName });
-
+        setReviewer({ id: `${ num + 1}`, firstName: reviewer.firstName, lastName: reviewer.lastName });
+    
         setTimeout(() => {
             setLoader(false);
             setTimeout(() => {
                 setSuccess(true);
                 setNumOfReviewers((prev) => prev + 1);
                 setAssignedReviewers((prev) => ({ ...prev, [reviewer.id]: true }));
-                setReviewers([...reviewers, reviewer])
+                setReviewers([...reviewers, reviewer]); // Add reviewer to the list
+            }, 500);
+        }, 3000);
+    }
+    
+    function unassign(reviewerId: string) {
+        if (!assignedReviewers[reviewerId]) return; // If not assigned, do nothing
+    
+        setLoader(true);
+    
+        setTimeout(() => {
+            setLoader(false);
+            setTimeout(() => {
+                setSuccess(true);
+                setNumOfReviewers((prev) => Math.max(0, prev - 1));
+                setAssignedReviewers((prev) => {
+                    const { [reviewerId]: _, ...rest } = prev; // Remove the reviewer from assigned list
+                    return rest;
+                });
+                unassignReviewer(reviewerId); // Remove reviewer from the list
             }, 500);
         }, 3000);
     }
@@ -51,15 +74,15 @@ export default function AssignReviewer(
             cell: ({ row }) => {
                 const item = row.original;
                 const isAssigned = assignedReviewers[item.id];
-                const maxAssigned = numOfReviewers >= 2;
+                // const maxAssigned = numOfReviewers >= 3;
 
                 return (
                     <button
-                        disabled={isAssigned || maxAssigned}
-                        className={`${isAssigned || maxAssigned ? "bg-ghost text-ghost-foreground" : "bg-primary text-white"} py-3 px-6 font-semibold rounded-[0.5rem] max-w-fit`}
-                        onClick={() => submitReviewerData(item)}
+                        // disabled={maxAssigned}
+                        className={` bg-primary text-white py-3 px-6 font-semibold rounded-[0.5rem] max-w-fit`}
+                        onClick={() => { isAssigned ? unassign(item?.id) : assign(item)}}
                     >
-                        {isAssigned ? 'Assigned' : 'Assign'}
+                        {isAssigned ? 'Unassign' : 'Assign'}
                     </button>
                         
                 )
@@ -92,10 +115,6 @@ export default function AssignReviewer(
                                     className="border-none hover:border-none focus:border-none w-full focus-visible:outline-none text-sm"
                                 />
                             </div>
-                            {/* <DialogClose disabled={numOfReviewers < 1}>
-                                {/* assign at least one reviewer before close 
-                                <Button variant={numOfReviewers < 1 ? "ghost" : "default"} className="!py-3 !px-6 font-semibold rounded-[0.5rem] w-full max-w-[9.375rem]">Finish</Button>
-                            </DialogClose>  */}
                         </div>   
                     </div>
                     <div className="w-full max-w-[95%] ">
