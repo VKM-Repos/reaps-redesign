@@ -145,7 +145,7 @@ const Summary = ({ handlePrint, isApproval, activeTab = "request table" } : Summ
                 {investigators && investigators.length > 0 && (
                   <>
                     <div className="text-sm text-[#454745] font-bold mt-4">Co-principal Investigators</div>
-                        <div className="w-full grid md:grid-cols-2 gap-4 justify-center">
+                        <div className="w-full grid md:grid-cols-2 gap-4">
                           {investigators.map((investigator) => (
                             <AddedInvestigator
                               key={investigator.id}
