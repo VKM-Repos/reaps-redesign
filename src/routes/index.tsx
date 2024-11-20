@@ -22,6 +22,7 @@ import ReviewRequest from "@/pages/dashboard/requests/pages/ReviewRequest";
 import ManageRequestPage from "@/pages/dashboard/requests/pages/ManageRequestPage";
 import Templates from "@/pages/dashboard/templates";
 import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
+import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
 
 const router = [
   {
@@ -93,6 +94,12 @@ const router = [
             element: ManageRequestPage,
           },
           // add templates
+          {
+            name: "Modify Request",
+            path: "requests/edit-request",
+            title: "Modify Request",
+            element: ModifyRequest,
+          }
         ],
       },
       {

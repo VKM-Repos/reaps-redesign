@@ -101,8 +101,8 @@ export default function SelectSpecialization({ handleNext }: Props) {
                       <SelectGroup>
                         <SelectLabel></SelectLabel>
                         {specialization &&
-                          specialization.map((spec) => (
-                            <SelectItem value={spec}>{spec}</SelectItem>
+                          specialization.map((spec, index) => (
+                            <SelectItem key={index} value={spec}>{spec}</SelectItem>
                           ))}
                       </SelectGroup>
                     </SelectContent>
