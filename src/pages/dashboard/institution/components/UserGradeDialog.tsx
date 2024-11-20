@@ -8,6 +8,7 @@ import {
 
 import { useRef, useState } from "react";
 import { UserGradeForm } from "./UserGradeForm";
+import { UserActivationForm } from "./UserActivationForm";
 
 export function UserGradeDialog({
   title,
@@ -36,11 +37,20 @@ export function UserGradeDialog({
       >
         <div className="mt-14 px-10">
           <h2 className="text-center font-semibold text-xl">{title} User</h2>{" "}
-          <UserGradeForm
-            handleClosDialog={handleClosDialog}
-            user={user}
-            action={title}
-          />
+          {title.includes("grade") && (
+            <UserGradeForm
+              handleClosDialog={handleClosDialog}
+              user={user}
+              action={title}
+            />
+          )}
+          {(title.includes("Activate") || title.includes("activate")) && (
+            <UserActivationForm
+              user={user}
+              handleClosDialog={handleClosDialog}
+              action={title}
+            />
+          )}
           <DialogClose asChild>
             <Button
               ref={closeDialogBtn}
