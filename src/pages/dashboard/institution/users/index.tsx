@@ -8,9 +8,9 @@ import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import EmptyRequests from "../../requests/components/emptystate";
 
 import FilterIcon from "@/components/custom/Icons/Filter";
-import ReviwersTable from "../components/ReviewersTable";
+// import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
-import AdminsTable from "../components/AdminsTable";
+// import AdminsTable from "../components/AdminsTable";
 import { useGET } from "@/hooks/useGET.hook";
 import ResearchersTable from "../components/ResearchersTable";
 import useUserStore from "@/store/user-store";
