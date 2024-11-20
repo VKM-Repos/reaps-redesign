@@ -1,13 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Smile from "@/assets/smile.svg";
-import Unhappy from "@/assets/unhappy.svg";
-import Unamused from "@/assets/unamused.svg";
+
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "@/components/custom/CustomFormField";
 import { Button } from "@/components/ui/button";
 import { DialogContent } from "@/components/ui/dialog";
+import { useMediaQuery } from "react-responsive";
+import { SheetClose, SheetContent } from "@/components/ui/sheet";
+import HoverCancel from "@/components/custom/Icons/HoverCancel";
 
 const formSchema = z.object({
     review_remark: z.string().min(1, { message: "You have to select one item"}),
@@ -15,13 +16,21 @@ const formSchema = z.object({
     correction_doc: z.instanceof(File, { message: "Please upload a file" }).optional()
 })
 
-export default function WriteReview({ setLoader }: { setLoader: (loading: boolean) => void}) {
-    const review_remarks = [
-        { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
-        { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
-        { id: "3", text: "Unamused", color: "#608FEB", icon: Unamused },
-    ];
+interface ReviewRemark {
+    id: string;
+    text: string;
+    color: string;
+    icon: string;
+  }
+  
+  interface WriteReviewProps {
+    setLoader: (loading: boolean) => void;
+    remarks: ReviewRemark[];
+    buttonText: string;
+  }
 
+export default function WriteReview({ setLoader, remarks, buttonText }: WriteReviewProps) {
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         // defaultValues,
@@ -51,8 +60,8 @@ export default function WriteReview({ setLoader }: { setLoader: (loading: boolea
     }
 
     return (
-        <DialogContent className='fixed !w-full !max-w-[80%] h-[90%] mx-auto'>
-            <div className="pb-6 px-6 mt-12 overflow-y-scroll">
+       <WriteReviewWrapper>
+            <div className="pb-6 px-6 mt-12 overflow-y-scroll scrollbar scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-w-1.5 scrollbar-thumb-gray-500">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                         <div className="py-2 px-4 flex flex-col gap-6 w-full">
@@ -62,8 +71,8 @@ export default function WriteReview({ setLoader }: { setLoader: (loading: boolea
                                     <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
                                     <div className="!w-full">
                                     <FormField control={form.control} name="review_remark" render={() => (
-                                        <FormItem className="w-full grid md:grid-cols-3 grids-col-1 gap-3 items-center justify-center">
-                                            {review_remarks.map((remark) => (
+                                        <FormItem className="w-full flex gap-3 items-center justify-center">
+                                            {remarks.map((remark) => (
                                                 <FormField key={remark.id} control={form.control} name="review_remark" render={({ field }) => (
                                                     <FormItem className="!w-full min-w-[28rem] md:min-w-0 justify-self-end !my-0">
                                                         <FormControl>
@@ -112,7 +121,7 @@ export default function WriteReview({ setLoader }: { setLoader: (loading: boolea
                                 </div>
                             </div>
                             <div className="w-full flex items-center justify-center">
-                                <Button variant={isValid ? "default" : "ghost"} className="w-full max-w-[9.375rem]">Submit review</Button>
+                                <Button variant={isValid ? "default" : "ghost"} className="w-full max-w-[9.375rem]">{buttonText}</Button>
                             </div>
                             
                         </div>
@@ -122,7 +131,25 @@ export default function WriteReview({ setLoader }: { setLoader: (loading: boolea
                 
                 
             </div>
-        </DialogContent>
+        </WriteReviewWrapper>
         
+    )
+}
+
+const WriteReviewWrapper = ({ children }: {children: React.ReactNode}) => {
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)'})
+    return (
+        <>
+        {isMobile ? 
+        <SheetContent className="w-full h-full  pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4">
+            <SheetClose className="absolute right-6 top-6 !w-fit mx-auto py-0 px-0 ml-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"><HoverCancel /></SheetClose>
+            {children}
+        </SheetContent>
+        :
+        <DialogContent className='fixed !w-full !max-w-[56rem] h-[90%] mx-auto '>
+            {children}
+        </DialogContent>
+        }
+      </>
     )
 }
