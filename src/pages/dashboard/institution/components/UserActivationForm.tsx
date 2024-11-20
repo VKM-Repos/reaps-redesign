@@ -87,7 +87,7 @@ export function UserActivationForm({
             <h2 className="text-center font-semibold text-xl mb-2">{action}</h2>
             <span className="text-center text-sm">
               <span className="capitalize">{user.user_type}</span> (
-              {user.first_name} {user.last_name}) have been {action}
+              {user.first_name} {user.last_name}) have been {action}d
             </span>
             <DialogClose asChild>
               <Button onClick={handleClosDialog} type="button">
