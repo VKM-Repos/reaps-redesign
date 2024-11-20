@@ -8,6 +8,7 @@ export interface Transaction {
   reference: string;
   id: string;
   date: string;
+  time: string;
   status: string;
   amount: string;
 }

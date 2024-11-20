@@ -21,6 +21,7 @@ import MyRequest from "@/pages/dashboard/requests/pages/MyRequest";
 import ReviewRequest from "@/pages/dashboard/requests/pages/ReviewRequest";
 import ManageRequestPage from "@/pages/dashboard/requests/pages/ManageRequestPage";
 import Templates from "@/pages/dashboard/templates";
+import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
 
 const router = [
   {
@@ -173,6 +174,14 @@ const router = [
         path: "pricing",
         title: "Pricing",
         element: Pricing,
+        routes: [
+          {
+            name: "Transactions",
+            path: "pricing/your-transactions",
+            title: "Transactions",
+            element: ViewTransactions,
+          }
+        ]
       },
       {
         name: "Settings",
