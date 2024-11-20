@@ -1,8 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useSideBar } from '@/context/SideBarContext';
-import Reapslogo from '/icons/reap-icon.svg';
-import Marklogo from '/icons/mark.svg';
-import useUserStore from '@/store/user-store';
+import { Link, useLocation } from "react-router-dom";
+import { useSideBar } from "@/context/SideBarContext";
+import Reapslogo from "/icons/reap-icon.svg";
+import Marklogo from "/icons/mark.svg";
+import useUserStore from "@/store/user-store";
 
 export default function Sidebar() {
   const { pathname } = useLocation();
@@ -26,8 +26,11 @@ export default function Sidebar() {
       <div className="scrollbar-hide h-[calc(100vh-130px)] overflow-y-scroll">
         <ul className="flex flex-col gap-8 px-6 pb-10">
           {links.map(({ path, icon, label, subLinks }) =>
-            activeRole === 'admin' &&
-            (label === 'Requests' || label === 'Institution') ? (
+            activeRole === "admin" ||
+            (activeRole === "super admin" &&
+              (label === "Requests" ||
+                label === "Institution" ||
+                label === "Super Admin")) ? (
               <div key={label} className="flex flex-col gap-4">
                 <div className="text-black/30 text-xs uppercase">{label}</div>
                 <div className="flex flex-col gap-8">
@@ -38,8 +41,8 @@ export default function Sidebar() {
                         to={path}
                         className={`${
                           path.includes(pathname)
-                            ? 'text-black'
-                            : 'text-black/30'
+                            ? "text-black"
+                            : "text-black/30"
                         } hover:text-black flex items-center justify-start space-x-4`}
                       >
                         <span>{icon}</span>
@@ -53,7 +56,7 @@ export default function Sidebar() {
                 key={label}
                 to={path}
                 className={`${
-                  path.includes(pathname) ? 'text-black' : 'text-black/30'
+                  path.includes(pathname) ? "text-black" : "text-black/30"
                 } hover:text-black flex items-center justify-start space-x-4`}
               >
                 <span>{icon}</span>

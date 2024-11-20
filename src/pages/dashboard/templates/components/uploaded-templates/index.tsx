@@ -6,7 +6,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -25,7 +25,7 @@ import UploadTemplate from "../upload-templates";
 import { useTemplateStore } from "@/store/templates-store";
 import { Skeleton } from "@/components/ui/skeleton";
 import Cancel from "@/components/custom/Icons/Cancel";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { getFileExtension } from "@/lib/utils";
 
 export default function UploadedTemplates({
@@ -62,6 +62,7 @@ const UploadedTemplate = ({
   templateName: string | undefined;
   templateUrl: string;
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const { setLoading } = useTemplateStore();
   const [isViewerLoading, setIsViewerLoading] = useState(false);
@@ -85,10 +86,36 @@ const UploadedTemplate = ({
       fileType: getFileExtension(templateUrl),
     },
   ];
+  useEffect(() => {
+    const hideIframeToolbar = () => {
+      // Ensure the container exists
+      if (containerRef.current) {
+        const iframe = containerRef.current.querySelector("iframe");
+        if (iframe && iframe.contentWindow) {
+          const doc = iframe.contentWindow.document;
+
+          // Inject custom CSS to hide the toolbar
+          const style = doc.createElement("style");
+          style.innerHTML = `
+            .toolbar-class { /* Replace this with the actual toolbar class name */
+              display: none !important;
+            }
+          `;
+          doc.head.appendChild(style);
+        }
+      }
+    };
+
+    // Wait a bit to ensure the iframe and its contents are loaded
+    const timeoutId = setTimeout(hideIframeToolbar, 5000);
+
+    // Cleanup in case the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, []);
   return (
     <div className="w-full md:max-w-[25.875rem] py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
       <div className="py-3 flex justify-between">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 h-[400px]">
           <div className="flex justify-between w-full items-center gap-5">
             <div className="flex items-center gap-5">
               <img src={RedFile} />
@@ -137,7 +164,7 @@ const UploadedTemplate = ({
                                   disableFileName: true,
                                 },
                               }}
-                              style={{ width: 650, height: 600 }}
+                              style={{ width: 650, height: 700 }}
                             />
                           )}
                         </div>
@@ -189,10 +216,9 @@ const UploadedTemplate = ({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="rounded-lg">
+          <div ref={containerRef}>
             <DocViewer
               documents={docs}
-              pluginRenderers={DocViewerRenderers}
               config={{
                 header: {
                   disableHeader: true,
@@ -200,7 +226,10 @@ const UploadedTemplate = ({
                   retainURLParams: false,
                 },
               }}
-              className="w-[400px] h-[400px] aspect-square object-cover rounded-lg"
+              theme={{
+                disableThemeScrollbar: true,
+              }}
+              style={{ width: 400, height: 400 }}
             />
           </div>
         </div>

@@ -45,7 +45,7 @@ export default function Requests() {
         {/* tab */}
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {activeRole === "admin" ? (
+            {activeRole === "admin" || activeRole === "super admin" ? (
               <Tabs
                 defaultValue="request users"
                 onValueChange={(val) => setActiveTab(val)}
@@ -87,7 +87,7 @@ export default function Requests() {
                   />
                 </TabsContent>
                 <TabsContent value="review users">
-                  <ReviwersTable
+                  <ResearchersTable
                     usersTableData={
                       users?.items.filter(
                         (user: any) => user.user_type == "reviewer"
@@ -97,7 +97,7 @@ export default function Requests() {
                   />
                 </TabsContent>
                 <TabsContent value="admin users">
-                  <AdminsTable
+                  <ResearchersTable
                     usersTableData={
                       users?.items.filter(
                         (user: any) => user.user_type == "admin"

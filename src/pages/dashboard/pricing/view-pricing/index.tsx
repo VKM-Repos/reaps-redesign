@@ -25,7 +25,7 @@ export default function CategoryTable({ categories }: CategoryProps) {
     ]
     return (
         <>
-          <CustomTable columns={columnData} data={categories}/>   
+          <CustomTable columns={columnData} data={categories} customRowClassName="!py-2 hover:bg-unset"/>   
         </>
     )
 }
