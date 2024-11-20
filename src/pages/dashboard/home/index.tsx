@@ -8,6 +8,7 @@ import Loader from "@/components/custom/Loader";
 import ResearcherHomePage from "./researcher";
 import InstitutionAdminHome from "./institution";
 import useUserStore from "@/store/user-store";
+import SuperAdminHome from "./super-admin";
 
 const Home = () => {
   // create handle open function
@@ -46,7 +47,11 @@ const Home = () => {
             </Button>
           </div>
           {activeRole === "admin" || activeRole === "super admin" ? (
-            <InstitutionAdminHome />
+            activeRole === "admin" ? (
+              <InstitutionAdminHome />
+            ) : (
+              <SuperAdminHome />
+            )
           ) : (
             <ResearcherHomePage />
           )}
