@@ -5,7 +5,7 @@ import { Providers } from "./providers";
 function App() {
   return (
     <Providers>
-      <Routes isAuthorized={true} />
+      <Routes />
     </Providers>
   );
 }

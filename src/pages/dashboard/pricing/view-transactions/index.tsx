@@ -1,19 +1,13 @@
-// import CustomTable from "@/components/custom/CustomTable";
 import { Badge } from "@/components/ui/badge";
-import { ColumnSetup } from "@/lib/helpers";
 import ArrowLeft from "@/components/custom/Icons/ArrowLeft";
 import { useTransactionStore } from "@/store/TransactionStore";
 import { useEffect } from "react";
 import TransactionDetails from "./TransactionDetails";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-
-type ViewTransactionsProps = {
-    setShowTransactions: (value: boolean) => void;
-}
+import CustomTable, { CustomCell, ColumnSetup } from "@/components/custom/CustomTable";
+import { useNavigate } from "react-router-dom";
 
 export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
     Failed: { bg: '#FC8D94', text: '#320104' },
@@ -24,21 +18,14 @@ export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
   
-export default function ViewTransactions({ setShowTransactions }: ViewTransactionsProps) {
+export default function ViewTransactions() {
     const { data, setTransactions } = useTransactionStore();
     const { transactions } = data;
-    const [ showDetails, setShowDetails ] = useState(false);
     const isMobile = useMediaQuery({query: '(max-width: 767px)'});
+    const navigate = useNavigate();
   
-    
-    
     const handleFunc = () => {
-        setShowTransactions(false);
-    }
-
-
-    const handleRowClick = () => {
-        setShowDetails(true);
+        navigate('/pricing');
     }
 
     useEffect(() => {
@@ -47,26 +34,23 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
     
     const columnData: ColumnSetup<any>[]= [
         {
-            header: "Reference",
-            accessor: "reference",
-            cellType: 'text',
-            headerClass: " text-[#454747] min-w-[12.5rem] font-semibold text-left text-xl",
-            cellClass: "w-full min-w-[12.5rem] text-[#868687] text-sm text-left font-normal"
+            header: () => <CustomCell value="References" className="text-[#454747] min-w-[12.5rem] font-semibold text-left text-xl" />,
+            accessorKey: "reference",
+            cell: (info) => <CustomCell value={info.getValue()} className="w-full min-w-[12.5rem] text-[#868687] text-sm text-left font-normal" />
         },
         {
-            header: "Request ID",
-            accessor: "id",
-            cellType: 'text',
-            headerClass: "text-[#454747] w-full min-w-[12.5rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center w-full min-w-[12.5rem] text-[#868687] text-sm font-normal"
+            header: () => <CustomCell value="Request ID" className="text-[#454747] w-full min-w-[9.5rem] font-semibold text-lg flex items-center text-xl" />,
+            accessorKey: "id",
+            cell: (info) => <CustomCell value={info.getValue()} className="flex items-center w-full min-w-[9.5rem] text-[#868687] text-sm font-normal" />
         },
         {
-            header: "Status",
-            accessor: "status",
-            cellType: 'custom',
-            customRender: (item: any) => {
+            header: () => <CustomCell value="Status" className="text-[#454747] w-full min-w-[7rem] font-semibold text-lg flex items-center text-xl"/>,
+            accessorKey: "status",
+            meta: { cellType: "custom" },
+            cell: ({ row }) => {
+                const item = row.original;
                 return (
-                    <>
+                    <div className="flex items-center w-full min-w-[7rem] font-normal">
                         <Badge
                           style={{
                             color: statusColorMap[item.status]?.text || '#000000',
@@ -82,33 +66,55 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
                           ></div>
                           {item.status}
                         </Badge>
-                    </>
+                    </div>
                   );
             },
-            headerClass: "text-[#454747] w-full min-w-[10rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center w-full min-w-[10rem] font-normal"
         },
         {
-            header: "Date",
-            accessor: "date",
-            cellType: 'custom',
-            customRender: (item: any) => {
+            header: () => <CustomCell value={"Date"} className="text-[#454747] w-full min-w-[10rem] font-semibold text-lg flex items-center text-xl"/>,
+            accessorKey: "date",
+            meta: { cellType: "custom" },
+            cell: ({ row }) => {
+                const item = row.original;
                
                 return (
-                    <>{item.date} <span>&nbsp;|&nbsp;</span> {item.time}</>
+                    <div className="flex items-center text-[#868687] text-sm w-full min-w-[10rem] font-normal">{item.date} <span>&nbsp;|&nbsp;</span> {item.time}</div>
                 )
             },
-            headerClass: "text-[#454747] w-full min-w-[10rem] font-semibold text-lg flex items-center text-xl",
-            cellClass: "flex items-center text-[#868687] text-sm w-full min-w-[10rem] font-normal"
         },
         {
-            header: "Amount",
-            accessor: "amount",
-            cellType: 'text',
-            headerClass: "text-[#454747] font-semibold text-lg text-xl flex items-center justify-center max-w-[6rem]",
-            cellClass: "flex items-center justify-center text-[#868687] text-sm font-normal max-w-[6rem]"
+            header: () => <CustomCell value="Amount" className="text-[#454747] font-semibold text-lg text-xl flex items-center justify-center w-[6rem]" />,
+            accessorKey: "amount",
+            cell: (info) => <CustomCell value={info.getValue()} className="flex items-center justify-center text-[#868687] text-sm font-normal w-[6rem]" />
         },
+        {
+            accessorKey: "custom",
+            header: () => <CustomCell value="" className="w-full md:max-w-[3rem] flex items-start" />,
+            meta: { cellType: "custom" },
+            cell: ({ row }) => {
+                const item = row.original;
+                return (
+                    <div className="flex items-center justify-center min-w-[6rem]">
+                    {isMobile ?
+                    <Sheet>
+                        <SheetTrigger className="text-sm text-[#192C8A]">
+                            View
+                        </SheetTrigger>
+                        <TransactionDetails transaction={item} />
+                    </Sheet>
+                    :
+                    <Dialog modal={false}>
+                        <DialogTrigger className="text-sm text-[#192C8A]">
+                            View
+                        </DialogTrigger>
+                        <TransactionDetails transaction={item} />
+                    </Dialog>}
+                </div>
+                )
+                
+            }
 
+        }
     ]
     
 
@@ -121,63 +127,7 @@ export default function ViewTransactions({ setShowTransactions }: ViewTransactio
             </div>
             <p className="text-sm text-[#454745]">Here you can see the details of all the payments you have made , please not that you will only find the transaction history of only payments made online and not offline</p>
         </div>
-        {/* <CustomTable columns={columnData} data={transactions} onRowClick={handleRowClick}/>  */}
-        <div className={`w-full flex flex-col mb-[7rem] ${isMobile && "overflow-x-scroll"} gap-2 
-        [&::-webkit-scrollbar]:h-2 
-        [&::-webkit-scrollbar-track]:rounded-full 
-        [&::-webkit-scrollbar-track]:bg-gray-10110
-        [&::-webkit-scrollbar-thumb]:bg-[#868687]`}>
-        <Table className="w-full border overflow-scroll">
-                <TableHeader>
-                    <TableRow className="font-bold w-full flex items-center justify-between !border-b p-6">
-                    {columnData.map((column, index) => (
-                        <TableHead key={index} className={`font-bold text-left w-full !h-auto ${column.headerClass || ''}`}>
-                            {column.header}
-                        </TableHead>
-                    ))}
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {transactions.map((rowData, rowIndex) => (
-                    <>
-                    {isMobile ?
-                    <Sheet>
-                        <SheetTrigger className="w-full">
-                            <TableRow key={rowIndex} 
-                            className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]"
-                            onClick={() => handleRowClick()}>
-                                {columnData.map((column, index) => (
-                                    <TableCell key={index} className={column.cellClass}>
-                                    {column.cellType === 'custom' && column.customRender ? column.customRender(rowData) :  (rowData as any)[column.accessor]}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </SheetTrigger>
-                        {showDetails && <TransactionDetails transaction={rowData}/>}
-                    </Sheet>
-                     : 
-                     <Dialog>
-                        <DialogTrigger className="w-full">
-                            <TableRow key={rowIndex} 
-                            className="flex items-center justify-between !px-6 !py-4 !border-none rounded-3xl hover:bg-[#14155E14]"
-                            onClick={() => handleRowClick()}>
-                                {columnData.map((column, index) => (
-                                    <TableCell key={index} className={column.cellClass}>
-                                    {column.cellType === 'custom' && column.customRender ? column.customRender(rowData) :  (rowData as any)[column.accessor]}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </DialogTrigger>
-                        {showDetails && <TransactionDetails transaction={rowData}/>}
-                    </Dialog>
-                    }
-                    </>
-                    ))}
-                </TableBody>
-                
-            </Table>
-            {isMobile && <div className="w-full">&nbsp;</div>}
-        </div>
+        <CustomTable columns={columnData} data={transactions} customTableClassName="!pb-4" customRowClassName="px-5 !py-3 rounded-none"/> 
     </div>
     )
 }

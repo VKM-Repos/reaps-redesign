@@ -14,6 +14,9 @@ import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import ArrowUp from "@/components/custom/Icons/ArrowUp";
 import ArrowDown from "@/components/custom/Icons/ArrowDown";
 import { UserGradeDialog } from "./UserGradeDialog";
+import { Check } from "lucide-react";
+import Cancel from "@/components/custom/Icons/Cancel";
+import useUserStore from "@/store/user-store";
 
 // type usersTableDataProps = {
 //   usersTableData: {
@@ -43,6 +46,8 @@ function RenderFunctions({
   item: any;
   refetch: () => void;
 }) {
+  const { activeRole } = useUserStore();
+
   return (
     <>
       <DropdownMenu modal={false}>
@@ -71,6 +76,19 @@ function RenderFunctions({
                 title="Downgrade"
               />
             </DropdownMenuItem>
+            {activeRole === "super admin" && (
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                {item?.enable ? <Cancel /> : <Check />}
+                <UserGradeDialog
+                  refetch={refetch}
+                  user={item}
+                  title={item?.enable ? "De-activate" : "Activate"}
+                />
+              </DropdownMenuItem>
+            )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
