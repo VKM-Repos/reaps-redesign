@@ -86,6 +86,7 @@ const AppSummary = ({ handleNext }: Props) => {
   };
 
   const handleGoBack = (step: number) => {
+    navigate('/requests/edit-request');
     setStep(step);
   };
 
