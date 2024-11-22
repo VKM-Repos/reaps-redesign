@@ -93,8 +93,8 @@ export default function ReviewersList() {
                     <CustomTable
                       columns={columnData}
                       data={assigned_reviewers}
-                      localSearch={searchTerm}
-                      setLocalSearch={setSearchTerm}
+                    //   localSearch={searchTerm}
+                    //   setLocalSearch={setSearchTerm}
                       customTableClassName="p-5 w-full "
                       customHeaderRowClassName="bg-[#14155E14] border-b-[#0E0F0C1F] !my-3 !py-2 !px-6 rounded-[.625rem] flex justify-between"
                       customRowClassName="!border-b-[#0E0F0C1F] !border !border-b !my-3 !px-6 !py-0 hover:bg-[#14155E14] !rounded-[.625rem] flex justify-between"
