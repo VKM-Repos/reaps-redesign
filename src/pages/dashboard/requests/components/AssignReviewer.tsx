@@ -44,7 +44,6 @@ export default function AssignReviewer({
       }, 500);
     }, 3000);
   }
-  console.log(reviewerss.items);
 
   const columnData: ColumnSetup<any>[] = [
     {
@@ -162,7 +161,7 @@ export default function AssignReviewer({
               <div className="w-full max-w-[95%] ">
                 <CustomTable
                   columns={columnData}
-                  data={reviewerss.items}
+                  data={reviewerss?.items || []}
                   localSearch={searchTerm}
                   setLocalSearch={setSearchTerm}
                   customTableClassName="p-5 w-full"
