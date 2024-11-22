@@ -79,6 +79,8 @@ export const LogoSignature = () => {
     },
   });
 
+  // TODO: PUT request to update logo and signature because reuploading  wont change the previous image
+
   const { mutate: uploadSignature, isPending: isPendingSignature } = usePOST(
     "signatures",
     {

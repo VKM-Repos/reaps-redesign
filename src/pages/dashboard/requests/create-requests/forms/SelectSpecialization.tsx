@@ -1,4 +1,3 @@
-import { useRequestsStore } from "@/store/RequestFormStore";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { z } from "zod";
@@ -27,8 +26,6 @@ const formSchema = z.object({
 });
 
 export default function SelectSpecialization({ handleNext }: Props) {
-  const { data, setData } = useRequestsStore();
-
   const { data: specializationData, isPending } = useGET({
     queryKey: ["specialization", "keywords"],
     url: "specializations",
@@ -53,17 +50,9 @@ export default function SelectSpecialization({ handleNext }: Props) {
 
   const selectedSpecialization = watch("specialisation");
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit() {
     try {
-      setData({
-        requestsDetails: {
-          ...data.requestsDetails,
-          specialisation: values.specialisation,
-        },
-      });
-      setTimeout(() => {
-        handleNext();
-      }, 3000);
+      handleNext();
     } catch (error) {
       console.error(error);
     }
