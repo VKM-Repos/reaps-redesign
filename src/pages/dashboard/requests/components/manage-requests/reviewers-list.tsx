@@ -1,5 +1,5 @@
 import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
-import SearchIcon from "@/components/custom/Icons/Search";
+// import SearchIcon from "@/components/custom/Icons/Search";
 import { DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
 import Smile from "@/assets/smile.svg";
@@ -7,16 +7,16 @@ import Unhappy from "@/assets/unhappy.svg";
 import Unamused from "@/assets/unamused.svg";
 
 export default function ReviewersList() {
-    const [searchTerm, setSearchTerm] = useState("");
+    // const [searchTerm, setSearchTerm] = useState("");
     const review_remarks = [
         { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
         { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
         { id: "3", text: "Further Review", color: "#608FEB", icon: Unamused },
       ];
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(e.target.value);
-    };
+    // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   setSearchTerm(e.target.value);
+    // };
     const columnData: ColumnSetup<any>[] = [
         {
           header: () => (
@@ -88,19 +88,6 @@ export default function ReviewersList() {
                     <h1 className="font-semibold text-[1.875rem]">
                       Reviewers
                     </h1>
-                    <div className="flex justify-between w-full">
-                      <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem] w-full min-w-[13rem] md:min-w-[21rem] max-w-[21rem]">
-                        <SearchIcon />
-                        <input
-                          name="search"
-                          placeholder="Search"
-                          type="search"
-                          value={searchTerm}
-                          onChange={handleSearchChange}
-                          className="border-none hover:border-none focus:border-none w-full focus-visible:outline-none text-sm"
-                        />
-                      </div>
-                    </div>
                   </div>
                   <div className="w-full max-w-[98%]">
                     <CustomTable
