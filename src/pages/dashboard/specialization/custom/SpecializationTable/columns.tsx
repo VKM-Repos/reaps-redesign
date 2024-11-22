@@ -15,10 +15,10 @@ const columns: Array<ColumnDef<SpecializationItems>> = [
     cell: ({ row }) => {
       const { keywords } = row.original;
       return (
-        <div className="flex gap-1">
+        <div className="w-full flex gap-1">
           {keywords.map((keyword: KeywordItems) => (
-            <span key={keyword.id} style={{ marginRight: 4 }}>
-              <Badge className="w-fit text-black flex items-center justify-center gap-1 bg-[#192C8A1A] capitalize hover:bg-[#192C8A1A]">
+            <span className="flex" key={keyword.id}>
+              <Badge className="w-fit text-black flex items-center justify-center gap-1 bg-[#192C8A1A] capitalize hover:bg-[#192C8A1A] whitespace-nowrap">
                 {keyword.keyword}
               </Badge>
             </span>
