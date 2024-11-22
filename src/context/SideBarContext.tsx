@@ -152,28 +152,6 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
             },
           ],
         },
-        {
-          label: "Super Admin",
-          path: "/super-admin",
-          icon: <User />,
-          subLinks: [
-            {
-              label: "Institutions",
-              path: "/super-admin/institutions",
-              icon: <School />,
-            },
-            {
-              label: "users",
-              path: "/super-admin/users",
-              icon: <UserMultiple />,
-            },
-            {
-              label: "Account",
-              path: "/institution/account",
-              icon: <Bank />,
-            },
-          ],
-        }
       );
       break;
     case "super admin":
