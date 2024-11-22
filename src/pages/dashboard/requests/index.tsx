@@ -33,11 +33,17 @@ export default function Requests() {
     }, 5000);
   };
 
-  const requestsStatuses = ["Draft", "Pending", "Approved", "Under Review", "Declined", "Reapproved"];
+  const requestsStatuses = [
+    "Draft",
+    "Pending",
+    "Approved",
+    "Under Review",
+    "Declined",
+    "Reapproved",
+  ];
 
   const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
 
-  
   useEffect(() => {
     setStatuses(
       activeTab === "request table" ? requestsStatuses : reviewStatuses
@@ -45,8 +51,8 @@ export default function Requests() {
   }, [activeTab]);
 
   useEffect(() => {
-    setStatuses(requestsStatuses)
-  }, [])
+    setStatuses(requestsStatuses);
+  }, []);
 
   const deleteStatusUpdate = (status: String) => {
     setAppliedStatuses((prev) => prev.filter((val) => val !== status));
@@ -57,8 +63,8 @@ export default function Requests() {
 
   return (
     <>
-    {loading && <Loader />}
-    {activeRole !== 'admin' &&
+      {loading && <Loader />}
+      {activeRole !== "admin" && (
         <div className="flex flex-col gap-12 mb-20">
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />
@@ -78,7 +84,13 @@ export default function Requests() {
           {tableData && tableData.length > 0 ? (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-              <SeachFilter statuses={statuses} activeTab={activeTab} setLoading={setLoading} setShowStatuses={setShowStatuses} setAppliedStatuses={setAppliedStatuses}/>
+                <SeachFilter
+                  statuses={statuses}
+                  activeTab={activeTab}
+                  setLoading={setLoading}
+                  setShowStatuses={setShowStatuses}
+                  setAppliedStatuses={setAppliedStatuses}
+                />
                 <div className="lg:flex items-center gap-1 hidden">
                   <span>
                     <a href="" className="font-semibold underline text-black">
@@ -99,28 +111,33 @@ export default function Requests() {
                         {status}
                       </span>
                       <span onClick={() => deleteStatusUpdate(status)}>
-                        <X size={10}  />
+                        <X size={10} />
                       </span>
                     </div>
                   ))}
                 </div>
               )}
               {/* change tables to completed state  */}
-              {activeRole === 'reviewer' ? (
+              {activeRole === "reviewer" ? (
                 <Tabs
                   defaultValue="request table"
                   onValueChange={(val) => setActiveTab(val)}
                 >
                   <TabsList className="border-b-[1.5px] w-full px-3">
                     <TabsTrigger value="request table">My request</TabsTrigger>
-                    <TabsTrigger value="review table">Review request</TabsTrigger>
+                    <TabsTrigger value="review table">
+                      Review request
+                    </TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="request table">
                     <TableRequests tableData={tableData} />
                   </TabsContent>
                   <TabsContent value="review table">
-                    <TableReview reviewTableData={reviewTableData} activeTab={activeTab}/>
+                    <TableReview
+                      reviewTableData={reviewTableData}
+                      activeTab={activeTab}
+                    />
                   </TabsContent>
                 </Tabs>
               ) : (
@@ -131,7 +148,7 @@ export default function Requests() {
             <EmptyRequests />
           )}
         </div>
-      }
+      )}
     </>
   );
 }
