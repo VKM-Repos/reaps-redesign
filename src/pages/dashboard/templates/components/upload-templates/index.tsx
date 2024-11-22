@@ -69,8 +69,6 @@ export default function UploadTemplate({
 
   const errorCallBack = (error: any) => {
     const message = error?.response?.data?.detail;
-    console.log(message);
-
     toast({
       title: "Error",
       description: message,
