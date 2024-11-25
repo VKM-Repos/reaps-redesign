@@ -178,8 +178,9 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
                           className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                         >
                           <span className="flex gap-2 items-center justify-center">
-                            {activeTab === 'review table' || 
-                              pathname.includes('/requests/review-requests') ?
+                            {(activeTab === 'review table' || 
+                              pathname.includes('/requests/review-requests')) || 
+                              (pathname.includes('/requests/manage-requests')) ?
                                 <span className='text-black text-[0.8rem]'>
                                   <GoogleDoc />
                                 </span>
