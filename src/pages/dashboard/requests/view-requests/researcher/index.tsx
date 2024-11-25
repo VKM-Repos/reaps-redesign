@@ -51,14 +51,14 @@ export default function ResearcherRequestSummary() {
          setShowTracker={setShowTracker}
        />
         }
-        <div className="mx-auto md:p-2 md:border-b md:border-t-0 w-full">
-          <div className={`${isMobile ? 'border border-[#0C0C0F29] !w-[95%]' : ''} w-full md:w-[90%] mx-auto flex justify-between md:justify-unset`}>
+        <div className="mx-auto md:border-t-0 w-full">
+          <div className={`${isMobile ? 'border border-[#0C0C0F29] !w-[95%]' : ''} md:fixed md:top-0 md:border-b md:bg-white z-40  w-full mx-auto flex justify-between md:justify-unset`}>
             <div className="p-2 w-full">
               <h1 className="text-center font-semibold text-xl md:text-xl2">
                 Your application Summary
               </h1>
             </div>
-            <SheetClose className="bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit">
+            <SheetClose className="md:absolute md:right-10 top-2 md:mt-0 mt-1 bg-inherit focus:outline-none border-none hover:border hover:bg-accent hover:rounded-full p-2.5 h-fit">
               <Cancel />
             </SheetClose>
           </div>

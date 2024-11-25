@@ -62,6 +62,7 @@ export default function ReviewerRequestSummary({ activeTab }: { activeTab: strin
                                     <NavItem sectionId="research-info" label="Research Information" />
                                     <NavItem sectionId="application-info" label="Application Information" />
                                     <NavItem sectionId="supporting-document" label="Supporting Document" />
+                                    <NavItem sectionId="comments-reviews" label="Comments and Reviews" />
                                     <div className="mt-3 w-full">
                                         <Dialog>
                                             <DialogTrigger className="w-full">

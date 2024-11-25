@@ -184,7 +184,7 @@ const review_remarks = [
 
 
               {/* Comments and Reviews Section */}
-              <section id="comments-reviews-section" className='py-5 px-3 flex flex-col gap-4'>
+              <section id="comments-reviews" className='py-5 px-3 flex flex-col gap-4'>
                 <div className='flex flex-col md:flex-row justify-between gap-2 md:items-center text-black'>
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Comments and Reviews</h1>
                 </div>
