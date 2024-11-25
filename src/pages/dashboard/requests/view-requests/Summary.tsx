@@ -1,8 +1,8 @@
 import CustomFormField, { FormFieldType } from '@/components/custom/CustomFormField';
 import FormInput from '@/components/custom/FormInput';
 import { Form } from '@/components/ui/form';
-import { FileDetails, fileGroup, useRequestsStore } from '@/store/RequestFormStore';
-import { application, supportDocData, tableData } from '@/lib/helpers';
+import { useRequestsStore } from '@/store/RequestFormStore';
+import { application, reviews, supportDocData, tableData } from '@/lib/helpers';
 import { useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import GreenCheckmark from '@/components/custom/Icons/GreenCheckmark';
@@ -12,6 +12,11 @@ import Download from '@/components/custom/Icons/Download';
 import { useLocation } from 'react-router-dom';
 import useUserStore from '@/store/user-store';
 import GoogleDoc from '@/components/custom/Icons/GoogleDoc';
+import User from '@/components/custom/Icons/User';
+import Smile from "@/assets/smile.svg";
+import Unhappy from "@/assets/unhappy.svg";
+import Unamused from "@/assets/unamused.svg";
+import Line from '@/assets/line.svg';
 
 type SummaryPageProps = {
     isApproval?: boolean,
@@ -44,46 +49,16 @@ const Summary = ({ handlePrint, isApproval, activeTab = "request table" } : Summ
   const { activeRole } = useUserStore();
   const { pathname } = useLocation();
 
-// change handleDownload function to receive file from table data instead not localstorage
-//  isFileGroup will no longer be useful
   const handleDownload = (fileId: string) => {
-    if (isFileGroup(files)) {
-      const fileDetails = files[fileId as keyof fileGroup];  // Directly access file using fileId as a key
-      if (fileDetails && fileDetails.file) {
-          downloadFile(fileDetails);  // Call the download function with the retrieved file
-      } else {
-          console.error("File not found or file is empty.");
-      }
-  } else {
-      console.error("Files is not of type fileGroup.");
-  }
+   console.log(fileId)
 };
 
-const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
-  return (files as fileGroup).requirement1 !== undefined;
-};
+const review_remarks = [
+  { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
+  { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
+  { id: "3", text: "Further Review", color: "#608FEB", icon: Unamused },
+];
 
-  
-  const downloadFile = (file: FileDetails) => {
-      if (!file || !file.file) {
-          console.error("No file available for download.");
-          return;
-      }
-      // Create a URL for the file
-      const fileURL = URL.createObjectURL(file.file);
-      // Create a temporary <a> element to trigger the download
-      const a = document.createElement('a');
-      a.href = fileURL;
-      a.download = file.path;  // Set the filename
-      // Append the element to the body (necessary for it to work in some browsers)
-      document.body.appendChild(a);
-      // Programmatically click the element to start the download
-      a.click();
-  
-      // Clean up
-      document.body.removeChild(a);
-      URL.revokeObjectURL(fileURL);
-  };
 
   function onSubmit() {
     try {
@@ -208,6 +183,77 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
               </section>
 
 
+              {/* Comments and Reviews Section */}
+              <section id="comments-reviews-section" className='py-5 px-3 flex flex-col gap-4'>
+                <div className='flex flex-col md:flex-row justify-between gap-2 md:items-center text-black'>
+                  <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">Comments and Reviews</h1>
+                </div>
+                <div className='flex flex-col gap-6 mx-auto'>
+                  {/* do not show reviews from Reviewers to researchers*/}
+                  {reviews?.filter(({ reviewer }) => !(activeRole === 'user' && reviewer.user_type === 'Reviewer'))
+                    .map(({ id, reviewer}) => {
+                    const remark = review_remarks.find((r) => r.text === reviewer.remark); 
+    
+
+                    return(
+                      <div key={id} className='p-3 flex flex-col gap-[0.625rem] border-b border-b-[#0E0F0C1F]'>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex items-center gap-[0.625rem]'>
+                            <div className="rounded-full bg-[#14155E14] p-2">
+                              <User />
+                            </div>
+                            <div className='flex flex-col gap-1'>
+                              <p className='font-semibold text-sm'>{reviewer.name}</p>
+                              <p className='text-sm text-[#868687] '>{reviewer.user_type}</p>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-x-2 items-center">
+                            {remark?.icon && (
+                            <span className='w-fit justify-self-end' style={{ color: `${remark.color}` }}><img src={remark.icon} style={{ color: `${remark.color}` }}/></span>
+                            )}
+                            <span
+                              style={{ color: remark?.color || "#000" }}
+                              className="text-sm jusify-self-end"
+                              >
+                              {reviewer.remark}
+                            </span>
+                        </div>
+                      </div>
+                        {reviewer.comments?.map(({ id, comment, file }) => (
+                          <div className='pl-2 flex gap-1'>
+                            <div className='py-2 px-3'>
+                              <img src={Line} />
+                              <p>&nbsp;</p>
+                            </div>
+                          <div className='grid grid-rows-2 gap-y-1'>
+                            <p key={id} className="text-sm text-[#6A6A6B]">
+                              {comment}
+                            </p>
+                            {file && 
+                            <div key={file}
+                              className="w-full max-w-[28rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2"
+                            >
+                               <span className="flex gap-6 items-center justify-center">
+                                  <span className='text-black text-[0.8rem]'>
+                                    <GoogleDoc />
+                                  </span>
+                                  <span>{file}</span>
+                               </span>
+                                <button className="p-2" onClick={() => handleDownload(file)}>
+                                  <span><Download /></span>
+                                </button>
+                            </div>
+                            }
+                          </div>
+                        </div>
+                      ))}  
+                    </div>
+                    )
+                  })}
+                </div>
+              </section>
+
+
               {/* Print Button for Researcher */}
               {isMobile && activeTab === 'request table' && 
                 <div className='w-full my-4 flex items-center justify-center'>
@@ -226,3 +272,5 @@ const isFileGroup = (files: {} | fileGroup): files is fileGroup => {
 }
 
 export default Summary
+
+
