@@ -71,10 +71,10 @@ export default function WriteReview({ setLoader, remarks, buttonText }: WriteRev
                                     <p className="text-center text-lg font-semibold">How satisfied are you with the quality of the request?</p>
                                     <div className="!w-full">
                                     <FormField control={form.control} name="review_remark" render={() => (
-                                        <FormItem className="w-full flex gap-3 items-center justify-center">
+                                        <FormItem className="w-full flex flex-wrap gap-3 items-center justify-center">
                                             {remarks.map((remark) => (
                                                 <FormField key={remark.id} control={form.control} name="review_remark" render={({ field }) => (
-                                                    <FormItem className="!w-full min-w-[28rem] md:min-w-0 justify-self-end !my-0">
+                                                    <FormItem className="!w-full min-w-[24rem] md:min-w-0 justify-self-end !my-0">
                                                         <FormControl>
                                                             <label className={"h-[5.5rem] w-full flex flex-col items-center justify-center rounded-lg gap-1 w-full cursor-pointer !my-0"}
                                                                 style={{ border: field.value === remark.id ? "0.2rem solid " + remark.color : "0.5px solid " + remark.color, color: `${remark.color}` }}>

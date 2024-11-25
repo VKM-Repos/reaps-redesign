@@ -12,12 +12,13 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 const review_remarks = [
   { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
   { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
-  { id: "3", text: "Unamused", color: "#608FEB", icon: Unamused },
+  
 ];
 
 const final_review_remarks = [
   { id: "1", text: "Approve", color: "#34A853", icon: Smile },
   { id: "2", text: "Decline", color: "#D03238", icon: Unhappy },
+  { id: "3", text: "Further Review", color: "#608FEB", icon: Unamused },
 ]
 
 

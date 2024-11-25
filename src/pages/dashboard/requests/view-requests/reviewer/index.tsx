@@ -1,13 +1,24 @@
-import { SheetClose, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Cancel from "@/components/custom/Icons/Cancel";
 import Summary from "../Summary";
 import { useState } from "react";
-import ReviewerWriteReview from "./reviewer-write";
+import Smile from "@/assets/smile.svg";
+import Unhappy from "@/assets/unhappy.svg";
+import WriteReview from "../../components/WriteReview";
+import Loader from "@/components/custom/Loader";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 
 
 export default function ReviewerRequestSummary({ activeTab }: { activeTab: string }) {
     const [activeSection, setActiveSection] = useState('');
+    const [loading, setLoader] = useState(false);
+
+    const review_remarks = [
+        { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
+        { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
+        
+      ];
 
     // navigate to sections on summary page
     const handleNavClick = (sectionId: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -20,7 +31,8 @@ export default function ReviewerRequestSummary({ activeTab }: { activeTab: strin
     const NavItem = ({ sectionId, label }: { sectionId: string; label: string }) => (
     <a
         href={`#${sectionId}`}
-        className={`w-full h-12 items-center rounded-md px-3 py-4 hover:bg-slate-200 text-[#6A6C6A] hover:text-black ${activeSection === sectionId ? 'bg-slate-200 text-black' : ''}`}
+        className={`w-full h-12 items-center rounded-md px-3 py-4 hover:bg-slate-200 text-[#6A6C6A] 
+                    hover:text-black ${activeSection === sectionId ? 'bg-slate-200 text-black' : ''}`}
         onClick={handleNavClick(sectionId)}
     >
         {label}
@@ -29,6 +41,7 @@ export default function ReviewerRequestSummary({ activeTab }: { activeTab: strin
  
     return(
         <>
+            {loading && <Loader />}
             <SheetContent side="bottom" className="overflow-y-scroll h-full md:!p-0 rounded-t-lg flex flex-col">
                    <section className="w-full flex md:relative">
                         <div className="w-full hidden md:block mx-6 md:mx-auto border-b fixed z-[100] bg-white top-0 py-2">
@@ -50,7 +63,12 @@ export default function ReviewerRequestSummary({ activeTab }: { activeTab: strin
                                     <NavItem sectionId="application-info" label="Application Information" />
                                     <NavItem sectionId="supporting-document" label="Supporting Document" />
                                     <div className="mt-3 w-full">
-                                        <ReviewerWriteReview />
+                                        <Dialog>
+                                            <DialogTrigger className="w-full">
+                                                    <button className='bg-primary text-white rounded-full flex items-center justify-center  px-6 py-[1.375rem] max-w-[13rem] md:w-full px-6 w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6'>Write your Review</button>
+                                            </DialogTrigger>
+                                            <WriteReview setLoader={setLoader} remarks={review_remarks} buttonText="Submit review"/>
+                                        </Dialog> 
                                     </div>
                                 </div>    
                             </div>
@@ -59,7 +77,16 @@ export default function ReviewerRequestSummary({ activeTab }: { activeTab: strin
                             </div>
                         </main>
                    </section>
-                   <div className="md:hidden mt-auto"><ReviewerWriteReview /></div>
+                   <div className="md:hidden mt-auto">
+                   <Sheet>
+                        <SheetTrigger className="w-full fixed bottom-4">
+                            <button className='bg-primary text-white rounded-full flex items-center justify-center max-w-[13rem] md:w-full px-6 py-[1.375rem] w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6'>Write your Review</button>
+                        </SheetTrigger>
+                        <div className="w-full">
+                            <WriteReview setLoader={setLoader} remarks={review_remarks} buttonText="Submit review"/>
+                        </div>
+                    </Sheet>
+                   </div>
             </SheetContent>
         </>
     );
