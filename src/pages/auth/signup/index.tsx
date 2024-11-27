@@ -1,28 +1,28 @@
-import { useCallback, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useCallback, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { useForm, SubmitHandler } from "react-hook-form";
 import {
   OnboardingFormStore,
   useOnboardingFormStore,
-} from '@/store/CreateOnboardingFormStore';
-import Loader from '@/components/custom/Loader';
-import SendCode from '@/pages/auth/signup/create-account-form/SendCode';
-import Password from '@/pages/auth/signup/create-account-form/RegisterPassword';
-import RegisterSuccess from '@/pages/auth/signup/create-account-form/RegisterSuccess';
-import PersonalInfo from '@/pages/auth/signup/create-account-form/PersonalInfo';
-import TopBar from '@/components/custom/TopBar';
-import CheckEmail from '@/pages/auth/signup/create-account-form/CheckEmail';
-import { toast } from '@/components/ui/use-toast';
+} from "@/store/CreateOnboardingFormStore";
+import Loader from "@/components/custom/Loader";
+import SendCode from "@/pages/auth/signup/create-account-form/SendCode";
+import Password from "@/pages/auth/signup/create-account-form/RegisterPassword";
+import RegisterSuccess from "@/pages/auth/signup/create-account-form/RegisterSuccess";
+import PersonalInfo from "@/pages/auth/signup/create-account-form/PersonalInfo";
+import TopBar from "@/components/custom/TopBar";
+import CheckEmail from "@/pages/auth/signup/create-account-form/CheckEmail";
+import { toast } from "@/components/ui/use-toast";
 
 export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { step, setStep, resetStore } = useOnboardingFormStore();
 
   const stepTitles: Record<number, string> = {
-    1: '',
-    2: 'Email',
-    3: 'Verification',
-    4: 'Personal Info',
+    1: "",
+    2: "Email",
+    3: "Verification",
+    4: "Personal Info",
   };
 
   const RenderForm = () => {
@@ -51,40 +51,41 @@ export default function OnboardingPage() {
           password: data?.onboardingDetails?.password,
           date_of_birth: data?.onboardingDetails.date_of_birth,
           gender: data?.onboardingDetails.gender,
+          // new field - what best describes you (student or researcher/academic)
         };
 
         const baseURL = import.meta.env.VITE_APP_BASE_URL;
         const response = await fetch(`${baseURL}users/signup`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Institution-Context': 'default_context',
+            "Content-Type": "application/json",
+            "Institution-Context": "ai",
           },
           body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
           const errorData = await response.json();
-          const errorMessage = errorData.detail || 'error in creating account';
+          const errorMessage = errorData.detail || "error in creating account";
           toast({
-            title: 'Error',
+            title: "Error",
             description: errorMessage,
-            variant: 'destructive',
+            variant: "destructive",
           });
           throw new Error(errorMessage);
         }
 
         // const responseData = await response.json();
         toast({
-          title: 'Feedback',
+          title: "Feedback",
           description: `user created`,
-          variant: 'default',
+          variant: "default",
         });
         resetStore();
 
         handleNext();
       } catch (error) {
-        console.error('Sign up error:', error);
+        console.error("Sign up error:", error);
       } finally {
         setIsLoading(false);
       }

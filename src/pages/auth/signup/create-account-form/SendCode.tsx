@@ -1,15 +1,15 @@
-import { Button } from '@/components/ui/button';
-import BackButton from '@/components/custom/BackButton';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
-import FormInput from '@/components/custom/FormInput';
-import { useOnboardingFormStore } from '@/store/CreateOnboardingFormStore';
-import { useMobileContext } from '@/context/MobileContext';
-import Loader from '@/components/custom/Loader';
-import { useCallback, useEffect, useState } from 'react';
-import { toast } from '@/components/ui/use-toast';
+import { Button } from "@/components/ui/button";
+import BackButton from "@/components/custom/BackButton";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import FormInput from "@/components/custom/FormInput";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import { useMobileContext } from "@/context/MobileContext";
+import Loader from "@/components/custom/Loader";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 type Props = {
   handleNext: () => void;
@@ -18,9 +18,9 @@ type Props = {
 const formSchema = z.object({
   code: z
     .string()
-    .max(6, { message: 'Please input the code sent to your email' })
-    .min(6, { message: 'Please input the code sent to your email' })
-    .regex(/^\d+$/, { message: 'Code must contain only digits' }),
+    .max(6, { message: "Please input the code sent to your email" })
+    .min(6, { message: "Please input the code sent to your email" })
+    .regex(/^\d+$/, { message: "Code must contain only digits" }),
 });
 
 export default function SendCode({ handleNext, handleGoBack }: Props) {
@@ -39,33 +39,33 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
       const response = await fetch(
         `${baseURL}auth/verification-code?email=${email}`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'institution-context': 'default_context',
+            "Content-Type": "application/json",
+            "institution-context": "ai",
           },
         }
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        const errorMessage = errorData.detail || 'Error in verifying email';
+        const errorMessage = errorData.detail || "Error in verifying email";
         toast({
-          title: 'Error',
+          title: "Error",
           description: errorMessage,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw new Error(errorMessage);
       }
 
       const responseData = await response.json();
       toast({
-        title: 'Success',
+        title: "Success",
         description: responseData.detail,
-        variant: 'default',
+        variant: "default",
       });
     } catch (error) {
-      console.error('Verification error:', error);
+      console.error("Verification error:", error);
     }
   };
 
@@ -79,7 +79,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
 
   useEffect(() => {
     if (countdown > 0) {
-      const timer = setInterval(() => setCountdown(prev => prev - 1), 1000);
+      const timer = setInterval(() => setCountdown((prev) => prev - 1), 1000);
       return () => clearInterval(timer);
     } else {
       setSendAgain(true);
@@ -95,30 +95,30 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
         const response = await fetch(
           `${baseURL}auth/verify-email?verification_code=${code}`,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              'institution-context': 'default_context',
+              "Content-Type": "application/json",
+              "institution-context": "ai",
             },
           }
         );
 
         if (!response.ok) {
           const errorData = await response.json();
-          const errorMessage = errorData.detail || 'error in verifying code';
+          const errorMessage = errorData.detail || "error in verifying code";
           toast({
-            title: 'Error',
+            title: "Error",
             description: errorMessage,
-            variant: 'destructive',
+            variant: "destructive",
           });
           throw new Error(errorMessage);
         }
 
         const responseData = await response.json();
         toast({
-          title: 'Feedback',
+          title: "Feedback",
           description: `${responseData.detail}`,
-          variant: 'default',
+          variant: "default",
         });
 
         setData({
@@ -130,7 +130,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
 
         handleNext();
       } catch (error) {
-        console.error('Login error:', error);
+        console.error("Login error:", error);
       } finally {
         setLoading(false);
       }
@@ -141,7 +141,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
   useEffect(() => {
     if (countdown > 0) {
       const timer = setInterval(() => {
-        setCountdown(prev => prev - 1);
+        setCountdown((prev) => prev - 1);
       }, 1000);
 
       return () => clearInterval(timer);
@@ -163,7 +163,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
     <>
       {loading && <Loader />}
       <div className="relative my-0 w-full px-4 pt-[2.5rem] antialiased md:mx-auto md:w-4/5">
-        {!isMobile ? <BackButton title="Back" goBack={handleGoBack} /> : ''}
+        {!isMobile ? <BackButton title="Back" goBack={handleGoBack} /> : ""}
         <div className="mx-auto my-0 w-full max-w-[375px] md:w-3/5 md:max-w-[526px]">
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-xl2 pb-5 pt-10 text-center font-semibold md:py-5">
@@ -171,7 +171,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
             </h1>
             <div className="pb-5 pt-2">
               <p className="text-center text-sm leading-[14px] text-[#454745]">
-                For security, we've sent you an email to{' '}
+                For security, we've sent you an email to{" "}
                 <span className="font-black font-bold">
                   {data.onboardingDetails.email}
                 </span>
@@ -189,14 +189,14 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
               <FormInput
                 label="Your 6-digit code"
                 type="number"
-                {...register('code', {
-                  required: 'This field is required',
+                {...register("code", {
+                  required: "This field is required",
                 })}
                 className="no-spinner"
               />
               <div className="flex flex-col items-center justify-center">
                 <p className="pb-7 pt-2 text-sm text-[#454745]">
-                  Didn't get an email?{' '}
+                  Didn't get an email?{" "}
                   {sendAgain ? (
                     <a
                       onClick={handleResend}
@@ -212,7 +212,7 @@ export default function SendCode({ handleNext, handleGoBack }: Props) {
                 </p>
               </div>
               <Button
-                variant={isValid ? 'default' : 'ghost'}
+                variant={isValid ? "default" : "ghost"}
                 className={`my-4 focus:outline-none`}
               >
                 Continue

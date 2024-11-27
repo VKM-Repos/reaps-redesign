@@ -1,16 +1,16 @@
-import { Button } from '@/components/ui/button';
-import BackButton from '@/components/custom/BackButton';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
-import FormInput from '@/components/custom/FormInput';
-import { useMobileContext } from '@/context/MobileContext';
-import TopBar from '@/components/custom/TopBar';
-import { usePasswordStore } from '@/store/recoverPasswordStore';
-import { useCallback, useEffect, useState } from 'react';
-import Loader from '@/components/custom/Loader';
-import { toast } from '@/components/ui/use-toast';
+import { Button } from "@/components/ui/button";
+import BackButton from "@/components/custom/BackButton";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import FormInput from "@/components/custom/FormInput";
+import { useMobileContext } from "@/context/MobileContext";
+import TopBar from "@/components/custom/TopBar";
+import { usePasswordStore } from "@/store/recoverPasswordStore";
+import { useCallback, useEffect, useState } from "react";
+import Loader from "@/components/custom/Loader";
+import { toast } from "@/components/ui/use-toast";
 
 type Props = {
   handleNext: () => void;
@@ -19,10 +19,10 @@ type Props = {
 const formSchema = z.object({
   code: z
     .string()
-    .max(6, { message: 'Please input the code sent to your email' })
-    .min(6, { message: 'Please input the code sent to your email' })
+    .max(6, { message: "Please input the code sent to your email" })
+    .min(6, { message: "Please input the code sent to your email" })
     .regex(/^\d+$/, {
-      message: 'Code must contain only digits',
+      message: "Code must contain only digits",
     }),
 });
 
@@ -48,33 +48,33 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
       const response = await fetch(
         `${baseURL}auth/forget-password?email=${email}`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'institution-context': 'default_context',
+            "Content-Type": "application/json",
+            "institution-context": "ai",
           },
         }
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        const errorMessage = errorData.detail || 'Error in verifying email';
+        const errorMessage = errorData.detail || "Error in verifying email";
         toast({
-          title: 'Error',
+          title: "Error",
           description: errorMessage,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw new Error(errorMessage);
       }
 
       const responseData = await response.json();
       toast({
-        title: 'Success',
+        title: "Success",
         description: responseData.detail,
-        variant: 'default',
+        variant: "default",
       });
     } catch (error) {
-      console.error('Verification error:', error);
+      console.error("Verification error:", error);
     }
   };
 
@@ -88,7 +88,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
 
   useEffect(() => {
     if (countdown > 0) {
-      const timer = setInterval(() => setCountdown(prev => prev - 1), 1000);
+      const timer = setInterval(() => setCountdown((prev) => prev - 1), 1000);
       return () => clearInterval(timer);
     } else {
       setSendAgain(true);
@@ -109,7 +109,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
 
         handleNext();
       } catch (error) {
-        console.error('Login error:', error);
+        console.error("Login error:", error);
       } finally {
         setLoading(false);
       }
@@ -128,7 +128,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
       <div className="relative my-0 w-full px-4 antialiased md:mx-auto md:w-4/5">
         <div className="relative flex w-full flex-col items-center justify-center">
           <div className="absolute left-0">
-            {!isMobile ? <BackButton title="Back" goBack={handleGoBack} /> : ''}
+            {!isMobile ? <BackButton title="Back" goBack={handleGoBack} /> : ""}
           </div>
           <div className="pt-[2.5rem]">
             <div className="flex h-[96px] w-[96px] items-center justify-center rounded-full bg-[#FFD13A] ">
@@ -147,7 +147,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
           </h1>
           <div className="pb-10 pt-2">
             <p className="text-center text-sm leading-[14px] text-[#454745]">
-              We've sent a 6-digit code to{' '}
+              We've sent a 6-digit code to{" "}
               <span className="font-black font-bold">
                 {data.passwordDetails.email}
               </span>
@@ -163,14 +163,14 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
               <FormInput
                 label="Enter 6-digit code"
                 type="number"
-                {...register('code', {
-                  required: 'This field is required',
+                {...register("code", {
+                  required: "This field is required",
                 })}
                 className="no-spinner"
               />
               <div className="flex flex-col items-center justify-center">
                 <p className="pb-7 pt-2 text-sm">
-                  Still need help?{' '}
+                  Still need help?{" "}
                   <a
                     href="/"
                     className="text-black hover:text-black font-semibold underline"
@@ -181,7 +181,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <p className="pb-7 pt-2 text-sm text-[#454745]">
-                  Didn't get an email?{' '}
+                  Didn't get an email?{" "}
                   {sendAgain ? (
                     <a
                       onClick={handleResend}
@@ -197,7 +197,7 @@ export default function EnterCode({ handleNext, handleGoBack }: Props) {
                 </p>
               </div>
               <Button
-                variant={isValid ? 'default' : 'ghost'}
+                variant={isValid ? "default" : "ghost"}
                 className={`my-4 focus:outline-none`}
               >
                 Continue
