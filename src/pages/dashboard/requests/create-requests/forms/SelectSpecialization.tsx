@@ -1,4 +1,3 @@
-import { useRequestsStore } from "@/store/RequestFormStore";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { z } from "zod";
@@ -8,59 +7,52 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 import RequestSpecialization from "./CreateSpecialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/Loader";
-import { useSpecializationsStore } from "@/store/specializationsFormStore";
+import { useGET } from "@/hooks/useGET.hook";
+import { SpecializationItems } from "@/types/specialization";
 
 type Props = {
   handleNext: () => void;
 };
 
 const formSchema = z.object({
-  specialisation: z
-    .string()
-    .refine((val) => specialization.includes(val as any), {
-      message: "Please select a valid specialization",
-    }),
+  specialisation: z.string().min(1, "Please select a specialization"),
 });
 
-const specialization = ["Medicine", "Law", "Engineering", "Architecture"];
-
 export default function SelectSpecialization({ handleNext }: Props) {
-  const { data, setData } = useRequestsStore();
-  const [spec, setSpec] = useState("");
+  const { data: specializationData, isPending } = useGET({
+    queryKey: ["specialization", "keywords"],
+    url: "specializations",
+    withAuth: true,
+  });
+
+  const specializations: SpecializationItems[] =
+    specializationData?.items || [];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      specialisation: "",
+    },
   });
 
   const {
     formState: { isValid },
     setValue,
+    watch,
   } = form;
-  const { loading, setLoading } = useSpecializationsStore();
-  // issue with submitting in specialisation store to allow loading change
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
+  const selectedSpecialization = watch("specialisation");
+
+  function onSubmit() {
     try {
-      setData({
-        requestsDetails: {
-          ...data.requestsDetails,
-          specialisation: values.specialisation,
-        },
-      });
-      setTimeout(() => {
-        handleNext();
-        setLoading(false);
-      }, 3000);
+      handleNext();
     } catch (error) {
       console.error(error);
     }
@@ -68,8 +60,8 @@ export default function SelectSpecialization({ handleNext }: Props) {
 
   return (
     <>
-      {loading && <Loader />}
-      {specialization.length > 0 ? (
+      {isPending && <Loader />}
+      {specializations.length > 0 ? (
         <>
           <div className="flex flex-col justify-center items-center pt-4">
             <h1 className="text-xl2 font-semibold pt-10 pb-5 md:py-5">
@@ -88,29 +80,33 @@ export default function SelectSpecialization({ handleNext }: Props) {
                       setValue("specialisation", value, {
                         shouldValidate: true,
                       });
-                      setSpec(value);
                     }}
                   >
                     <Label className="font-sm">
                       Select your Specialisation
                     </Label>
                     <SelectTrigger className="w-full mt-2">
-                      <SelectValue placeholder={spec} />
+                      <SelectValue
+                        placeholder={
+                          selectedSpecialization || "Select specialization"
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel></SelectLabel>
-                        {specialization &&
-                          specialization.map((spec) => (
-                            <SelectItem value={spec}>{spec}</SelectItem>
-                          ))}
+                        {specializations.map((spec) => (
+                          <SelectItem key={spec.id} value={spec.id}>
+                            {spec.title}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
                 <Button
                   variant={isValid ? "default" : "ghost"}
-                  className={`my-4 focus:outline-none`}
+                  className="my-4 focus:outline-none"
+                  type="submit"
                 >
                   Continue
                 </Button>
@@ -119,9 +115,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
           </div>
         </>
       ) : (
-        <>
-          <RequestSpecialization handleSpecNext={handleNext} />
-        </>
+        <RequestSpecialization handleSpecNext={handleNext} />
       )}
     </>
   );

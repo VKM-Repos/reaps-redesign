@@ -16,6 +16,7 @@ import View from "@/components/custom/Icons/View";
 import InstitutionRequestSummary from "../../view-requests/admin";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import SignatureIcon from "@/components/custom/Icons/Signature";
+import ReviewersList from "./reviewers-list";
 
 type TableRequestsProps = {
   institutionTableData: {
@@ -58,6 +59,7 @@ function RenderFunctions() {
                 <SignatureIcon />
                 <span>Reviewers</span>
               </DialogTrigger>
+              <ReviewersList />
             </Dialog>
           </>
         </DropdownMenuGroup>
