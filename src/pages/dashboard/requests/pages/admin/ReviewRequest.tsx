@@ -1,23 +1,25 @@
-import { institutionTableData } from "@/lib/helpers";
-import PageTitle from "../components/PageTitle";
-import SeachFilter from "../components/SeachFilter";
+import { reviewTableData } from "@/lib/helpers";
+import PageTitle from "../../components/PageTitle";
+import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import ManageRequests from "../components/manage-requests";
+import TableReview from "../../components/table-review";
 import { useMediaQuery } from "react-responsive";
 import { X } from "lucide-react";
 
-export default function ManageRequestPage() {
+export default function ReviewRequest() {
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<string[]>([])
   const [showStatuses, setShowStatuses] = useState(false);
   const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const navigate = useNavigate();
+  const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
+
   const handleFunc = () => {
     setLoading(true);
     setTimeout(() => {
@@ -25,8 +27,7 @@ export default function ManageRequestPage() {
       setLoading(false);
     }, 5000);
   };
-  const manageStatuses = ["Awaiting", "Reviewed", "Assigned", "In Progress"];
-
+  
   const deleteStatusUpdate = (status: String) => {
     setAppliedStatuses((prev) => prev.filter((val) => val !== status));
     if (appliedStatuses.length === 0) {
@@ -35,8 +36,10 @@ export default function ManageRequestPage() {
   };
 
   useEffect(() => {
-    setStatuses(manageStatuses);
+    setStatuses(reviewStatuses);
   }, [])
+
+
 
   return (
     <>
@@ -44,7 +47,7 @@ export default function ManageRequestPage() {
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">
-            <PageTitle title="Manage Request" />
+            <PageTitle title="Review Request" />
             <Button
               onClick={handleFunc}
               className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -83,7 +86,7 @@ export default function ManageRequestPage() {
                 ))}
               </div>
             )}
-          <ManageRequests institutionTableData={institutionTableData} />
+          <TableReview reviewTableData={reviewTableData} />
         </div>
     </>
   );
