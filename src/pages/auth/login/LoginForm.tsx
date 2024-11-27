@@ -41,7 +41,7 @@ export function LoginForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "institution-context": "default_context",
+            "institution-context": "ai",
           },
           body: JSON.stringify(data),
         });

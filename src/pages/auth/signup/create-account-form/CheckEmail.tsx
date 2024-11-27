@@ -1,15 +1,15 @@
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import FormInput from '@/components/custom/FormInput';
-import Loader from '@/components/custom/Loader';
-import { Form } from '@/components/ui/form';
-import { useOnboardingFormStore } from '@/store/CreateOnboardingFormStore';
-import Cancel from '@/components/custom/Icons/Cancel';
-import { useNavigate } from 'react-router-dom';
-import { toast } from '@/components/ui/use-toast';
-import { useCallback, useState } from 'react';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import FormInput from "@/components/custom/FormInput";
+import Loader from "@/components/custom/Loader";
+import { Form } from "@/components/ui/form";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import Cancel from "@/components/custom/Icons/Cancel";
+import { useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
+import { useCallback, useState } from "react";
 
 type Props = {
   handleNext: () => void;
@@ -18,8 +18,8 @@ type Props = {
 const formSchema = z.object({
   email: z
     .string()
-    .min(1, { message: 'Please fill this field' })
-    .email({ message: 'Invalid email address' }),
+    .min(1, { message: "Please fill this field" })
+    .email({ message: "Invalid email address" }),
 });
 
 export default function CheckEmail({ handleNext }: Props) {
@@ -43,30 +43,30 @@ export default function CheckEmail({ handleNext }: Props) {
         const response = await fetch(
           `${baseURL}auth/verification-code?email=${email}`,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              'institution-context': 'default_context',
+              "Content-Type": "application/json",
+              "institution-context": "ai",
             },
           }
         );
 
         if (!response.ok) {
           const errorData = await response.json();
-          const errorMessage = errorData.detail || 'error in verifying email';
+          const errorMessage = errorData.detail || "error in verifying email";
           toast({
-            title: 'Error',
+            title: "Error",
             description: errorMessage,
-            variant: 'destructive',
+            variant: "destructive",
           });
           throw new Error(errorMessage);
         }
 
         const responseData = await response.json();
         toast({
-          title: 'Feedback',
+          title: "Feedback",
           description: `${responseData.detail}`,
-          variant: 'default',
+          variant: "default",
         });
 
         setData({
@@ -78,7 +78,7 @@ export default function CheckEmail({ handleNext }: Props) {
 
         handleNext();
       } catch (error) {
-        console.error('Login error:', error);
+        console.error("Login error:", error);
       } finally {
         setLoading(false);
       }
@@ -116,10 +116,10 @@ export default function CheckEmail({ handleNext }: Props) {
             Create your Reaps account
           </h1>
           <p className="pb-10 pt-2 text-sm text-[#454745]">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <a
               onClick={() => {
-                navigate('/login');
+                navigate("/login");
               }}
               className="text-black hover:text-black font-semibold underline"
             >
@@ -136,12 +136,12 @@ export default function CheckEmail({ handleNext }: Props) {
               <FormInput
                 label="First enter your email address"
                 placeholder="johndoe@email.com"
-                {...register('email', {
-                  required: 'This field is required',
+                {...register("email", {
+                  required: "This field is required",
                 })}
               />
               <Button
-                variant={isValid ? 'default' : 'ghost'}
+                variant={isValid ? "default" : "ghost"}
                 className={`my-4 focus:outline-none`}
               >
                 Next
@@ -151,14 +151,14 @@ export default function CheckEmail({ handleNext }: Props) {
         </div>
         <div className="flex flex-col items-center justify-center">
           <p className="pb-10 pt-2 text-sm">
-            By registering, you accept our{' '}
+            By registering, you accept our{" "}
             <a
               href="/"
               className="text-black hover:text-black font-semibold underline"
             >
               Terms of use
-            </a>{' '}
-            and{' '}
+            </a>{" "}
+            and{" "}
             <a
               href="/"
               className="text-black hover:text-black font-semibold underline"
