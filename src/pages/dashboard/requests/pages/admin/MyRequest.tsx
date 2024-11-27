@@ -1,7 +1,7 @@
 import { tableData } from "@/lib/helpers";
-import TableRequests from "../components/table-requests";
-import PageTitle from "../components/PageTitle";
-import SeachFilter from "../components/SeachFilter";
+import TableRequests from "../../components/table-requests";
+import PageTitle from "../../components/PageTitle";
+import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";

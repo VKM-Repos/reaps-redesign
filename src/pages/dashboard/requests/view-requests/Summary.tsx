@@ -23,7 +23,11 @@ type SummaryPageProps = {
     handlePrint?: () => void,
     activeTab?: string,
 }
-const Summary = ({ handlePrint, isApproval, activeTab = "request table" } : SummaryPageProps) => {
+const Summary = (
+  { handlePrint, 
+    isApproval, 
+    activeTab = "request table" 
+  } : SummaryPageProps) => {
 
   const { data } = useRequestsStore();
   const { objectives, checkbox, files } = data.requestsDetails;
@@ -72,6 +76,7 @@ const review_remarks = [
       console.error(error);
     }
   }
+  
   return (
     <>
       <div className="w-full flex items-center justify-center">
