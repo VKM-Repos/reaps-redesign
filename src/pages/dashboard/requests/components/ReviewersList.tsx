@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,10 +17,8 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -30,18 +28,6 @@ import {
 } from "@/components/ui/popover";
 import { useGET } from "@/hooks/useGET.hook";
 import SearchIcon from "@/components/custom/Icons/Search";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
 
 const FormSchema = z.object({
   reviewer_id: z.string({
@@ -53,7 +39,7 @@ export function ReviewersList() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-  const { data: reviewers, isPending } = useGET({
+  const { data: reviewers } = useGET({
     url: "users?user_type=reviewer",
     queryKey: ["GET_USERS_IN_ASSIGN_REVIEW_PAGE"],
   });

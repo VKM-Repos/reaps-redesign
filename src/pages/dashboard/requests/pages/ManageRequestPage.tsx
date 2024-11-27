@@ -28,13 +28,13 @@ export default function ManageRequestPage() {
   };
   const manageStatuses = ["Awaiting", "Reviewed", "Assigned", "In Progress"];
 
-  const deleteStatusUpdate = (status: String) => {
+  const deleteStatusUpdate = (status: string) => {
     setAppliedStatuses((prev) => prev.filter((val) => val !== status));
     if (appliedStatuses.length === 0) {
       setShowStatuses(false);
     }
   };
-  const { data: requests, isPending } = useGET({
+  const { data: requests } = useGET({
     url: "requests",
     queryKey: ["GET_REQUEST_MANAGE_REQUEST_PAGE"],
   });
