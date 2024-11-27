@@ -1,4 +1,3 @@
-import { institutionTableData } from "@/lib/helpers";
 import PageTitle from "../../components/PageTitle";
 import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
@@ -38,7 +37,6 @@ export default function ManageRequestPage() {
     url: "requests",
     queryKey: ["GET_REQUEST_MANAGE_REQUEST_PAGE"],
   });
-  console.log(requests, "?????");
 
   useEffect(() => {
     setStatuses(manageStatuses);
@@ -93,7 +91,7 @@ export default function ManageRequestPage() {
             ))}
           </div>
         )}
-        <ManageRequests institutionTableData={institutionTableData} />
+        <ManageRequests institutionTableData={requests?.items || []} />
       </div>
     </>
   );
