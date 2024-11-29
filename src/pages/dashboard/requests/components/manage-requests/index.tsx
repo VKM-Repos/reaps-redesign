@@ -97,7 +97,7 @@ export default function ManageRequests({
           className="font-bold w-full min-w-[12rem]"
         />
       ),
-      accessorKey: "research_title",
+      accessorKey: "user.first_name",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[12rem] w-full" />
       ),
