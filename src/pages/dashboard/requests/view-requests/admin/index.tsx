@@ -72,7 +72,7 @@ export default function InstitutionRequestSummary({
         </div>
         {activeRole === "admin" &&
           pathname.includes("/requests/manage-requests") && (
-            <ActionButton setLoader={setLoader} />
+            <ActionButton request={request} setLoader={setLoader} />
           )}
         <div className="px-4">
           <Summary request={request} />

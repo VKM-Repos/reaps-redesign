@@ -50,6 +50,7 @@ const FormSchema = z.object({
   education_level: z.string().min(1, {
     message: "Please fill this field.",
   }),
+  description: z.string().min(1, { message: "Please fill this field" }),
 });
 
 type FlagData = {
@@ -76,6 +77,11 @@ export function CreateUserForm({
     { title: "Masters", value: "masters" },
     { title: "PHD", value: "phd" },
   ];
+
+  const descriptions = [
+    { title: "Student", value: "Student" },
+    { title: "Researcher", value: "Researcher" },
+  ];
   // console.log(CountryList.getAll());
 
   useEffect(() => {
@@ -94,6 +100,7 @@ export function CreateUserForm({
       date_of_birth: "2026-01-01",
       password: "password",
       education_level: "",
+      description: "",
     },
   });
   const combinedData = countriesData
@@ -117,12 +124,10 @@ export function CreateUserForm({
         });
         handleClosDialog();
       },
-      onError: (error) => {
-        console.log(error);
-
+      onError: (error: any) => {
         toast({
           title: "Error",
-          description: "Error creating a user.",
+          description: error.response.data.detail,
           variant: "destructive",
         });
       },
@@ -303,7 +308,7 @@ export function CreateUserForm({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a verified email to display" />
+                          <SelectValue placeholder="Select qualification" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -311,6 +316,33 @@ export function CreateUserForm({
                           educationLevels.map((educationLevel) => (
                             <SelectItem value={educationLevel.value}>
                               {educationLevel.title}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Describe</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a description" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {educationLevels &&
+                          descriptions.map((description) => (
+                            <SelectItem value={description.value}>
+                              {description.title}
                             </SelectItem>
                           ))}
                       </SelectContent>
