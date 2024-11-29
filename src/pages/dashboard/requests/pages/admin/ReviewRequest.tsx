@@ -17,12 +17,17 @@ export default function ReviewRequest() {
   const navigate = useNavigate();
   const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
 
-  const { data: requests_to_review } = useGET({
+  const { 
+    data: requests_to_review, 
+    isPending: isRequestsPending 
+  } = useGET({
     url: "reviews/reviewer",
     queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
   })
 
-  const review_requests_data = requests_to_review?.items.map((request: any) => {
+  const review_requests_data 
+  = requests_to_review?.items.map(
+    (request: any) => {
     return {
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
@@ -49,7 +54,7 @@ export default function ReviewRequest() {
 
   return (
     <>
-      {loading &&
+      {(loading || isRequestsPending) &&
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">

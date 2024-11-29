@@ -1,4 +1,3 @@
-// import { reviewTableData, tableData } from "@/lib/helpers";
 import TableRequests from "../../components/table-requests";
 import TableReview from "./table";
 import EmptyRequests from "../../components/emptystate";
@@ -36,18 +35,26 @@ export default function ReviewerRequests() {
     "Reopened"
 ];
 
-  const { data: my_requests } = useGET({
+  const { 
+    data: my_requests, 
+    isPending: isMyRequestsPending,
+  } = useGET({
     url: "requests/users/me",
     queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
   });
 
-  const { data: requests_to_review } = useGET({
+  const { 
+    data: requests_to_review,
+    isPending: isReviewRequestsPending
+  } = useGET({
     url: "reviews/reviewer",
     queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
   })
 
   // return requests object to table
-  const review_requests_data = requests_to_review?.items.map((request: any) => {
+  const review_requests_data 
+  = requests_to_review?.items.map(
+    (request: any) => {
     return {
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
@@ -55,6 +62,7 @@ export default function ReviewerRequests() {
       request: request.request
     }
   })
+
 
   const handleFunc = () => {
     setLoading(true);
@@ -80,7 +88,9 @@ export default function ReviewerRequests() {
 
   return (
     <>
-      {loading && <Loader />}
+      {(loading || 
+        (isMyRequestsPending || 
+        isReviewRequestsPending)) && <Loader />}
         <div className="flex flex-col gap-12 mb-20">
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />

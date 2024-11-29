@@ -23,7 +23,10 @@ export default function MyRequest() {
     "Reapproved"
   ];
 
-  const { data: my_requests } = useGET({
+  const { 
+    data: my_requests, 
+    isPending: isRequestsLoading 
+  } = useGET({
     url: "requests/users/me",
     queryKey: ["GET_MY_REQUESTS_AS_MADE_BY_ADMIN"],
   });
@@ -47,7 +50,7 @@ export default function MyRequest() {
 
   return (
     <>
-      {loading &&
+      {(loading || isRequestsLoading) &&
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">

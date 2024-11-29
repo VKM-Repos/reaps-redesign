@@ -1,4 +1,3 @@
-// import { reviewTableData, tableData } from "@/lib/helpers";
 import TableRequests from "./components/table-requests";
 import EmptyRequests from "./components/emptystate";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,10 @@ export default function Requests() {
   const navigate = useNavigate();
 
 
-  const { data: my_requests } = useGET({
+  const { 
+    data: my_requests,
+    isPending: isMyRequestsPending 
+  } = useGET({
     url: "requests/users/me?sort_direction=asc&skip=0&limit=10",
     queryKey: ["GET_MY_REQUESTS_AS_A_USER"],
   });
@@ -60,8 +62,11 @@ export default function Requests() {
       <ReviewerRequests />
     ) : (
       <>
-        {loading && <Loader />}
-        {activeRole !== "admin" && (
+        {(loading || 
+          isMyRequestsPending) 
+          && <Loader />}
+        {activeRole !== "admin" 
+        && (
           <div className="flex flex-col gap-12 mb-20">
             {/* Page Title and Button */}
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
