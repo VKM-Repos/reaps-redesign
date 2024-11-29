@@ -31,6 +31,8 @@ export default function Requests() {
   
   const handleFunc = () => {
     setLoading(true);
+    console.log(showStatuses);
+    console.log(appliedStatuses)
     setTimeout(() => {
       navigate("/requests/create");
       setLoading(false);
@@ -53,7 +55,7 @@ export default function Requests() {
 
   return (
     <>
-    {/* Change tables to completed state */}
+    {/* switch between reviewer and researcher based on role */}
     {activeRole === "reviewer" ? (
       <ReviewerRequests />
     ) : (
@@ -83,7 +85,6 @@ export default function Requests() {
                 <div className="flex items-center justify-between">
                   <SeachFilter
                     statuses={statuses}
-                 
                     setLoading={setLoading}
                     setShowStatuses={setShowStatuses}
                     setAppliedStatuses={setAppliedStatuses}

@@ -1,6 +1,6 @@
 // import { reviewTableData, tableData } from "@/lib/helpers";
 import TableRequests from "../../components/table-requests";
-import TableReview from "../../components/table-review";
+import TableReview from "./table";
 import EmptyRequests from "../../components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
@@ -20,25 +20,7 @@ export default function ReviewerRequests() {
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<any[]>([]);
   const navigate = useNavigate();
-
-  const { data: my_requests } = useGET({
-    url: "requests/users/me?sort_direction=asc&skip=0&limit=10",
-    queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
-  });
-
-  const { data: requests_to_review } = useGET({
-    url: "reviews/reviewer?offset=0&limit=15",
-    queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
-  })
-
-  const handleFunc = () => {
-    setLoading(true);
-    setTimeout(() => {
-      navigate("/requests/create");
-      setLoading(false);
-    }, 5000);
-  };
-
+  
   const requestsStatuses = [
     "Draft",
     "Pending",
@@ -53,6 +35,36 @@ export default function ReviewerRequests() {
     "Reviewed", 
     "Reopened"
 ];
+
+  const { data: my_requests } = useGET({
+    url: "requests/users/me",
+    queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
+  });
+
+  const { data: requests_to_review } = useGET({
+    url: "reviews/reviewer",
+    queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
+  })
+
+  // return requests object to table
+  const review_requests_data = requests_to_review?.items.map((request: any) => {
+    return {
+      title: request.request.research_title,
+      applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
+      status: request.status,
+      request: request.request
+    }
+  })
+
+  const handleFunc = () => {
+    setLoading(true);
+    console.log(showStatuses);
+    console.log(appliedStatuses)
+    setTimeout(() => {
+      navigate("/requests/create");
+      setLoading(false);
+    }, 5000);
+  };
 
   useEffect(() => {
     setStatuses(
@@ -72,7 +84,7 @@ export default function ReviewerRequests() {
         <div className="flex flex-col gap-12 mb-20">
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />
-            {my_requests?.items.length > 0 && (
+            {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) && (
               <Button
                 onClick={handleFunc}
                 className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -85,7 +97,7 @@ export default function ReviewerRequests() {
             )}
           </div>
           {/* tab */}
-          {my_requests?.items.length > 0 ? (
+          {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) ? (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <SeachFilter
@@ -123,14 +135,14 @@ export default function ReviewerRequests() {
                   </TabsContent>
                   <TabsContent value="review table">
                     <TableReview
-                      reviewTableData={requests_to_review?.items || []}
-                      activeTab={activeTab}
+                      reviewTableData={review_requests_data || []}
+                      activeTab={activeTab}                
                     />
                   </TabsContent>
                 </Tabs>
             </div>
           ) : (
-            <EmptyRequests activeTab={activeTab}/>
+            <EmptyRequests setActiveTab={setActiveTab}/>
           )}
         </div>
     </>
