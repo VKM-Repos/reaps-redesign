@@ -7,10 +7,11 @@ import Unhappy from "@/assets/unhappy.svg";
 import WriteReview from "../../components/WriteReview";
 import Loader from "@/components/custom/Loader";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { RequestItems } from "@/types/requests";
 
 
 
-export default function ReviewerRequestSummary({ activeTab }: { activeTab: string }) {
+export default function ReviewerRequestSummary({ activeTab, request }: { activeTab: string, request: RequestItems }) {
     const [activeSection, setActiveSection] = useState('');
     const [loading, setLoader] = useState(false);
 
@@ -74,7 +75,7 @@ export default function ReviewerRequestSummary({ activeTab }: { activeTab: strin
                                 </div>    
                             </div>
                             <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
-                                 <Summary activeTab={activeTab}/>
+                                 <Summary activeTab={activeTab} request={request}/>
                             </div>
                         </main>
                    </section>

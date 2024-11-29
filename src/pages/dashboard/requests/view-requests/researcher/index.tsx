@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useMediaQuery } from "react-responsive";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
+import { RequestItems } from "@/types/requests";
 
 const statuses = [
   "Request Submitted",
@@ -15,7 +16,7 @@ const statuses = [
   "Approval"
 ];
 
-export default function ResearcherRequestSummary() {
+export default function ResearcherRequestSummary({ request }: { request: RequestItems}) {
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const handleSummaryPrint = useReactToPrint({
@@ -70,7 +71,7 @@ export default function ResearcherRequestSummary() {
             }
           <div className="mx-auto my-0 md:absolute md:right-0 md:w-10/12">
             <div className="w-[85%] mx-auto">
-              <Summary isApproval={isApproval} handlePrint={handleSummaryPrint} />
+              <Summary request={request} isApproval={isApproval} handlePrint={handleSummaryPrint} />
             </div>
           </div>
         </div>

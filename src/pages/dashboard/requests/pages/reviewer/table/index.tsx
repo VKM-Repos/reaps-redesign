@@ -3,7 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import CustomTable, { ColumnSetup, CustomCell } from "@/components/custom/CustomTable";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import ReviewerRequestSummary from "../../view-requests/reviewer";
+import ReviewerRequestSummary from "../../../view-requests/reviewer";
+
 
 
 type TableRequestsProps = {
@@ -14,6 +15,7 @@ type TableRequestsProps = {
         status: string;
     }[],
     activeTab?: string,
+
 }
 
 
@@ -25,7 +27,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
 
-    export default function TableReview( { reviewTableData, activeTab="request table" }: TableRequestsProps) {
+    export default function ReviewRequestsTable( { reviewTableData, activeTab="request table" }: TableRequestsProps) {
         const { multiStatusDateFilter } = useGlobalFilter()
 
         const columnData: ColumnSetup<any>[]= [
@@ -56,7 +58,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                         <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
                             <Badge
                               style={{
-                                color: statusColorMap[item]?.text || '#000000',
+                                color: statusColorMap[item]?.text || 'white',
                                 backgroundColor: statusColorMap[item]?.bg || '#192C8A',
                               }}
                               className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
@@ -79,17 +81,20 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                 accessorKey: "custom",
                 header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
                 meta: { cellType: "custom" },
-                cell: () => (
+                cell: ({ row }) => {
+                    const item = row.original;
+                    return (
                         <div className="flex justify-center gap-2 text-black p-3 cursor-pointer">
-                            {/* open a drawer to view */}
-                            <Sheet>
-                                <SheetTrigger className="flex gap-2">
-                                    <View /> <span>View</span>
-                                </SheetTrigger>
-                                <ReviewerRequestSummary activeTab={activeTab} />
-                            </Sheet>
-                        </div>
-                    ),
+                        {/* open a drawer to view */}
+                        <Sheet>
+                            <SheetTrigger className="flex gap-2">
+                                <View /> <span>View</span>
+                            </SheetTrigger>
+                            <ReviewerRequestSummary request={item?.request} activeTab={activeTab} />
+                        </Sheet>
+                    </div>
+                    )      
+                    },
                 }
         ]
 
@@ -99,3 +104,6 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
             </div>
         )
     }
+
+    // 8388f770-a8ed-4080-a0ee-01fafb2f8bbb - request
+    // a3ac1d5a-291d-4c30-b7dc-24ffba9b86ac - reviewer
