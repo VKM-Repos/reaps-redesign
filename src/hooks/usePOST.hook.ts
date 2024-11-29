@@ -35,8 +35,6 @@ export const usePOST = (
       callback && callback(returnedData);
     },
     onError: (error: { response: { data: any } }) => {
-      console.log(error, "<<<<<<<<<<<<<<<");
-
       errorCallBack && errorCallBack(error);
     },
   });
