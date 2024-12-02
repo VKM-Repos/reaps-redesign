@@ -104,6 +104,3 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
             </div>
         )
     }
-
-    // 8388f770-a8ed-4080-a0ee-01fafb2f8bbb - request
-    // a3ac1d5a-291d-4c30-b7dc-24ffba9b86ac - reviewer

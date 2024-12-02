@@ -1,5 +1,3 @@
-import TableRequests from "../../components/table-requests";
-import TableReview from "./table";
 import EmptyRequests from "../../components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";

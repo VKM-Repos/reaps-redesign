@@ -9,23 +9,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import Tick from "@/components/custom/Icons/Tick";
 import { useLocation } from "react-router-dom";
+import { formatISODate } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
-export default function SeachFilter({ statuses, activeTab, setShowStatuses, setLoading, setAppliedStatuses }: { statuses: string[], activeTab?: string, setShowStatuses: (showStatuses: boolean ) => void, setLoading: (loading: boolean) => void, setAppliedStatuses: (appliedStatuses: string[]) => void}) {
+export default function SeachFilter({ 
+  statuses, 
+  activeTab, 
+  setShowStatuses, 
+  setLoading, 
+  setAppliedStatuses
+ }: { 
+  statuses: string[], 
+  activeTab?: string, 
+  setShowStatuses: (showStatuses: boolean ) => void, 
+  setLoading: (loading: boolean) => void, 
+  setAppliedStatuses: (appliedStatuses: string[]) => void}) {
+
+
   const [open, setOpen] = useState(false);
   const [activeContent, setActiveContent] = useState("Status");
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [tickedStatuses, setTickedStatuses] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [startDate, setStartDate] = useState<Date>();
   const [statusFilter, setStatusFilter] = useState<String[]>([]);
-  const [startCalendarOpen, setStartCalendarOpen] = useState(false);
-  const [endCalendarOpen, setEndCalendarOpen] = useState(false);
-  const [endDate, setEndDate] = useState<Date | undefined>();
-
-  type SelectSingleEventHandler = (day: Date | undefined) => void;
+  const [endDate, setEndDate] = useState<Date>();
 
   const { globalFilter, setGlobalFilter, setColumnFilters } = useGlobalFilter();
   const { pathname } = useLocation();
@@ -57,26 +67,16 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
         : [...prev, status]
     );
   }
-
-  function formatDateToDDMMYYYY(date: Date) {
-    const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with 0 if necessary
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
-    const year = date.getFullYear(); // Get the full year
-    return `${day}-${month}-${year}`; // Return in DD-MM-YYYY format
-  }
-
-  const handleStartDateChange: SelectSingleEventHandler = (
-    day: Date | undefined
+  const handleStartDateChange = (
+    day: Date
   ) => {
-    setStartDate(day || undefined);
-    setStartCalendarOpen(false);
+    setStartDate(day);
   };
 
-  const handleEndDateChange: SelectSingleEventHandler = (
-    day: Date | undefined
+  const handleEndDateChange = (
+    day: Date 
   ) => {
-    setEndDate(day || undefined);
-    setEndCalendarOpen(false);
+    setEndDate(day );
   };
   const setFilters = () => {
     const filters = [];
@@ -87,12 +87,9 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
       });
     }
     if (startDate && endDate) {
-      const formattedStartDate = formatDateToDDMMYYYY(startDate); // convert input date to backend date format
-      const formattedEndDate = formatDateToDDMMYYYY(endDate);
-
       filters.push({
         id: "submission",
-        value: { formattedStartDate, formattedEndDate },
+        value: { startDate, endDate },
       });
     }
     setColumnFilters(filters);
@@ -118,6 +115,8 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
     setStatusFilter([]);
     setGlobalFilter('');
     setColumnFilters([]);
+    setStartDate(undefined);
+    setEndDate(undefined);
   }, [pathname, activeTab]);
 
   return (
@@ -239,61 +238,35 @@ export default function SeachFilter({ statuses, activeTab, setShowStatuses, setL
                   activeContent === "Date" && (
                     <div className="gap-2 flex flex-col justify-center">
                       <div className="flex gap-3 items-center">
-                        <DropdownMenu
-                          open={startCalendarOpen}
-                          onOpenChange={setStartCalendarOpen}
-                          modal={false}
-                        >
-                          <DropdownMenuTrigger>
-                            <div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">
-                              {startDate
-                                ? `${formatDateToDDMMYYYY(startDate)}`
-                                : "Start date"}
-                            </div>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start" side="bottom">
-                            <Calendar
-                              mode="single"
-                              selected={startDate}
-                              onSelect={handleStartDateChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date("1900-01-01")
-                              }
-                              initialFocus
+                        <div className="flex flex-col gap-1">
+                          <Label className="text-xs text-[#6A6C6A]">Start Date</Label>
+                        <input
+                            name="Start Date"
+                            type="date"
+                            value={startDate ? formatISODate(startDate) : ""}
+                            onChange={(e) => handleStartDateChange(new Date(e.target.value))}
+                            className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]"
+                            min="1900-01-01"
+                            max={new Date().toISOString().split("T")[0]}
                             />
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                        <DropdownMenu
-                          open={endCalendarOpen}
-                          onOpenChange={setEndCalendarOpen}
-                          modal={false}
-                        >
-                          <DropdownMenuTrigger>
-                            <div className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]">
-                              {endDate
-                                ? `${formatDateToDDMMYYYY(endDate)}`
-                                : "End date"}
-                            </div>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" side="bottom">
-                            <Calendar
-                              mode="single"
-                              selected={endDate}
-                              onSelect={handleEndDateChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date("1900-01-01")
-                              }
-                              initialFocus
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <Label className="text-xs text-[#6A6C6A]">End Date</Label>
+                        <input
+                            name="End Date"
+                            type="date"
+                            value={endDate ? formatISODate(endDate) : ""}
+                            onChange={(e) => handleEndDateChange(new Date(e.target.value))}
+                            className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]"
+                            min="1900-01-01"
+                            max={new Date().toISOString().split("T")[0]}
                             />
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        </div>
                       </div>
                     </div>
                   )
                 )}
-                <div className="flex items-center gap-3 align-self-end">
+                <div className="flex items-center justify-between align-self-end">
                   <Button
                     className="w-full max-w-[5.25rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]"
                     variant="ghost"
