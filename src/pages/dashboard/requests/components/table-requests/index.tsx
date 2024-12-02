@@ -48,7 +48,7 @@ function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
   const navigate = useNavigate();
 
   const redirectToSummary = () => {
-    navigate("/requests/create");
+    navigate("/requests/edit-request");
     setStep(5);
   };
 
