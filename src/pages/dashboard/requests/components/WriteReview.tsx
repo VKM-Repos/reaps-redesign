@@ -59,7 +59,7 @@ export default function WriteReview({
   });
 
   const { mutate: write_review, isPending: updating_review } = usePATCH(
-    `reviews/${review?.items[0].id}`,
+    `reviews/${review?.items[0]?.id}`,
     { method: "PATCH" }
   );
   console.log(request);
