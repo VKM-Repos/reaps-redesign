@@ -1,38 +1,49 @@
-import { reviewTableData } from "@/lib/helpers";
-import PageTitle from "../components/PageTitle";
-import SeachFilter from "../components/SeachFilter";
+import PageTitle from "../../components/PageTitle";
+import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import TableReview from "../components/table-review";
-import { useMediaQuery } from "react-responsive";
-import { X } from "lucide-react";
+import { useGET } from "@/hooks/useGET.hook";
+import ReviewRequestsTable from "../reviewer/table";
 
 export default function ReviewRequest() {
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<string[]>([])
   const [showStatuses, setShowStatuses] = useState(false);
   const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const navigate = useNavigate();
   const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
 
+  const { 
+    data: requests_to_review, 
+    isPending: isRequestsPending 
+  } = useGET({
+    url: "reviews/reviewer",
+    queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
+  })
+
+  const review_requests_data 
+  = requests_to_review?.items.map(
+    (request: any) => {
+    return {
+      title: request.request.research_title,
+      applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
+      status: request.status,
+      request: request.request
+    }
+  })
+
   const handleFunc = () => {
     setLoading(true);
+    console.log(showStatuses);
+    console.log(appliedStatuses)
     setTimeout(() => {
       navigate("/requests/create");
       setLoading(false);
     }, 5000);
-  };
-  
-  const deleteStatusUpdate = (status: String) => {
-    setAppliedStatuses((prev) => prev.filter((val) => val !== status));
-    if (appliedStatuses.length === 0) {
-      setShowStatuses(false);
-    }
   };
 
   useEffect(() => {
@@ -43,7 +54,7 @@ export default function ReviewRequest() {
 
   return (
     <>
-      {loading &&
+      {(loading || isRequestsPending) &&
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">
@@ -59,7 +70,11 @@ export default function ReviewRequest() {
             </Button>
           </div>
           <div className="flex items-center justify-between mt-12 mb-4">
-            <SeachFilter statuses={statuses} setLoading={setLoading} setShowStatuses={setShowStatuses} setAppliedStatuses={setAppliedStatuses}/>
+            <SeachFilter 
+              statuses={statuses} 
+              setLoading={setLoading} 
+              setShowStatuses={setShowStatuses} 
+              setAppliedStatuses={setAppliedStatuses}/>
             <div className="lg:flex items-center gap-1 hidden">
               <span>
                 <a href="" className="font-semibold underline text-black">
@@ -71,22 +86,7 @@ export default function ReviewRequest() {
               </span>
             </div>
           </div>
-          {isMobile && showStatuses && appliedStatuses.length !== 0 && (
-              <div className="flex flex-wrap justify-center items-center p-4 gap-3">
-                {appliedStatuses.map((status) => (
-                  <div className="py-2 px-3 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center justify-start gap-2 w-full max-w-fit">
-                    <span className="w-[6px] h-[5px] bg-[#FFD13A] rounded-full"></span>
-                    <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">
-                      {status}
-                    </span>
-                    <span onClick={() => deleteStatusUpdate(status)}>
-                      <X size={10} />
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          <TableReview reviewTableData={reviewTableData} />
+          <ReviewRequestsTable reviewTableData={review_requests_data || []} />
         </div>
     </>
   );

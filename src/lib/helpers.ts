@@ -582,3 +582,59 @@ export const mock_templates = [
     file: PdfUrl3,
   },
 ];
+
+export const reviews = [
+  {
+    id: "1",
+    reviewer: {
+      name: "Mariam Catherine",
+      user_type: "Reviewer",
+      remark: "Unsatisfactory",
+      comments: [
+        {
+          id: "1",
+          comment:
+            "A better understanding of usage can aid in prioritizing future efforts i'm sorry I replied to your emails after only three weeksLet it grow as it did so long ago, its just one tiny tree, but its all we really need, lets celebrate the world’s rebirth, i say let it grow.",
+          file: "Evidence of completion",
+        },
+        {
+          id: "2",
+          comment:
+            "A better understanding of usage can aid in prioritizing future efforts i'm sorry I replied to your emails after only three weeksLet it grow as it did so long ago, its just one tiny tree, but its all we really need, lets celebrate the world’s rebirth, i say let it grow.",
+        },
+      ],
+    },
+  },
+  {
+    id: "2",
+    reviewer: {
+      name: "Alex Thomas",
+      user_type: "Admin",
+      remark: "Satisfactory",
+      comments: [
+        {
+          id: "1",
+          comment:
+            "A better understanding of usage can aid in prioritizing future efforts i'm sorry I replied to your emails after only three weeksLet it grow as it did so long ago, its just one tiny tree, but its all we really need, lets celebrate the world’s rebirth, i say let it grow.",
+          file: "",
+        },
+      ],
+    },
+  },
+  {
+    id: "3",
+    reviewer: {
+      name: "Emily Perez",
+      user_type: "Reviewer",
+      remark: "Further Review",
+      comments: [
+        {
+          id: "1",
+          comment:
+            "A better understanding of usage can aid in prioritizing future efforts i'm sorry I replied to your emails after only three weeksLet it grow as it did so long ago, its just one tiny tree, but its all we really need, lets celebrate the world’s rebirth, i say let it grow.",
+          file: "Evidence of completion",
+        },
+      ],
+    },
+  },
+];
