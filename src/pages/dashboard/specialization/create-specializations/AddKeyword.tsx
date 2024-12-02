@@ -32,7 +32,7 @@ export default function AddKeyword({ handleNext }: Props) {
   });
   const {
     register,
-    reset,
+    // reset,
     formState: { isValid },
   } = form;
   const [keyword, setKeyword] = useState<string>("");

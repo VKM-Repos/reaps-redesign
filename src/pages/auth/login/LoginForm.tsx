@@ -26,7 +26,7 @@ export function LoginForm() {
   const form = useForm<LoginRequestData>({ resolver: zodResolver(formSchema) });
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
 
   const login = useCallback(
     async (data: LoginRequestData) => {
@@ -71,13 +71,10 @@ export function LoginForm() {
         const searchParams = new URLSearchParams(location.search);
         const redirectPath = searchParams.get("redirect") || "/home";
 
-        // Compare roles
         const requiredRole = searchParams.get("role");
         if (requiredRole && requiredRole !== responseData.user.user_type) {
-          // Redirect to `/home` if roles don't match
           navigate("/home");
         } else {
-          // Redirect to the specified path
           navigate(redirectPath);
         }
       } catch (error) {

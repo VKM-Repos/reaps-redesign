@@ -19,6 +19,7 @@ export interface OnboardingFormStore {
       date_of_birth: string;
       education_level: any;
       description: any;
+      notifications: boolean;
     };
   };
   setStep: (step: number) => void;
@@ -51,6 +52,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
           date_of_birth: "",
           education_level: "",
           description: "",
+          notifications: false,
         },
       },
       setStep: (step) => set({ step }),
@@ -73,6 +75,7 @@ export const useOnboardingFormStore = create<OnboardingFormStore>(
               date_of_birth: "",
               education_level: "",
               description: "",
+              notifications: false,
             },
           },
         });
