@@ -55,19 +55,17 @@ export default function WriteReview({
   } = form;
   const { data: review, isPending: fetch_review } = useGET({
     url: `reviews/request/${request?.id}`,
-    queryKey: ["FETCH_REVIEW_BY_ID"],
+    queryKey: ["FETCH_REVIEW_BY_ID", request?.id],
   });
 
   const { mutate: write_review, isPending: updating_review } = usePATCH(
     `reviews/${review?.items[0]?.id}`,
     { method: "PATCH" }
   );
-  console.log(request);
 
   const { mutate: write_final_review, isPending: updating_final_review } =
     usePOST(`reviews/final-review/${request?.id}`);
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("role:", activeRole);
     const send_review =
       activeRole === "admin" ? write_final_review : write_review;
 
