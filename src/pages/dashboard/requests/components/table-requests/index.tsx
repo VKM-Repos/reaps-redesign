@@ -120,14 +120,14 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
         header: () => (
           <CustomCell
             value={"Title"}
-            className="font-bold w-full min-w-[18.75rem]"
+            className="font-bold w-full min-w-[16.75rem]"
           />
         ),
-        accessorKey: "research_title",
+        accessorKey: "title",
         cell: (info) => (
           <CustomCell
             value={info.getValue()}
-            className="min-w-[18.75rem] w-full"
+            className="min-w-[16.75rem] w-full overflow-x-hidden"
           />
         ),
       },
@@ -135,12 +135,12 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
         header: () => (
           <CustomCell
             value={"Submission"}
-            className="font-bold w-full min-w-[11rem]"
+            className="font-bold w-full min-w-[16rem]"
           />
         ),
         accessorKey: "submission",
         cell: ({ getValue }) => (
-          <CustomCell value={getValue()} className="min-w-[11rem] w-full" />
+          <CustomCell value={getValue()} className="min-w-[16rem] w-full" />
         ),
         filterFn: multiStatusDateFilter,
         enableGlobalFilter: false,
@@ -183,7 +183,7 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
             <CustomCell
               value={
                 <MobileRender
-                  item={item}
+                  item={item?.request}
                   onDelete={deleteTableItem}
                   loading={loading}
                 />
@@ -194,7 +194,7 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
             <CustomCell
               value={
                 <RenderFunctions
-                  item={item}
+                  item={item?.request}
                   onDelete={deleteTableItem}
                   loading={loading}
                 />

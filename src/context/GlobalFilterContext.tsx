@@ -1,3 +1,4 @@
+import { formatISODate } from '@/lib/utils';
 import { ColumnFiltersState, FilterFn } from '@tanstack/react-table';
 import { createContext, useContext, useState } from 'react'
 
@@ -16,12 +17,6 @@ const GlobalFilterContext =  createContext<GlobalFilterContextInterface>({} as G
 export const GlobalFilterProvider = ({ children }: {children: React.ReactNode}) => {
     const [ globalFilter, setGlobalFilter] = useState('');
     const [ columnFilters, setColumnFilters ] = useState<ColumnFiltersState>([]);
-
-
-    function parseDate(dateString: string) {
-        const [day, month, year] = dateString.split('-');
-        return new Date(`${year}-${month}-${day}`);
-    }
   
 
     const multiStatusDateFilter: FilterFn<any> = (row: any, columnId: any, filterValue: any) => {
@@ -29,20 +24,15 @@ export const GlobalFilterProvider = ({ children }: {children: React.ReactNode}) 
       
         if (columnId === 'status') {
           // Filter by multiple statuses
-     
           return filterValue.length === 0 || filterValue.includes(rowValue);
         }
       
         if (columnId === 'submission') {
-          
-          const { formattedStartDate, formattedEndDate } = filterValue;
-          const rowDate = parseDate(rowValue); // Assuming rowValue is in DD-MM-YYYY format
-          const startDate = parseDate(formattedStartDate);
-          const endDate = parseDate(formattedEndDate);
-
+          const { endDate, startDate } = filterValue;
           // Filter by date range
-          return rowDate >= startDate && rowDate <= endDate;
+          return rowValue >= formatISODate(startDate) && rowValue <= formatISODate(endDate);
         }
+        
       
         return true; // If no filters, return all rows
       };

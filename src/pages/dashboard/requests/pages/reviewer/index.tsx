@@ -1,5 +1,3 @@
-import TableRequests from "../../components/table-requests";
-import TableReview from "./table";
 import EmptyRequests from "../../components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
@@ -11,6 +9,9 @@ import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import PageTitle from "../../components/PageTitle";
 import SeachFilter from "../../components/SeachFilter";
 import { useGET } from "@/hooks/useGET.hook";
+import MyRequestsTable from "../../components/table-requests";
+import ReviewRequestsTable from "./table";
+import { formatISODate } from "@/lib/utils";
 
 export default function ReviewerRequests() {
   const [activeTab, setActiveTab] = useState("request table");
@@ -51,6 +52,18 @@ export default function ReviewerRequests() {
     queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
   })
 
+  const my_requests_data =
+  my_requests?.items.map(
+    (request: any) => {
+      return {
+        title: request.research_title,
+        status: request.status,
+        submission: formatISODate(request.created_at),
+        request: request,
+      }
+    }
+  )
+  
   // return requests object to table
   const review_requests_data 
   = requests_to_review?.items.map(
@@ -59,6 +72,7 @@ export default function ReviewerRequests() {
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
       status: request.status,
+      submission: formatISODate(request.request.created_at),
       request: request.request
     }
   })
@@ -141,10 +155,10 @@ export default function ReviewerRequests() {
                   </TabsList>
 
                   <TabsContent value="request table">
-                    <TableRequests tableData={my_requests?.items || []} />
+                    <MyRequestsTable tableData={my_requests_data || []} />
                   </TabsContent>
                   <TabsContent value="review table">
-                    <TableReview
+                    <ReviewRequestsTable
                       reviewTableData={review_requests_data || []}
                       activeTab={activeTab}                
                     />

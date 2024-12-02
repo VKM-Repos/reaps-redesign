@@ -32,9 +32,9 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
         const columnData: ColumnSetup<any>[]= [
             {
-                header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[18.75rem]" />,
+                header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[16.75rem]" />,
                 accessorKey: "title",
-                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[18.75rem] w-full" />,
+                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[16.75rem] w-full overflow-x-hidden" />,
         
             },
             {
@@ -104,6 +104,3 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
             </div>
         )
     }
-
-    // 8388f770-a8ed-4080-a0ee-01fafb2f8bbb - request
-    // a3ac1d5a-291d-4c30-b7dc-24ffba9b86ac - reviewer
