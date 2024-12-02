@@ -51,7 +51,7 @@ export default function OnboardingPage() {
           password: data?.onboardingDetails?.password,
           date_of_birth: data?.onboardingDetails.date_of_birth,
           gender: data?.onboardingDetails.gender,
-          // new field - what best describes you (student or researcher/academic)
+          description: data?.onboardingDetails.description,
         };
 
         const baseURL = import.meta.env.VITE_APP_BASE_URL;
@@ -75,12 +75,12 @@ export default function OnboardingPage() {
           throw new Error(errorMessage);
         }
 
-        // const responseData = await response.json();
         toast({
           title: "Feedback",
           description: `user created`,
           variant: "default",
         });
+
         resetStore();
 
         handleNext();

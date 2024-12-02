@@ -1,7 +1,6 @@
-import PdfUrl from "@/lib/mockfiles/ResearchTemplate.pdf"
-import PdfUrl2 from "@/lib/mockfiles/Research-Paper-Outline-Template.pdf"
-import PdfUrl3 from "@/lib/mockfiles/Research Paper Outline Template.pdf"
-
+import PdfUrl from "@/lib/mockfiles/ResearchTemplate.pdf";
+import PdfUrl2 from "@/lib/mockfiles/Research-Paper-Outline-Template.pdf";
+import PdfUrl3 from "@/lib/mockfiles/Research Paper Outline Template.pdf";
 
 type Requirement = {
   id: string;
@@ -112,8 +111,8 @@ export const requirements: RequirementMapping = {
 };
 
 export const requestsArray = [
-  "Application Info",
   "Research Info",
+  "Application Info",
   "Supporting docs",
   "Summary",
 ];
@@ -566,21 +565,20 @@ export const assignReviewerData = [
   },
 ];
 
-
 export const mock_templates = [
-  { 
+  {
     id: "1",
     name: "Registration/Submission Guidelines",
-    file: PdfUrl
+    file: PdfUrl,
   },
-  { 
+  {
     id: "2",
     name: "Registration/Submission Guidelines",
-    file: PdfUrl2
+    file: PdfUrl2,
   },
-  { 
+  {
     id: "3",
     name: "Registration/Submission Guidelines",
-    file: PdfUrl3
+    file: PdfUrl3,
   },
-]
+];

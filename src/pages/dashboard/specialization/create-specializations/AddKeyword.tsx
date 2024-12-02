@@ -51,7 +51,7 @@ export default function AddKeyword({ handleNext }: Props) {
         ...uniqueKeywords.filter((kw) => !prev.includes(kw)),
       ]);
 
-      reset({ keywords: "" });
+      // reset({ keywords: "" });
     }
   }
 
@@ -102,11 +102,7 @@ export default function AddKeyword({ handleNext }: Props) {
               })}
               value={keyword}
             />
-            {keywordsArray.length <= 0 && (
-              <span className="text-red-500 mt-1 text-xs">
-                Please add at least one keyword.
-              </span>
-            )}
+
             <div className="mt-8 flex w-full flex-wrap gap-2">
               {keywordsArray.map((item: string, index: number) => (
                 <Badge
@@ -129,7 +125,7 @@ export default function AddKeyword({ handleNext }: Props) {
               variant={
                 isValid && keywordsArray.length > 0 ? "default" : "ghost"
               }
-              disabled={!isValid && keywordsArray.length < 1}
+              disabled={!isValid || keywordsArray.length < 1}
               className={`mt-[2rem] focus:outline-none`}
             >
               Finish

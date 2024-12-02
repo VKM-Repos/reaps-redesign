@@ -26,10 +26,7 @@ export function LoginForm() {
   const form = useForm<LoginRequestData>({ resolver: zodResolver(formSchema) });
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUser } = useUserStore();
-
-  const searchParams = new URLSearchParams(location.search);
-  const redirectPath = searchParams.get("redirect") || "/home";
+  const { user, setUser } = useUserStore();
 
   const login = useCallback(
     async (data: LoginRequestData) => {
@@ -71,14 +68,25 @@ export function LoginForm() {
           refresh_token: responseData.refresh_token,
         });
 
-        navigate(redirectPath);
+        const searchParams = new URLSearchParams(location.search);
+        const redirectPath = searchParams.get("redirect") || "/home";
+
+        // Compare roles
+        const requiredRole = searchParams.get("role");
+        if (requiredRole && requiredRole !== responseData.user.user_type) {
+          // Redirect to `/home` if roles don't match
+          navigate("/home");
+        } else {
+          // Redirect to the specified path
+          navigate(redirectPath);
+        }
       } catch (error) {
         console.error("Login error:", error);
       } finally {
         setIsLoading(false);
       }
     },
-    [navigate, redirectPath, setUser]
+    [location.search, navigate, setUser]
   );
 
   function onSubmit(data: LoginRequestData) {

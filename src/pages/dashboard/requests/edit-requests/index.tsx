@@ -1,59 +1,122 @@
-import { useRequestsStore } from "@/store/RequestFormStore";
-import SelectSpecialization from "../create-requests/forms/SelectSpecialization";
-import ResearchInfo from "../create-requests/forms/ResearchInfo";
-import AppInfo from "../create-requests/forms/AppInfo";
-import SupportDoc from "../create-requests/forms/SupportDoc";
-import AppSummary from "../create-requests/forms/AppSummary";
+import { SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
-import { RequestItems } from "@/types/requests";
+import ResearchInformation from "../components/ethical-request-forms/research-information";
+import ApplicationInformation from "../components/ethical-request-forms/application-information";
+import SupportingDocuments from "../components/ethical-request-forms/supporting-document";
+import SavingLoader from "../components/SavingLoader";
+import {
+  EthicalRequestStore,
+  useEthicalRequestStore,
+} from "@/store/ethicalRequestStore";
+import ApplicationSummary from "../components/ethical-request-forms/application-summary";
+import { usePOST } from "@/hooks/usePOST.hook";
+import { toast } from "@/components/ui/use-toast";
+import Loader from "@/components/custom/Loader";
+import SelectSpecialization from "../components/ethical-request-forms/select-specialization";
+import { useNavigate } from "react-router-dom";
+import { queryClient } from "@/providers";
 
-type Props = {
-  request: RequestItems;
-};
+const ModifyRequest = () => {
+  const { data, step, setStep, resetStore } = useEthicalRequestStore();
+  const navigate = useNavigate();
 
-const ModifyRequest = ({ request }: Props) => {
-  const { step, setStep } = useRequestsStore();
+  const { mutate, isPending } = usePOST("requests", {
+    contentType: "multipart/form-data",
+  });
 
-  const handleNext = () => setStep(step + 1);
+  const RenderRequestsForm = () => {
+    const handleNext = () => {
+      setStep(step + 1);
+    };
 
-  const handleSubmit = async () => {
-    try {
-      console.log(request);
-      // resetStore();
-      // setOpen(false)
-    } catch (error) {
-      console.error("Error modifying request", error);
-    }
-  };
+    const { handleSubmit } = useForm<EthicalRequestStore>();
 
-  const RenderEdit = () => {
+    const onSubmitHandler: SubmitHandler<EthicalRequestStore> = async () => {
+      const formData = new FormData();
+
+      Object.entries(data.ethical_request_files).forEach(([fileName, file]) => {
+        if (file) {
+          formData.append(fileName, file);
+        }
+      });
+
+      Object.entries(data.ethical_request_questions).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value.toString());
+        }
+      });
+
+      mutate(formData, {
+        onSuccess: (response) => {
+          console.log(response);
+
+          toast({
+            title: "Success",
+            description: `You have successfully created an ethical request.`,
+            variant: "default",
+          });
+
+          queryClient.invalidateQueries({
+            predicate: (query: any) => query.queryKey.includes(["requests"]),
+          });
+
+          resetStore();
+
+          navigate("/requests");
+        },
+        onError: (error: any) => {
+          console.error("Error received:", error);
+
+          const errorMessage =
+            error?.detail ||
+            (Array.isArray(error) && error[0]?.message) ||
+            (error?.response?.data && error.response.data.detail) ||
+            "An unexpected error occurred";
+
+          toast({
+            title: "Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+        },
+      });
+    };
+
     switch (step) {
       case 1:
         return <SelectSpecialization handleNext={handleNext} />;
       case 2:
-        return <AppInfo handleNext={handleNext} />;
+        return <ResearchInformation handleNext={handleNext} />;
       case 3:
-        return <ResearchInfo handleNext={handleNext} />;
+        return <ApplicationInformation handleNext={handleNext} />;
       case 4:
-        return <SupportDoc handleNext={handleNext} />;
+        return <SupportingDocuments handleNext={handleNext} />;
       case 5:
-        return <AppSummary handleNext={handleSubmit} />;
+        return (
+          <ApplicationSummary handleNext={handleSubmit(onSubmitHandler)} />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="flex flex-col gap-[1.25rem] mb-20">
-      <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-        <h1 className="text-[1.875rem] font-bold">Requests</h1>
+    <>
+      {isPending && <Loader />}
+      <div className="flex flex-col gap-[1.25rem] mb-20">
+        <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
+          <h1 className="text-[1.875rem] font-bold">Requests</h1>
+        </div>
+        <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
+          <RequestsLayout>
+            <div className="relative md:w-[80%] mx-auto">
+              {step > 1 && <SavingLoader />}
+            </div>
+            <RenderRequestsForm />
+          </RequestsLayout>
+        </div>
       </div>
-      <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
-        <RequestsLayout>
-          <RenderEdit />
-        </RequestsLayout>
-      </div>
-    </div>
+    </>
   );
 };
 

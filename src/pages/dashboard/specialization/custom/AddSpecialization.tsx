@@ -19,7 +19,7 @@ import { useGET } from "@/hooks/useGET.hook";
 
 const AddSpecialization = () => {
   const { step, setStep, resetStore } = useSpecializationsStore();
-  const { createSpecialization, isPending } = useCreateSpecialization();
+  const { createSpecialization } = useCreateSpecialization();
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const [open, setOpen] = useState(false);
@@ -67,7 +67,7 @@ const AddSpecialization = () => {
 
   return (
     <>
-      {isPending || (loading && <Loader />)}
+      {loading && <Loader />}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button className="flex max-w-[16.75rem] items-center justify-center gap-4 px-6 py-3">
@@ -78,6 +78,7 @@ const AddSpecialization = () => {
           </Button>
         </SheetTrigger>
         <SheetContent
+          onInteractOutside={resetStore}
           side={isMobile ? "bottom" : "top"}
           className={` ${
             isMobile
@@ -94,7 +95,10 @@ const AddSpecialization = () => {
               go back
             </button>
           )}
-          <SheetClose className="absolute right-6 mx-auto flex w-fit rounded-full !px-0 py-0 opacity-70 transition-opacity hover:bg-[#14155E14] hover:opacity-100 focus:outline-none disabled:pointer-events-none">
+          <SheetClose
+            onClick={resetStore}
+            className="absolute right-6 mx-auto flex w-fit rounded-full !px-0 py-0 opacity-70 transition-opacity hover:bg-[#14155E14] hover:opacity-100 focus:outline-none disabled:pointer-events-none"
+          >
             <HoverCancel />
           </SheetClose>
           <div className="flex h-full w-full flex-col gap-[2.5rem] border-none md:max-h-[26.5rem]">
