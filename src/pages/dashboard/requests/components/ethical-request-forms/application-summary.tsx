@@ -2,12 +2,12 @@
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import EthicalApprovalCard from "../ethical-request-approval";
 import { useMediaQuery } from "react-responsive";
 import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import { questionsData } from "./questions";
 import { Label } from "@/components/ui/label";
 import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
+import PaymentCart from "./payment-cart";
 
 type Props = {
   handleNext: () => void;
@@ -259,13 +259,13 @@ const ApplicationSummary = ({ handleNext }: Props) => {
   return (
     <>
       {showPaymentCart ? (
-        <EthicalApprovalCard
-          educationLevel="Undergraduate"
-          amountToPay="25000"
-          showApproval={() => {
-            setShowPaymentCart(false);
-          }}
-        />
+        <>
+          <PaymentCart
+            showApproval={() => {
+              setShowPaymentCart(false);
+            }}
+          />
+        </>
       ) : (
         <section className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
           <div className="flex flex-col justify-center items-center">

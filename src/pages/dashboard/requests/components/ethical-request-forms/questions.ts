@@ -59,8 +59,8 @@ export const questionsData: QuestionsData = {
       documentLabel: "Materials transfer agreement form",
     },
     {
-      name: "duration_of_research_in_years",
-      label: "What is the duration of the research (years)?",
+      name: "duration_of_research_in_years", //change to months
+      label: "What is the duration of the research (months)?",
       type: "counter",
     },
     {
