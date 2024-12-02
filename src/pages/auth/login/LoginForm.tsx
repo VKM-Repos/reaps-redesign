@@ -28,9 +28,6 @@ export function LoginForm() {
   const location = useLocation();
   const { setUser } = useUserStore();
 
-  const searchParams = new URLSearchParams(location.search);
-  const redirectPath = searchParams.get("redirect") || "/home";
-
   const login = useCallback(
     async (data: LoginRequestData) => {
       try {
@@ -71,14 +68,22 @@ export function LoginForm() {
           refresh_token: responseData.refresh_token,
         });
 
-        navigate(redirectPath);
+        const searchParams = new URLSearchParams(location.search);
+        const redirectPath = searchParams.get("redirect") || "/home";
+
+        const requiredRole = searchParams.get("role");
+        if (requiredRole && requiredRole !== responseData.user.user_type) {
+          navigate("/home");
+        } else {
+          navigate(redirectPath);
+        }
       } catch (error) {
         console.error("Login error:", error);
       } finally {
         setIsLoading(false);
       }
     },
-    [navigate, redirectPath, setUser]
+    [location.search, navigate, setUser]
   );
 
   function onSubmit(data: LoginRequestData) {

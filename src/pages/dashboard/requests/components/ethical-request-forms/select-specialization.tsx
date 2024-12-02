@@ -10,12 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import RequestSpecialization from "./CreateSpecialization";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/Loader";
 import { useGET } from "@/hooks/useGET.hook";
 import { SpecializationItems } from "@/types/specialization";
+import CreateSpecialization from "./create-specialization";
 
 type Props = {
   handleNext: () => void;
@@ -115,7 +115,7 @@ export default function SelectSpecialization({ handleNext }: Props) {
           </div>
         </>
       ) : (
-        <RequestSpecialization handleSpecNext={handleNext} />
+        <CreateSpecialization handleSpecNext={handleNext} />
       )}
     </>
   );
