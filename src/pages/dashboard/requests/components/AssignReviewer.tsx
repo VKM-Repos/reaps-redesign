@@ -18,7 +18,7 @@ export default function AssignReviewer({ request }: { request: any }) {
     refetch: refetch_assigned,
   } = useGET({
     url: `reviews/request/${request?.id}`,
-    queryKey: ["GET_ASSIGNED_IN_ASSIGN_REVIEW_PAGE"],
+    queryKey: ["GET_ASSIGNED_IN_ASSIGN_REVIEW_PAGE", request?.id],
   });
 
   const { mutate: un_assign, isPending: un_assigning } =
