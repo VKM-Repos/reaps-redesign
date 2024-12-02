@@ -11,6 +11,17 @@ import SeachFilter from "./components/SeachFilter";
 import useUserStore from "@/store/user-store";
 import ReviewerRequests from "./pages/reviewer";
 import { useGET } from "@/hooks/useGET.hook";
+import { formatISODate } from "@/lib/utils";
+
+
+export const status_map: Record<string, string> = {
+  "Review in Progress": "Under Review",
+  "Not Yet Reviewed": "Pending",
+  "Approved": "Approved",
+  "Draft": "Draft",
+  "Declined": "Declined",
+  "Reapproved": "Reapproved",
+} 
 
 export default function Requests() {
   const { activeRole } = useUserStore();
@@ -29,6 +40,17 @@ export default function Requests() {
     queryKey: ["GET_MY_REQUESTS_AS_A_USER"],
   });
 
+  const my_requests_data =
+  my_requests?.items.map(
+    (request: any) => {
+      return {
+        title: request.research_title,
+        status: request.status,
+        submission: formatISODate(request.created_at),
+        request: request,
+      }
+    }
+  )
 
   
   const handleFunc = () => {
@@ -85,7 +107,7 @@ export default function Requests() {
             </div>
   
             {/* Tab and Table */}
-            {my_requests?.items.length > 0 ? (
+            {my_requests_data?.length > 0 ? (
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <SeachFilter
@@ -105,7 +127,7 @@ export default function Requests() {
                     </span>
                   </div>
                 </div>
-                <TableRequests tableData={my_requests.items || []} />
+                <TableRequests tableData={my_requests_data || []} />
               </div>
             ) : (
               <EmptyRequests />

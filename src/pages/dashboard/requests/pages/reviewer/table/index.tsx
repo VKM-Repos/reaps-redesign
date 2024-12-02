@@ -32,9 +32,9 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
         const columnData: ColumnSetup<any>[]= [
             {
-                header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[18.75rem]" />,
+                header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[16.75rem]" />,
                 accessorKey: "title",
-                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[18.75rem] w-full" />,
+                cell: (info) => <CustomCell value={info.getValue()} className="min-w-[16.75rem] w-full overflow-x-hidden" />,
         
             },
             {
