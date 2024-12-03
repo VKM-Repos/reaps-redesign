@@ -26,8 +26,8 @@ export default function SharedActions({ item, onDelete, redirectToSummary, isMob
         <div>
           <button
             onClick={redirectToSummary}
-            // className={`${item?.status === "Draft" ? "text-black" : "text-black/30"} items-center flex justify-center gap-2 ${isMobile ? 'p-2' : 'p-3'}`}
-            // disabled={item?.status !== "Draft"}
+            className={`${item.request?.status === "Draft" ? "text-black" : "text-black/30"} items-center flex justify-center gap-2 ${isMobile ? 'p-2' : 'p-3'}`}
+            disabled={item?.status !== "Draft"}
           >
             <PencilEdit />
             {isMobile ? null : <span>Edit</span>}

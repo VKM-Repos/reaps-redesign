@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
 import ResearchInformation from "../components/ethical-request-forms/research-information";
@@ -55,7 +56,7 @@ const CreateRequests = () => {
 
           toast({
             title: "Success",
-            description: `You have successfully created an ethical request.`,
+            description: `Saved to drafts`,
             variant: "default",
           });
 
