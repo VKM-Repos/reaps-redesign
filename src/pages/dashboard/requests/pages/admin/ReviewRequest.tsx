@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import { useGET } from "@/hooks/useGET.hook";
 import ReviewRequestsTable from "../reviewer/table";
+import { formatISODate } from "@/lib/utils";
 
 export default function ReviewRequest() {
   const [loading, setLoading] = useState(false);
@@ -32,9 +33,11 @@ export default function ReviewRequest() {
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
       status: request.status,
+      submission: formatISODate(request.request.created_at),
       request: request.request
     }
   })
+
 
   const handleFunc = () => {
     setLoading(true);

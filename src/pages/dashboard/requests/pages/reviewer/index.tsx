@@ -106,9 +106,10 @@ export default function ReviewerRequests() {
         (isMyRequestsPending || 
         isReviewRequestsPending)) && <Loader />}
         <div className="flex flex-col gap-12 mb-20">
+          {/* Page title and button */}
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />
-            {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) && (
+            {(my_requests_data.length > 0) && (
               <Button
                 onClick={handleFunc}
                 className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -118,9 +119,11 @@ export default function ReviewerRequests() {
                 </span>
                 Request Ethical Approval
               </Button>
-            )}
+            )}            
           </div>
-          {/* tab */}
+
+
+          {/* Search and Filter components */}
           {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) ? (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
@@ -142,7 +145,9 @@ export default function ReviewerRequests() {
                   </span>
                 </div>
               </div>
-              {/* change tables to completed state  */}
+
+
+              {/* Requests table tabs  */}
                 <Tabs
                   defaultValue="request table"
                   onValueChange={(val) => setActiveTab(val)}
