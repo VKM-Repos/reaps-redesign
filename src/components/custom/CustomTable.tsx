@@ -13,8 +13,13 @@ import {
   useReactTable,
   flexRender,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
+import ArrowLeftDouble from "@/assets/arrow_left_double.svg";
+import ArrowRightDouble from "@/assets/arrow_right_double.svg";
+import { ChevronsLeftIcon, ChevronsRight } from "lucide-react";
+import { useState } from "react";
 
 export const CustomCell = ({
   value,
@@ -62,14 +67,38 @@ export default function CustomTable({
       globalFilter: localSearch ?? globalFilter,
       columnFilters: columnFilters,
     },
+    initialState: {
+      pagination: { pageIndex: 0, pageSize: 10 },
+    },
     onGlobalFilterChange: setLocalSearch ?? setGlobalFilter,
+    getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const total_entries = table.getFilteredRowModel().rows.length;
+  const { pageIndex, pageSize } = table.getState().pagination;
+  const page_number = Math.ceil(total_entries / pageSize);
+  const start = pageIndex * pageSize + 1;
+  const end = Math.min(start + pageSize - 1, total_entries);
+  const [visible_start, setVisibleStart ] = useState(0);
+
+
+  const visible_pages =
+    Array.from(
+    {length: 2},
+    (_, i) => visible_start + i).filter(
+      (page) => page < page_number
+    )
+
+  
+
+    
+
   return (
-    <div
-      className={`mb-[6rem] flex w-full flex-col ${
+    <div className="w-full flex flex-col gap-6 mb-[6rem] ">
+      <div
+      className={`flex w-full flex-col ${
         isMobile && "overflow-x-scroll"
       } [&::-webkit-scrollbar-track]:bg-gray-10110 
         gap-2 
@@ -126,5 +155,43 @@ export default function CustomTable({
       </Table>
       {isMobile && <div className="w-full">&nbsp;</div>}
     </div>
+    {/* {visible_pages.length > 1 && */}
+    <div className="py-3 px-6 flex justify-between items-center">
+      <div>
+        <p className="text-[#4A5567] text-sm">Showing {start} to {end} of {total_entries} entries.</p>
+      </div>
+      <div className="flex gap-[0.625rem] items-center">
+        <button 
+          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center">
+            <ChevronsLeftIcon />
+        </button>
+        <div
+          className="flex gap-1 items-center font-medium">
+        
+            {visible_pages.map((page, index)=> (
+              <button
+                key={index}
+                className={`rounded-full py-2 px-[1.125rem] flex items-center justify-center  ${pageIndex === page ? `text-[#FFFFFF] bg-[#051467]` : "text-[#20293A]"}`}
+                onClick={() => table.setPageIndex(page)}>
+              {page + 1}
+            </button>
+            ))}
+          
+          
+          {/* <button
+            className={`rounded-full py-2 px-[1.125rem] flex items-center justify-center ${pageIndex === visible_start + 1 ? `text-[#FFFFFF] bg-[#051467]` : "text-[#20293A]"}`}>
+            {visible_start + 2}
+          </button> */}
+        </div>
+        
+        <button 
+          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center">
+            <ChevronsRight />        
+            </button>
+      </div>
+
+    </div>
+  </div>
+    
   );
 }
