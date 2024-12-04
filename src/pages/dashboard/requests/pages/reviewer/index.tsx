@@ -63,6 +63,7 @@ export default function ReviewerRequests() {
       }
     }
   )
+  console.log(my_requests)
   
   // return requests object to table
   const review_requests_data 
@@ -109,7 +110,7 @@ export default function ReviewerRequests() {
           {/* Page title and button */}
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />
-            {(my_requests_data.length > 0) && (
+            {(my_requests_data?.length > 0) && (
               <Button
                 onClick={handleFunc}
                 className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
