@@ -9,10 +9,6 @@ import Unhappy from "@/assets/unhappy.svg";
 import Unamused from "@/assets/unamused.svg";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
-const review_remarks = [
-  { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
-  { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
-];
 
 const final_review_remarks = [
   { id: "1", text: "Approved", color: "#34A853", icon: Smile },
@@ -43,23 +39,12 @@ export const ActionButton = ({
       content: <AssignReviewer request={request} />,
     },
     {
-      id: "2",
-      text: "Review",
-      color: "#BD6BC9",
-      content: (
-        <WriteReview
-          request={request}
-          remarks={review_remarks}
-          buttonText="Submit review"
-        />
-      ),
-    },
-    {
       id: "3",
       text: "Final Review",
       color: "#566DBE",
       content: (
         <WriteReview
+            closeDialog={()=>{} }
           request={request}
           remarks={final_review_remarks}
           buttonText="Submit final review"
