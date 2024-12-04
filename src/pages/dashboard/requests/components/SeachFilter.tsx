@@ -266,9 +266,9 @@ export default function SeachFilter({
                     </div>
                   )
                 )}
-                <div className="flex items-center justify-between align-self-end">
+                <div className="flex items-center gap-3 align-self-end">
                   <Button
-                    className="w-full max-w-[7rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]"
+                    className="w-full py-[0.313rem] px-3 rounded font-semibold text-sm text-[#868687]"
                     variant="ghost"
                     onClick={() => {
                       setOpen(false);
@@ -277,7 +277,7 @@ export default function SeachFilter({
                     Cancel
                   </Button>
                   <Button
-                    className="w-full max-w-[7rem] py-[0.313rem] px-3 rounded font-semibold text-sm text-white"
+                    className="w-full py-[0.313rem] px-3 rounded font-semibold text-sm text-white"
                     onClick={applyFilters}
                   >
                     Apply
