@@ -28,3 +28,17 @@ export function getFileExtension(url: string): string {
   // If there is a match, return the file extension in lowercase
   return match ? match[1].toLowerCase() : " ";
 }
+
+export function mapStatus (status: string) {
+  const statusMap: Record<string, string> = {
+    'Not Yet Reviewed': 'Unreviewed',
+    'PENDING': 'Pending',
+    'APPROVED': 'Approved',
+    'DECLINED': 'Declined',
+    'SUCCESS': 'Success',
+    'FAILED': 'Failed',
+  };
+  
+  // Return the mapped value if it exists, or the original status formatted
+  return statusMap[status] || status.charAt(0) + status.slice(1).toLowerCase();
+};
