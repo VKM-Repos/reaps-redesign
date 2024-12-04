@@ -32,7 +32,7 @@ export default function SeachFilter({
   const [open, setOpen] = useState(false);
   const [activeContent, setActiveContent] = useState("Status");
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [tickedStatuses, setTickedStatuses] = useState<string[]>([]);
+  // const [tickedStatuses, setTickedStatuses] = useState<string[]>([]);
   const [startDate, setStartDate] = useState<Date>();
   const [statusFilter, setStatusFilter] = useState<String[]>([]);
   const [endDate, setEndDate] = useState<Date>();
@@ -41,7 +41,7 @@ export default function SeachFilter({
   const { pathname } = useLocation();
 
   // check if touch device 
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGlobalFilter(e.target.value);
@@ -60,13 +60,14 @@ export default function SeachFilter({
     );
   };
 
-  const handleTickedStatus = (status: string) => {
-    setTickedStatuses((prev) =>
-      prev.includes(status)
-        ? prev.filter((val) => val !== status)
-        : [...prev, status]
-    );
-  }
+  // const handleTickedStatus = (status: string) => {
+  //   setTickedStatuses((prev) =>
+  //     prev.includes(status)
+  //       ? prev.filter((val) => val !== status)
+  //       : [...prev, status]
+  //   );
+  // }
+
   const handleStartDateChange = (
     day: Date
   ) => {
@@ -207,24 +208,27 @@ export default function SeachFilter({
                     <ul className="flex flex-col items-start">
                       {statuses.map((status: string) => (
                         <div
-                           onMouseEnter={() => {
-                              if (!isTouchDevice) handleTickedStatus(status);
-                            }}
-                            onMouseLeave={() => {
-                              if (!isTouchDevice) handleTickedStatus(status); ;
-                            }}
+                          //  onMouseEnter={() => {
+                          //     if (!isTouchDevice) handleTickedStatus(status);
+                          //   }}
+                          //   onMouseLeave={() => {
+                          //     if (!isTouchDevice) handleTickedStatus(status); ;
+                          //   }}
                             onClick={() => {
-                              handleTickedStatus(status);
+                              // handleTickedStatus(status);
                               handleSelectStatus(status);
                             }}
-                            className={`flex gap-2 py-2 items-center justify-start w-full text-xs font-[500] ${
-                            selectedStatuses.includes(status) || tickedStatuses.includes(status)
+                            className={`flex gap-2 py-2 items-center justify-start w-full text-xs font-medium cursor-pointer ${
+                            selectedStatuses.includes(status) 
+                            // || tickedStatuses.includes(status)
                               ? "text-black bg-[#192C8A0D]"
                               : "text-[#6A6C6A]"
                             }`}
                             key={status}  
                         >
-                          {selectedStatuses.includes(status) || tickedStatuses.includes(status) ? (
+                          {selectedStatuses.includes(status) 
+                          // || tickedStatuses.includes(status) 
+                          ? (
                             <Tick />
                           ) : (
                             <div className="w-6 h-6">&nbsp;</div>
