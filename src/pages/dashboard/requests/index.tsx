@@ -1,8 +1,7 @@
-import TableRequests from "./components/table-requests";
 import EmptyRequests from "./components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
@@ -11,17 +10,10 @@ import SeachFilter from "./components/SeachFilter";
 import useUserStore from "@/store/user-store";
 import ReviewerRequests from "./pages/reviewer";
 import { useGET } from "@/hooks/useGET.hook";
-import { formatISODate } from "@/lib/utils";
+import { formatISODate, mapStatus } from "@/lib/utils";
+import MyRequestsTable from "./components/table-requests";
 
 
-export const status_map: Record<string, string> = {
-  "Review in Progress": "Under Review",
-  "Not Yet Reviewed": "Pending",
-  "Approved": "Approved",
-  "Draft": "Draft",
-  "Declined": "Declined",
-  "Reapproved": "Reapproved",
-} 
 
 export default function Requests() {
   const { activeRole } = useUserStore();
@@ -33,24 +25,32 @@ export default function Requests() {
 
 
   const { 
-    data: my_requests,
+    data: transactions,
     isPending: isMyRequestsPending 
   } = useGET({
-    url: "requests/users/me?sort_direction=asc&skip=0&limit=10",
+    url: "transactions",
     queryKey: ["GET_MY_REQUESTS_AS_A_USER"],
   });
 
-  const my_requests_data =
-  my_requests?.items.map(
-    (request: any) => {
-      return {
-        title: request.research_title,
-        status: request.status,
-        submission: formatISODate(request.created_at),
-        request: request,
-      }
-    }
-  )
+  const { 
+    data: user,
+  } = useGET({
+    url: "auth/me",
+    queryKey: ["GET_MY_ID"],
+  });
+
+  const my_id = user?.id;
+  const my_requests = useMemo(() => {
+    if (!transactions?.items || !my_id) return [];
+    return transactions.items
+      .filter((transaction: any) => transaction.request.user.id === my_id)
+      .map((transaction: any) => ({
+        title: transaction.request.research_title,
+        status: mapStatus(transaction.status),
+        submission: formatISODate(transaction.request.created_at),
+        request: transaction.request,
+      }));
+  }, [transactions, my_id]);
 
   
   const handleFunc = () => {
@@ -93,7 +93,7 @@ export default function Requests() {
             {/* Page Title and Button */}
             <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
               <PageTitle title="Requests" />
-              {my_requests?.items.length > 0 && (
+              {my_requests?.length > 0 && (
                 <Button
                   onClick={handleFunc}
                   className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -107,7 +107,7 @@ export default function Requests() {
             </div>
   
             {/* Tab and Table */}
-            {my_requests_data?.length > 0 ? (
+            {my_requests?.length > 0 ? (
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <SeachFilter
@@ -127,7 +127,7 @@ export default function Requests() {
                     </span>
                   </div>
                 </div>
-                <TableRequests tableData={my_requests_data || []} />
+                <MyRequestsTable tableData={my_requests || []} />
               </div>
             ) : (
               <EmptyRequests />

@@ -2,7 +2,7 @@ import EmptyRequests from "../../components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
@@ -11,7 +11,7 @@ import SeachFilter from "../../components/SeachFilter";
 import { useGET } from "@/hooks/useGET.hook";
 import MyRequestsTable from "../../components/table-requests";
 import ReviewRequestsTable from "./table";
-import { formatISODate } from "@/lib/utils";
+import { formatISODate, mapStatus } from "@/lib/utils";
 
 export default function ReviewerRequests() {
   const [activeTab, setActiveTab] = useState("request table");
@@ -36,34 +36,51 @@ export default function ReviewerRequests() {
     "Reopened"
 ];
 
-  const { 
-    data: my_requests, 
-    isPending: isMyRequestsPending,
-  } = useGET({
-    url: "requests/users/me",
-    queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
-  });
+const { 
+  data: user,
+} = useGET({
+  url: "auth/me",
+  queryKey: ["GET_MY_ID"],
+});
 
-  const { 
-    data: requests_to_review,
-    isPending: isReviewRequestsPending
-  } = useGET({
-    url: "reviews/reviewer",
-    queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
-  })
+const { 
+  data: transactions,
+  isPending: isMyRequestsPending 
+} = useGET({
+  url: "transactions",
+  queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
+});
 
-  const my_requests_data =
-  my_requests?.items.map(
-    (request: any) => {
-      return {
-        title: request.research_title,
-        status: request.status,
-        submission: formatISODate(request.created_at),
-        request: request,
-      }
-    }
-  )
-  console.log(my_requests)
+
+const { 
+  data: requests_to_review,
+  isPending: isReviewRequestsPending
+} = useGET({
+  url: "reviews/reviewer",
+  queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
+})
+
+
+
+const my_id = user?.id;
+const my_requests = useMemo(() => {
+  if (!transactions?.items || !my_id) return [];
+  return transactions.items
+    .filter((transaction: any) => transaction.request?.user.id === my_id)
+    .map((transaction: any) => ({
+      title: transaction.request.research_title,
+      status: mapStatus(transaction.status),
+      submission: formatISODate(transaction.request.created_at),
+      request: transaction.request,
+    }));
+}, [transactions, my_id]);
+
+
+
+ 
+
+ 
+  
   
   // return requests object to table
   const review_requests_data 
@@ -72,7 +89,7 @@ export default function ReviewerRequests() {
     return {
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
-      status: request.status,
+      status: mapStatus(request.status),
       submission: formatISODate(request.request.created_at),
       request: request.request
     }
@@ -110,7 +127,7 @@ export default function ReviewerRequests() {
           {/* Page title and button */}
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />
-            {(my_requests_data?.length > 0) && (
+            {(my_requests?.length > 0) && (
               <Button
                 onClick={handleFunc}
                 className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -125,7 +142,7 @@ export default function ReviewerRequests() {
 
 
           {/* Search and Filter components */}
-          {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) ? (
+          {(my_requests?.length > 0) || (review_requests_data?.length > 0) ? (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <SeachFilter
@@ -161,7 +178,7 @@ export default function ReviewerRequests() {
                   </TabsList>
 
                   <TabsContent value="request table">
-                    <MyRequestsTable tableData={my_requests_data || []} />
+                    <MyRequestsTable tableData={my_requests || []} />
                   </TabsContent>
                   <TabsContent value="review table">
                     <ReviewRequestsTable

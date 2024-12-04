@@ -120,14 +120,14 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
         header: () => (
           <CustomCell
             value={"Title"}
-            className="font-bold w-full min-w-[16.75rem]"
+            className="font-bold w-full min-w-[22rem]"
           />
         ),
         accessorKey: "title",
         cell: (info) => (
           <CustomCell
             value={info.getValue()}
-            className="min-w-[16.75rem] w-full overflow-x-hidden"
+            className="min-w-[22rem] w-full overflow-x-hidden"
           />
         ),
       },
@@ -151,7 +151,7 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
         cell: ({ getValue }) => {
           const item = getValue();
           return (
-            <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full">
+            <span className="text-left min-w-[5.75rem] flex justify-left !text-xs -font-bold w-full">
               <Badge
                 style={{
                   color: statusColorMap[item]?.text || "#000000",
@@ -208,7 +208,10 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
 
   return (
     <>
-      <CustomTable columns={columnData} data={tableArray} />
+      <CustomTable 
+        columns={columnData} 
+        data={tableArray} 
+      />
     </>
   );
 }
