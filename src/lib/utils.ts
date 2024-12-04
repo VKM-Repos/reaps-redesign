@@ -37,6 +37,7 @@ export function mapStatus (status: string) {
     'DECLINED': 'Declined',
     'SUCCESS': 'Success',
     'FAILED': 'Failed',
+    'Review in Progress': 'Under Review',
   };
   
   // Return the mapped value if it exists, or the original status formatted
