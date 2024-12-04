@@ -9,6 +9,7 @@ import ReviewerRequestSummary from "../../../view-requests/reviewer";
 
 type TableRequestsProps = {
     reviewTableData: {
+        id: string;
         title: string;
         applicantName: string;
         submission: string;
@@ -29,7 +30,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
     export default function ReviewRequestsTable( { reviewTableData, activeTab="request table" }: TableRequestsProps) {
         const { multiStatusDateFilter } = useGlobalFilter()
-
+        console.log(reviewTableData, 'rreerrr')
         const columnData: ColumnSetup<any>[]= [
             {
                 header: () => <CustomCell value={"Title"} className="font-bold w-full min-w-[16.75rem]" />,
@@ -90,7 +91,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
                             <SheetTrigger className="flex gap-2">
                                 <View /> <span>View</span>
                             </SheetTrigger>
-                            <ReviewerRequestSummary request={item?.request} activeTab={activeTab} />
+                            <ReviewerRequestSummary request={item.request} activeTab={activeTab} />
                         </Sheet>
                     </div>
                     )      

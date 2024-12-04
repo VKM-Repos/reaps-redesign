@@ -69,6 +69,7 @@ export default function ReviewerRequests() {
   = requests_to_review?.items.map(
     (request: any) => {
     return {
+      id: request.id,
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
       status: request.status,
