@@ -21,9 +21,8 @@ import { usePOST } from "@/hooks/usePOST.hook";
 const formSchema = z.object({
   status: z.string().min(1, { message: "You have to select one item" }),
   comment: z.string().min(1, { message: "Please input some comment" }),
-  //   correction_doc: z
-  //     .instanceof(File, { message: "Please upload a file" })
-  //     .optional(),
+    correction_doc: z
+      .instanceof(Blob, { message: "Please upload a file" })
 });
 
 interface ReviewRemark {
@@ -37,46 +36,58 @@ interface WriteReviewProps {
   request?: any;
   remarks: ReviewRemark[];
   buttonText: string;
+  closeDialog: () => void;
 }
 
 export default function WriteReview({
   request,
   remarks,
-  buttonText,
+  buttonText, closeDialog,
 }: WriteReviewProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues,
+    defaultValues:{
+      status: "",
+      comment: "",
+      correction_doc: [],
+    }
   });
   const { activeRole } = useUserStore();
   const {
     formState: { isValid, errors },
     reset,
   } = form;
-  const { data: review, isPending: fetch_review } = useGET({
-    url: `reviews/request/${request?.id}`,
-    queryKey: ["FETCH_REVIEW_BY_ID", request?.id],
-  });
 
+  const { data: reviewer_reviews, isPending: fetch_reviewers_review } = useGET({
+    url: `reviews/reviewer`,
+    queryKey: ["FETCH_REVIEW_BY_REVIEWER", request?.id],
+  });
+  const review_id = reviewer_reviews?.items?.find(
+      (item: any) => item.request?.id === request?.id
+  )?.id;
   const { mutate: write_review, isPending: updating_review } = usePATCH(
-    `reviews/${review?.items[0]?.id}`,
-    { method: "PATCH" }
+    `reviews/${review_id}`,
+    { method: "PATCH", contentType: "multipart/form-data" }
   );
 
   const { mutate: write_final_review, isPending: updating_final_review } =
-    usePOST(`reviews/final-review/${request?.id}`);
+    usePOST(`reviews/final-review/${request?.id}`, {contentType: "multipart/form-data"});
   function onSubmit(values: z.infer<typeof formSchema>) {
     const send_review =
       activeRole === "admin" ? write_final_review : write_review;
-
-    send_review(values, {
-      onSuccess: (response: any) => {
+    const formData = new FormData();
+    formData.append('comment', values.comment);
+    formData.append('status', values.status);
+    formData.append('review_document', values.correction_doc)
+    send_review(formData, {
+      onSuccess: () => {
         toast({
           title: "Feedback",
-          description: response?.message,
+          description: 'Review has been sent.',
           variant: "default",
         });
         reset();
+        closeDialog()
       },
       onError: (error: any) => {
         toast({
@@ -90,7 +101,7 @@ export default function WriteReview({
 
   return (
     <>
-      {fetch_review || updating_review || updating_final_review ? (
+      {fetch_reviewers_review || updating_review || updating_final_review ? (
         <Loader />
       ) : (
         <WriteReviewWrapper>
@@ -190,8 +201,7 @@ export default function WriteReview({
                       <CustomFormField
                         fieldType={FormFieldType.UPLOAD}
                         name="correction_doc"
-                        // error={errors["correction_doc"]}
-                        error={errors["comment"]}
+                        error={errors["correction_doc"]}
                         control={form.control}
                         label="Correction/Explanatory Document"
                         labelClassName="!font-semibold text-sm text-[#040C21]"
