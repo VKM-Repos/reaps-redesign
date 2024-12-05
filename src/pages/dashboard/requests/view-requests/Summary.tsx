@@ -98,43 +98,42 @@ const Summary = ({
     {
       id: "requirement1",
       label: "Curriculum Vitae",
-      name: request?.cv?.match(/\/([^/]+)(?=\.pdf$)/)
-        ? request?.cv?.match(/\/([^/]+)(?=\.pdf$)/)[1]
-        : "CV",
+      name: "CV",
       href: request?.cv,
     },
     {
       id: "requirement2",
       label: "Cover Letter/Application Letter",
-      name: request?.cover_letter?.match(/\/([^/]+)(?=\.pdf$)/)
-        ? request?.cover_letter?.match(/\/([^/]+)(?=\.pdf$)/)[1]
-        : "Cover Letter",
+      name: "Cover Letter",
       href: request?.cover_letter,
     },
     {
       id: "requirement3",
       label: "Proposal",
-      name: request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)
-        ? request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)[1]
-        : "Proposal",
+      name: "Proposal",
       href: request?.proposal,
     },
-    // {
-    //   id: "requirement4",
-    //   label: "Research Tools/Questionaire",
-    //   name: "Research Tools",
-    // },
-    // {
-    //   id: "requirement5",
-    //   label: "Informed Consent Form",
-    //   name: "Informed Consent Form",
-    // },
+    {
+      id: "requirement4",
+      label: "Research Tools/Questionnaire",
+      name: "Research Tools",
+      href: request?.questionnaire,
+    },
+    {
+      id: "requirement5",
+      label: "Informed Consent Form",
+      name: "Informed Consent Form",
+      href: request?.consent_form,
+    },
     // {
     //   id: "requirement6",
     //   label: "Materials Transfer Agreement Form",
     //   name: "Materials Transfer Agreement Form",
+    //   href: 
     // },
   ]);
+
+  const filteredDocs = supportDocData.filter((doc) => doc.href);
   const handleDownload = (fileId: string) => {
     console.log(fileId);
   };
@@ -157,6 +156,8 @@ const Summary = ({
       console.error(error);
     }
   }
+
+  
   // const application = [
   //   {
   //     name: "question1",
@@ -213,8 +214,9 @@ const Summary = ({
   //   {
   //     id: "requirement3",
   //     label: "Proposal",
-  //     name: request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)
-  //       ? request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)[1]
+    // name: request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)
+      //   ? request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)[1]
+      //   : "Proposal",
   //       : "Proposal",
   //     href: request?.proposal,
   //   },
@@ -262,7 +264,7 @@ const Summary = ({
                     control={form.control}
                     label="Objectives of the study"
                     labelClassName="!font-medium"
-                    className="!pb-[12rem] flex pointer-events-none"
+                    className="!pb-[12rem] flex pointer-events-none !border-gray-300"
                     required
                 />
               </section>
@@ -328,7 +330,7 @@ const Summary = ({
                   )}
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
-                  {supportDocData.map((file) => {
+                  {filteredDocs.map((file) => {
                     return (
                         <div className="flex flex-col gap-2">
                           <div className="flex flex-col gap-1 md:gap-2 md:flex-row md:justify-between">
@@ -386,6 +388,7 @@ const Summary = ({
               </section>
 
               {/* Comments and Reviews Section */}
+             
               <section
                   id="comments-reviews"
                   className="py-5 px-3 flex flex-col gap-4"
@@ -395,7 +398,8 @@ const Summary = ({
                     Comments and Reviews
                   </h1>
                 </div>
-                <div className="flex flex-col gap-6 mx-auto">
+                {reviews?.items.length > 0 ? (
+                <div className="flex flex-col gap-6">
                   {/* do not show reviews from Reviewers to researchers*/}
                   {reviews?.items?.map((reviewer: any) => {
                     // const remark = review_remarks.find(
@@ -404,7 +408,7 @@ const Summary = ({
                     return (
                         <div
                             key={reviewer.id}
-                            className="p-3 flex flex-col gap-[0.625rem] border-b border-b-[#0E0F0C1F]"
+                            className="p-3 flex flex-col gap-[0.625rem] border-b border-b-[#0E0F0C1F] w-full"
                         >
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-[0.625rem]">
@@ -474,7 +478,9 @@ const Summary = ({
                         </div>
                     );
                   })}
-                </div>
+                </div> ) : (
+                  <p>No reviews yet.</p>
+                )}
               </section>
 
               {/* Print Button for Researcher */}
