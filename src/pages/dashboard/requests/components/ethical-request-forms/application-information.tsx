@@ -12,6 +12,7 @@ import { useState } from "react";
 import Loader from "@/components/custom/Loader";
 import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import { questionsData } from "./questions";
+import { RequestItems } from "@/types/requests";
 
 const questionsSchema = z.object({
   are_you_investigator_or_local_principal_investigator: z.boolean(),
@@ -28,15 +29,19 @@ type QuestionsSchema = z.infer<typeof questionsSchema>;
 
 type Props = {
   handleNext: () => void;
+  requestDetails?: RequestItems;
 };
 
-export default function ApplicationInformation({ handleNext }: Props) {
+export default function ApplicationInformation({
+  handleNext,
+  requestDetails,
+}: Props) {
   const { data, setData } = useEthicalRequestStore();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<QuestionsSchema>({
     resolver: zodResolver(questionsSchema),
-    defaultValues: data.ethical_request_questions,
+    defaultValues: data.ethical_request_questions || requestDetails,
   });
 
   const {

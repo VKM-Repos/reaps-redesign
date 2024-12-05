@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
 import ResearchInformation from "../components/ethical-request-forms/research-information";
@@ -13,12 +14,22 @@ import { usePOST } from "@/hooks/usePOST.hook";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
 import SelectSpecialization from "../components/ethical-request-forms/select-specialization";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { queryClient } from "@/providers";
+import { useGET } from "@/hooks/useGET.hook";
 
 const ModifyRequest = () => {
   const { data, step, setStep, resetStore } = useEthicalRequestStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const request_id = searchParams.get("id");
+
+  const { data: request_details } = useGET({
+    url: `requests/${request_id}`,
+    queryKey: ["GET_REQUEST_DETAILS"],
+  });
 
   const { mutate, isPending } = usePOST("requests", {
     contentType: "multipart/form-data",
@@ -46,13 +57,15 @@ const ModifyRequest = () => {
         }
       });
 
+      formData.append("can_edit", JSON.stringify(true));
+
       mutate(formData, {
         onSuccess: (response) => {
           console.log(response);
 
           toast({
             title: "Success",
-            description: `You have successfully created an ethical request.`,
+            description: `Saved to drafts`,
             variant: "default",
           });
 
@@ -86,11 +99,26 @@ const ModifyRequest = () => {
       case 1:
         return <SelectSpecialization handleNext={handleNext} />;
       case 2:
-        return <ResearchInformation handleNext={handleNext} />;
+        return (
+          <ResearchInformation
+            handleNext={handleNext}
+            requestDetails={request_details}
+          />
+        );
       case 3:
-        return <ApplicationInformation handleNext={handleNext} />;
+        return (
+          <ApplicationInformation
+            handleNext={handleNext}
+            requestDetails={request_details}
+          />
+        );
       case 4:
-        return <SupportingDocuments handleNext={handleNext} />;
+        return (
+          <SupportingDocuments
+            handleNext={handleNext}
+            requestDetails={request_details}
+          />
+        );
       case 5:
         return (
           <ApplicationSummary handleNext={handleSubmit(onSubmitHandler)} />

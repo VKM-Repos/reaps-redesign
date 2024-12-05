@@ -48,7 +48,9 @@ function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
   const navigate = useNavigate();
 
   const redirectToSummary = () => {
-    navigate("/requests/edit-request");
+    const redirectPath = encodeURIComponent(item.id);
+
+    navigate(`/requests/edit-request?id=${redirectPath}`);
     setStep(5);
   };
 
@@ -116,94 +118,94 @@ export default function MyRequestsTable({ tableData }: TableRequestsProps) {
   }
 
   const columnData: ColumnSetup<any>[] = [
-      {
-        header: () => (
-          <CustomCell
-            value={"Title"}
-            className="font-bold w-full min-w-[16.75rem]"
-          />
-        ),
-        accessorKey: "title",
-        cell: (info) => (
-          <CustomCell
-            value={info.getValue()}
-            className="min-w-[16.75rem] w-full overflow-x-hidden"
-          />
-        ),
-      },
-      {
-        header: () => (
-          <CustomCell
-            value={"Submission"}
-            className="font-bold w-full min-w-[16rem]"
-          />
-        ),
-        accessorKey: "submission",
-        cell: ({ getValue }) => (
-          <CustomCell value={getValue()} className="min-w-[16rem] w-full" />
-        ),
-        filterFn: multiStatusDateFilter,
-        enableGlobalFilter: false,
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
-        cell: ({ getValue }) => {
-          const item = getValue();
-          return (
-            <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full">
-              <Badge
+    {
+      header: () => (
+        <CustomCell
+          value={"Title"}
+          className="font-bold w-full min-w-[16.75rem]"
+        />
+      ),
+      accessorKey: "title",
+      cell: (info) => (
+        <CustomCell
+          value={info.getValue()}
+          className="min-w-[16.75rem] w-full overflow-x-hidden"
+        />
+      ),
+    },
+    {
+      header: () => (
+        <CustomCell
+          value={"Submission"}
+          className="font-bold w-full min-w-[16rem]"
+        />
+      ),
+      accessorKey: "submission",
+      cell: ({ getValue }) => (
+        <CustomCell value={getValue()} className="min-w-[16rem] w-full" />
+      ),
+      filterFn: multiStatusDateFilter,
+      enableGlobalFilter: false,
+    },
+    {
+      header: "Status",
+      accessorKey: "status",
+      cell: ({ getValue }) => {
+        const item = getValue();
+        return (
+          <span className="text-left min-w-[8.75rem] flex justify-left !text-xs -font-bold w-full">
+            <Badge
+              style={{
+                color: statusColorMap[item]?.text || "#000000",
+                backgroundColor: statusColorMap[item]?.bg || "#192C8A",
+              }}
+              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
+            >
+              <div
                 style={{
-                  color: statusColorMap[item]?.text || "#000000",
-                  backgroundColor: statusColorMap[item]?.bg || "#192C8A",
+                  backgroundColor: statusColorMap[item]?.text || "#192C8A",
                 }}
-                className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
-              >
-                <div
-                  style={{
-                    backgroundColor: statusColorMap[item]?.text || "#192C8A",
-                  }}
-                  className="w-[5px] h-[5px] rounded-full"
-                ></div>
-                {item}
-              </Badge>
-            </span>
-          );
-        },
-        filterFn: multiStatusDateFilter,
-        enableGlobalFilter: false,
+                className="w-[5px] h-[5px] rounded-full"
+              ></div>
+              {item}
+            </Badge>
+          </span>
+        );
       },
-      {
-        accessorKey: "custom",
-        header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
-        meta: { cellType: "custom" },
-        cell: ({ row }) => {
-          const item = row.original;
-          return isMobile ? (
-            <CustomCell
-              value={
-                <MobileRender
-                  item={item?.request}
-                  onDelete={deleteTableItem}
-                  loading={loading}
-                />
-              }
-              className="flex justify-center items-center w-full md:max-w-[3rem]"
-            />
-          ) : (
-            <CustomCell
-              value={
-                <RenderFunctions
-                  item={item?.request}
-                  onDelete={deleteTableItem}
-                  loading={loading}
-                />
-              }
-              className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
-            />
-          );
-        },
+      filterFn: multiStatusDateFilter,
+      enableGlobalFilter: false,
+    },
+    {
+      accessorKey: "custom",
+      header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
+      meta: { cellType: "custom" },
+      cell: ({ row }) => {
+        const item = row.original;
+        return isMobile ? (
+          <CustomCell
+            value={
+              <MobileRender
+                item={item?.request}
+                onDelete={deleteTableItem}
+                loading={loading}
+              />
+            }
+            className="flex justify-center items-center w-full md:max-w-[3rem]"
+          />
+        ) : (
+          <CustomCell
+            value={
+              <RenderFunctions
+                item={item?.request}
+                onDelete={deleteTableItem}
+                loading={loading}
+              />
+            }
+            className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
+          />
+        );
       },
+    },
   ];
 
   return (
