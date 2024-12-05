@@ -3,11 +3,12 @@ import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import { useGET } from "@/hooks/useGET.hook";
 import MyRequestsTable from "../../components/table-requests";
+import { formatISODate, mapStatus } from "@/lib/utils";
 
 export default function MyRequest() {
   const [loading, setLoading] = useState(false);
@@ -22,16 +23,38 @@ export default function MyRequest() {
     "Declined", 
     "Reapproved"
   ];
+  const navigate = useNavigate();
 
   const { 
-    data: my_requests, 
-    isPending: isRequestsLoading 
+    data: user,
   } = useGET({
-    url: "requests/users/me",
-    queryKey: ["GET_MY_REQUESTS_AS_MADE_BY_ADMIN"],
+    url: "auth/me",
+    queryKey: ["GET_MY_ID"],
+  });
+  
+  const { 
+    data: transactions,
+    isPending: isMyRequestsPending 
+  } = useGET({
+    url: "transactions",
+    queryKey: ["GET_MY_REQUESTS_AS_AN_ADMIN"],
   });
 
-  const navigate = useNavigate();
+  const my_id = user?.id;
+
+  const my_requests = useMemo(() => {
+    if (!transactions?.items || !my_id) return [];
+    return transactions.items
+      .filter((transaction: any) => transaction.request?.user.id === my_id)
+      .map((transaction: any) => ({
+        title: transaction.request.research_title,
+        status: mapStatus(transaction.status),
+        submission: formatISODate(transaction.request.created_at),
+        request: transaction.request,
+      }));
+  }, [transactions, my_id]);
+
+  
   const handleFunc = () => {
     setLoading(true);
     console.log(showStatuses);
@@ -50,7 +73,7 @@ export default function MyRequest() {
 
   return (
     <>
-      {(loading || isRequestsLoading) &&
+      {(loading || isMyRequestsPending) &&
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">
@@ -82,7 +105,7 @@ export default function MyRequest() {
               </span>
             </div>
           </div>
-          <MyRequestsTable tableData={my_requests?.items || []} />
+          <MyRequestsTable tableData={my_requests || []} />
         </div>
       
     </>

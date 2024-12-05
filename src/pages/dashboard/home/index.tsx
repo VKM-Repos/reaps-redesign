@@ -19,12 +19,12 @@ const Home = () => {
 
   const handleFunc = () => {
     setLoading(true);
-
     setTimeout(() => {
       navigate("/requests/create");
       setLoading(false);
     }, 5000);
   };
+
 
   return (
     <>

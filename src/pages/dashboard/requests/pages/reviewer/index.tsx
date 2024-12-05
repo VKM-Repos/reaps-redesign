@@ -2,7 +2,7 @@ import EmptyRequests from "../../components/emptystate";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
@@ -11,7 +11,8 @@ import SeachFilter from "../../components/SeachFilter";
 import { useGET } from "@/hooks/useGET.hook";
 import MyRequestsTable from "../../components/table-requests";
 import ReviewRequestsTable from "./table";
-import { formatISODate } from "@/lib/utils";
+import { formatISODate, mapStatus } from "@/lib/utils";
+import useUserStore from "@/store/user-store";
 
 export default function ReviewerRequests() {
   const [activeTab, setActiveTab] = useState("request table");
@@ -20,6 +21,7 @@ export default function ReviewerRequests() {
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<any[]>([]);
   const navigate = useNavigate();
+  const { user } = useUserStore();
   
   const requestsStatuses = [
     "Draft",
@@ -36,33 +38,41 @@ export default function ReviewerRequests() {
     "Reopened"
 ];
 
-  const { 
-    data: my_requests, 
-    isPending: isMyRequestsPending,
-  } = useGET({
-    url: "requests/users/me",
-    queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
-  });
+const { 
+  data: transactions,
+  isPending: isMyRequestsPending 
+} = useGET({
+  url: "transactions",
+  queryKey: ["GET_MY_REQUESTS_AS_A_REVIEWER"],
+});
 
-  const { 
-    data: requests_to_review,
-    isPending: isReviewRequestsPending
-  } = useGET({
-    url: "reviews/reviewer",
-    queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
-  })
 
-  const my_requests_data =
-  my_requests?.items.map(
-    (request: any) => {
-      return {
-        title: request.research_title,
-        status: request.status,
-        submission: formatISODate(request.created_at),
-        request: request,
-      }
-    }
-  )
+const { 
+  data: requests_to_review,
+  isPending: isReviewRequestsPending
+} = useGET({
+  url: "reviews/reviewer",
+  queryKey: ["GET_REQUESTS_ASSIGNED_TO_ME"]
+})
+
+const my_requests = useMemo(() => {
+  if (!transactions?.items || !user?.id) return [];
+  return transactions.items
+    .filter((transaction: any) => transaction.request?.user.id === user?.id)
+    .map((transaction: any) => ({
+      title: transaction.request.research_title,
+      status: mapStatus(transaction.status),
+      submission: formatISODate(transaction.request.created_at),
+      request: transaction.request,
+    }));
+}, [transactions, user?.id]);
+
+
+
+ 
+
+ 
+  
   
   // return requests object to table
   const review_requests_data 
@@ -72,7 +82,7 @@ export default function ReviewerRequests() {
       id: request.id,
       title: request.request.research_title,
       applicantName: request.request.user.first_name + ' ' + request.request.user.last_name,
-      status: request.status,
+      status: mapStatus(request.status),
       submission: formatISODate(request.request.created_at),
       request: request.request
     }
@@ -103,13 +113,12 @@ export default function ReviewerRequests() {
 
   return (
     <>
-      {(loading || 
-        (isMyRequestsPending || 
-        isReviewRequestsPending)) && <Loader />}
+      {loading && <Loader />}
         <div className="flex flex-col gap-12 mb-20">
+          {/* Page title and button */}
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
             <PageTitle title="Requests" />
-            {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) && (
+            {(my_requests?.length > 0) && (
               <Button
                 onClick={handleFunc}
                 className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
@@ -119,10 +128,12 @@ export default function ReviewerRequests() {
                 </span>
                 Request Ethical Approval
               </Button>
-            )}
+            )}            
           </div>
-          {/* tab */}
-          {(my_requests?.items.length > 0) || (requests_to_review?.items.length > 0) ? (
+
+
+          {/* Search and Filter components */}
+          {(my_requests?.length > 0) || (review_requests_data?.length > 0) ? (
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <SeachFilter
@@ -143,7 +154,9 @@ export default function ReviewerRequests() {
                   </span>
                 </div>
               </div>
-              {/* change tables to completed state  */}
+
+
+              {/* Requests table tabs  */}
                 <Tabs
                   defaultValue="request table"
                   onValueChange={(val) => setActiveTab(val)}
@@ -154,16 +167,20 @@ export default function ReviewerRequests() {
                       Review request
                     </TabsTrigger>
                   </TabsList>
-
-                  <TabsContent value="request table">
-                    <MyRequestsTable tableData={my_requests_data || []} />
-                  </TabsContent>
-                  <TabsContent value="review table">
-                    <ReviewRequestsTable
-                      reviewTableData={review_requests_data || []}
-                      activeTab={activeTab}                
-                    />
-                  </TabsContent>
+                    <TabsContent value="request table">
+                      {isMyRequestsPending ? (
+                        <Loader />
+                      ) : (
+                        <MyRequestsTable tableData={my_requests || []} />
+                      )}
+                    </TabsContent>
+                    <TabsContent value="review table">
+                      {isReviewRequestsPending ? (
+                        <Loader />
+                      ) : (
+                        <ReviewRequestsTable reviewTableData={review_requests_data || []} />
+                      )}
+                    </TabsContent>
                 </Tabs>
             </div>
           ) : (
