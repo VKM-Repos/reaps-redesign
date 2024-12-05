@@ -8,9 +8,11 @@ import CustomFormField, {
 import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import { Form } from "@/components/ui/form";
 import { questionsData } from "./questions";
+import { RequestItems } from "@/types/requests";
 
 type Props = {
   handleNext: () => void;
+  requestDetails?: RequestItems;
 };
 
 const MAX_FILE_SIZE = 3000000; // 3MB
@@ -23,7 +25,7 @@ const ACCEPTED_FILE_TYPES = [
   "image/gif", // GIF
 ];
 
-const SupportingDocuments = ({ handleNext }: Props) => {
+const SupportingDocuments = ({ handleNext, requestDetails }: Props) => {
   const { data, setData } = useEthicalRequestStore();
   const { ethical_request_questions, ethical_request_files } = data;
 
@@ -106,7 +108,7 @@ const SupportingDocuments = ({ handleNext }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
-    defaultValues,
+    defaultValues: defaultValues || requestDetails,
   });
 
   const {

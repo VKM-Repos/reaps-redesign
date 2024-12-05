@@ -114,7 +114,7 @@ const getRefreshToken = async () => {
       "institution-context": user.institution_context,
     },
     params: {
-      refresh_token: refreshToken!,
+      refresh_token: refreshToken,
     },
   });
 
