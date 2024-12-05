@@ -6,10 +6,10 @@ const queryClientSettings: QueryClientConfig = {
     queries: {
       retry: 3,
       refetchOnMount: true,
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
       refetchInterval: 3.6e6, // 1 hour
-      refetchIntervalInBackground: true,
+      refetchIntervalInBackground: false,
       staleTime: Infinity,
     },
     mutations: {

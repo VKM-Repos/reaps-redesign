@@ -6,12 +6,12 @@ import {
 } from "@/components/ui/sheet";
 import Cancel from "@/components/custom/Icons/Cancel";
 import Summary from "../Summary";
-import { useState } from "react";
+import {useRef, useState} from "react";
 import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
 import WriteReview from "../../components/WriteReview";
 import Loader from "@/components/custom/Loader";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import {Dialog, DialogClose, DialogTrigger} from "@/components/ui/dialog";
 import { RequestItems } from "@/types/requests";
 
 export default function ReviewerRequestSummary({
@@ -23,7 +23,7 @@ export default function ReviewerRequestSummary({
 }) {
   const [activeSection, setActiveSection] = useState("");
   const [loading] = useState(false);
-
+const close_dialog_ref = useRef<HTMLButtonElement | null>(null)
   const review_remarks = [
     { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
     { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
@@ -60,7 +60,9 @@ export default function ReviewerRequestSummary({
       {label}
     </a>
   );
-
+const closeDialog = ()=>{
+  close_dialog_ref?.current?.click();
+}
   return (
     <>
       {loading && <Loader />}
@@ -111,14 +113,21 @@ export default function ReviewerRequestSummary({
                 <div className="mt-3 w-full">
                   <Dialog>
                     <DialogTrigger className="w-full">
-                      <button className="bg-primary text-white rounded-full flex items-center justify-center  px-6 py-[1.375rem] max-w-[13rem] md:w-full px-6 w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6">
+                      <button className="bg-primary text-white rounded-full flex items-center justify-center  px-6 py-[1.375rem] max-w-[13rem] md:w-full w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6">
                         Write your Review
                       </button>
                     </DialogTrigger>
                     <WriteReview
+                        closeDialog={closeDialog}
+                        request={request}
                       remarks={review_remarks}
                       buttonText="Submit review"
                     />
+                    <DialogClose asChild>
+                      <button type="button" className="hidden" ref={close_dialog_ref}>
+                        Close
+                      </button>
+                    </DialogClose>
                   </Dialog>
                 </div>
               </div>
@@ -137,6 +146,8 @@ export default function ReviewerRequestSummary({
             </SheetTrigger>
             <div className="w-full">
               <WriteReview
+                  closeDialog={closeDialog}
+                  request={request}
                 remarks={review_remarks}
                 buttonText="Submit review"
               />
