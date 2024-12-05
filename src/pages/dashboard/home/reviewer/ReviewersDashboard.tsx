@@ -13,6 +13,8 @@ type Props = {
 
 
 export default function AssignedReuqustCard ({ name, reviewed, pending }: Props ) {
+
+    // add all requests with the same id, check length of all requests with reviewed and then number of requests with pending
        return(
         <div className="z-[10]">
         <section className="w-full rounded-[20px] md:h-[282px] h-[25rem] bg-[#e1e1ea] flex justify-between text-[14px]">

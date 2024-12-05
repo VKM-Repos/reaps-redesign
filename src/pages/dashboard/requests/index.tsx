@@ -21,6 +21,7 @@ export default function Requests() {
   const [showStatuses, setShowStatuses] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<any[]>([]);
+  const { user } = useUserStore();
   const navigate = useNavigate();
 
 
@@ -32,25 +33,17 @@ export default function Requests() {
     queryKey: ["GET_MY_REQUESTS_AS_A_USER"],
   });
 
-  const { 
-    data: user,
-  } = useGET({
-    url: "auth/me",
-    queryKey: ["GET_MY_ID"],
-  });
-
-  const my_id = user?.id;
   const my_requests = useMemo(() => {
-    if (!transactions?.items || !my_id) return [];
+    if (!transactions?.items || !user?.id) return [];
     return transactions.items
-      .filter((transaction: any) => transaction.request.user.id === my_id)
+      .filter((transaction: any) => transaction.request.user.id === user?.id)
       .map((transaction: any) => ({
         title: transaction.request.research_title,
         status: mapStatus(transaction.status),
         submission: formatISODate(transaction.request.created_at),
         request: transaction.request,
       }));
-  }, [transactions, my_id]);
+  }, [transactions, user?.id]);
 
   
   const handleFunc = () => {
