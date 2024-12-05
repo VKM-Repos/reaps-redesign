@@ -56,7 +56,7 @@ export default function Requests() {
   const handleFunc = () => {
     setLoading(true);
     console.log(showStatuses);
-    console.log(appliedStatuses)
+    console.log(appliedStatuses);
     setTimeout(() => {
       navigate("/requests/create");
       setLoading(false);
@@ -75,7 +75,6 @@ export default function Requests() {
   useEffect(() => {
     setStatuses(requestsStatuses);
   }, []);
-
 
   return (
     <>
@@ -139,4 +138,3 @@ export default function Requests() {
   </>
   )
 }
-  

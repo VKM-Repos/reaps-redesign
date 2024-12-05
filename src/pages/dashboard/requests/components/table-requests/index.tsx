@@ -48,7 +48,9 @@ function RenderFunctions({ item, onDelete, loading }: RenderFunctionsProps) {
   const navigate = useNavigate();
 
   const redirectToSummary = () => {
-    navigate("/requests/edit-request");
+    const redirectPath = encodeURIComponent(item.id);
+
+    navigate(`/requests/edit-request?id=${redirectPath}`);
     setStep(5);
   };
 
