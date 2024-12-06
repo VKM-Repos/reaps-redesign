@@ -16,7 +16,8 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import { ChevronsLeftIcon, ChevronsRight } from "lucide-react";
+import ArrowLeftDouble from "@/assets/arrow-left-doube.svg"
+import ArrowRightDouble from "@/assets/arrow-right-double.svg"
 import { useState } from "react";
 
 export const CustomCell = ({
@@ -165,27 +166,29 @@ export default function CustomTable({
             ))
           )}
         </TableBody>
-      </Table>
+      </Table> 
       {isMobile && <div className="w-full">&nbsp;</div>}
     </div>
+
+    {/* Pagination component */}
     {page_number > 1 &&
-    <div className="py-3 px-6 flex justify-between items-center">
+    <div className="py-3 px-3 md:px-6 flex justify-between items-center">
       <div>
-        <p className="text-[#4A5567] text-sm">Showing {start} to {end} of {total_entries} entries.</p>
+        <p className="text-[#4A5567] text-xs md:text-sm">Showing {start} to {end} of {total_entries} entries.</p>
       </div>
       <div className="flex gap-[0.625rem] items-center">
         <button 
           className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"
           disabled={visibleStart <= 1}
           onClick={() => handlePreviousPages()}>
-            <ChevronsLeftIcon />
+            <img src={ArrowLeftDouble} />  
         </button>
         <div
           className="flex gap-1 items-center font-medium">
             {visible_pages.map((page, index)=> (
               <button
                 key={index}
-                className={`rounded-full py-2 px-[1.125rem] flex items-center justify-center  ${pageIndex === page ? `text-[#FFFFFF] bg-[#051467]` : "text-[#20293A] hover:bg-[#14155E14]"}`}
+                className={`rounded-full py-2.5 px-[17px] flex items-center justify-center  ${pageIndex === page ? `text-[#FFFFFF] bg-[#051467]` : "text-[#20293A] hover:bg-[#14155E14]"}`}
                 onClick={() => table.setPageIndex(page)}>
               {page + 1}
             </button>
@@ -196,7 +199,7 @@ export default function CustomTable({
           className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"
           disabled={visibleStart + 2 >= page_number}
           onClick={() => handleNextPages()}>
-            <ChevronsRight />        
+            <img src={ArrowRightDouble} />        
         </button>
       </div>
 
