@@ -19,8 +19,6 @@ import Unhappy from "@/assets/unhappy.svg";
 // import Unamused from "@/assets/unamused.svg";
 import Line from "@/assets/line.svg";
 import { useState } from "react";
-import { useGET } from "@/hooks/useGET.hook.ts";
-import Loader from "@/components/custom/Loader.tsx";
 
 type SummaryPageProps = {
   isApproval?: boolean;

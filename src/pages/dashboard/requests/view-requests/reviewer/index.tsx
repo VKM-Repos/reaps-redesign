@@ -29,14 +29,12 @@ export default function ReviewerRequestSummary({
     { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
   ];
 
-  const {
-    data: request_details,
-    isPending: fetching_request_details,
-    refetch: refetch_request_details,
-  } = useGET({
-    url: `requests/${request?.id}`,
-    queryKey: ["FETCH_REQUEST_DETAILS", request?.id],
-  });
+  const { data: request_details, isPending: fetching_request_details } = useGET(
+    {
+      url: `requests/${request?.id}`,
+      queryKey: ["FETCH_REQUEST_DETAILS", request?.id],
+    }
+  );
   const {
     data: reviews,
     isPending: fetching_reviews,

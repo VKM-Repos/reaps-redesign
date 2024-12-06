@@ -27,11 +27,7 @@ export default function InstitutionRequestSummary({
   const { pathname } = useLocation();
   const [loading, setLoader] = useState(false);
   const { reviewer, success, setReviewer, setSuccess } = useRequestsStore();
-  const {
-    data: reviews,
-    isPending: fetching_reviews,
-    refetch: refetch_reviews,
-  } = useGET({
+  const { data: reviews, refetch: refetch_reviews } = useGET({
     url: `reviews/request/${request?.id}`,
     queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
   });
