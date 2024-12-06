@@ -20,7 +20,7 @@ export default function ReviewerRequestSummary({
   activeTab,
 }: {
   request: RequestItems;
-  activeTab: string;
+  activeTab?: string;
 }) {
   const [activeSection, setActiveSection] = useState("");
   const close_dialog_ref = useRef<HTMLButtonElement | null>(null);
@@ -65,11 +65,11 @@ export default function ReviewerRequestSummary({
     <a
       href={`#${sectionId}`}
       className={`w-full h-12 items-center rounded-md px-3 py-4 hover:bg-slate-200 text-[#6A6C6A] 
-                    hover:text-black ${
-                      activeSection === sectionId
-                        ? "bg-slate-200 text-black"
-                        : ""
-                    }`}
+        hover:text-black ${
+          activeSection === sectionId
+            ? "bg-slate-200 text-black"
+            : ""
+        }`}
       onClick={handleNavClick(sectionId)}
     >
       {label}

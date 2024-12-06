@@ -178,7 +178,7 @@ const my_requests = useMemo(() => {
                       {isReviewRequestsPending ? (
                         <Loader />
                       ) : (
-                        <ReviewRequestsTable reviewTableData={review_requests_data || []} />
+                        <ReviewRequestsTable reviewTableData={review_requests_data || []} activeTab={activeTab}/>
                       )}
                     </TabsContent>
                 </Tabs>
