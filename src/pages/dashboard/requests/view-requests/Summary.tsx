@@ -31,11 +31,12 @@ type SummaryPageProps = {
 const Summary = ({
   handlePrint,
   isApproval,
-  activeTab = "request table",
+  activeTab,
   request,
 }: SummaryPageProps) => {
   const { data } = useRequestsStore();
   const { checkbox, files } = data.requestsDetails;
+  console.log(activeTab)
   // receive table row prop in here and populate the fields
 
   // const { title } = tableData[1];
@@ -137,6 +138,7 @@ const Summary = ({
   const handleDownload = (fileId: string) => {
     console.log(fileId);
   };
+
 
   // const review_remarks = [
   //   { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
@@ -319,8 +321,10 @@ const Summary = ({
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">
                     Supporting Document
                   </h1>
-                  {activeRole !== "user" && activeTab === "review table" && (
-                      <p className="text-[#000066] justify-center flex gap-2 items-center font-semibold cursor-pointer">
+                  {(activeRole === "reviewer" && activeTab === "review table") ||
+                  (pathname.includes("/requests/review-requests") ||
+                    pathname.includes("/requests/manage-requests")) && (
+                      <p className="text-[#000066] items-center flex gap-2 items-center font-semibold cursor-pointer">
                         {" "}
                         <span className="underline">
                         download all supporting documents
@@ -347,7 +351,8 @@ const Summary = ({
                               className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                           >
                           <span className="flex gap-2 items-center justify-center">
-                            {activeTab === "review table" ||
+                            {
+                            activeTab === "review table" ||
                             pathname.includes("/requests/review-requests") ||
                             pathname.includes("/requests/manage-requests") ? (
                                 <span className="text-black text-[0.8rem]">

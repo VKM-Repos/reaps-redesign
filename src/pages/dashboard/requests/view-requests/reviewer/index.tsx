@@ -19,7 +19,7 @@ export default function ReviewerRequestSummary({
   activeTab,
 }: {
   request: RequestItems;
-  activeTab: string;
+  activeTab?: string;
 }) {
   const [activeSection, setActiveSection] = useState("");
   const [loading] = useState(false);
