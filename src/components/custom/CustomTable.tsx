@@ -16,8 +16,6 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import ArrowLeftDouble from "@/assets/arrow_left_double.svg";
-import ArrowRightDouble from "@/assets/arrow_right_double.svg";
 import { ChevronsLeftIcon, ChevronsRight } from "lucide-react";
 import { useState } from "react";
 
@@ -68,7 +66,7 @@ export default function CustomTable({
       columnFilters: columnFilters,
     },
     initialState: {
-      pagination: { pageIndex: 0, pageSize: 10 },
+      pagination: { pageIndex: 0, pageSize: 6 },
     },
     onGlobalFilterChange: setLocalSearch ?? setGlobalFilter,
     getPaginationRowModel: getPaginationRowModel(),
@@ -76,20 +74,36 @@ export default function CustomTable({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  // calculate the total number of entries, 
+  // number of pages depending on the data size, 
+  // the average of both against each other
+  // set all page indices 
   const total_entries = table.getFilteredRowModel().rows.length;
   const { pageIndex, pageSize } = table.getState().pagination;
   const page_number = Math.ceil(total_entries / pageSize);
   const start = pageIndex * pageSize + 1;
   const end = Math.min(start + pageSize - 1, total_entries);
-  const [visible_start, setVisibleStart ] = useState(0);
+  const [visibleStart, setVisibleStart ] = useState(0);
 
 
   const visible_pages =
     Array.from(
     {length: 2},
-    (_, i) => visible_start + i).filter(
+    (_, i) => visibleStart + i).filter(
       (page) => page < page_number
     )
+
+    const handleNextPages = () => {
+      if (visibleStart + 2 < page_number) {
+        setVisibleStart((prev) => prev + 2);
+      }
+    };
+    
+    const handlePreviousPages = () => {
+      if (visibleStart - 2 >= 0) {
+        setVisibleStart((prev) => prev - 2);
+      }
+    };
 
   
 
@@ -155,14 +169,16 @@ export default function CustomTable({
       </Table>
       {isMobile && <div className="w-full">&nbsp;</div>}
     </div>
-    {/* {visible_pages.length > 1 && */}
+    {end !== start &&
     <div className="py-3 px-6 flex justify-between items-center">
       <div>
         <p className="text-[#4A5567] text-sm">Showing {start} to {end} of {total_entries} entries.</p>
       </div>
       <div className="flex gap-[0.625rem] items-center">
         <button 
-          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center">
+          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"
+          disabled={visibleStart <= 1}
+          onClick={() => handlePreviousPages()}>
             <ChevronsLeftIcon />
         </button>
         <div
@@ -176,21 +192,18 @@ export default function CustomTable({
               {page + 1}
             </button>
             ))}
-          
-          
-          {/* <button
-            className={`rounded-full py-2 px-[1.125rem] flex items-center justify-center ${pageIndex === visible_start + 1 ? `text-[#FFFFFF] bg-[#051467]` : "text-[#20293A]"}`}>
-            {visible_start + 2}
-          </button> */}
         </div>
         
         <button 
-          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center">
+          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"
+          disabled={visibleStart + 2 >= page_number}
+          onClick={() => handleNextPages()}>
             <ChevronsRight />        
             </button>
       </div>
 
     </div>
+}
   </div>
     
   );
