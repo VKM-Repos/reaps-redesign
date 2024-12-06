@@ -1,14 +1,13 @@
 import CircleArrowDown from "@/assets/circle-arrow-down-01.svg";
 import AssignReviewer from "../../components/AssignReviewer";
 import WriteReview from "../../components/WriteReview";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useMediaQuery } from "react-responsive";
 import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
 import Unamused from "@/assets/unamused.svg";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-
+import { Sheet, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 const final_review_remarks = [
   { id: "1", text: "Approved", color: "#34A853", icon: Smile },
@@ -18,18 +17,23 @@ const final_review_remarks = [
 
 export const ActionButton = ({
   request,
+  refetch,
 }: {
   request: any;
+  refetch: () => void;
   setLoader: (loading: boolean) => void;
 }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-
+  const close_sheet_ref = useRef<HTMLButtonElement | null>(null);
   const handleStepForward = (index: number) => {
     if (index === currentStep) {
       setCurrentStep((prev) => prev + 1);
     }
+  };
+  const close_sheet = () => {
+    close_sheet_ref?.current?.click();
   };
   const actions = [
     {
@@ -44,7 +48,9 @@ export const ActionButton = ({
       color: "#566DBE",
       content: (
         <WriteReview
-            closeDialog={()=>{} }
+          refetch={refetch}
+          closeDialog={close_sheet}
+          request_id={request?.id}
           request={request}
           remarks={final_review_remarks}
           buttonText="Submit final review"
@@ -96,6 +102,11 @@ export const ActionButton = ({
                     </button>
                   </SheetTrigger>
                   {content}
+                  <SheetClose>
+                    <button className="hidden" ref={close_sheet_ref}>
+                      CLose sheet
+                    </button>
+                  </SheetClose>
                 </Sheet>
               )
             )}
