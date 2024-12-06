@@ -9,6 +9,7 @@ import { useRequestsStore } from "@/store/RequestFormStore";
 import Loader from "@/components/custom/Loader";
 import { ActionButton } from "./ActionButtons";
 import useUserStore from "@/store/user-store";
+import { useGET } from "@/hooks/useGET.hook";
 
 // view requests should be specific to each table id
 // view should receive and store these values based on id
@@ -26,7 +27,14 @@ export default function InstitutionRequestSummary({
   const { pathname } = useLocation();
   const [loading, setLoader] = useState(false);
   const { reviewer, success, setReviewer, setSuccess } = useRequestsStore();
-
+  const {
+    data: reviews,
+    isPending: fetching_reviews,
+    refetch: refetch_reviews,
+  } = useGET({
+    url: `reviews/request/${request?.id}`,
+    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
+  });
   const closeDialog = () => {
     setSuccess(false);
     setReviewer({ firstName: "", lastName: "" }); // Reset reviewer when closing
@@ -72,10 +80,14 @@ export default function InstitutionRequestSummary({
         </div>
         {activeRole === "admin" &&
           pathname.includes("/requests/manage-requests") && (
-            <ActionButton request={request} setLoader={setLoader} />
+            <ActionButton
+              refetch={refetch_reviews}
+              request={request}
+              setLoader={setLoader}
+            />
           )}
         <div className="px-4">
-          <Summary request={request} />
+          <Summary reviews={reviews?.items} request={request} />
         </div>
       </SheetContent>
     </>
