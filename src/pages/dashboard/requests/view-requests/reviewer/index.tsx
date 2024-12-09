@@ -66,9 +66,7 @@ export default function ReviewerRequestSummary({
       href={`#${sectionId}`}
       className={`w-full h-12 items-center rounded-md px-3 py-4 hover:bg-slate-200 text-[#6A6C6A] 
         hover:text-black ${
-          activeSection === sectionId
-            ? "bg-slate-200 text-black"
-            : ""
+          activeSection === sectionId ? "bg-slate-200 text-black" : ""
         }`}
       onClick={handleNavClick(sectionId)}
     >
@@ -155,7 +153,7 @@ export default function ReviewerRequestSummary({
             </div>
             <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
               <Summary
-                reviews={reviews?.items}
+                reviews={reviews?.items || []}
                 request={request_details}
                 activeTab={activeTab}
               />

@@ -104,6 +104,11 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
           icon: <More />,
         },
         {
+          label: "Pricing",
+          path: "/pricing",
+          icon: <InvoiceIcon />,
+        },
+        {
           label: "Requests",
           path: "/requests",
           icon: <DocumentIcon />,
@@ -114,9 +119,9 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
               icon: <DocumentIcon />,
             },
             {
-              label: "Review Request",
-              path: "/requests/review-requests",
-              icon: <FileView />,
+              label: "Approved Request",
+              path: "/requests/approved-requests",
+              icon: <DocumentIcon />,
             },
             {
               label: "Manage Request",
@@ -151,7 +156,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
               icon: <Bank />,
             },
           ],
-        },
+        }
       );
       break;
     case "super admin":

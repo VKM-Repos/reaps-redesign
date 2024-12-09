@@ -1,5 +1,10 @@
 import { useMediaQuery } from "react-responsive";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogClose,
+} from "@/components/ui/dialog";
 import {
   Sheet,
   SheetTrigger,
@@ -12,15 +17,21 @@ import { statusColorMap } from "./transaction-table/columns";
 import { TransactionItem } from "@/types/transaction";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import { useToast } from "@/components/ui/use-toast";
-import { queryClient } from "@/providers";
+// import { queryClient } from "@/providers";
+import { useRef } from "react";
 
 type Props = {
   transaction: TransactionItem;
+  refetch: () => void;
 };
 
-export default function TransactionDetails({ transaction }: Props) {
+export default function TransactionDetails({ transaction, refetch }: Props) {
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+  const close_dialog_ref = useRef<HTMLButtonElement | null>(null);
 
+  const handle_close_dialog = () => {
+    close_dialog_ref?.current?.click();
+  };
   return isMobile ? (
     <Sheet>
       <SheetTrigger className="text-sm text-[#192C8A]">View</SheetTrigger>
@@ -28,20 +39,39 @@ export default function TransactionDetails({ transaction }: Props) {
         <SheetClose className="absolute right-6 top-6 !w-fit mx-auto py-0 px-0 ml-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
           <HoverCancel />
         </SheetClose>
-        <TransactionDetailsContent transaction={transaction} />
+        <TransactionDetailsContent
+          close_dialog={handle_close_dialog}
+          refetch={refetch}
+          transaction={transaction}
+        />
       </SheetContent>
     </Sheet>
   ) : (
     <Dialog>
       <DialogTrigger className="text-sm text-[#192C8A]">View</DialogTrigger>
       <DialogContent className="w-full max-w-[800px] h-full md:max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
-        <TransactionDetailsContent transaction={transaction} />
+        <TransactionDetailsContent
+          close_dialog={handle_close_dialog}
+          refetch={refetch}
+          transaction={transaction}
+        />
       </DialogContent>
+      <DialogClose>
+        <button ref={close_dialog_ref} className="hidden"></button>
+      </DialogClose>
     </Dialog>
   );
 }
 
-function TransactionDetailsContent({ transaction }: Props) {
+function TransactionDetailsContent({
+  transaction,
+  refetch,
+  close_dialog,
+}: {
+  transaction: TransactionItem;
+  refetch: () => void;
+  close_dialog: () => void;
+}) {
   const { toast } = useToast();
 
   const formattedAmount = new Intl.NumberFormat("en-NG", {
@@ -51,7 +81,7 @@ function TransactionDetailsContent({ transaction }: Props) {
 
   const { mutate: requery, isPending: isRequerying } = usePATCH(
     `transactions/${transaction?.transaction_reference}/re-query`,
-    { method: "PUT", contentType: "application/json" }
+    { method: "PUT" }
   );
 
   const handleRequeryTransaction = () => {
@@ -65,17 +95,22 @@ function TransactionDetailsContent({ transaction }: Props) {
       { self: "true" },
       {
         onSuccess: (data) => {
+          console.log("SUCCEESSSS");
+
           toast({
             title: "Re-query Successful",
             description: `Transaction status: ${data.status}`,
             variant: "default",
           });
-
-          queryClient.invalidateQueries({
-            predicate: (query) => query.queryKey.includes(["transaction"]),
-          });
+          refetch();
+          close_dialog();
+          // queryClient.invalidateQueries({
+          //   predicate: (query) => query.queryKey.includes(["transaction"]),
+          // });
         },
         onError: (error) => {
+          console.log("ERRROR");
+
           const errorMessage =
             error?.response.data.detail ||
             "Unable to re-query the transaction.";

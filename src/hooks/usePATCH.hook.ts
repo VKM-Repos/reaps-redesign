@@ -47,6 +47,8 @@ export const usePATCH = (
     },
     onError: (error: { response: { data: any } }) => {
       // (err?.data?.message instanceof Array) ? toast.error(err?.data?.message[0]) : toast.error(err?.data?.message)
+      console.log(error);
+      
       errorCallBack && errorCallBack(error);
       toast({
       title: "Error",
