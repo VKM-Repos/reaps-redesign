@@ -17,7 +17,7 @@ import { statusColorMap } from "./transaction-table/columns";
 import { TransactionItem } from "@/types/transaction";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import { useToast } from "@/components/ui/use-toast";
-import { queryClient } from "@/providers";
+// import { queryClient } from "@/providers";
 import { useRef } from "react";
 
 type Props = {

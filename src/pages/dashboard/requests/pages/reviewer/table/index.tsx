@@ -1,5 +1,5 @@
 import View from "@/components/custom/Icons/View";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import CustomTable, {
   ColumnSetup,
   CustomCell,
@@ -19,11 +19,11 @@ type TableRequestsProps = {
   activeTab?: string;
 };
 
-const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-  Unreviewed: { bg: "#ffcce6", text: "#254D4B" },
-  Reviewed: { bg: "#b3e6ff", text: "#333A33" },
-  Reopened: { bg: "#ffd9b3", text: "#BF1E2C" },
-};
+// const statusColorMap: { [key: string]: { bg: string; text: string } } = {
+//   Unreviewed: { bg: "#ffcce6", text: "#254D4B" },
+//   Reviewed: { bg: "#b3e6ff", text: "#333A33" },
+//   Reopened: { bg: "#ffd9b3", text: "#BF1E2C" },
+// };
 
 export default function ReviewRequestsTable({
   reviewTableData,

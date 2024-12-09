@@ -17,11 +17,7 @@ type Props = {
 //   PENDING: { bg: "#FFDEFF", text: "#410A70" },
 // };
 const TransactionTable = ({ data }: Props) => {
-  const {
-    data: transactionsData,
-    isPending,
-    refetch,
-  } = useGET({
+  const { data: transactionsData, refetch } = useGET({
     queryKey: ["my-transactions"],
     url: "transactions",
     withAuth: true,
