@@ -86,22 +86,33 @@ export default function CustomTable({
   const end = Math.min(start + pageSize - 1, total_entries);
   const [visibleStart, setVisibleStart ] = useState(0);
 
+
+  const allPages = Array.from({ length: page_number }, (_, i) => i);
   const visible_pages =
-    Array.from(
-    {length: 2},
-    (_, i) => visibleStart + i).filter(
-      (page) => page < page_number
-    )
+  page_number <= 5
+  ? allPages // Show all if fewer than max pages
+  : [
+      ...allPages.slice(0, 2), // First two
+      ...(visibleStart > 2 ? ["..."] : []), // Ellipsis if middle pages are hidden
+      ...allPages.slice(
+        Math.max(visibleStart, 2),
+        Math.min(visibleStart + 2, page_number - 2)
+      ),
+      ...(visibleStart + 2 < page_number - 2 ? ["..."] : []), // Ellipsis before last two
+      ...allPages.slice(page_number - 2, page_number), // Last two
+    ];
 
     const handleNextPages = () => {
-      if (visibleStart + 2 < page_number) {
-        setVisibleStart((prev) => prev + 2);
+      if (pageIndex < page_number - 1) {
+        table.setPageIndex(pageIndex + 1);
+        setVisibleStart(Math.min(visibleStart + 2, page_number - 2));
       }
     };
     
     const handlePreviousPages = () => {
-      if (visibleStart - 2 >= 0) {
-        setVisibleStart((prev) => prev - 2);
+      if (pageIndex > 0) {
+        table.setPageIndex(pageIndex - 1);
+        setVisibleStart(Math.max(visibleStart - 2, 0));
       }
     };
 
@@ -174,30 +185,41 @@ export default function CustomTable({
     {page_number > 1 &&
     <div className="py-3 px-3 md:px-6 flex justify-between items-center">
       <div>
-        <p className="text-[#4A5567] text-xs md:text-sm">Showing {start} to {end} of {total_entries} entries.</p>
+        <p className="text-[#4A5567] hidden md:block text-sm">Showing {start} to {end} of {total_entries} entries.</p>
       </div>
       <div className="flex gap-[0.625rem] items-center">
         <button 
-          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"
-          disabled={visibleStart <= 1}
+          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full w-[3rem] h-[3rem] flex items-center justify-center"
+          disabled={pageIndex === 0}
           onClick={() => handlePreviousPages()}>
             <img src={ArrowLeftDouble} />  
         </button>
-        <div
-          className="flex gap-1 items-center font-medium">
-            {visible_pages.map((page, index)=> (
+        {/* Page Numbers */}
+        <div className="flex gap-1 items-center font-medium">
+          {visible_pages.map((page: any, index) =>
+            page === "..." ? (
+              <span key={index} className="text-[#20293A]">
+                ...
+              </span>
+            ) : (
               <button
                 key={index}
-                className={`rounded-full py-2.5 px-[17px] flex items-center justify-center  ${pageIndex === page ? `text-[#FFFFFF] bg-[#051467]` : "text-[#20293A] hover:bg-[#14155E14]"}`}
-                onClick={() => table.setPageIndex(page)}>
-              {page + 1}
-            </button>
-            ))}
+                className={`rounded-full w-[3rem] h-[3rem] flex items-center justify-center ${
+                  pageIndex === page
+                    ? "text-[#FFFFFF] bg-[#051467]"
+                    : "text-[#20293A] hover:bg-[#14155E14]"
+                }`}
+                onClick={() => table.setPageIndex(page)}
+              >
+                {page + 1}
+              </button>
+            )
+          )}
         </div>
         
         <button 
-          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full p-2 flex items-center justify-center"
-          disabled={visibleStart + 2 >= page_number}
+          className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full w-[3rem] h-[3rem] flex items-center justify-center"
+          disabled={pageIndex >= page_number - 1}
           onClick={() => handleNextPages()}>
             <img src={ArrowRightDouble} />        
         </button>
