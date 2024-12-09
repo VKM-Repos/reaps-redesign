@@ -28,7 +28,7 @@ const statusColorMap: { [key: string]: { bg: string; text: string } } = {
 
 
 
-    export default function ReviewRequestsTable( { reviewTableData, activeTab="request table" }: TableRequestsProps) {
+    export default function ReviewRequestsTable( { reviewTableData, activeTab }: TableRequestsProps) {
         const { multiStatusDateFilter } = useGlobalFilter()
         console.log(reviewTableData, 'rreerrr')
         const columnData: ColumnSetup<any>[]= [

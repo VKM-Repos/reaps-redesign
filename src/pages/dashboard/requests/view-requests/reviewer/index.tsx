@@ -6,28 +6,43 @@ import {
 } from "@/components/ui/sheet";
 import Cancel from "@/components/custom/Icons/Cancel";
 import Summary from "../Summary";
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
 import WriteReview from "../../components/WriteReview";
 import Loader from "@/components/custom/Loader";
-import {Dialog, DialogClose, DialogTrigger} from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogTrigger } from "@/components/ui/dialog";
 import { RequestItems } from "@/types/requests";
+import { useGET } from "@/hooks/useGET.hook";
 
 export default function ReviewerRequestSummary({
   request,
   activeTab,
 }: {
   request: RequestItems;
-  activeTab: string;
+  activeTab?: string;
 }) {
   const [activeSection, setActiveSection] = useState("");
-  const [loading] = useState(false);
-const close_dialog_ref = useRef<HTMLButtonElement | null>(null)
+  const close_dialog_ref = useRef<HTMLButtonElement | null>(null);
   const review_remarks = [
     { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
     { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
   ];
+
+  const { data: request_details, isPending: fetching_request_details } = useGET(
+    {
+      url: `requests/${request?.id}`,
+      queryKey: ["FETCH_REQUEST_DETAILS", request?.id],
+    }
+  );
+  const {
+    data: reviews,
+    isPending: fetching_reviews,
+    refetch: refetch_reviews,
+  } = useGET({
+    url: `reviews/request/${request?.id}`,
+    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
+  });
 
   // navigate to sections on summary page
   const handleNavClick =
@@ -50,22 +65,22 @@ const close_dialog_ref = useRef<HTMLButtonElement | null>(null)
     <a
       href={`#${sectionId}`}
       className={`w-full h-12 items-center rounded-md px-3 py-4 hover:bg-slate-200 text-[#6A6C6A] 
-                    hover:text-black ${
-                      activeSection === sectionId
-                        ? "bg-slate-200 text-black"
-                        : ""
-                    }`}
+        hover:text-black ${
+          activeSection === sectionId
+            ? "bg-slate-200 text-black"
+            : ""
+        }`}
       onClick={handleNavClick(sectionId)}
     >
       {label}
     </a>
   );
-const closeDialog = ()=>{
-  close_dialog_ref?.current?.click();
-}
+  const closeDialog = () => {
+    close_dialog_ref?.current?.click();
+  };
   return (
     <>
-      {loading && <Loader />}
+      {(fetching_request_details || fetching_reviews) && <Loader />}
       <SheetContent
         side="bottom"
         className="overflow-y-scroll h-full md:!p-0 rounded-t-lg flex flex-col"
@@ -118,13 +133,19 @@ const closeDialog = ()=>{
                       </button>
                     </DialogTrigger>
                     <WriteReview
-                        closeDialog={closeDialog}
-                        request={request}
+                      request_id={request?.id}
+                      refetch={refetch_reviews}
+                      closeDialog={closeDialog}
+                      request={request}
                       remarks={review_remarks}
                       buttonText="Submit review"
                     />
                     <DialogClose asChild>
-                      <button type="button" className="hidden" ref={close_dialog_ref}>
+                      <button
+                        type="button"
+                        className="hidden"
+                        ref={close_dialog_ref}
+                      >
                         Close
                       </button>
                     </DialogClose>
@@ -133,7 +154,11 @@ const closeDialog = ()=>{
               </div>
             </div>
             <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
-              <Summary request={request} activeTab={activeTab} />
+              <Summary
+                reviews={reviews?.items}
+                request={request_details}
+                activeTab={activeTab}
+              />
             </div>
           </main>
         </section>
@@ -146,8 +171,10 @@ const closeDialog = ()=>{
             </SheetTrigger>
             <div className="w-full">
               <WriteReview
-                  closeDialog={closeDialog}
-                  request={request}
+                request_id={request?.id}
+                refetch={refetch_reviews}
+                closeDialog={closeDialog}
+                request={request}
                 remarks={review_remarks}
                 buttonText="Submit review"
               />

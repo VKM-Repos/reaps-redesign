@@ -21,8 +21,7 @@ import { usePOST } from "@/hooks/usePOST.hook";
 const formSchema = z.object({
   status: z.string().min(1, { message: "You have to select one item" }),
   comment: z.string().min(1, { message: "Please input some comment" }),
-    correction_doc: z
-      .instanceof(Blob, { message: "Please upload a file" })
+  correction_doc: z.instanceof(Blob, { message: "Please upload a file" }),
 });
 
 interface ReviewRemark {
@@ -33,24 +32,29 @@ interface ReviewRemark {
 }
 
 interface WriteReviewProps {
+  request_id: string;
   request?: any;
   remarks: ReviewRemark[];
   buttonText: string;
   closeDialog: () => void;
+  refetch: () => void;
 }
 
 export default function WriteReview({
+  request_id,
   request,
   remarks,
-  buttonText, closeDialog,
+  buttonText,
+  closeDialog,
+  refetch,
 }: WriteReviewProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
+    defaultValues: {
       status: "",
       comment: "",
       correction_doc: [],
-    }
+    },
   });
   const { activeRole } = useUserStore();
   const {
@@ -60,10 +64,10 @@ export default function WriteReview({
 
   const { data: reviewer_reviews, isPending: fetch_reviewers_review } = useGET({
     url: `reviews/reviewer`,
-    queryKey: ["FETCH_REVIEW_BY_REVIEWER", request?.id],
+    queryKey: ["FETCH_REVIEW_BY_REVIEWER", request_id],
   });
   const review_id = reviewer_reviews?.items?.find(
-      (item: any) => item.request?.id === request?.id
+    (item: any) => item.request?.id === request?.id
   )?.id;
   const { mutate: write_review, isPending: updating_review } = usePATCH(
     `reviews/${review_id}`,
@@ -71,23 +75,26 @@ export default function WriteReview({
   );
 
   const { mutate: write_final_review, isPending: updating_final_review } =
-    usePOST(`reviews/final-review/${request?.id}`, {contentType: "multipart/form-data"});
+    usePOST(`reviews/final-review/${request?.id}`, {
+      contentType: "multipart/form-data",
+    });
   function onSubmit(values: z.infer<typeof formSchema>) {
     const send_review =
       activeRole === "admin" ? write_final_review : write_review;
     const formData = new FormData();
-    formData.append('comment', values.comment);
-    formData.append('status', values.status);
-    formData.append('review_document', values.correction_doc)
+    formData.append("comment", values.comment);
+    formData.append("status", values.status);
+    formData.append("review_document", values.correction_doc);
     send_review(formData, {
       onSuccess: () => {
         toast({
           title: "Feedback",
-          description: 'Review has been sent.',
+          description: "Review has been sent.",
           variant: "default",
         });
+        refetch();
         reset();
-        closeDialog()
+        closeDialog();
       },
       onError: (error: any) => {
         toast({
@@ -98,6 +105,7 @@ export default function WriteReview({
       },
     });
   }
+  console.log(request, "{{}}");
 
   return (
     <>
