@@ -18,11 +18,11 @@ import InstitutionProfile from "@/pages/dashboard/institution/profile";
 import InstitutionAccount from "@/pages/dashboard/institution/account";
 import Transactions from "@/pages/dashboard/institution/account/transactions";
 import MyRequest from "@/pages/dashboard/requests/pages/admin/MyRequest";
-import ReviewRequest from "@/pages/dashboard/requests/pages/admin/ReviewRequest";
 import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/ManageRequestPage";
 import Templates from "@/pages/dashboard/templates";
 import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
+import ApprovedRequest from "@/pages/dashboard/requests/pages/admin/ApprovedRequest";
 
 const router = [
   {
@@ -82,10 +82,10 @@ const router = [
             element: MyRequest,
           },
           {
-            name: "Review Request",
-            path: "requests/review-requests",
-            title: "Review Request",
-            element: ReviewRequest,
+            name: "Approved Request",
+            path: "requests/approved-requests",
+            title: "Approved Request",
+            element: ApprovedRequest,
           },
           {
             name: "Manage Request",
@@ -99,7 +99,7 @@ const router = [
             path: "requests/edit-request",
             title: "Modify Request",
             element: ModifyRequest,
-          }
+          },
         ],
       },
       {
@@ -187,8 +187,8 @@ const router = [
             path: "pricing/your-transactions",
             title: "Transactions",
             element: ViewTransactions,
-          }
-        ]
+          },
+        ],
       },
       {
         name: "Settings",
