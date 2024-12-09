@@ -16,7 +16,6 @@ import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import User from "@/components/custom/Icons/User";
 import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
-// import Unamused from "@/assets/unamused.svg";
 import Line from "@/assets/line.svg";
 import { useState } from "react";
 
@@ -24,7 +23,7 @@ type SummaryPageProps = {
   isApproval?: boolean;
   handlePrint?: () => void;
   activeTab?: string;
-  reviews: any;
+  reviews?: any;
   request?: any;
 };
 const Summary = ({
@@ -37,9 +36,6 @@ const Summary = ({
   const { data } = useRequestsStore();
   const { checkbox, files } = data.requestsDetails;
   console.log(activeTab);
-  // receive table row prop in here and populate the fields
-
-  // const { title } = tableData[1];
 
   const form = useForm({
     defaultValues: {
@@ -139,12 +135,6 @@ const Summary = ({
     console.log(fileId);
   };
 
-  // const review_remarks = [
-  //   { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
-  //   { id: "2", text: "Unsatisfactory", color: "#D03238", icon: Unhappy },
-  //   { id: "3", text: "Further Review", color: "#608FEB", icon: Unamused },
-  // ];
-
   function onSubmit() {
     try {
       setTimeout(() => {
@@ -156,85 +146,8 @@ const Summary = ({
       console.error(error);
     }
   }
+  console.log(reviews, "ppppp");
 
-  // const application = [
-  //   {
-  //     name: "question1",
-  //     label:
-  //       "Are you the principal investigator or Local Principal Investigator?",
-  //     value: request?.are_you_investigator_or_local_principal_investigator
-  //       ? "Yes"
-  //       : "No",
-  //   },
-  //   {
-  //     name: "question3",
-  //     label: "Is there a Co-Principal Investigator?",
-  //     value: request?.has_co_principal_investigator ? "Yes" : "No",
-  //   },
-  //   {
-  //     name: "question4",
-  //     label: "Is the project sponsored?",
-  //     value: request?.has_project_sponsored ? "Yes" : "No",
-  //   },
-  //   {
-  //     name: "question5",
-  //     label: "Did You Complete Ethics Training?",
-  //     value: request?.completed_ethics_training ? "Yes" : "No",
-  //   },
-  //   {
-  //     name: "question6",
-  //     label:
-  //       "Will materials or tissue specimens be shipped out of the country?",
-  //     value: request?.specimen_will_be_shipped_out ? "Yes" : "No",
-  //   },
-  //   {
-  //     name: "question7",
-  //     label: "What is the duration of the Research? (months)",
-  //     value: request?.duration_of_research_in_years,
-  //   },
-  // ];
-  // const supportDocData = [
-  //   {
-  //     id: "requirement1",
-  //     label: "Curriculum Vitae",
-  //     name: request?.cv?.match(/\/([^/]+)(?=\.pdf$)/)
-  //       ? request?.cv?.match(/\/([^/]+)(?=\.pdf$)/)[1]
-  //       : "CV",
-  //     href: request?.cv,
-  //   },
-  //   {
-  //     id: "requirement2",
-  //     label: "Cover Letter/Application Letter",
-  //     name: request?.cover_letter?.match(/\/([^/]+)(?=\.pdf$)/)
-  //       ? request?.cover_letter?.match(/\/([^/]+)(?=\.pdf$)/)[1]
-  //       : "Cover Letter",
-  //     href: request?.cover_letter,
-  //   },
-  //   {
-  //     id: "requirement3",
-  //     label: "Proposal",
-  // name: request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)
-  //   ? request?.proposal?.match(/\/([^/]+)(?=\.pdf$)/)[1]
-  //   : "Proposal",
-  //       : "Proposal",
-  //     href: request?.proposal,
-  //   },
-  //   // {
-  //   //   id: "requirement4",
-  //   //   label: "Research Tools/Questionaire",
-  //   //   name: "Research Tools",
-  //   // },
-  //   // {
-  //   //   id: "requirement5",
-  //   //   label: "Informed Consent Form",
-  //   //   name: "Informed Consent Form",
-  //   // },
-  //   // {
-  //   //   id: "requirement6",
-  //   //   label: "Materials Transfer Agreement Form",
-  //   //   name: "Materials Transfer Agreement Form",
-  //   // },
-  // ];
   return (
     <>
       <div className="w-full flex items-center justify-center">
@@ -244,7 +157,6 @@ const Summary = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-4 text-sm text-[#454745]"
             >
-              {/* Research Information Section */}
               <section id="research-info" className="flex flex-col gap-4">
                 <h1 className="text-[1.375rem] font-semibold pt-10 md:pb-5 md:py-5 text-black">
                   Research Information
@@ -268,7 +180,6 @@ const Summary = ({
                 />
               </section>
 
-              {/* Application Information Section */}
               <section id="application-info" className="flex flex-col gap-4">
                 <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5 text-black">
                   Application Information
@@ -276,7 +187,7 @@ const Summary = ({
                 <div className="grid md:grid-cols-2 gap-8 ">
                   <>
                     {application.map((question) => (
-                      <div className="flex flex-col gap-2">
+                      <div key={question.label} className="flex flex-col gap-2">
                         <div className="text-sm text-[#454745]">
                           {question.label}&nbsp;
                           <span className="text-red-500">*</span>
@@ -398,7 +309,7 @@ const Summary = ({
                     Comments and Reviews
                   </h1>
                 </div>
-                {reviews?.items.length > 0 ? (
+                {reviews?.length > 0 ? (
                   <div className="flex flex-col gap-6">
                     {/* do not show reviews from Reviewers to researchers*/}
                     {reviews?.map((reviewer: any) => {
