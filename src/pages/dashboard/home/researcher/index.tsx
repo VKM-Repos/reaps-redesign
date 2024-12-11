@@ -43,7 +43,7 @@ export default function ResearcherHomePage() {
         url: "templates",
         queryKey: ["GET_TEMPLATES_DASHBOARD"],
     });
-    console.log(templates, '?????');
+
     return (
         <div className="flex flex-col gap-10">
             <div className="mt-[3.25rem]">
