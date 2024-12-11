@@ -54,7 +54,7 @@ const FormInput = forwardRef<HTMLInputElement, InputProps>(
                   }
                   placeholder={rest.placeholder}
                   onChange={onChange}
-                  value={value}
+                  value={value ?? ""}
                   className={`font-medium rounded-[4px] ${
                     error ? "border-red-500" : "border-gray-300"
                   }  placeholder:text-black/30 ${className}`}
