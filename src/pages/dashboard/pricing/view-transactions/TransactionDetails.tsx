@@ -4,6 +4,8 @@ import {
   DialogTrigger,
   DialogContent,
   DialogClose,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Sheet,
@@ -49,6 +51,8 @@ export default function TransactionDetails({ transaction, refetch }: Props) {
   ) : (
     <Dialog>
       <DialogTrigger className="text-sm text-[#192C8A]">View</DialogTrigger>
+      <DialogTitle></DialogTitle>
+      <DialogDescription className="hidden">Details of the selected transaction</DialogDescription>    
       <DialogContent className="w-full max-w-[800px] h-full md:max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
         <TransactionDetailsContent
           close_dialog={handle_close_dialog}
@@ -57,7 +61,7 @@ export default function TransactionDetails({ transaction, refetch }: Props) {
         />
       </DialogContent>
       <DialogClose>
-        <button ref={close_dialog_ref} className="hidden"></button>
+        <span ref={close_dialog_ref} className="hidden"></span>
       </DialogClose>
     </Dialog>
   );
