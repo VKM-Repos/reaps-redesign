@@ -35,7 +35,6 @@ const Summary = ({
 }: SummaryPageProps) => {
   const { data } = useRequestsStore();
   const { checkbox, files } = data.requestsDetails;
-  console.log(activeTab);
 
   const form = useForm({
     defaultValues: {
@@ -131,9 +130,6 @@ const Summary = ({
   ]);
 
   const filteredDocs = supportDocData.filter((doc) => doc.href);
-  const handleDownload = (fileId: string) => {
-    console.log(fileId);
-  };
 
   function onSubmit() {
     try {
@@ -146,7 +142,6 @@ const Summary = ({
       console.error(error);
     }
   }
-  console.log(reviews, "ppppp");
 
   return (
     <>
@@ -241,9 +236,9 @@ const Summary = ({
                     ))}
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
-                  {filteredDocs.map((file) => {
+                  {filteredDocs.map((file, index) => {
                     return (
-                      <div className="flex flex-col gap-2">
+                      <div key={index} className="flex flex-col gap-2">
                         <div className="flex flex-col gap-1 md:gap-2 md:flex-row md:justify-between">
                           <div className="font-semibold text-sm">
                             {file.label}
@@ -280,7 +275,6 @@ const Summary = ({
                             <a
                               href={file?.href}
                               className="p-2"
-                              onClick={() => handleDownload(file.id)}
                             >
                               <span>
                                 <Download />

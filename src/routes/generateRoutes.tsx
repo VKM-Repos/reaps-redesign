@@ -45,14 +45,14 @@ export const renderRoutes = (mainRoutes: LayoutConfig[]) => {
         const subRoutes = generateFlattenRoutes(routes);
 
         return (
-          <Route key={index} element={<Layout />}>
+          <Route key={`layout-${index}`} element={<Layout />}>
             {subRoutes.map(({ element: Element, path, name }: RouteConfig) => {
               const isProtected = Layout === DashboardLayout;
 
               return Element && path ? (
                 isProtected ? (
                   <Route
-                    key={name}
+                    key={name || `route-${path || index}`}
                     element={
                       <ProtectedRoute isAuthorized={isAuthorized}>
                         <Element />
@@ -61,7 +61,7 @@ export const renderRoutes = (mainRoutes: LayoutConfig[]) => {
                     path={path}
                   />
                 ) : (
-                  <Route key={name} element={<Element />} path={path} />
+                  <Route key={`route-${index}`} element={<Element />} path={path} />
                 )
               ) : null;
             })}
