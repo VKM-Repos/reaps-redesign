@@ -161,7 +161,9 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                         <span className="flex gap-2 items-center justify-center">
                           <GreenCheckmark />
                           {/* reload causes field value name to disappear */}
-                          {field.value?.name}
+                          <p className="truncate whitespace-nowrap text-ellipsis max-w-[16rem] md:max-w-[24rem]">
+                            {field.value?.name}
+                          </p>
                         </span>
                         <span>
                           <button

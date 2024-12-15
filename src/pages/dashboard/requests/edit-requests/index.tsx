@@ -1,27 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
-import ResearchInformation from "../components/ethical-request-forms/research-information";
-import ApplicationInformation from "../components/ethical-request-forms/application-information";
-import SupportingDocuments from "../components/ethical-request-forms/supporting-document";
+import ResearchInformation from "../components/edit-ethical-request-forms/research-information";
+import ApplicationInformation from "../components/edit-ethical-request-forms/application-information";
+import SupportingDocuments from "../components/edit-ethical-request-forms/supporting-document";
 import SavingLoader from "../components/SavingLoader";
 import {
   EthicalRequestStore,
   useEthicalRequestStore,
 } from "@/store/ethicalRequestStore";
-import ApplicationSummary from "../components/ethical-request-forms/application-summary";
-import { usePOST } from "@/hooks/usePOST.hook";
+import ApplicationSummary from "../components/edit-ethical-request-forms/application-summary";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
-import SelectSpecialization from "../components/ethical-request-forms/select-specialization";
+import SelectSpecialization from "../components/edit-ethical-request-forms/select-specialization";
 import { useLocation, useNavigate } from "react-router-dom";
 import { queryClient } from "@/providers";
 import { useGET } from "@/hooks/useGET.hook";
+import { usePATCH } from "@/hooks/usePATCH.hook";
 
 const ModifyRequest = () => {
   const { data, step, setStep, resetStore } = useEthicalRequestStore();
   const navigate = useNavigate();
   const location = useLocation();
+
   const searchParams = new URLSearchParams(location.search);
 
   const request_id = searchParams.get("id");
@@ -31,9 +32,10 @@ const ModifyRequest = () => {
     queryKey: ["GET_REQUEST_DETAILS"],
   });
 
-  const { mutate, isPending } = usePOST("requests", {
-    contentType: "multipart/form-data",
-  });
+  const { mutate: editRequest, isPending: isEditing } = usePATCH(
+    `requests/${request_id}`,
+    { method: "PUT", contentType: "multipart/form-data" }
+  );
 
   const RenderRequestsForm = () => {
     const handleNext = () => {
@@ -59,13 +61,13 @@ const ModifyRequest = () => {
 
       formData.append("can_edit", JSON.stringify(true));
 
-      mutate(formData, {
+      editRequest(formData, {
         onSuccess: (response) => {
           console.log(response);
 
           toast({
             title: "Success",
-            description: `Saved to drafts`,
+            description: `Request updated`,
             variant: "default",
           });
 
@@ -121,7 +123,10 @@ const ModifyRequest = () => {
         );
       case 5:
         return (
-          <ApplicationSummary handleNext={handleSubmit(onSubmitHandler)} />
+          <ApplicationSummary
+            requestDetails={request_details}
+            handleNext={handleSubmit(onSubmitHandler)}
+          />
         );
       default:
         return null;
@@ -130,7 +135,7 @@ const ModifyRequest = () => {
 
   return (
     <>
-      {isPending && <Loader />}
+      {isEditing && <Loader />}
       <div className="flex flex-col gap-[1.25rem] mb-20">
         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
           <h1 className="text-[1.875rem] font-bold">Requests</h1>

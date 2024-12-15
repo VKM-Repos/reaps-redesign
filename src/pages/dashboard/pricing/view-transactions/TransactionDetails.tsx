@@ -52,7 +52,9 @@ export default function TransactionDetails({ transaction, refetch }: Props) {
     <Dialog>
       <DialogTrigger className="text-sm text-[#192C8A]">View</DialogTrigger>
       <DialogTitle></DialogTitle>
-      <DialogDescription className="hidden">Details of the selected transaction</DialogDescription>    
+      <DialogDescription className="hidden">
+        Details of the selected transaction
+      </DialogDescription>
       <DialogContent className="w-full max-w-[800px] h-full md:max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
         <TransactionDetailsContent
           close_dialog={handle_close_dialog}
@@ -82,6 +84,16 @@ function TransactionDetailsContent({
     style: "currency",
     currency: "NGN",
   }).format(transaction.amount);
+
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(new Date(transaction.request.created_at));
 
   const { mutate: requery, isPending: isRequerying } = usePATCH(
     `transactions/${transaction?.transaction_reference}/re-query`,
@@ -165,29 +177,30 @@ function TransactionDetailsContent({
             <p>Details</p>
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Research Topic</p>
-            <p>{transaction.request.research_title}</p>
+            <p className="font-bold text-sm">Request ID:</p>
+            <p>{transaction.id ?? "---"}</p>
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Transaction Reference</p>
-            <p>{transaction.transaction_reference}</p>
+            <p className="font-bold text-sm">Research Topic:</p>
+            <p>{transaction.request.research_title ?? "---"}</p>
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Remita Reference</p>
-            <p>{transaction.rrr}</p>
+            <p className="font-bold text-sm">Transaction Reference:</p>
+            <p>{transaction.transaction_reference ?? "---"}</p>
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Request ID</p>
-            <p>{transaction.id}</p>
+            <p className="font-bold text-sm">Remita Reference:</p>
+            <p>{transaction.rrr ?? "---"}</p>
           </div>
+
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Date of Transaction</p>
+            <p className="font-bold text-sm">Date of Transaction:</p>
             <p className="flex items-center gap-2">
-              <span>{transaction.request.created_at}</span>
+              <span>{formattedDate ?? "---"}</span>
             </p>
           </div>
           <div className="flex gap-5 text-sm items-center text-[#515152]">
-            <p className="font-bold">Status</p>
+            <p className="font-bold">Status:</p>
             <Badge
               style={{
                 color: statusColorMap[transaction.status]?.text || "#000000",
@@ -203,7 +216,7 @@ function TransactionDetailsContent({
                 }}
                 className="w-[5px] h-[5px] rounded-full "
               ></div>
-              {transaction.status}
+              {transaction.status ?? "---"}
             </Badge>
           </div>
         </div>

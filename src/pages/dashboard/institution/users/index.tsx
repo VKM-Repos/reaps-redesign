@@ -5,7 +5,7 @@ import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
 
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import EmptyRequests from "../../requests/components/emptystate";
+import EmptyRequests from "../../requests/components/empty-state";
 
 import FilterIcon from "@/components/custom/Icons/Filter";
 // import ReviwersTable from "../components/ReviewersTable";

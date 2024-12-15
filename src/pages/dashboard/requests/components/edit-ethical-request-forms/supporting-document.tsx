@@ -17,25 +17,24 @@ type Props = {
 
 const MAX_FILE_SIZE = 3000000; // 3MB
 const ACCEPTED_FILE_TYPES = [
-  "application/pdf", // PDF
-  "application/msword", // DOC
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
-  "image/jpeg", // JPEG
-  "image/png", // PNG
-  "image/gif", // GIF
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
 ];
 
 const SupportingDocuments = ({ handleNext, requestDetails }: Props) => {
   const { data, setData } = useEthicalRequestStore();
-  const { ethical_request_questions, ethical_request_files } = data;
+  const { ethical_request_files } = data;
 
   const requiredDocs = questionsData.documents.required;
-
   const dynamicRequiredDocs = questionsData.questions
     .filter(
       (question) =>
         question.type === "boolean" &&
-        ethical_request_questions[question.name] === true
+        data.ethical_request_questions[question.name] === true
     )
     .flatMap((question) => question.requiresFile ?? []);
 
@@ -52,12 +51,7 @@ const SupportingDocuments = ({ handleNext, requestDetails }: Props) => {
       const label = question
         ? question.documentLabel
         : fileName.replace("_", " ").toUpperCase();
-
-      return {
-        name: fileName,
-        label,
-        type: "required",
-      };
+      return { name: fileName, label, type: "required" };
     }),
     ...questionsData.documents.optional.map((doc) => ({
       name: doc.name,
@@ -92,23 +86,31 @@ const SupportingDocuments = ({ handleNext, requestDetails }: Props) => {
   });
 
   const defaultValues = {
-    ethical_request_files: Object.keys(ethical_request_files).reduce(
-      (acc, key) => {
-        const file = ethical_request_files[key];
-        acc[key] = file instanceof File ? file : file || null;
-        return acc;
-      },
-      {} as Record<
-        string,
-        File | { name: string; size: number; type: string } | null
-      >
-    ),
+    ethical_request_files: allRequiredDocs.reduce((acc, doc) => {
+      const storeFile = ethical_request_files[doc.name];
+      const requestFile = requestDetails?.[doc.name as keyof RequestItems];
+
+      // Map requestFile (URL string) into the required object structure
+      if (typeof requestFile === "string") {
+        acc[doc.name] = {
+          name: requestFile.split("/").pop() || "unknown", // Extract file name from URL
+          size: 0, // Set size to 0 as it's unavailable for URLs
+          type: "application/octet-stream", // Set a generic MIME type
+        };
+      } else if (storeFile) {
+        acc[doc.name] = storeFile;
+      } else {
+        acc[doc.name] = null; // Default to null
+      }
+
+      return acc;
+    }, {} as Record<string, File | { name: string; size: number; type: string } | null>),
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
-    defaultValues: defaultValues || requestDetails,
+    defaultValues,
   });
 
   const {
@@ -116,37 +118,45 @@ const SupportingDocuments = ({ handleNext, requestDetails }: Props) => {
   } = form;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    try {
-      const filesData = Object.keys(values.ethical_request_files).reduce(
-        (acc, key) => {
-          const file = values.ethical_request_files[key];
-          if (file instanceof File) {
-            acc[key] = file;
-          } else {
-            acc[key] = null;
-          }
+    const updatedFiles = Object.keys(values.ethical_request_files).reduce(
+      (acc, key) => {
+        const file = values.ethical_request_files[key];
+        const storeFile = ethical_request_files[key];
+        const requestFile = requestDetails?.[key as keyof RequestItems];
+
+        // Add to store only if the file is changed
+        if (file instanceof File) {
+          acc[key] = file; // File is newly uploaded
+        } else if (storeFile && storeFile === file) {
+          acc[key] = storeFile; // Keep existing store file if unchanged
+        } else if (
+          typeof requestFile === "string" &&
+          requestFile === file?.name
+        ) {
+          // Skip if file is unchanged and matches the request data
           return acc;
-        },
-        {} as Record<string, File | null>
-      );
+        } else {
+          acc[key] = null; // Explicitly set to null for missing files
+        }
+        return acc;
+      },
+      {} as Record<string, File | null>
+    );
 
-      setData({
-        ...data,
-        ethical_request_files: filesData,
-      });
+    // Update the store only with modified or valid files
+    setData({
+      ...data,
+      ethical_request_files: updatedFiles,
+    });
 
-      console.table(filesData);
-      handleNext();
-    } catch (error) {
-      console.error("Error saving files:", error);
-    }
+    handleNext();
   };
 
   return (
     <div className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-xl2 font-semibold pt-5 pb-5 md:py-2">
-          Supporting Document
+          Supporting Documents
         </h1>
       </div>
       <div className="md:w-4/5 w-full max-w-[368px] md:max-w-[526px] mx-auto my-0">
