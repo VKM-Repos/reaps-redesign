@@ -8,12 +8,23 @@ import { questionsData } from "./questions";
 import { Label } from "@/components/ui/label";
 import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
 import PaymentCart from "./payment-cart";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { FileWarning } from "lucide-react";
 
 type Props = {
   handleNext: () => void;
+  requestDetails: any;
 };
 
-const ApplicationSummary = ({ handleNext }: Props) => {
+const ApplicationSummary = ({ handleNext, requestDetails }: Props) => {
   const { data, setStep } = useEthicalRequestStore();
   const { ethical_request_questions, ethical_request_files } = data;
   const [showPaymentCart, setShowPaymentCart] = useState(false);
@@ -234,7 +245,7 @@ const ApplicationSummary = ({ handleNext }: Props) => {
                     key={doc.name}
                     className="w-full flex justify-between items-center border border-gray-300 p-3 rounded-md mb-2"
                   >
-                    <span className="flex gap-2 items-center justify-center">
+                    <span className="flex gap-2 items-center justify-center overflow-hidden">
                       <span>
                         <GreenCheckmark />
                       </span>
@@ -243,7 +254,7 @@ const ApplicationSummary = ({ handleNext }: Props) => {
                       </span>
                     </span>
                     <span className="text-xs text-gray-500">
-                      {(file.size / 1024).toFixed(2)} KB
+                      {(file?.size / 1024).toFixed(2)} KB
                     </span>
                   </div>
                 </div>
@@ -282,23 +293,79 @@ const ApplicationSummary = ({ handleNext }: Props) => {
             <ApplicationInfoPreview />
             <SupportingDocsPreview />
           </div>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4">
-            <Button
-              variant="outline"
-              onClick={handleNext}
-              className="rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]"
-            >
-              Save & Continue later
-            </Button>
-            <Button
-              onClick={(event) => {
-                proceedToPay(event);
-              }}
-              className="focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6"
-            >
-              Proceed to pay
-            </Button>
-          </div>
+          {requestDetails && requestDetails.status !== "Re Opened" ? (
+            <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4">
+              <Button
+                variant="outline"
+                onClick={handleNext}
+                className="rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]"
+              >
+                Save & Continue later
+              </Button>
+              <Button
+                onClick={(event) => {
+                  proceedToPay(event);
+                }}
+                className="focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6"
+              >
+                Proceed to pay
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4">
+              <Sheet>
+                <SheetTrigger>
+                  <Button
+                    size="lg"
+                    className="rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none w-full md:max-w-[15.625rem]"
+                  >
+                    Submit
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side={isMobile ? "bottom" : "top"}
+                  className={` ${
+                    isMobile
+                      ? "inset-x-auto inset-y-0"
+                      : "inset-x-[30%] inset-y-auto rounded-3xl md:!pt-0"
+                  } mx-auto flex h-full w-full flex-col items-center justify-center px-2 md:max-h-[20.5rem] md:max-w-[30rem]`}
+                >
+                  <div className="flex flex-col items-center justify-center gap-[2.5rem] border-none md:rounded-3xl">
+                    <div className="flex flex-col items-center gap-[9.75rem] md:gap-7">
+                      <div className="flex flex-col items-center gap-7">
+                        <FileWarning className=" text-secondary" size={64} />
+
+                        <SheetHeader className="flex flex-col items-center justify-center gap-3">
+                          <SheetTitle className="text-xl2 font-bold">
+                            Proceed?
+                          </SheetTitle>
+
+                          <SheetDescription className="text-sm text-[454745] md:text-center">
+                            Once submitted, no further edits can be made. Please
+                            review carefully before proceeding
+                          </SheetDescription>
+                        </SheetHeader>
+                      </div>
+
+                      <div className="flex w-full items-center justify-center gap-10">
+                        <SheetClose className="w-full max-w-[12rem] rounded-[2.75rem] border border-[#0C0C0F29] !px-6 !py-3 text-sm">
+                          Cancel
+                        </SheetClose>
+                        <SheetClose className="w-full max-w-[12rem] p-0">
+                          <Button
+                            onClick={handleNext}
+                            className="focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6"
+                          >
+                            Submit Request
+                          </Button>
+                        </SheetClose>
+                      </div>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          )}
         </section>
       )}
     </>

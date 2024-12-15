@@ -59,6 +59,7 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
     async (error: AxiosError) => {
       const originalRequest = error.config as CustomAxiosRequestConfig;
 
+      // Retry the request only if we encounter a 401 and haven't retried yet
       if (
         originalRequest &&
         error.response?.status === 401 &&
@@ -68,18 +69,21 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
 
         try {
           const newTokens = await getRefreshToken();
-
           useUserStore.setState({
             accessToken: newTokens.access_token,
             refreshToken: newTokens.refresh_token,
             user: newTokens.user,
           });
 
+          // Update the request with the new access token and retry
           originalRequest.headers[
             "Authorization"
           ] = `Bearer ${newTokens.access_token}`;
+
+          // Only retry the request once with the updated token
           return apiInstance(originalRequest);
         } catch (refreshError) {
+          // Handle refresh token failure (e.g., log out the user)
           if (
             axios.isAxiosError(refreshError) &&
             refreshError.response?.status === 403
@@ -94,6 +98,7 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
         }
       }
 
+      // If we can't handle the error, reject it as usual
       return Promise.reject(error);
     }
   );

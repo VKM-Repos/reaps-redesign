@@ -51,9 +51,7 @@ const CreateRequests = () => {
       formData.append("can_edit", JSON.stringify(true));
 
       mutate(formData, {
-        onSuccess: (response) => {
-          console.log(response);
-
+        onSuccess: () => {
           toast({
             title: "Success",
             description: `Saved to drafts`,

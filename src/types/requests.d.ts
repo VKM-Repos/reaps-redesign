@@ -1,6 +1,6 @@
 import { User } from "./user";
 
-interface RequestItems {
+export interface RequestItems {
   id: string;
   research_title: string;
   has_co_principal_investigator: boolean;
@@ -14,6 +14,7 @@ interface RequestItems {
   expiration_date: string;
   supervisor_attestation_statement: string;
   cv: string;
+  status: string;
   letter_of_support_from_investigator: string;
   cover_letter: string;
   proposal: string;
@@ -29,4 +30,8 @@ interface RequestItems {
   updated_at: string;
   can_edit: boolean;
   user: User;
+}
+
+export interface RequestArray {
+  items: RequestItems[];
 }

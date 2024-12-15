@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import CustomFormField, {
   FormFieldType,
 } from "@/components/custom/CustomFormField";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Loader from "@/components/custom/Loader";
 import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import { questionsData } from "./questions";
@@ -15,14 +15,14 @@ import { RequestItems } from "@/types/requests";
 const researchSchema = z.object({
   research_title: z
     .string()
-    .min(3, { message: "Required field" })
+    .min(1, { message: "Required field" })
     .max(255, { message: "Title must not exceed 255 characters" })
     .refine((val) => val.trim().length > 0, {
       message: "Field cannot be empty or just spaces",
     }),
   objectives_of_the_study: z
     .string()
-    .min(6, { message: "Required field" })
+    .min(1, { message: "Required field" })
     .max(2000, { message: "Objectives must not exceed 2000 characters" })
     .refine((val) => val.trim().length > 0, {
       message: "Field cannot be empty or just spaces",
@@ -43,9 +43,24 @@ export default function ResearchInformation({
   const { data, setData } = useEthicalRequestStore();
   const [loading, setLoading] = useState(false);
 
+  const defaultValues = useMemo(() => {
+    return {
+      research_title: String(
+        data.ethical_request_questions?.research_title ??
+          requestDetails?.research_title ??
+          ""
+      ),
+      objectives_of_the_study: String(
+        data.ethical_request_questions?.objectives_of_the_study ??
+          requestDetails?.objectives_of_the_study ??
+          ""
+      ),
+    };
+  }, [data, requestDetails]);
+
   const form = useForm<ResearchSchema>({
     resolver: zodResolver(researchSchema),
-    defaultValues: data.ethical_request_questions || requestDetails,
+    defaultValues,
   });
 
   const {
@@ -56,7 +71,7 @@ export default function ResearchInformation({
   const objectivesValue = useWatch({
     control: form.control,
     name: "objectives_of_the_study",
-    defaultValue: "",
+    defaultValue: defaultValues.objectives_of_the_study,
   });
 
   async function onSubmit(values: ResearchSchema) {

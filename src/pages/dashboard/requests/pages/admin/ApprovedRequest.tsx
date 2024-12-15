@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import { useGET } from "@/hooks/useGET.hook";
-import ReviewRequestsTable from "../reviewer/table";
-import { formatISODate } from "@/lib/utils";
+
+import ReviewerRequestTable from "../../components/request-tables/reviewer";
 
 export default function ApprovedRequest() {
   const [loading, setLoading] = useState(false);
@@ -26,11 +26,12 @@ export default function ApprovedRequest() {
 
   const review_requests_data = approved_requuest?.map((request: any) => {
     return {
-      title: request.request.research_title,
-      applicantName:
+      id: request.id,
+      research_title: request.request.research_title,
+      fullName:
         request.request.user.first_name + " " + request.request.user.last_name,
       status: request.status,
-      submission: formatISODate(request.request.created_at),
+      created_at: request.request.created_at,
       request: request.request,
     };
   });
@@ -83,7 +84,7 @@ export default function ApprovedRequest() {
             </span>
           </div>
         </div>
-        <ReviewRequestsTable reviewTableData={review_requests_data || []} />
+        <ReviewerRequestTable data={review_requests_data || []} />
       </div>
     </>
   );
