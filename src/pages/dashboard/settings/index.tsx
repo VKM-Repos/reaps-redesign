@@ -17,14 +17,14 @@ import LockIcon from "@/components/custom/Icons/LockIcon";
 import MailIcon from "@/components/custom/Icons/MailIcon";
 import ArrowDown from "/icons/arrow-down-01.svg"
 import School from "@/components/custom/sidebar-icons/school";
-import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import useUserStore from "@/store/user-store";
 
 
 
 export default function Settings() {
     const [isOpenIndex, setOpenIndex] = useState<number | null>();
-    const { data } = useOnboardingFormStore();
-    const email = data.onboardingDetails.email || 'johndoe@gmail.com';
+    const { user } = useUserStore();
+    const email = user?.email;
     
 
     const handleToggle = (index: number) => {
