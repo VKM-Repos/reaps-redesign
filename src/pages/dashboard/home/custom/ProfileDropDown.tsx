@@ -210,7 +210,7 @@ function ProfileCard({
           {typeof path === 'string' ? (
             <Link
               to={path}
-              className="hover:text-black flex gap-2 text-[#868687]"
+              className={`${path === '/help' ? "pointer-events-none" : "pointer-events-auto"} hover:text-black flex gap-2 text-[#868687]`}
               onClick={setOpen}
             >
               <span>{icon}</span>
