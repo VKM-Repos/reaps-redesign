@@ -5,6 +5,7 @@ import Loading from "@/components/custom/Icons/Loading";
 import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
 import NotificationCard from "@/pages/dashboard/home/custom/NotificationCard"
 import {useGET} from "@/hooks/useGET.hook.ts";
+import { RequestsTotal } from "@/types/requests";
 
 const notifications = [
     {
@@ -36,7 +37,8 @@ const notifications = [
 ]
 
 
-export default function ResearcherHomePage() {
+
+export default function ResearcherHomePage({ submitted, approved, pending }: RequestsTotal) {
     const {
         data: templates,
     } = useGET({
@@ -48,11 +50,11 @@ export default function ResearcherHomePage() {
         <div className="flex flex-col gap-10">
             <div className="">
                 <div className="w-full my-8 mx-auto flex md:flex-row gap-7 flex-col items-center justify-between">
-                    <SummaryCard icon={GoogleDoc()} label="Submitted" num="24" color="#4D4341"/>
+                    <SummaryCard icon={GoogleDoc()} label="Submitted" num={submitted ?? "0"} color="#4D4341"/>
                 
-                    <SummaryCard icon={Loading()} label="Pending Requests" num="24" color="#713055"/>
+                    <SummaryCard icon={Loading()} label="Pending Requests" num={pending ?? "0"} color="#713055"/>
                 
-                    <SummaryCard icon={DocValidation()} label="Approved Requests" num="24" color="#254D4B"/>
+                    <SummaryCard icon={DocValidation()} label="Approved Requests" num={approved ?? 0} color="#254D4B"/>
                 </div>
             </div>
             {templates?.items?.length > 0 &&

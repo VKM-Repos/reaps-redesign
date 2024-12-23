@@ -7,11 +7,13 @@ import RepeatIcon from "@/components/custom/Icons/Repeat";
 import SignatureIcon from "@/components/custom/Icons/Signature";
 import MoneyIcon from "@/components/custom/Icons/Money";
 import FileRemove from "@/components/custom/Icons/FileRemove";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomChart from "@/components/custom/CustomChart";
 import { ChartConfig } from "@/components/ui/chart";
+import { RequestsTotal } from "@/types/requests";
+import { useGET } from "@/hooks/useGET.hook";
 
-export default function InstitutionAdminHome() {
+export default function InstitutionAdminHome({ submitted, approved, pending }: RequestsTotal) {
   const [activeStatsTab, setActiveStatsTab] = useState("yourStats");
 
   return (
@@ -39,7 +41,7 @@ export default function InstitutionAdminHome() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="yourStats">
-          <ResearcherHomePage />
+          <ResearcherHomePage submitted={submitted} approved={approved} pending={pending}/>
         </TabsContent>
         <TabsContent value="adminStats">
           <InstitutionAdminHomePage />
@@ -114,6 +116,65 @@ const InstitutionAdminHomePage = () => {
     return [`${value}  `, `${name}`];
   };
 
+
+  const fetchUrls: Record<string, string> = {
+    reopened: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Re%20Opened'`,
+    approved_requests: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Approved`,
+    pending: `transactions`,
+    submitted: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Submitted`,
+    requests_to_reviews: `reviews/reviewer`,
+    declined: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Declined`,
+    unconfirmed: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Awaiting%20Payment%20Confirmation`
+  };
+
+  const { data: reopened, refetch: refetch_reopened } = useGET({
+    url: fetchUrls.reopened,
+    queryKey: ["FETCH_REOPENED_REQUESTS"],
+    enabled: !!fetchUrls.reopened,
+  });
+
+  const { data: reviews, refetch: refetch_reviews } = useGET({
+    url: fetchUrls.requests_to_review,
+    queryKey: ["FETCH_REQUESTS_TO_REVIEW"],
+    enabled: !!fetchUrls.reviews,
+  });
+  const { data: submitted, refetch: refetch_submitted } = useGET({
+    url: fetchUrls.submitted,
+    queryKey: ["FETCH_SUBMITTED"],
+    enabled: !!fetchUrls.submitted,
+  });
+
+  const { data: approved_requests, refetch: refetch_approved } = useGET({
+    url: fetchUrls.approved_requests,
+    queryKey: ["FETCH_APPROVED_REQUESTS"],
+    enabled: !!fetchUrls.approved_requests
+  }
+  )
+
+  const { data: unconfirmed, refetch: refetch_unconfirmed } = useGET({
+    url: fetchUrls.unconfirmed,
+    queryKey: ["FETCH_UNCONFIRMED"],
+    enabled: !!fetchUrls.unconfirmed
+  })
+
+  const { data: declined, refetch: refetch_declined } = useGET({
+    url: fetchUrls.declined,
+    queryKey: ["FETCH_DECLINED"],
+    enabled: !!fetchUrls.declined
+  })
+
+  useEffect(() => {
+    refetch_approved();
+    refetch_declined();
+    refetch_reopened();
+    refetch_reviews();
+    refetch_submitted();
+    refetch_unconfirmed();
+  }, []);
+
+
+
+
   return (
     <div className="flex flex-col gap-10 mt-[3.25rem] mb-[14rem]">
       <div className="grid md:grid-cols-4 gap-3 my-8">
@@ -121,7 +182,7 @@ const InstitutionAdminHomePage = () => {
           <span className="max-h-[8.75rem] w-full">
             <InstitutionCards
               icon={GoogleDoc()}
-              label="Submitted Requests"
+              label={submitted?.items.length}
               num="24"
               color="#7D462A"
             />
@@ -131,7 +192,7 @@ const InstitutionAdminHomePage = () => {
             <InstitutionCards
               icon={FileView()}
               label="Review Requests"
-              num="24"
+              num={reviews?.items.length}
               color="#891D1D"
             />
           </span>
@@ -140,7 +201,7 @@ const InstitutionAdminHomePage = () => {
           <InstitutionCards
             icon={RepeatIcon()}
             label="Re-opened Requests"
-            num="24"
+            num={reopened?.items.length}
             color="#56163B"
             image={InstitutionCardBg}
           />
@@ -149,7 +210,7 @@ const InstitutionAdminHomePage = () => {
           <InstitutionCards
             icon={SignatureIcon()}
             label="Approved Requests"
-            num="24"
+            num={approved_requests?.items.length}
             color="#0D304A"
             image={InstitutionCardBg}
           />
@@ -159,7 +220,7 @@ const InstitutionAdminHomePage = () => {
             <InstitutionCards
               icon={MoneyIcon()}
               label="Unconfirmed Payments"
-              num="24"
+              num={unconfirmed?.items.length}
               color="#0D304A"
             />
           </span>
@@ -167,7 +228,7 @@ const InstitutionAdminHomePage = () => {
             <InstitutionCards
               icon={FileRemove()}
               label="Declined Requests"
-              num="24"
+              num={declined?.items.length}
               color="#55336A"
             />
           </span>

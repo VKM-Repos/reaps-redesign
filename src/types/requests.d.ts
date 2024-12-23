@@ -35,3 +35,9 @@ export interface RequestItems {
 export interface RequestArray {
   items: RequestItems[];
 }
+
+export interface RequestsTotal {
+  submitted: any;
+  approved: any;
+  pending: any;
+}
