@@ -118,13 +118,13 @@ const InstitutionAdminHomePage = () => {
 
 
   const fetchUrls: Record<string, string> = {
-    reopened: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Re%20Opened'`,
-    approved_requests: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Approved`,
+    reopened: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Re Opened'`,
+    approved_requests: `approved-requests`,
     pending: `transactions`,
     submitted: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Submitted`,
     requests_to_reviews: `reviews/reviewer`,
     declined: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Declined`,
-    unconfirmed: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Awaiting%20Payment%20Confirmation`
+    unconfirmed: `requests?sort_by=status&sort_direction=asc&skip=0&limit=100&status=Awaiting Payment Confirmation`
   };
 
   const { data: reopened, refetch: refetch_reopened } = useGET({
@@ -182,8 +182,8 @@ const InstitutionAdminHomePage = () => {
           <span className="max-h-[8.75rem] w-full">
             <InstitutionCards
               icon={GoogleDoc()}
-              label={submitted?.items.length}
-              num="24"
+              label="Submitted Requests"
+              num={submitted?.items.length ?? 0}
               color="#7D462A"
             />
           </span>
@@ -192,7 +192,7 @@ const InstitutionAdminHomePage = () => {
             <InstitutionCards
               icon={FileView()}
               label="Review Requests"
-              num={reviews?.items.length}
+              num={reviews?.items.length ?? 0}
               color="#891D1D"
             />
           </span>
@@ -201,7 +201,7 @@ const InstitutionAdminHomePage = () => {
           <InstitutionCards
             icon={RepeatIcon()}
             label="Re-opened Requests"
-            num={reopened?.items.length}
+            num={reopened?.items.length ?? 0}
             color="#56163B"
             image={InstitutionCardBg}
           />
@@ -220,7 +220,7 @@ const InstitutionAdminHomePage = () => {
             <InstitutionCards
               icon={MoneyIcon()}
               label="Unconfirmed Payments"
-              num={unconfirmed?.items.length}
+              num={unconfirmed?.items.length ?? 0}
               color="#0D304A"
             />
           </span>
@@ -228,7 +228,7 @@ const InstitutionAdminHomePage = () => {
             <InstitutionCards
               icon={FileRemove()}
               label="Declined Requests"
-              num={declined?.items.length}
+              num={declined?.items.length ?? 0}
               color="#55336A"
             />
           </span>

@@ -110,12 +110,12 @@ const Home = () => {
           </div>
           {activeRole === "admin" || activeRole === "super admin" ? (
             activeRole === "admin" ? (
-              <InstitutionAdminHome submitted={submitted?.items.length} approved={approved?.items.length} pending={pending.length}/>
+              <InstitutionAdminHome submitted={submitted?.items.length} approved={approved?.items.length} pending={pending?.items.length}/>
             ) : (
               <SuperAdminHome />
             )
           ) : (
-            <ResearcherHomePage submitted={submitted?.items.length} approved={approved?.items.length} pending={pending.length}/>
+            <ResearcherHomePage submitted={submitted?.items.length} approved={approved?.items.length} pending={pending?.items.length}/>
           )}
         </div>
       </div>
