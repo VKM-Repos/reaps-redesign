@@ -121,7 +121,7 @@ export default function UploadTemplate({
 
   return (
     <>
-      {isPending || isSuccess || updating || updated ? (
+      {isPending || isSuccess || updating ? (
         <Loader />
       ) : (
         <div className="w-full mx-auto">
