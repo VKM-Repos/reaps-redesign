@@ -91,9 +91,18 @@ export function UserGradeForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="reviewer">Reviewer</SelectItem>
-                    <SelectItem value="user">Researcher</SelectItem>
+                    {action == "Upgrade" && (
+                      <SelectItem value="admin">Admin</SelectItem>
+                    )}
+                    {user.user_type == "admin" && action == "Downgrade" && (
+                      <SelectItem value="reviewer">Reviewer</SelectItem>
+                    )}
+                    {user.user_type == "user" && action == "Upgrade" && (
+                      <SelectItem value="reviewer">Reviewer</SelectItem>
+                    )}
+                    {action == "Downgrade" && (
+                      <SelectItem value="user">Researcher</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
