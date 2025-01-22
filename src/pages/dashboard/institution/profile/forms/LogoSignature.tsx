@@ -9,6 +9,8 @@ import Camera from "@/components/custom/Icons/Camera";
 import { usePOST } from "@/hooks/usePOST.hook";
 import { toast } from "@/components/ui/use-toast";
 import { useGET } from "@/hooks/useGET.hook";
+import { Pencil } from "lucide-react";
+import { usePATCH } from "@/hooks/usePATCH.hook";
 
 const logoSchema = z.object({
   logo: z
@@ -95,6 +97,16 @@ export const LogoSignature = () => {
     }
   );
 
+  const { mutate: updateLogo, isPending: isUpdatingLogo } = usePATCH(
+    `logos/${logoData?.id}`,
+    { method: "PUT", contentType: "multipart/form-data" }
+  );
+
+  const { mutate: updateSignature, isPending: isUpdatingSignature } = usePATCH(
+    `signatures/${signatureData?.id}`,
+    { method: "PUT", contentType: "multipart/form-data" }
+  );
+
   const {
     register,
     handleSubmit,
@@ -147,13 +159,59 @@ export const LogoSignature = () => {
     if (logo) {
       const logoFormData = new FormData();
       logoFormData.append("file", logo);
-      uploadLogo(logoFormData);
+
+      if (logoData) {
+        updateLogo(logoFormData, {
+          onSuccess: (response) => {
+            console.log(response);
+
+            toast({
+              title: "Feedback",
+              description: "Logo updated",
+              variant: "default",
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+            toast({
+              title: "Error",
+              description: "Failed to update logo",
+              variant: "destructive",
+            });
+          },
+        });
+      } else {
+        uploadLogo(logoFormData);
+      }
     }
 
     if (signature) {
       const signatureFormData = new FormData();
       signatureFormData.append("file", signature);
-      uploadSignature(signatureFormData);
+
+      if (signatureData) {
+        updateSignature(signatureFormData, {
+          onSuccess: (response) => {
+            console.log(response);
+
+            toast({
+              title: "Feedback",
+              description: "Signature updated",
+              variant: "default",
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+            toast({
+              title: "Error",
+              description: "Failed to update signature",
+              variant: "destructive",
+            });
+          },
+        });
+      } else {
+        uploadSignature(signatureFormData);
+      }
     }
   };
 
@@ -183,7 +241,11 @@ export const LogoSignature = () => {
                     onClick={() => logoRef.current?.click()}
                     className="bg-white rounded-full w-9 h-9 flex justify-center items-center absolute -ml-10 cursor-pointer"
                   >
-                    <Camera />
+                    {logoData ? (
+                      <Pencil size={18} className="text-primary" />
+                    ) : (
+                      <Camera />
+                    )}
                   </span>
                 </div>
               </div>
@@ -248,7 +310,11 @@ export const LogoSignature = () => {
                     onClick={() => signatureRef.current?.click()}
                     className="bg-white rounded-full w-9 h-9 flex justify-center items-center absolute -ml-10 cursor-pointer"
                   >
-                    <Camera />
+                    {signatureData ? (
+                      <Pencil size={18} className="text-primary" />
+                    ) : (
+                      <Camera />
+                    )}
                   </span>
                 </div>
               </div>
@@ -299,9 +365,17 @@ export const LogoSignature = () => {
           type="submit"
           variant={`${watchedLogo || watchedSignature ? "default" : "ghost"}`}
           className="my-4 focus:outline-none py-4"
-          disabled={isPendingLogo || isPendingSignature}
+          disabled={
+            isPendingLogo ||
+            isPendingSignature ||
+            isUpdatingLogo ||
+            isUpdatingSignature
+          }
         >
-          {isPendingLogo || isPendingSignature
+          {isPendingLogo ||
+          isPendingSignature ||
+          isUpdatingLogo ||
+          isUpdatingSignature
             ? "Uploading..."
             : "Save Changes"}
         </Button>

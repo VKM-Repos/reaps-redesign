@@ -1,59 +1,155 @@
-import { useRequestsStore } from "@/store/RequestFormStore";
-import SelectSpecialization from "../create-requests/forms/SelectSpecialization";
-import ResearchInfo from "../create-requests/forms/ResearchInfo";
-import AppInfo from "../create-requests/forms/AppInfo";
-import SupportDoc from "../create-requests/forms/SupportDoc";
-import AppSummary from "../create-requests/forms/AppSummary";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
-import { RequestItems } from "@/types/requests";
+import ResearchInformation from "../components/edit-ethical-request-forms/research-information";
+import ApplicationInformation from "../components/edit-ethical-request-forms/application-information";
+import SupportingDocuments from "../components/edit-ethical-request-forms/supporting-document";
+import SavingLoader from "../components/SavingLoader";
+import {
+  EthicalRequestStore,
+  useEthicalRequestStore,
+} from "@/store/ethicalRequestStore";
+import ApplicationSummary from "../components/edit-ethical-request-forms/application-summary";
+import { toast } from "@/components/ui/use-toast";
+import Loader from "@/components/custom/Loader";
+import SelectSpecialization from "../components/edit-ethical-request-forms/select-specialization";
+import { useLocation, useNavigate } from "react-router-dom";
+import { queryClient } from "@/providers";
+import { useGET } from "@/hooks/useGET.hook";
+import { usePATCH } from "@/hooks/usePATCH.hook";
 
-type Props = {
-  request: RequestItems;
-};
+const ModifyRequest = () => {
+  const { data, step, setStep, resetStore } = useEthicalRequestStore();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-const ModifyRequest = ({ request }: Props) => {
-  const { step, setStep } = useRequestsStore();
+  const searchParams = new URLSearchParams(location.search);
 
-  const handleNext = () => setStep(step + 1);
+  const request_id = searchParams.get("id");
 
-  const handleSubmit = async () => {
-    try {
-      console.log(request);
-      // resetStore();
-      // setOpen(false)
-    } catch (error) {
-      console.error("Error modifying request", error);
-    }
-  };
+  const { data: request_details } = useGET({
+    url: `requests/${request_id}`,
+    queryKey: ["GET_REQUEST_DETAILS"],
+  });
 
-  const RenderEdit = () => {
+  const { mutate: editRequest, isPending: isEditing } = usePATCH(
+    `requests/${request_id}`,
+    { method: "PUT", contentType: "multipart/form-data" }
+  );
+
+  const RenderRequestsForm = () => {
+    const handleNext = () => {
+      setStep(step + 1);
+    };
+
+    const { handleSubmit } = useForm<EthicalRequestStore>();
+
+    const onSubmitHandler: SubmitHandler<EthicalRequestStore> = async () => {
+      const formData = new FormData();
+
+      Object.entries(data.ethical_request_files).forEach(([fileName, file]) => {
+        if (file) {
+          formData.append(fileName, file);
+        }
+      });
+
+      Object.entries(data.ethical_request_questions).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value.toString());
+        }
+      });
+
+      formData.append("can_edit", JSON.stringify(true));
+
+      editRequest(formData, {
+        onSuccess: (response) => {
+          console.log(response);
+
+          toast({
+            title: "Success",
+            description: `Request updated`,
+            variant: "default",
+          });
+
+          queryClient.invalidateQueries({
+            predicate: (query: any) => query.queryKey.includes(["requests"]),
+          });
+
+          resetStore();
+
+          navigate("/requests");
+        },
+        onError: (error: any) => {
+          console.error("Error received:", error);
+
+          const errorMessage =
+            error?.detail ||
+            (Array.isArray(error) && error[0]?.message) ||
+            (error?.response?.data && error.response.data.detail) ||
+            "An unexpected error occurred";
+
+          toast({
+            title: "Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+        },
+      });
+    };
+
     switch (step) {
       case 1:
         return <SelectSpecialization handleNext={handleNext} />;
       case 2:
-        return <AppInfo handleNext={handleNext} />;
+        return (
+          <ResearchInformation
+            handleNext={handleNext}
+            requestDetails={request_details}
+          />
+        );
       case 3:
-        return <ResearchInfo handleNext={handleNext} />;
+        return (
+          <ApplicationInformation
+            handleNext={handleNext}
+            requestDetails={request_details}
+          />
+        );
       case 4:
-        return <SupportDoc handleNext={handleNext} />;
+        return (
+          <SupportingDocuments
+            handleNext={handleNext}
+            requestDetails={request_details}
+          />
+        );
       case 5:
-        return <AppSummary handleNext={handleSubmit} />;
+        return (
+          <ApplicationSummary
+            requestDetails={request_details}
+            handleNext={handleSubmit(onSubmitHandler)}
+          />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="flex flex-col gap-[1.25rem] mb-20">
-      <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-        <h1 className="text-[1.875rem] font-bold">Requests</h1>
+    <>
+      {isEditing && <Loader />}
+      <div className="flex flex-col gap-[1.25rem] mb-20">
+        <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
+          <h1 className="text-[1.875rem] font-bold">Requests</h1>
+        </div>
+        <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
+          <RequestsLayout>
+            <div className="relative md:w-[80%] mx-auto">
+              {step > 1 && <SavingLoader />}
+            </div>
+            <RenderRequestsForm />
+          </RequestsLayout>
+        </div>
       </div>
-      <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
-        <RequestsLayout>
-          <RenderEdit />
-        </RequestsLayout>
-      </div>
-    </div>
+    </>
   );
 };
 

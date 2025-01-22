@@ -1,38 +1,68 @@
-import { tableData } from "@/lib/helpers";
-import TableRequests from "../components/table-requests";
-import PageTitle from "../components/PageTitle";
-import SeachFilter from "../components/SeachFilter";
+import PageTitle from "../../components/PageTitle";
+import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import { X } from "lucide-react";
-import { useMediaQuery } from "react-responsive";
+import { useGET } from "@/hooks/useGET.hook";
+import MyRequestsTable from "../../components/table-requests";
+import { formatISODate, mapStatus } from "@/lib/utils";
 
 export default function MyRequest() {
   const [loading, setLoading] = useState(false);
   const [statuses, setStatuses] = useState<string[]>([])
   const [showStatuses, setShowStatuses] = useState(false);
   const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const requestsStatuses = [ "Draft", "Pending", "Approved", "Under Review", "Declined", "Reapproved",];
+  const requestsStatuses = [ 
+    "Draft", 
+    "Pending", 
+    "Approved", 
+    "Under Review", 
+    "Declined", 
+    "Reapproved"
+  ];
   const navigate = useNavigate();
+
+  const { 
+    data: user,
+  } = useGET({
+    url: "auth/me",
+    queryKey: ["GET_MY_ID"],
+  });
+  
+  const { 
+    data: transactions,
+    isPending: isMyRequestsPending 
+  } = useGET({
+    url: "transactions",
+    queryKey: ["GET_MY_REQUESTS_AS_AN_ADMIN"],
+  });
+
+  const my_id = user?.id;
+
+  const my_requests = useMemo(() => {
+    if (!transactions?.items || !my_id) return [];
+    return transactions.items
+      .filter((transaction: any) => transaction.request?.user.id === my_id)
+      .map((transaction: any) => ({
+        title: transaction.request.research_title,
+        status: mapStatus(transaction.status),
+        submission: formatISODate(transaction.request.created_at),
+        request: transaction.request,
+      }));
+  }, [transactions, my_id]);
+
+  
   const handleFunc = () => {
     setLoading(true);
+    console.log(showStatuses);
+    console.log(appliedStatuses)
     setTimeout(() => {
       navigate("/requests/create");
       setLoading(false);
     }, 5000);
-  };
-
-
-  const deleteStatusUpdate = (status: String) => {
-    setAppliedStatuses((prev) => prev.filter((val) => val !== status));
-    if (appliedStatuses.length === 0) {
-      setShowStatuses(false);
-    }
   };
 
   useEffect(() => {
@@ -43,7 +73,7 @@ export default function MyRequest() {
 
   return (
     <>
-      {loading &&
+      {(loading || isMyRequestsPending) &&
         <Loader />}
         <div>
           <div className="flex md:flex-row flex-col gap-5 md:gap-auto justify-between md:items-center justify-between mx-auto w-full">
@@ -59,7 +89,11 @@ export default function MyRequest() {
             </Button>
           </div>
           <div className="flex items-center justify-between mt-12 mb-4">
-            <SeachFilter statuses={statuses} setLoading={setLoading} setShowStatuses={setShowStatuses} setAppliedStatuses={setAppliedStatuses}/>
+            <SeachFilter 
+              statuses={statuses} 
+              setLoading={setLoading} 
+              setShowStatuses={setShowStatuses} 
+              setAppliedStatuses={setAppliedStatuses}/>
             <div className="lg:flex items-center gap-1 hidden">
               <span>
                 <a href="" className="font-semibold underline text-black">
@@ -71,22 +105,7 @@ export default function MyRequest() {
               </span>
             </div>
           </div>
-          {isMobile && showStatuses && appliedStatuses.length !== 0 && (
-              <div className="flex flex-wrap justify-center items-center p-4 gap-3">
-                {appliedStatuses.map((status) => (
-                  <div className="py-2 px-3 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center justify-start gap-2 w-full max-w-fit">
-                    <span className="w-[6px] h-[5px] bg-[#FFD13A] rounded-full"></span>
-                    <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">
-                      {status}
-                    </span>
-                    <span onClick={() => deleteStatusUpdate(status)}>
-                      <X size={10} />
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          <TableRequests tableData={tableData} />
+          <MyRequestsTable tableData={my_requests || []} />
         </div>
       
     </>

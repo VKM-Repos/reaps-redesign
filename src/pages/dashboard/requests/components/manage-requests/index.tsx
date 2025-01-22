@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
-import { Badge } from "@/components/ui/badge";
-import { useGlobalFilter } from "@/context/GlobalFilterContext";
+// import { Badge } from "@/components/ui/badge";
+// import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import View from "@/components/custom/Icons/View";
 import InstitutionRequestSummary from "../../view-requests/admin";
@@ -27,14 +27,14 @@ type TableRequestsProps = {
   }[];
 };
 
-const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-  Awaiting: { bg: "#C2BDFF", text: "#13131A" },
-  Reviewed: { bg: "#A7DAFF", text: "#0D141A" },
-  Assigned: { bg: "#DEFFBD", text: "#161A13" },
-  "In Progress": { bg: "#FFA165", text: "#1A1513" },
-};
+// const statusColorMap: { [key: string]: { bg: string; text: string } } = {
+//   Awaiting: { bg: "#C2BDFF", text: "#13131A" },
+//   Reviewed: { bg: "#A7DAFF", text: "#0D141A" },
+//   Assigned: { bg: "#DEFFBD", text: "#161A13" },
+//   "In Progress": { bg: "#FFA165", text: "#1A1513" },
+// };
 
-function RenderFunctions() {
+function RenderFunctions({ item }: { item: any }) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
@@ -50,7 +50,7 @@ function RenderFunctions() {
                 <View />
                 <span>View</span>
               </SheetTrigger>
-              <InstitutionRequestSummary />
+              <InstitutionRequestSummary request={item} />
             </Sheet>
             <Dialog>
               <DialogTrigger
@@ -72,34 +72,61 @@ export default function ManageRequests({
   institutionTableData,
 }: TableRequestsProps) {
   // const [ tableArray, setTableArray ] = useState(institutionTableData);
-  const { multiStatusDateFilter } = useGlobalFilter();
-  
+  // const { multiStatusDateFilter } = useGlobalFilter();
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
   const columnData: ColumnSetup<any>[] = [
     {
       header: () => (
         <CustomCell
           value={"Title"}
-          className="font-bold w-full min-w-[18.75rem]"
+          className="font-bold w-full min-w-[15rem]"
         />
       ),
-      accessorKey: "title",
+      accessorKey: "research_title",
       cell: (info) => (
-        <CustomCell
-          value={info.getValue()}
-          className="min-w-[18.75rem] w-full"
-        />
+        <CustomCell value={info.getValue()} className="min-w-[15rem] w-full" />
       ),
     },
     {
       header: () => (
         <CustomCell
           value={"Applicant Name"}
-          className="font-bold w-full min-w-[12rem]"
+          className="font-bold w-full min-w-[8rem]"
         />
       ),
-      accessorKey: "applicantName",
-      cell: (info) => (
-        <CustomCell value={info.getValue()} className="min-w-[12rem] w-full" />
+      accessorKey: "user.first_name",
+      cell: (info) => {
+        const applicant_name =
+          info.row.original.user.first_name +
+          " " +
+          info.row.original.user.last_name;
+        return (
+          <CustomCell
+            value={applicant_name}
+            className=" w-full  min-w-[8rem]"
+          />
+        );
+      },
+    },
+    {
+      header: () => (
+        <CustomCell
+          value={"Email"}
+          className="font-bold w-full min-w-[10rem]"
+        />
+      ),
+      accessorKey: "user.email",
+      cell: ({ getValue }) => (
+        <CustomCell
+          className="w-full min-w-[10rem] text-left"
+          value={getValue()}
+        />
       ),
     },
     {
@@ -109,50 +136,49 @@ export default function ManageRequests({
           className="font-bold w-full min-w-[10rem]"
         />
       ),
-      accessorKey: "submission",
+      accessorKey: "created_at",
       cell: ({ getValue }) => (
-        <CustomCell value={getValue()} className="min-w-[10rem] w-full" />
+        <CustomCell className="w-full" value={formatDate(getValue())} />
       ),
-      filterFn: multiStatusDateFilter,
-      enableGlobalFilter: false,
     },
-    {
-      header: "Status",
-      accessorKey: "status",
-      cell: ({ getValue }) => {
-        const item = getValue();
-        return (
-          <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
-            <Badge
-              style={{
-                color: statusColorMap[item]?.text || "#000000",
-                backgroundColor: statusColorMap[item]?.bg || "#192C8A",
-              }}
-              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
-            >
-              <div
-                style={{
-                  backgroundColor: statusColorMap[item]?.text || "#192C8A",
-                }}
-                className="w-[5px] h-[5px] rounded-full"
-              ></div>
-              {item}
-            </Badge>
-          </span>
-        );
-      },
-      filterFn: multiStatusDateFilter,
-      enableGlobalFilter: false,
-    },
+    // {
+    //   header: "Status",
+    //   accessorKey: "status",
+    //   cell: ({ getValue }) => {
+    //     const item = getValue();
+    //     return (
+    //       <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
+    //         <Badge
+    //           style={{
+    //             color: statusColorMap[item]?.text || "#000000",
+    //             backgroundColor: statusColorMap[item]?.bg || "#192C8A",
+    //           }}
+    //           className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
+    //         >
+    //           <div
+    //             style={{
+    //               backgroundColor: statusColorMap[item]?.text || "#192C8A",
+    //             }}
+    //             className="w-[5px] h-[5px] rounded-full"
+    //           ></div>
+    //           {item}
+    //         </Badge>
+    //       </span>
+    //     );
+    //   },
+    //   filterFn: multiStatusDateFilter,
+    //   enableGlobalFilter: false,
+    // },
     {
       accessorKey: "custom",
-      header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
+      header: () => <CustomCell value="" className="w-full md:max-w-[2rem]" />,
       meta: { cellType: "custom" },
-      cell: () => {
+      cell: ({ row }) => {
+        const item = row.original;
         return (
           <CustomCell
-            value={<RenderFunctions />}
-            className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
+            value={<RenderFunctions item={item} />}
+            className="flex justify-center items-center justify-self-end w-full md:max-w-[2rem]"
           />
         );
       },

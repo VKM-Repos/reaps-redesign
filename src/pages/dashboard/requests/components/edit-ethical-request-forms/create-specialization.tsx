@@ -20,11 +20,11 @@ type Props = {
   handleSpecNext: () => void;
 };
 
-const RequestSpecialization = ({ handleSpecNext }: Props) => {
+const CreateSpecialization = ({ handleSpecNext }: Props) => {
   const { step, setStep, resetStore } = useSpecializationsStore();
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-  const { createSpecialization, isPending } = useCreateSpecialization();
+  const { createSpecialization } = useCreateSpecialization();
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -73,7 +73,7 @@ const RequestSpecialization = ({ handleSpecNext }: Props) => {
 
   return (
     <>
-      {isPending || (loading && <Loader />)}
+      {loading && <Loader />}
       <div className="flex flex-col gap-[1.25rem] my-8 px-4">
         <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
           <div className="flex flex-col gap-8 w-full max-w-[37rem] text-center">
@@ -125,4 +125,4 @@ const RequestSpecialization = ({ handleSpecNext }: Props) => {
   );
 };
 
-export default RequestSpecialization;
+export default CreateSpecialization;

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from '@/components/ui/button';
-import BackButton from '@/components/custom/BackButton';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
-import FormInput from '@/components/custom/FormInput';
-import { Props } from '@/types/forms.types';
-import { useOnboardingFormStore } from '@/store/CreateOnboardingFormStore';
-import { useMobileContext } from '@/context/MobileContext';
+import { Button } from "@/components/ui/button";
+import BackButton from "@/components/custom/BackButton";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import FormInput from "@/components/custom/FormInput";
+import { Props } from "@/types/forms.types";
+import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
+import { useMobileContext } from "@/context/MobileContext";
 import {
   Select,
   SelectContent,
@@ -17,39 +17,59 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import { useEffect, useState } from 'react';
-import { Label } from '@/components/ui/label';
-import Loader from '@/components/custom/Loader';
-import { countries, CountryListItemType } from 'country-list-json';
-import countryFlags from '@/lib/data/countries.json';
+import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import Loader from "@/components/custom/Loader";
+import { countries, CountryListItemType } from "country-list-json";
+import countryFlags from "@/lib/data/countries.json";
 
 enum EducationLevel {
-  HIGH_SCHOOL = 'high_school',
-  BACHELORS = 'bachelors',
-  MASTERS = 'masters',
-  PHD = 'phd',
+  HIGH_SCHOOL = "high_school",
+  BACHELORS = "bachelors",
+  MASTERS = "masters",
+  PHD = "phd",
 }
-enum dob {
-  MALE = 'male',
-  FEMALE = 'female',
+enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+}
+enum Description {
+  Student = "Student",
+  Researcher = "Researcher",
 }
 
-const formSchema = z.object({
-  firstName: z.string().min(1, { message: 'Please fill this field' }),
-  lastName: z.string().min(1, { message: 'Please fill this field' }),
-  phoneNumber: z
-    .string()
-    .min(8, { message: 'Please fill this field' })
-    .max(12, {
-      message: 'Phone number should not contain more than 12 characters',
-    })
-    .regex(/^\d+$/, { message: 'Phone number should contain only numbers' }),
-  education_level: z.nativeEnum(EducationLevel),
-  dob: z.string().min(1, { message: 'Please select your date of birth' }),
-  gender: z.enum(['male', 'female'], { message: 'Please select your gender' }),
-});
+const formSchema = z
+  .object({
+    firstName: z.string().min(1, { message: "Please fill this field" }),
+    lastName: z.string().min(1, { message: "Please fill this field" }),
+    phoneNumber: z
+      .string()
+      .min(10, { message: "Phone number must be at least 10 digits" })
+      .max(12, { message: "Phone number must be at most 12 digits" })
+      .regex(/^\d+$/, {
+        message:
+          "Phone number must only contain digits (no spaces or special characters)",
+      }),
+    country_code: z.string().regex(/^\+\d{1,4}$/, {
+      message: "Country code must start with '+' and be 1-4 digits long",
+    }),
+    education_level: z.nativeEnum(EducationLevel, {
+      errorMap: () => ({ message: "Please select a valid education level" }),
+    }),
+    dob: z.string().min(1, { message: "Please select your date of birth" }),
+    gender: z.nativeEnum(Gender, {
+      message: "Please select your gender",
+    }),
+    description: z.nativeEnum(Description, {
+      message: "Please select a description of yourself",
+    }),
+  })
+  .refine((data) => data.country_code && data.phoneNumber, {
+    path: ["phoneNumber"],
+    message: "Both country code and phone number are required",
+  });
 
 type FlagData = {
   url: string;
@@ -60,19 +80,24 @@ type FlagData = {
 };
 
 export function PersonalInfo({ handleNext, handleGoBack }: Props) {
-  const [dialCode, setDialCode] = useState('+93');
-  const [selectedFlag, setSelectedFlag] = useState();
+  const [dialCode, setDialCode] = useState("+234");
+  const [selectedFlag, setSelectedFlag] = useState<string | undefined>(
+    undefined
+  );
+
   const { isMobile } = useMobileContext();
   const { data, setData, loading, setLoading } = useOnboardingFormStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: data?.onboardingDetails.first_name ?? '',
-      lastName: data?.onboardingDetails.last_name ?? '',
-      phoneNumber: data?.onboardingDetails.phone_number ?? '',
-      education_level: data?.onboardingDetails.education_level ?? '',
-      dob: data?.onboardingDetails.date_of_birth ?? '',
-      gender: data?.onboardingDetails.gender ?? '',
+      firstName: data?.onboardingDetails.first_name ?? "",
+      lastName: data?.onboardingDetails.last_name ?? "",
+      phoneNumber: data?.onboardingDetails.phone_number ?? "",
+      country_code: data?.onboardingDetails.country_code ?? "",
+      education_level: data?.onboardingDetails.education_level ?? "",
+      dob: data?.onboardingDetails.date_of_birth ?? "",
+      gender: data?.onboardingDetails.gender ?? "",
+      description: data?.onboardingDetails.description ?? "",
     },
   });
 
@@ -84,20 +109,30 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
   const [flags, setFlags] = useState<FlagData[]>([]);
   const [countriesData, setCountries] = useState<CountryListItemType[]>([]);
 
+  const combinedData = countriesData
+    .filter((country) => flags.some((f) => f.name === country.name))
+    .map((country) => {
+      const flag = flags.find((f) => f.name === country.name);
+      return {
+        ...country,
+        flag: flag?.file_url || "",
+      };
+    });
+
   useEffect(() => {
     setCountries(countries);
     setFlags(countryFlags);
-  }, []);
 
-  const combinedData = countriesData
-    .filter(country => flags.some(f => f.name === country.name))
-    .map(country => {
-      const flag = flags.find(f => f.name === country.name);
-      return {
-        ...country,
-        flag: flag?.file_url || '',
-      };
-    });
+    if (data?.onboardingDetails.country_code) {
+      const country = combinedData.find(
+        (country) => country.dial_code === data?.onboardingDetails.country_code
+      );
+      if (country) {
+        setDialCode(country.dial_code);
+        setSelectedFlag(country?.flag);
+      }
+    }
+  }, [combinedData, data?.onboardingDetails.country_code]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
@@ -108,10 +143,11 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           first_name: values.firstName,
           last_name: values.lastName,
           phone_number: values.phoneNumber,
-          country_code: dialCode,
+          country_code: values.country_code,
           education_level: values.education_level,
           date_of_birth: values.dob,
           gender: values.gender,
+          description: values.description,
         },
       });
       setTimeout(() => {
@@ -137,38 +173,48 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col"
+              className="flex flex-col gap-6"
             >
               <FormInput
                 label="Your first name"
                 placeholder="Jane"
-                {...register('firstName', {
-                  required: 'This field is required',
+                {...register("firstName", {
+                  required: "This field is required",
                 })}
                 className="capitalize"
               />
               <FormInput
                 label="Your last name"
                 placeholder="Doe"
-                {...register('lastName', {
-                  required: 'This field is required',
+                {...register("lastName", {
+                  required: "This field is required",
                 })}
                 className="capitalize"
               />
               <div className="flex gap-2">
                 <div className="mt-2 flex flex-col text-xs">
+                  <Label className="font-md">Country Code</Label>
                   <Select
                     onValueChange={(value: string) => {
+                      // Find the selected country from the combinedData array
                       const selectedCountry: any = combinedData.find(
-                        country => country.name === value
+                        (country) => country.name === value
                       );
+
                       if (selectedCountry) {
+                        // Update the dial code and selected flag
                         setDialCode(selectedCountry.dial_code);
                         setSelectedFlag(selectedCountry.flag);
+
+                        // Set the country_code field in the form
+                        form.setValue(
+                          "country_code",
+                          selectedCountry.dial_code
+                        );
                       }
                     }}
+                    value={form.getValues("country_code")}
                   >
-                    <Label className="font-md">Country Code</Label>
                     <SelectTrigger className="mt-2 w-full min-w-[7.5rem] !gap-2">
                       <SelectValue placeholder="Select a country">
                         {selectedFlag ? (
@@ -182,7 +228,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                             <span>{dialCode}</span>
                           </div>
                         ) : (
-                          'Select a country'
+                          "Select a country"
                         )}
                       </SelectValue>
                     </SelectTrigger>
@@ -190,7 +236,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                       <SelectGroup>
                         <SelectLabel>Country Codes</SelectLabel>
                         {combinedData &&
-                          combinedData.map(country => (
+                          combinedData.map((country) => (
                             <SelectItem key={country.name} value={country.name}>
                               <div className="flex items-center justify-center gap-4">
                                 <span>
@@ -198,6 +244,7 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                                     src={country.flag}
                                     height="24px"
                                     width="24px"
+                                    alt={country.name}
                                   />
                                 </span>
                                 <span>{country.name}</span>
@@ -209,12 +256,13 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     </SelectContent>
                   </Select>
                 </div>
+
                 <div className="w-full">
                   <FormInput
                     label="Phone number"
                     type="number"
-                    {...register('phoneNumber', {
-                      required: 'This field is required',
+                    {...register("phoneNumber", {
+                      required: "This field is required",
                     })}
                     className="no-spinner"
                   />
@@ -224,19 +272,29 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
               <div className="mt-4 flex flex-col text-xs">
                 <Label>Education Level</Label>
                 <Select
-                  onValueChange={value =>
-                    form.setValue('education_level', value as EducationLevel)
+                  onValueChange={(value) =>
+                    form.setValue("education_level", value as EducationLevel)
                   }
+                  value={form.watch("education_level")}
                 >
-                  <SelectTrigger className="mt-2 w-full">
+                  <SelectTrigger className="mt-2 w-full min-w-[7.5rem]">
                     <SelectValue placeholder="Select education level" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="high_school">High School</SelectItem>
-                      <SelectItem value="bachelors">Bachelors</SelectItem>
-                      <SelectItem value="masters">Masters</SelectItem>
-                      <SelectItem value="phd">PhD</SelectItem>
+                      <SelectLabel>Education Level</SelectLabel>
+                      {Object.values(EducationLevel).map((level) => {
+                        const formattedLevel = level
+                          .toLowerCase()
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (char) => char.toUpperCase());
+
+                        return (
+                          <SelectItem key={level} value={level}>
+                            {formattedLevel}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -247,31 +305,63 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                   <FormInput
                     label="Date of Birth"
                     type="date"
-                    {...register('dob', {
-                      required: 'This field is required',
+                    {...register("dob", {
+                      required: "This field is required",
                     })}
                   />
                 </div>
                 <div className="w-full">
                   <Label>Gender</Label>
                   <Select
-                    onValueChange={value =>
-                      form.setValue('gender', value as dob)
+                    onValueChange={(value) =>
+                      form.setValue("gender", value as Gender)
                     }
+                    value={form.watch("gender")}
                   >
-                    <SelectTrigger className="mt-2 w-full">
+                    <SelectTrigger className="mt-2 w-full min-w-[7.5rem]">
                       <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
+                      <SelectGroup>
+                        <SelectLabel>Gender</SelectLabel>
+                        {Object.values(Gender).map((gender) => (
+                          <SelectItem key={gender} value={gender}>
+                            {gender}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="w-full">
+                  <Label>How would you describe yourself?</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      form.setValue("description", value as Description)
+                    }
+                    value={form.watch("description")}
+                  >
+                    <SelectTrigger className="mt-2 w-full min-w-[7.5rem]">
+                      <SelectValue placeholder="Select description" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Description</SelectLabel>
+                        {Object.values(Description).map((description) => (
+                          <SelectItem key={description} value={description}>
+                            {description}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <Button
-                variant={isValid ? 'default' : 'ghost'}
+                variant={isValid ? "default" : "ghost"}
                 className={`my-4 focus:outline-none`}
               >
                 Continue

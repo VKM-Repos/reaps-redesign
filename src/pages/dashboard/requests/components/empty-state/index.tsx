@@ -4,11 +4,13 @@ import GoogleDocLarge from "@/components/custom/Icons/GoogleDocLarge"
 import { useState } from "react"
 import Loader from "@/components/custom/Loader"
 import { useNavigate } from "react-router-dom"
+import useUserStore from "@/store/user-store"
 
 
-export default function EmptyRequests() {
+export default function EmptyRequests({ setActiveTab }: { setActiveTab?: (activeTab: string) => void}) {
     const [ loading, setLoading ] = useState(false);
     const navigate = useNavigate();
+    const { activeRole } = useUserStore();
 
     const handleFunc = () => {
         setLoading(true);
@@ -18,6 +20,12 @@ export default function EmptyRequests() {
           setLoading(false); 
         }, 5000);
       };
+
+    const ViewRequestsToReview = () => {
+        if(setActiveTab) {
+            setActiveTab('review table')
+        }
+    }
     return (
         <>
             {loading && <Loader />}
@@ -28,7 +36,11 @@ export default function EmptyRequests() {
                 <div className="flex flex-col gap-6 w-full max-w-[37rem] text-center">
                     <h1 className="text-[1.625rem] leading-8 font-bold">Research ethics approval made easy</h1>
                     <p>Enjoy efficiency, transparency, and accountability while eliminating material losses and communication delays in the review process</p>
-                    <Button onClick={() => {handleFunc()}} className="flex gap-4 items-center justify-center py-3 px-6 w-full max-w-[16rem] mx-auto"><span><GoogleDoc /></span>Request Ethical Approval</Button>
+                    <div className="flex flex-col gap-3">
+                        <Button onClick={() => {handleFunc()}} className="flex gap-4 items-center justify-center py-3 px-6 w-full max-w-[16rem] mx-auto"><span><GoogleDoc /></span>Request Ethical Approval</Button>
+                        {activeRole === 'reviewer' && <button onClick={() => {ViewRequestsToReview()}} className="border border-[#14155E] text-[#0D1F00] py-3 px-3 text-sm w-full max-w-[16rem] mx-auto">Review Submitted Requests</button>}
+                    </div>
+                    
                 </div>
             </div>
         </>   

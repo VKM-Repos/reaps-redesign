@@ -1,123 +1,60 @@
-import { useStepper } from "@/context/StepperContext";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-type Props = {
-    setStep: (step: number) => void,
-    step: number,
-    array: string[]
+interface StepperProps {
+  step: number;
+  setStep: (step: number) => void;
+  array: string[];
 }
-   
 
-const totalWidth = 600;
+const Stepper: React.FC<StepperProps> = ({ step, setStep, array }) => {
+  const totalSteps = array.length;
+  const progressWidth = ((step - 1) / (totalSteps - 1)) * 100;
 
-export default function Stepper( { setStep, step, array }: Props) {
-    const { stepper, setStepper } = useStepper();
-    const [ball, setBall] = useState<number>(8);
-    const [stepWidths, setStepWidths] = useState<number[]>([]);
-    const stepRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  return (
+    <div className="flex flex-col gap-4 w-full mx-auto min-w-[18.75rem] max-w-[32rem] my-0">
+      {/* Progress Bar */}
+      <div className="relative w-full mx-auto h-[2.5px] bg-gray-200 rounded-full">
+        <motion.div
+          className="absolute top-0 left-0 h-[2.5px] gradient rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${progressWidth}%` }}
+          transition={{ duration: 0.3 }}
+        />
+        <motion.div
+          className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1 w-[9px] h-[9px] bg-primary rounded-full"
+          initial={{ left: "0%" }}
+          animate={{ left: `${progressWidth}%` }}
+          transition={{ duration: 0.3 }}
+        />
+      </div>
 
+      {/* Step Buttons */}
+      <div className="flex items-center justify-between w-full">
+        {array.map((title, index) => {
+          const stepIndex = index + 2;
 
-    const updateBall = (step: number) => {
-        if (step === 0) {
-            setBall(0)
-        }
-        else {
-            setBall(8)
-        }
-    }
+          return (
+            <button
+              key={index}
+              onClick={() => stepIndex <= step && setStep(stepIndex)}
+              style={{
+                cursor: stepIndex > step ? "not-allowed" : "pointer",
+              }}
+              className={`text-sm font-medium py-1 rounded letter-spacing-[1.25%] hidden lg:block ${
+                step === stepIndex
+                  ? "text-primary font-semibold"
+                  : stepIndex <= step
+                  ? "text-primary font-semibold"
+                  : "text-gray-500 hover:text-black"
+              }`}
+            >
+              {title}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
-    const handleStepClick = (index: number) => {
-        if (index <= stepper) {
-            setStep(index + 2);
-            setStepper(index);
-        }
-    }
-
-
-    const calculateGap = () => {
-        const totalStepsWidth = stepWidths.reduce((acc, width) => acc + width, 0);
-        const totalGaps = array.length - 1;
-        const remainingSpace = totalWidth - totalStepsWidth;
-
-        return remainingSpace / totalGaps;
-    };
-
-
-    const calculatePosition = (index: number) => {
-        const gap = calculateGap();
-
-        let totalWidthSoFar = 0;
-        if (index === 0) return 0;
-        if (index === array.length - 1) return 100;
-        for (let i = 0; i < index; i++) {
-            totalWidthSoFar += stepWidths[i] + gap;
-        }
-
-        const middleOfCurrentStep = stepWidths[index] / 2;
-        const position = (totalWidthSoFar + middleOfCurrentStep) / totalWidth * 100;
-
-        return position;
-    };
-
-    useEffect(() => {
-        const widths = stepRefs.current.map((step) =>
-            step ? step.getBoundingClientRect().width : 0    
-        );
-        updateBall(stepper);
-        setStepWidths(widths);
-    }, [step, stepper]);
-
-    useEffect(() => {
-        if (step !== stepper + 1) {
-            setStepper(step - 1); // Sync stepper with step
-        }
-    }, [step]);
-
-    const stepPosition = stepWidths.length ? calculatePosition(stepper) : 0;
-
-
-    return (
-        <div className="flex flex-col gap-4 w-full mx-auto min-w-[18.75rem] max-w-[32rem] my-0">
-            <div className="relative h-[9px] w-full overflow-hidden rounded-full flex items-center justify-center">
-                <div className="relative bg-[#16330014] h-[2px] relative w-full rounded-full flex items-center justify-center">
-                    <div
-                    className="gradient w-full h-full absolute"
-                    style={{ transform: `translateX(-${100 - (stepPosition )}%)` }}
-                    ></div>
-                    <div
-                        className="rounded-full w-2 h-2 bg-[#192C8A] absolute"
-                        style={{ left: `calc(${stepPosition}% - ${ball}px)` }}
-                    ></div>
-                </div>
-                
-            </div>
-            <div className="flex justify-between items-center">
-            {array.map((label, index) => {
-                    let textColor = "text-[#454745]"; 
-                    let fontWeight = "font-[400]";
-
-                    if (stepper > index) {
-                        fontWeight = "font-[600]";
-                    } else if (stepper === index) {
-                        textColor = "text-black"; 
-                        fontWeight = "font-[600]";
-                    }
-                    // update stepper to click on step names
-
-                    return (
-                        <p
-                            key={index}
-                            ref={(el) => (stepRefs.current[index] = el)}
-                            className={`${textColor} ${fontWeight} text-sm letter-spacing-[1.25%] hidden lg:block`}
-                            style={{ cursor: index > stepper ? 'not-allowed' : 'pointer' }}
-                            onClick={() => {handleStepClick(index)}}
-                        >
-                            {label}
-                        </p>
-                    );
-                })}
-            </div>
-        </div>
-       
-);
-}
+export default Stepper;

@@ -77,7 +77,7 @@ export default function UploadTemplate({
     refetch();
   };
 
-  const { mutate, isPending } = usePOST("templates", {
+  const { mutate, isPending, isSuccess } = usePOST("templates", {
     contentType: " multipart/form-data",
     callback: successCallBack,
     errorCallBack: errorCallBack,
@@ -104,7 +104,14 @@ export default function UploadTemplate({
         mutate(formData);
         break;
       case "edit":
-        update(formData);
+        update(formData, {
+          onSuccess: () => {
+            console.log("Successfully uploaded");
+          },
+          onError: () => {
+            console.log("Error updating template");
+          },
+        });
         break;
       default:
         console.error("Invalid action");
@@ -114,7 +121,7 @@ export default function UploadTemplate({
 
   return (
     <>
-      {isPending || updating ? (
+      {isPending || isSuccess || updating ? (
         <Loader />
       ) : (
         <div className="w-full mx-auto">

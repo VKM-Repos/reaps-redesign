@@ -6,43 +6,44 @@ import SearchIcon from "@/components/custom/Icons/Search";
 import Loader from "@/components/custom/Loader";
 import { DialogContent } from "@/components/ui/dialog";
 import { useGET } from "@/hooks/useGET.hook";
-import { useRequestsStore } from "@/store/RequestFormStore";
 import { useState } from "react";
+import { ReviewersList } from "./ReviewersList";
+import { useDELETE } from "@/hooks/useDelete.hook";
+import { toast } from "@/components/ui/use-toast";
 
-export default function AssignReviewer({
-  setLoader,
-}: {
-  setLoader: (loading: boolean) => void;
-}) {
-  const { reviewers, setReviewer, setReviewers, setSuccess } =
-    useRequestsStore();
-  const [numOfReviewers, setNumOfReviewers] = useState(0);
-  const [assignedReviewers, setAssignedReviewers] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const { data: reviewerss, isPending } = useGET({
-    url: "users?user_type=reviewer",
-    queryKey: ["GET_USERS_IN_ASSIGN_REVIEW_PAGE"],
+export default function AssignReviewer({ request }: { request: any }) {
+  const {
+    data: assigned,
+    isPending: fetching_assigned,
+    refetch: refetch_assigned,
+  } = useGET({
+    url: `reviews/request/${request?.id}`,
+    queryKey: ["GET_ASSIGNED_IN_ASSIGN_REVIEW_PAGE", request?.id],
   });
-  function submitReviewerData(reviewer: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }) {
-    if (numOfReviewers >= 2 || assignedReviewers[reviewer.id]) return;
-    setLoader(true);
-    setReviewer({ firstName: reviewer.firstName, lastName: reviewer.lastName });
 
-    setTimeout(() => {
-      setLoader(false);
-      setTimeout(() => {
-        setSuccess(true);
-        setNumOfReviewers((prev) => prev + 1);
-        setAssignedReviewers((prev) => ({ ...prev, [reviewer.id]: true }));
-        setReviewers([...reviewers, reviewer]);
-      }, 500);
-    }, 3000);
+  const { mutate: un_assign, isPending: un_assigning } =
+    useDELETE("reviews/unassign");
+  function un_assign_review(request_id: string, reviewer_id: string) {
+    un_assign(
+      { request_id, reviewer_id },
+      {
+        onSuccess: (response: any) => {
+          refetch_assigned();
+          toast({
+            title: "Feedback",
+            description: response.data.message,
+            variant: "default",
+          });
+        },
+        onError: (error: any) => {
+          toast({
+            title: "Error",
+            description: error.response.data.detail,
+            variant: "destructive",
+          });
+        },
+      }
+    );
   }
 
   const columnData: ColumnSetup<any>[] = [
@@ -53,7 +54,7 @@ export default function AssignReviewer({
           className="w-full min-w-[15rem] font-semibold text-[#0C0D0F]"
         />
       ),
-      accessorKey: "first_name",
+      accessorKey: "reviewer.first_name",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -68,7 +69,7 @@ export default function AssignReviewer({
           className="w-full min-w-[15rem] font-semibold text-[#0C0D0F]"
         />
       ),
-      accessorKey: "last_name",
+      accessorKey: "reviewer.last_name",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -79,18 +80,19 @@ export default function AssignReviewer({
     {
       header: () => (
         <CustomCell
-          value={"Email"}
-          className="w-full min-w-[22rem] font-semibold text-[#0C0D0F]"
+          value={"Status"}
+          className="w-full min-w-[15rem] font-semibold text-[#0C0D0F]"
         />
       ),
-      accessorKey: "email",
+      accessorKey: "status",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
-          className="w-full min-w-[22rem] text-black"
+          className="w-full min-w-[15rem] text-black"
         />
       ),
     },
+
     {
       accessorKey: "custom",
       header: () => (
@@ -102,20 +104,15 @@ export default function AssignReviewer({
       meta: { cellType: "custom" },
       cell: ({ row }) => {
         const item = row.original;
-        const isAssigned = assignedReviewers[item.id];
-        const maxAssigned = numOfReviewers >= 2;
 
         return (
           <button
-            disabled={isAssigned || maxAssigned}
-            className={`${
-              isAssigned || maxAssigned
-                ? "bg-ghost text-ghost-foreground"
-                : "bg-primary text-white"
-            } py-3 px-6 font-semibold rounded-[0.5rem] max-w-fit`}
-            onClick={() => submitReviewerData(item)}
+            className={`
+                bg-primary text-white
+             py-3 px-6 font-semibold rounded-[0.5rem] max-w-fit`}
+            onClick={() => un_assign_review(item.request.id, item.reviewer.id)}
           >
-            {isAssigned ? "Assigned" : "Assign"}
+            Un-assign
           </button>
         );
       },
@@ -130,7 +127,7 @@ export default function AssignReviewer({
 
   return (
     <>
-      {isPending ? (
+      {fetching_assigned || un_assigning ? (
         <Loader />
       ) : (
         <DialogContent className="fixed !w-full !max-w-[70rem] h-[90%] mx-auto">
@@ -152,16 +149,23 @@ export default function AssignReviewer({
                       className="border-none hover:border-none focus:border-none w-full focus-visible:outline-none text-sm"
                     />
                   </div>
+                  <ReviewersList refetch={refetch_assigned} request={request} />
                   {/* <DialogClose disabled={numOfReviewers < 1}>
                                 {/* assign at least one reviewer before close 
                                 <Button variant={numOfReviewers < 1 ? "ghost" : "default"} className="!py-3 !px-6 font-semibold rounded-[0.5rem] w-full max-w-[9.375rem]">Finish</Button>
                             </DialogClose>  */}
                 </div>
               </div>
+              <h1 className="font-semibold text-[1.2rem]">
+                Reviewers for{" "}
+                <span className="text-primary">
+                  ({request?.research_title})
+                </span>
+              </h1>
               <div className="w-full max-w-[95%] ">
                 <CustomTable
                   columns={columnData}
-                  data={reviewerss?.items || []}
+                  data={assigned?.items || []}
                   localSearch={searchTerm}
                   setLocalSearch={setSearchTerm}
                   customTableClassName="p-5 w-full"
