@@ -73,49 +73,74 @@ export default function ManageRequests({
 }: TableRequestsProps) {
   // const [ tableArray, setTableArray ] = useState(institutionTableData);
   // const { multiStatusDateFilter } = useGlobalFilter();
-
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
   const columnData: ColumnSetup<any>[] = [
     {
       header: () => (
         <CustomCell
           value={"Title"}
-          className="font-bold w-full min-w-[18.75rem]"
+          className="font-bold w-full min-w-[15rem]"
         />
       ),
       accessorKey: "research_title",
       cell: (info) => (
-        <CustomCell
-          value={info.getValue()}
-          className="min-w-[18.75rem] w-full"
-        />
+        <CustomCell value={info.getValue()} className="min-w-[15rem] w-full" />
       ),
     },
     {
       header: () => (
         <CustomCell
           value={"Applicant Name"}
-          className="font-bold w-full min-w-[12rem]"
+          className="font-bold w-full min-w-[8rem]"
         />
       ),
       accessorKey: "user.first_name",
-      cell: (info) => (
-        <CustomCell value={info.getValue()} className="min-w-[12rem] w-full" />
+      cell: (info) => {
+        const applicant_name =
+          info.row.original.user.first_name +
+          " " +
+          info.row.original.user.last_name;
+        return (
+          <CustomCell
+            value={applicant_name}
+            className=" w-full  min-w-[8rem]"
+          />
+        );
+      },
+    },
+    {
+      header: () => (
+        <CustomCell
+          value={"Email"}
+          className="font-bold w-full min-w-[10rem]"
+        />
+      ),
+      accessorKey: "user.email",
+      cell: ({ getValue }) => (
+        <CustomCell
+          className="w-full min-w-[10rem] text-left"
+          value={getValue()}
+        />
       ),
     },
-    // {
-    //   header: () => (
-    //     <CustomCell
-    //       value={"Submission"}
-    //       className="font-bold w-full min-w-[10rem]"
-    //     />
-    //   ),
-    //   accessorKey: "submission",
-    //   cell: ({ getValue }) => (
-    //     <CustomCell value={getValue()} className="min-w-[10rem] w-full" />
-    //   ),
-    //   filterFn: multiStatusDateFilter,
-    //   enableGlobalFilter: false,
-    // },
+    {
+      header: () => (
+        <CustomCell
+          value={"Submission"}
+          className="font-bold w-full min-w-[10rem]"
+        />
+      ),
+      accessorKey: "created_at",
+      cell: ({ getValue }) => (
+        <CustomCell className="w-full" value={formatDate(getValue())} />
+      ),
+    },
     // {
     //   header: "Status",
     //   accessorKey: "status",
@@ -146,14 +171,14 @@ export default function ManageRequests({
     // },
     {
       accessorKey: "custom",
-      header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
+      header: () => <CustomCell value="" className="w-full md:max-w-[2rem]" />,
       meta: { cellType: "custom" },
       cell: ({ row }) => {
         const item = row.original;
         return (
           <CustomCell
             value={<RenderFunctions item={item} />}
-            className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
+            className="flex justify-center items-center justify-self-end w-full md:max-w-[2rem]"
           />
         );
       },

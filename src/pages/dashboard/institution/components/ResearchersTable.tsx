@@ -58,24 +58,32 @@ function RenderFunctions({
         </DropdownMenuTrigger>
         <DropdownMenuContent className="rounded-xl rounded-r-none py-2 px-4 w-fit .dropdown-shadow">
           <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <ArrowUp />
-              <UserGradeDialog refetch={refetch} user={item} title="Upgrade" />
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <ArrowDown />
-              <UserGradeDialog
-                refetch={refetch}
-                user={item}
-                title="Downgrade"
-              />
-            </DropdownMenuItem>
+            {item?.user_type != "admin" && (
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <ArrowUp />
+                <UserGradeDialog
+                  refetch={refetch}
+                  user={item}
+                  title="Upgrade"
+                />
+              </DropdownMenuItem>
+            )}
+            {item?.user_type != "user" && (
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <ArrowDown />
+                <UserGradeDialog
+                  refetch={refetch}
+                  user={item}
+                  title="Downgrade"
+                />
+              </DropdownMenuItem>
+            )}
             {activeRole === "super admin" && (
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()}

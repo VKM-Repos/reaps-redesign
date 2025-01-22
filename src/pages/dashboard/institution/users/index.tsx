@@ -7,10 +7,7 @@ import SearchIcon from "@/components/custom/Icons/Search";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import EmptyRequests from "../../requests/components/empty-state";
 
-import FilterIcon from "@/components/custom/Icons/Filter";
-// import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
-// import AdminsTable from "../components/AdminsTable";
 import { useGET } from "@/hooks/useGET.hook";
 import ResearchersTable from "../components/ResearchersTable";
 import useUserStore from "@/store/user-store";
@@ -69,10 +66,10 @@ export default function Requests() {
                       />
                     </div>
                     <div className="flex gap-2 p-1 items-center w-fit">
-                      <FilterIcon />
+                      {/* <FilterIcon />
                       <p className="font-semibold text-[#6A6A6B] inter">
                         Filters
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>
