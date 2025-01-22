@@ -37,6 +37,7 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
     headers: {
       "Content-Type": "application/json",
     },
+    timeout: 10000
     // withCredentials: true,  // enabling this causes cors error on dev, dont know why
   });
 
