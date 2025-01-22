@@ -1,148 +1,385 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { useForm, SubmitHandler, useWatch } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import ins_logo from "@/assets/ins_logo.svg";
-import ins_Signature from "@/assets/ins_signature.svg";
-import Loader from "@/components/custom/Loader";
+import ins_signature from "@/assets/ins_signature.svg";
 import Camera from "@/components/custom/Icons/Camera";
+import { usePOST } from "@/hooks/usePOST.hook";
+import { toast } from "@/components/ui/use-toast";
+import { useGET } from "@/hooks/useGET.hook";
+import { Pencil } from "lucide-react";
+import { usePATCH } from "@/hooks/usePATCH.hook";
 
-export const LogoSignature = ({ onSave }: { onSave: () => void }) => {
-  const [loading, setLoader] = useState(false);
-  const [selectedLogo, setSelectedLogo] = useState<File | string>("");
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+const logoSchema = z.object({
+  logo: z
+    .instanceof(File)
+    .optional()
+    .refine(
+      (file) => !file || ["image/jpeg", "image/png"].includes(file.type),
+      {
+        message: "Logo must be a JPG or PNG image",
+      }
+    ),
+});
 
-  const [selectedSignature, setSelectedSignature] = useState<File | string>("");
-  const [signaturePreview, setSignaturePreview] = useState<string | null>(null);
-  const [validationError, setValidationError] = useState(false);
+const signatureSchema = z.object({
+  signature: z
+    .instanceof(File)
+    .optional()
+    .refine(
+      (file) => !file || ["image/jpeg", "image/png"].includes(file.type),
+      {
+        message: "Signature must be a JPG or PNG image",
+      }
+    ),
+});
+
+type LogoSignatureFormValues = {
+  logo?: File;
+  signature?: File;
+};
+
+export const LogoSignature = () => {
   const logoRef = useRef<HTMLInputElement>(null);
   const signatureRef = useRef<HTMLInputElement>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [signaturePreview, setSignaturePreview] = useState<string | null>(null);
 
-  const handleChooseLogo = () => {
-    logoRef.current?.click();
-  };
-  const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = e.target.files?.[0];
-    setValidationError(false);
-    if (imageFile) {
-      // Update the logo in the store with the URL
-      const imageUrl = URL.createObjectURL(imageFile);
-      setLogoPreview(imageUrl);
-      setSelectedLogo(imageFile);
-      console.log(validationError);
-      onSave();
+  const {
+    data: logoData,
+    isPending: isLogoLoading,
+    isError: logoError,
+    refetch: refetchLogo,
+  } = useGET({
+    url: "logos/details",
+    queryKey: ["logo"],
+    withAuth: true,
+    enabled: true,
+  });
+  const {
+    data: signatureData,
+    isPending: isSignatureLoading,
+    isError: signatureError,
+    refetch: refetchSignature,
+  } = useGET({
+    url: "signatures/details",
+    queryKey: ["signature"],
+    withAuth: true,
+    enabled: true,
+  });
+
+  const { mutate: uploadLogo, isPending: isPendingLogo } = usePOST("logos", {
+    contentType: "multipart/form-data",
+    callback: (data) => {
+      setLogoPreview(data.logo_path);
+      toast({
+        title: "Feedback",
+        description: "Logo uploaded successfully",
+      });
+    },
+  });
+
+  // TODO: PUT request to update logo and signature because reuploading  wont change the previous image
+
+  const { mutate: uploadSignature, isPending: isPendingSignature } = usePOST(
+    "signatures",
+    {
+      contentType: "multipart/form-data",
+      callback: (data) => {
+        setSignaturePreview(data.signature_path);
+        toast({
+          title: "Feedback",
+          description: "Signature uploaded successfully",
+        });
+      },
+    }
+  );
+
+  const { mutate: updateLogo, isPending: isUpdatingLogo } = usePATCH(
+    `logos/${logoData?.id}`,
+    { method: "PUT", contentType: "multipart/form-data" }
+  );
+
+  const { mutate: updateSignature, isPending: isUpdatingSignature } = usePATCH(
+    `signatures/${signatureData?.id}`,
+    { method: "PUT", contentType: "multipart/form-data" }
+  );
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    control,
+  } = useForm<LogoSignatureFormValues>({
+    resolver: zodResolver(z.union([logoSchema, signatureSchema])),
+  });
+
+  const watchedLogo = useWatch({
+    control,
+    name: "logo",
+  });
+
+  const watchedSignature = useWatch({
+    control,
+    name: "signature",
+  });
+
+  useEffect(() => {
+    if (logoData?.logo_path) {
+      setLogoPreview(logoData.logo_path);
+    }
+    if (signatureData?.signature_path) {
+      setSignaturePreview(signatureData.signature_path);
+    }
+  }, [logoData, signatureData]);
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setLogoPreview(URL.createObjectURL(file));
+      setValue("logo", file);
     }
   };
 
-  const handleChooseSignature = () => {
-    signatureRef.current?.click();
-  };
-  const handleSignatureChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const imageFile = e.target.files?.[0];
-    setValidationError(false);
-    if (imageFile) {
-      // Update the logo in the store with the URL
-      const imageUrl = URL.createObjectURL(imageFile);
-      setSignaturePreview(imageUrl);
-      setSelectedSignature(imageFile);
+  const handleSignatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSignaturePreview(URL.createObjectURL(file));
+      setValue("signature", file);
     }
   };
-  function onSubmit(e: any) {
-    e.preventDefault();
-    setLoader(true);
-    console.log(selectedSignature, selectedLogo);
-  }
+
+  const onSubmit: SubmitHandler<LogoSignatureFormValues> = ({
+    logo,
+    signature,
+  }) => {
+    if (logo) {
+      const logoFormData = new FormData();
+      logoFormData.append("file", logo);
+
+      if (logoData) {
+        updateLogo(logoFormData, {
+          onSuccess: (response) => {
+            console.log(response);
+
+            toast({
+              title: "Feedback",
+              description: "Logo updated",
+              variant: "default",
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+            toast({
+              title: "Error",
+              description: "Failed to update logo",
+              variant: "destructive",
+            });
+          },
+        });
+      } else {
+        uploadLogo(logoFormData);
+      }
+    }
+
+    if (signature) {
+      const signatureFormData = new FormData();
+      signatureFormData.append("file", signature);
+
+      if (signatureData) {
+        updateSignature(signatureFormData, {
+          onSuccess: (response) => {
+            console.log(response);
+
+            toast({
+              title: "Feedback",
+              description: "Signature updated",
+              variant: "default",
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+            toast({
+              title: "Error",
+              description: "Failed to update signature",
+              variant: "destructive",
+            });
+          },
+        });
+      } else {
+        uploadSignature(signatureFormData);
+      }
+    }
+  };
+
   return (
-    <>
-      {loading && <Loader />}
-      <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
-        <form onSubmit={(e) => onSubmit(e)} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-8 text-xs mt-2">
-            <div>
-              <span className="font-inter font-semibold text-md">
-                Institution Logo
-              </span>
-              <div className="flex gap-7 items-center">
-                <div className="bg-slate-300 rounded-full flex justify-center w-[100px] aspect-square object-cover">
+    <div className="md:w-3/5 w-full max-w-[358px] md:max-w-[526px] my-0">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 text-xs mt-2">
+          {/* Logo Upload */}
+          <div>
+            <span className="font-inter font-semibold text-md">
+              Institution Logo
+            </span>
+
+            <div className="flex gap-7 items-center">
+              <div className="bg-slate-300 rounded-full flex justify-center w-[100px] aspect-square object-cover">
+                {isLogoLoading ? (
+                  <div className="w-[100px] aspect-square bg-gray-200 animate-pulse rounded-full" />
+                ) : (
                   <img
                     src={logoPreview || ins_logo}
                     alt="Institution Logo"
                     className="w-[100px] aspect-square object-cover rounded-full"
                   />
-                  <div className="relative flex items-end">
-                    <span className="bg-white rounded-full w-9 h-9 flex justify-center items-center absolute -ml-10 cursor-pointer">
+                )}
+                <div className="relative flex items-end">
+                  <span
+                    onClick={() => logoRef.current?.click()}
+                    className="bg-white rounded-full w-9 h-9 flex justify-center items-center absolute -ml-10 cursor-pointer"
+                  >
+                    {logoData ? (
+                      <Pencil size={18} className="text-primary" />
+                    ) : (
                       <Camera />
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-inter font-semibold text-md">
-                    Drop your photo here or{" "}
-                    <input
-                      ref={logoRef}
-                      type="file"
-                      className="hidden"
-                      name="logo"
-                      onChange={handleLogoChange}
-                    />
-                    <span
-                      onClick={handleChooseLogo}
-                      className="text-primary underline cursor-pointer"
-                    >
-                      select a file
-                    </span>
+                    )}
                   </span>
-                  <span>Supports JPG,PNG.</span>
                 </div>
               </div>
-            </div>
-            <div>
-              <span className="font-inter font-semibold text-md">
-                Institution Signature
-              </span>
-              <div className="flex gap-7 items-center">
-                <div className="bg-slate-300 rounded-full flex w-[100px] aspect-square object-cover">
-                  <img
-                    src={signaturePreview || ins_Signature}
-                    alt="Institution Logo"
-                    className="w-[100px] aspect-square object-cover rounded-full"
+              <div className="flex flex-col gap-1">
+                <span className="font-inter font-semibold text-md">
+                  Drop your photo here or{" "}
+                  <input
+                    ref={logoRef}
+                    type="file"
+                    className="hidden"
+                    name="logo"
+                    onChange={handleLogoChange}
                   />
-                  <div className="relative flex items-end">
-                    <span className="bg-white rounded-full w-9 h-9 flex justify-center items-center absolute -ml-10 cursor-pointer">
-                      <Camera />
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-inter font-semibold text-md">
-                    Drop your photo here or{" "}
-                    <input
-                      ref={signatureRef}
-                      type="file"
-                      className="hidden"
-                      name="logo"
-                      onChange={handleSignatureChange}
-                    />
-                    <span
-                      onClick={handleChooseSignature}
-                      className="text-primary underline cursor-pointer"
-                    >
-                      select a file
-                    </span>
+                  <span
+                    onClick={() => logoRef.current?.click()}
+                    className="text-primary underline cursor-pointer"
+                  >
+                    select a file
                   </span>
-                  <span>Supports JPG,PNG.</span>
-                </div>
+                </span>
+                <span>Supports JPG,PNG.</span>
+                <span className="text-red-500">{errors.logo?.message}</span>
+                {logoError && (
+                  <p className="text-red-500">
+                    Cannot fetch logo{" "}
+                    <span
+                      className="text-black font-semibold cursor-pointer hover:underline"
+                      onClick={() => refetchLogo()}
+                    >
+                      Try Again
+                    </span>
+                  </p>
+                )}
               </div>
+              <input
+                type="file"
+                className="hidden"
+                {...register("logo")}
+                onChange={handleLogoChange}
+              />
             </div>
           </div>
-          <Button
-            variant={selectedLogo && selectedSignature ? "default" : "ghost"}
-            className={`my-4 focus:outline-none py-4`}
-          >
-            Save
-          </Button>
-        </form>
-      </div>
-    </>
+
+          {/* Signature Upload */}
+          <div>
+            <span className="font-inter font-semibold text-md">
+              Institution Signature
+            </span>
+            <div className="flex gap-7 items-center">
+              <div className="bg-slate-300 rounded-full flex justify-center w-[100px] aspect-square object-cover">
+                {isSignatureLoading ? (
+                  <div className="w-[100px] aspect-square bg-gray-200 animate-pulse rounded-full" />
+                ) : (
+                  <img
+                    src={signaturePreview || ins_signature}
+                    alt="Institution Signature"
+                    className="w-[100px] aspect-square object-cover rounded-full"
+                  />
+                )}
+                <div className="relative flex items-end">
+                  <span
+                    onClick={() => signatureRef.current?.click()}
+                    className="bg-white rounded-full w-9 h-9 flex justify-center items-center absolute -ml-10 cursor-pointer"
+                  >
+                    {signatureData ? (
+                      <Pencil size={18} className="text-primary" />
+                    ) : (
+                      <Camera />
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="font-inter font-semibold text-md">
+                  Drop your photo here or{" "}
+                  <input
+                    ref={signatureRef}
+                    type="file"
+                    className="hidden"
+                    name="signature"
+                    onChange={handleSignatureChange}
+                  />
+                  <span
+                    onClick={() => signatureRef.current?.click()}
+                    className="text-primary underline cursor-pointer"
+                  >
+                    select a file
+                  </span>
+                </span>
+                <span>Supports JPG,PNG.</span>
+                <span className="text-red-500">
+                  {errors.signature?.message}
+                </span>
+                {signatureError && (
+                  <p className="text-red-500">
+                    Cannot fetch signature{" "}
+                    <span
+                      className="text-black font-semibold cursor-pointer hover:underline"
+                      onClick={() => refetchSignature()}
+                    >
+                      Try Again
+                    </span>
+                  </p>
+                )}
+              </div>
+              <input
+                type="file"
+                className="hidden"
+                {...register("signature")}
+                onChange={handleSignatureChange}
+              />
+            </div>
+          </div>
+        </div>
+        <Button
+          type="submit"
+          variant={`${watchedLogo || watchedSignature ? "default" : "ghost"}`}
+          className="my-4 focus:outline-none py-4"
+          disabled={
+            isPendingLogo ||
+            isPendingSignature ||
+            isUpdatingLogo ||
+            isUpdatingSignature
+          }
+        >
+          {isPendingLogo ||
+          isPendingSignature ||
+          isUpdatingLogo ||
+          isUpdatingSignature
+            ? "Uploading..."
+            : "Save Changes"}
+        </Button>
+      </form>
+    </div>
   );
 };

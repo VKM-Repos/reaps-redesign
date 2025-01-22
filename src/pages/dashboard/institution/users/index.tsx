@@ -5,12 +5,12 @@ import Loader from "@/components/custom/Loader";
 import SearchIcon from "@/components/custom/Icons/Search";
 
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import EmptyRequests from "../../requests/components/emptystate";
+import EmptyRequests from "../../requests/components/empty-state";
 
 import FilterIcon from "@/components/custom/Icons/Filter";
-import ReviwersTable from "../components/ReviewersTable";
+// import ReviwersTable from "../components/ReviewersTable";
 import { AddNewUserButton } from "../components/AddNewUserButton";
-import AdminsTable from "../components/AdminsTable";
+// import AdminsTable from "../components/AdminsTable";
 import { useGET } from "@/hooks/useGET.hook";
 import ResearchersTable from "../components/ResearchersTable";
 import useUserStore from "@/store/user-store";
@@ -45,7 +45,7 @@ export default function Requests() {
         {/* tab */}
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {activeRole === 'admin' ? (
+            {activeRole === "admin" || activeRole === "super admin" ? (
               <Tabs
                 defaultValue="request users"
                 onValueChange={(val) => setActiveTab(val)}
@@ -87,7 +87,7 @@ export default function Requests() {
                   />
                 </TabsContent>
                 <TabsContent value="review users">
-                  <ReviwersTable
+                  <ResearchersTable
                     usersTableData={
                       users?.items.filter(
                         (user: any) => user.user_type == "reviewer"
@@ -97,7 +97,7 @@ export default function Requests() {
                   />
                 </TabsContent>
                 <TabsContent value="admin users">
-                  <AdminsTable
+                  <ResearchersTable
                     usersTableData={
                       users?.items.filter(
                         (user: any) => user.user_type == "admin"

@@ -5,17 +5,17 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '../ui/sheet';
-import { Button } from '../ui/button';
-import { useMediaQuery } from 'react-responsive';
-import LogOutLarge from './Icons/LogOutLarge';
-import { useNavigate } from 'react-router-dom';
-import useUserStore from '@/store/user-store';
-import { useCallback } from 'react';
-import { toast } from '../ui/use-toast';
+} from "../ui/sheet";
+import { Button } from "../ui/button";
+import { useMediaQuery } from "react-responsive";
+import LogOutLarge from "./Icons/LogOutLarge";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/store/user-store";
+import { useCallback } from "react";
+import { toast } from "../ui/use-toast";
 
 export default function Logout({ setLoading }: { setLoading: any }) {
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const { reset, refreshToken } = useUserStore();
   const navigate = useNavigate();
 
@@ -26,34 +26,34 @@ export default function Logout({ setLoading }: { setLoading: any }) {
       const response = await fetch(
         `${baseURL}auth/token/revoke?token=${refreshToken}`,
         {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
-            'Content-Type': 'application/json',
-            'Institution-Context': 'default_context',
+            "Content-Type": "application/json",
+            "Institution-Context": "ai",
           },
         }
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        const errorMessage = errorData.detail || 'error logging out';
+        const errorMessage = errorData.detail || "error logging out";
         toast({
-          title: 'Error',
+          title: "Error",
           description: errorMessage,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw new Error(errorMessage);
       }
 
       toast({
-        title: 'See you again!',
+        title: "See you again!",
         description: `Thanks for sticking around!`,
-        variant: 'default',
+        variant: "default",
       });
       reset();
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Log out error:', error);
+      console.error("Log out error:", error);
     } finally {
       setLoading(false);
     }
@@ -66,8 +66,12 @@ export default function Logout({ setLoading }: { setLoading: any }) {
   return (
     <>
       <SheetContent
-        side={isMobile ? 'bottom' : 'top'}
-        className={` ${isMobile ? 'inset-x-auto inset-y-0' : 'inset-x-[30%] inset-y-auto rounded-3xl md:!pt-0'} mx-auto flex h-full w-full flex-col items-center justify-center px-2 md:max-h-[20.5rem] md:max-w-[30rem]`}
+        side={isMobile ? "bottom" : "top"}
+        className={` ${
+          isMobile
+            ? "inset-x-auto inset-y-0"
+            : "inset-x-[30%] inset-y-auto rounded-3xl md:!pt-0"
+        } mx-auto flex h-full w-full flex-col items-center justify-center px-2 md:max-h-[20.5rem] md:max-w-[30rem]`}
       >
         <div className="flex flex-col items-center justify-center gap-[2.5rem] border-none md:rounded-3xl">
           <div className="flex flex-col items-center gap-[9.75rem] md:gap-7">

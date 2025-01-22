@@ -18,7 +18,7 @@ import Tick from "@/components/custom/Icons/Tick";
 import FilterIcon from "@/components/custom/Icons/Filter";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
-import EmptyRequests from "../../requests/components/emptystate";
+import EmptyRequests from "../../requests/components/empty-state";
 import BackArrow from "@/components/custom/Icons/BackArrow";
 import TransactionTable from "../components/TransactionTable";
 type SelectSingleEventHandler = (day: Date | undefined) => void;

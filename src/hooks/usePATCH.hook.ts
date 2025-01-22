@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
 import { createApiInstance } from "@/config/axiosInstance";
+import { toast } from "@/components/ui/use-toast";
+
 export interface PatchOptions {
   baseURL?: string;
   withAuth?: boolean;
@@ -40,13 +41,20 @@ export const usePATCH = (
     },
     onSuccess: (returnedData) => {
       console.log(returnedData);
-      toast.success("Success");
+      // toast.success("Success");
 
       callback && callback(returnedData);
     },
-    onError: (err) => {
+    onError: (error: { response: { data: any } }) => {
       // (err?.data?.message instanceof Array) ? toast.error(err?.data?.message[0]) : toast.error(err?.data?.message)
-      errorCallBack && errorCallBack(err);
+      console.log(error);
+      
+      errorCallBack && errorCallBack(error);
+      toast({
+      title: "Error",
+      description: error?.response?.data?.detail,
+      variant: "destructive",
+    })
     },
   });
 

@@ -1,135 +1,153 @@
-import { reviewTableData, tableData } from "@/lib/helpers";
-import TableRequests from "./components/table-requests";
-import TableReview from "./components/table-review";
-import EmptyRequests from "./components/emptystate";
-import { Button } from "@/components/ui/button";
-import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tab";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
-import LinkIcon from "@/components/custom/Icons/LinkIcon";
-import { X } from "lucide-react";
-import { useMediaQuery } from "react-responsive";
-import PageTitle from "./components/PageTitle";
 import SeachFilter from "./components/SeachFilter";
 import useUserStore from "@/store/user-store";
+import { useGET } from "@/hooks/useGET.hook";
+import RequestLayout from "./components/request-layout";
+import RequestTable from "./components/request-tables";
+import ReviewerRequestTable from "./components/request-tables/reviewer";
+import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import { cn } from "@/lib/utils";
 
 export default function Requests() {
-  const { activeRole } = useUserStore();
-  const [activeTab, setActiveTab] = useState("request table");
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
-  const [showStatuses, setShowStatuses] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [statuses, setStatuses] = useState<any[]>([]);
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("my_request");
+  const [, setAppliedStatuses] = useState<string[]>([]);
+  const [, setLoading] = useState(false);
+  const [, setShowStatuses] = useState(false);
+  const [statuses, setStatuses] = useState<string[]>([]);
+  const { user } = useUserStore();
 
-  const handleFunc = () => {
-    setLoading(true);
-    setTimeout(() => {
-      navigate("/requests/create");
-      setLoading(false);
-    }, 5000);
+  const tabFetchUrls: Record<string, string | null> = {
+    my_request: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Payment Confirmed`,
+    drafts: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Not Submitted Yet`,
+    reopened: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
+    review_request: `reviews/reviewer`,
   };
 
-  const requestsStatuses = ["Draft", "Pending", "Approved", "Under Review", "Declined", "Reapproved"];
+  const { data, isPending, refetch } = useGET({
+    url: tabFetchUrls[activeTab]!,
+    queryKey: ["FETCH_REQUESTS", activeTab],
+    enabled: !!tabFetchUrls[activeTab],
+  });
 
-  const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
-
-  
   useEffect(() => {
-    setStatuses(
-      activeTab === "request table" ? requestsStatuses : reviewStatuses
-    );
+    setStatuses([
+      "Not Submitted Yet",
+      "Submitted",
+      "Re Opened",
+      "Not Yet Reviewed",
+      "Declined",
+      "Satisfactory",
+      "Approved",
+      "Closed",
+    ]);
+    refetch();
   }, [activeTab]);
 
-  useEffect(() => {
-    setStatuses(requestsStatuses)
-  }, [])
+  const tabTriggerClass = cn(
+    "relative py-1 px-4 text-[1.1rem] font-semibold transition-all whitespace-nowrap",
+    "data-[state=active]:text-[#000066] data-[state=active]:font-bold",
+    "data-[state=active]:after:absolute data-[state=active]:after:left-0 data-[state=active]:after:right-0",
+    "data-[state=active]:after:bottom-0 data-[state=active]:after:h-[2px] data-[state=active]:after:bg-[#000066]",
+    "data-[state=active]:after:transition-transform data-[state=active]:after:duration-300",
+    "data-[state=active]:after:scale-x-100 after:scale-x-0"
+  );
 
-  const deleteStatusUpdate = (status: String) => {
-    setAppliedStatuses((prev) => prev.filter((val) => val !== status));
-    if (appliedStatuses.length === 0) {
-      setShowStatuses(false);
-    }
-  };
+  // Map data for the reviewer tab
+  const reviewRequests =
+    (data &&
+      data?.items.map((item: any) => ({
+        id: item?.id,
+        research_title: item?.request?.research_title || "N/A",
+        fullName: `${item?.request?.user?.first_name || ""} ${
+          item?.request?.user?.last_name || ""
+        }`,
+        status: item?.status,
+        created_at: item?.request?.created_at,
+        request: item?.request,
+      }))) ||
+    [];
+
+  const requestItems =
+    (data &&
+      data?.items.map((item: any) => ({
+        id: item?.id,
+        research_title: item?.research_title || "N/A",
+        fullName: `${item?.user?.first_name || ""} ${
+          item?.user?.last_name || ""
+        }`,
+        status: item?.status,
+        created_at: item?.created_at,
+        request: item,
+      }))) ||
+    [];
+
+  const normalizedData =
+    activeTab === "review_request" ? reviewRequests : requestItems;
 
   return (
-    <>
-      {loading && <Loader />}
-      <div className="flex flex-col gap-12 mb-20">
-        <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-          <PageTitle title="Requests" />
-          {tableData.length > 0 && (
-            <Button
-              onClick={handleFunc}
-              className="flex gap-4 items-center justify-center py-3 px-6 max-w-[16.75rem]"
+    <RequestLayout
+      setActiveTab={setActiveTab}
+      data={normalizedData || []}
+      filters={
+        <SeachFilter
+          statuses={statuses}
+          setLoading={setLoading}
+          setShowStatuses={setShowStatuses}
+          setAppliedStatuses={setAppliedStatuses}
+        />
+      }
+      tab_header={
+        <TabsList className="border-b-[1px] w-full">
+          <TabsTrigger
+            className={tabTriggerClass}
+            value="my_request"
+            onClick={() => setActiveTab("my_request")}
+          >
+            My requests
+          </TabsTrigger>
+          <TabsTrigger
+            className={tabTriggerClass}
+            value="drafts"
+            onClick={() => setActiveTab("drafts")}
+          >
+            Drafts
+          </TabsTrigger>
+          <TabsTrigger
+            className={tabTriggerClass}
+            value="reopened"
+            onClick={() => setActiveTab("reopened")}
+          >
+            Re-Opened
+          </TabsTrigger>
+          {user?.user_type === "reviewer" && (
+            <TabsTrigger
+              className={tabTriggerClass}
+              value="review_request"
+              onClick={() => setActiveTab("review_request")}
             >
-              <span>
-                <GoogleDoc />
-              </span>
-              Request Ethical Approval
-            </Button>
+              Review requests
+            </TabsTrigger>
           )}
-        </div>
-        {/* tab */}
-        {tableData && tableData.length > 0 ? (
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-            <SeachFilter statuses={statuses} activeTab={activeTab} setLoading={setLoading} setShowStatuses={setShowStatuses} setAppliedStatuses={setAppliedStatuses}/>
-              <div className="lg:flex items-center gap-1 hidden">
-                <span>
-                  <a href="" className="font-semibold underline text-black">
-                    The approval process
-                  </a>
-                </span>
-                <span>
-                  <LinkIcon />
-                </span>
-              </div>
-            </div>
-            {isMobile && showStatuses && appliedStatuses.length !== 0 && (
-              <div className="flex flex-wrap justify-center items-center p-4 gap-3">
-                {appliedStatuses.map((status) => (
-                  <div className="py-2 px-3 border border-[#0C0C0F29] rounded-[0.625rem] flex items-center justify-start gap-2 w-full max-w-fit">
-                    <span className="w-[6px] h-[5px] bg-[#FFD13A] rounded-full"></span>
-                    <span className="text-xs font-semibold text-[#0C0D0F] w-full min-w-fit flex text-wrap">
-                      {status}
-                    </span>
-                    <span onClick={() => deleteStatusUpdate(status)}>
-                      <X size={10}  />
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-            {/* change tables to completed state  */}
-            {activeRole === 'reviewer' ? (
-              <Tabs
-                defaultValue="request table"
-                onValueChange={(val) => setActiveTab(val)}
-              >
-                <TabsList className="border-b-[1.5px] w-full px-3">
-                  <TabsTrigger value="request table">My request</TabsTrigger>
-                  <TabsTrigger value="review table">Review request</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="request table">
-                  <TableRequests tableData={tableData} />
-                </TabsContent>
-                <TabsContent value="review table">
-                  <TableReview reviewTableData={reviewTableData} />
-                </TabsContent>
-              </Tabs>
-            ) : (
-              <TableRequests tableData={tableData} />
-            )}
-          </div>
+        </TabsList>
+      }
+    >
+      <TabsContent value="my_request">
+        {isPending ? <Loader /> : <RequestTable data={normalizedData || []} />}
+      </TabsContent>
+      <TabsContent value="drafts">
+        {isPending ? <Loader /> : <RequestTable data={normalizedData || []} />}
+      </TabsContent>
+      <TabsContent value="reopened">
+        {isPending ? <Loader /> : <RequestTable data={normalizedData || []} />}
+      </TabsContent>
+      <TabsContent value="review_request">
+        {isPending ? (
+          <Loader />
         ) : (
-          <EmptyRequests />
+          <ReviewerRequestTable data={normalizedData} />
         )}
-      </div>
-    </>
+      </TabsContent>
+    </RequestLayout>
   );
 }

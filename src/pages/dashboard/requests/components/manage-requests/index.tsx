@@ -9,13 +9,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import MoreIcon from "@/components/custom/Icons/MoreIcon";
-import { Badge } from "@/components/ui/badge";
-import { useGlobalFilter } from "@/context/GlobalFilterContext";
+// import { Badge } from "@/components/ui/badge";
+// import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import View from "@/components/custom/Icons/View";
 import InstitutionRequestSummary from "../../view-requests/admin";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import SignatureIcon from "@/components/custom/Icons/Signature";
+import ReviewersList from "./reviewers-list";
 
 type TableRequestsProps = {
   institutionTableData: {
@@ -26,14 +27,14 @@ type TableRequestsProps = {
   }[];
 };
 
-const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-  Awaiting: { bg: "#C2BDFF", text: "#13131A" },
-  Reviewed: { bg: "#A7DAFF", text: "#0D141A" },
-  Assigned: { bg: "#DEFFBD", text: "#161A13" },
-  "In Progress": { bg: "#FFA165", text: "#1A1513" },
-};
+// const statusColorMap: { [key: string]: { bg: string; text: string } } = {
+//   Awaiting: { bg: "#C2BDFF", text: "#13131A" },
+//   Reviewed: { bg: "#A7DAFF", text: "#0D141A" },
+//   Assigned: { bg: "#DEFFBD", text: "#161A13" },
+//   "In Progress": { bg: "#FFA165", text: "#1A1513" },
+// };
 
-function RenderFunctions() {
+function RenderFunctions({ item }: { item: any }) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
@@ -49,7 +50,7 @@ function RenderFunctions() {
                 <View />
                 <span>View</span>
               </SheetTrigger>
-              <InstitutionRequestSummary />
+              <InstitutionRequestSummary request={item} />
             </Sheet>
             <Dialog>
               <DialogTrigger
@@ -58,6 +59,7 @@ function RenderFunctions() {
                 <SignatureIcon />
                 <span>Reviewers</span>
               </DialogTrigger>
+              <ReviewersList />
             </Dialog>
           </>
         </DropdownMenuGroup>
@@ -70,8 +72,8 @@ export default function ManageRequests({
   institutionTableData,
 }: TableRequestsProps) {
   // const [ tableArray, setTableArray ] = useState(institutionTableData);
-  const { multiStatusDateFilter } = useGlobalFilter();
-  
+  // const { multiStatusDateFilter } = useGlobalFilter();
+
   const columnData: ColumnSetup<any>[] = [
     {
       header: () => (
@@ -80,7 +82,7 @@ export default function ManageRequests({
           className="font-bold w-full min-w-[18.75rem]"
         />
       ),
-      accessorKey: "title",
+      accessorKey: "research_title",
       cell: (info) => (
         <CustomCell
           value={info.getValue()}
@@ -95,61 +97,62 @@ export default function ManageRequests({
           className="font-bold w-full min-w-[12rem]"
         />
       ),
-      accessorKey: "applicantName",
+      accessorKey: "user.first_name",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[12rem] w-full" />
       ),
     },
-    {
-      header: () => (
-        <CustomCell
-          value={"Submission"}
-          className="font-bold w-full min-w-[10rem]"
-        />
-      ),
-      accessorKey: "submission",
-      cell: ({ getValue }) => (
-        <CustomCell value={getValue()} className="min-w-[10rem] w-full" />
-      ),
-      filterFn: multiStatusDateFilter,
-      enableGlobalFilter: false,
-    },
-    {
-      header: "Status",
-      accessorKey: "status",
-      cell: ({ getValue }) => {
-        const item = getValue();
-        return (
-          <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
-            <Badge
-              style={{
-                color: statusColorMap[item]?.text || "#000000",
-                backgroundColor: statusColorMap[item]?.bg || "#192C8A",
-              }}
-              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
-            >
-              <div
-                style={{
-                  backgroundColor: statusColorMap[item]?.text || "#192C8A",
-                }}
-                className="w-[5px] h-[5px] rounded-full"
-              ></div>
-              {item}
-            </Badge>
-          </span>
-        );
-      },
-      filterFn: multiStatusDateFilter,
-      enableGlobalFilter: false,
-    },
+    // {
+    //   header: () => (
+    //     <CustomCell
+    //       value={"Submission"}
+    //       className="font-bold w-full min-w-[10rem]"
+    //     />
+    //   ),
+    //   accessorKey: "submission",
+    //   cell: ({ getValue }) => (
+    //     <CustomCell value={getValue()} className="min-w-[10rem] w-full" />
+    //   ),
+    //   filterFn: multiStatusDateFilter,
+    //   enableGlobalFilter: false,
+    // },
+    // {
+    //   header: "Status",
+    //   accessorKey: "status",
+    //   cell: ({ getValue }) => {
+    //     const item = getValue();
+    //     return (
+    //       <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
+    //         <Badge
+    //           style={{
+    //             color: statusColorMap[item]?.text || "#000000",
+    //             backgroundColor: statusColorMap[item]?.bg || "#192C8A",
+    //           }}
+    //           className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
+    //         >
+    //           <div
+    //             style={{
+    //               backgroundColor: statusColorMap[item]?.text || "#192C8A",
+    //             }}
+    //             className="w-[5px] h-[5px] rounded-full"
+    //           ></div>
+    //           {item}
+    //         </Badge>
+    //       </span>
+    //     );
+    //   },
+    //   filterFn: multiStatusDateFilter,
+    //   enableGlobalFilter: false,
+    // },
     {
       accessorKey: "custom",
       header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
       meta: { cellType: "custom" },
-      cell: () => {
+      cell: ({ row }) => {
+        const item = row.original;
         return (
           <CustomCell
-            value={<RenderFunctions />}
+            value={<RenderFunctions item={item} />}
             className="flex justify-center items-center justify-self-end w-full md:max-w-[3rem]"
           />
         );

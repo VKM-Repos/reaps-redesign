@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import Loader from '@/components/custom/Loader';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { PasswordStore, usePasswordStore } from '@/store/recoverPasswordStore';
-import AddEmail from '@/pages/auth/password/forms/AddEmail';
-import NewPassword from '@/pages/auth/password/forms/NewPassword';
-import EnterCode from '@/pages/auth/password/forms/EnterCode';
-import SuccessfulReset from '@/pages/auth/password/forms/SuccessfulReset';
-import { toast } from '@/components/ui/use-toast';
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import Loader from "@/components/custom/Loader";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { PasswordStore, usePasswordStore } from "@/store/recoverPasswordStore";
+import AddEmail from "@/pages/auth/password/forms/AddEmail";
+import NewPassword from "@/pages/auth/password/forms/NewPassword";
+import EnterCode from "@/pages/auth/password/forms/EnterCode";
+import SuccessfulReset from "@/pages/auth/password/forms/SuccessfulReset";
+import { toast } from "@/components/ui/use-toast";
 
 export default function RecoverPassword() {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,10 +40,10 @@ export default function RecoverPassword() {
         const response = await fetch(
           `${baseURL}auth/reset-password?email=${payload.email}&verification_code=${payload.verification_code}&new_password=${payload.new_password}`,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              'Institution-Context': 'default_context',
+              "Content-Type": "application/json",
+              "Institution-Context": "ai",
             },
             body: JSON.stringify(payload),
           }
@@ -51,11 +51,11 @@ export default function RecoverPassword() {
 
         if (!response.ok) {
           const errorData = await response.json();
-          const errorMessage = errorData.detail || 'error in creating account';
+          const errorMessage = errorData.detail || "error in creating account";
           toast({
-            title: 'Error',
+            title: "Error",
             description: errorMessage,
-            variant: 'destructive',
+            variant: "destructive",
           });
           throw new Error(errorMessage);
         }
@@ -64,7 +64,7 @@ export default function RecoverPassword() {
 
         handleNext();
       } catch (error: any) {
-        console.error('Error recovering password: ', error);
+        console.error("Error recovering password: ", error);
       } finally {
         setIsLoading(false);
       }

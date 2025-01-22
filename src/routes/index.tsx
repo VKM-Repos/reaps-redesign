@@ -17,10 +17,12 @@ import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
 import InstitutionAccount from "@/pages/dashboard/institution/account";
 import Transactions from "@/pages/dashboard/institution/account/transactions";
-import MyRequest from "@/pages/dashboard/requests/pages/MyRequest";
-import ReviewRequest from "@/pages/dashboard/requests/pages/ReviewRequest";
-import ManageRequestPage from "@/pages/dashboard/requests/pages/ManageRequestPage";
+import MyRequest from "@/pages/dashboard/requests/pages/admin/MyRequest";
+import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/ManageRequestPage";
 import Templates from "@/pages/dashboard/templates";
+import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
+import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
+import ApprovedRequest from "@/pages/dashboard/requests/pages/admin/ApprovedRequest";
 
 const router = [
   {
@@ -80,16 +82,23 @@ const router = [
             element: MyRequest,
           },
           {
-            name: "Review Request",
-            path: "requests/review-requests",
-            title: "Review Request",
-            element: ReviewRequest,
+            name: "Approved Request",
+            path: "requests/approved-requests",
+            title: "Approved Request",
+            element: ApprovedRequest,
           },
           {
             name: "Manage Request",
             path: "requests/manage-requests",
             title: "Manage Request",
             element: ManageRequestPage,
+          },
+          // add templates
+          {
+            name: "Modify Request",
+            path: "requests/edit-request",
+            title: "Modify Request",
+            element: ModifyRequest,
           },
         ],
       },
@@ -125,6 +134,43 @@ const router = [
         ],
       },
       {
+        name: "Super Admin",
+        path: "super-admin",
+        title: "Super Admin",
+        routes: [
+          {
+            name: "Institutions",
+            path: "super-admin/institutions",
+            title: "Institutions",
+            element: InstitutionUsers,
+          },
+          {
+            name: "Users",
+            path: "super-admin/users",
+            title: "Users",
+            element: InstitutionUsers,
+          },
+          {
+            name: "Institution Profile",
+            path: "institution/profile",
+            title: "Institution Profile",
+            element: InstitutionProfile,
+          },
+          {
+            name: "Institution Account",
+            path: "institution/account",
+            title: "Institution Account",
+            element: InstitutionAccount,
+          },
+          {
+            name: "Institution Account Transactions",
+            path: "institution/account/transactions",
+            title: "Institution Account Transactions",
+            element: Transactions,
+          },
+        ],
+      },
+      {
         name: "Specialization",
         path: "specialization",
         title: "Specialization",
@@ -135,6 +181,14 @@ const router = [
         path: "pricing",
         title: "Pricing",
         element: Pricing,
+        routes: [
+          {
+            name: "Transactions",
+            path: "pricing/your-transactions",
+            title: "Transactions",
+            element: ViewTransactions,
+          },
+        ],
       },
       {
         name: "Settings",
@@ -142,6 +196,7 @@ const router = [
         title: "Settings",
         element: Settings,
       },
+      // change templates path to requests/templates
       {
         name: "Templates",
         path: "templates",

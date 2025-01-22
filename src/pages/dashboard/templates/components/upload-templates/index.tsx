@@ -56,7 +56,6 @@ export default function UploadTemplate({
     }, 300);
   };
   const successCallBack = () => {
-    refetch();
     toast({
       title: "Feedback",
       description:
@@ -65,15 +64,17 @@ export default function UploadTemplate({
           : "Your template has been changed.",
       variant: "default",
     });
+    refetch();
   };
 
-  const errorCallBack = () => {
-    refetch();
+  const errorCallBack = (error: any) => {
+    const message = error?.response?.data?.detail;
     toast({
       title: "Error",
-      description: "Error submitting your template",
+      description: message,
       variant: "destructive",
     });
+    refetch();
   };
 
   const { mutate, isPending, isSuccess } = usePOST("templates", {
@@ -81,12 +82,16 @@ export default function UploadTemplate({
     callback: successCallBack,
     errorCallBack: errorCallBack,
   });
-  console.log(template, '?????')
-  const { mutate: update, isPending: updating, isSuccess: updated } = usePATCH(`templates?template_id=${template?.id}`, {
-    contentType: " multipart/form-data",
-    callback: successCallBack,
-    errorCallBack: errorCallBack,
-  });
+  console.log(template?.id, "?????");
+
+  const { mutate: update, isPending: updating } = usePATCH(
+    `templates?template_id=${template?.id}`,
+    {
+      contentType: " multipart/form-data",
+      callback: successCallBack,
+      errorCallBack: errorCallBack,
+    }
+  );
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const formData = new FormData();
@@ -100,12 +105,12 @@ export default function UploadTemplate({
         break;
       case "edit":
         update(formData, {
-          onSuccess: ()=> {
-            console.log('Successfully uploaded');
+          onSuccess: () => {
+            console.log("Successfully uploaded");
           },
-          onError: ()=> {
-            console.log('Error updating template');
-          }
+          onError: () => {
+            console.log("Error updating template");
+          },
         });
         break;
       default:
@@ -116,7 +121,7 @@ export default function UploadTemplate({
 
   return (
     <>
-      {(isPending || isSuccess) || (updating || updated) ? (
+      {isPending || isSuccess || updating || updated ? (
         <Loader />
       ) : (
         <div className="w-full mx-auto">
