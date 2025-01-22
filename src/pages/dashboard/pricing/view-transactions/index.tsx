@@ -7,8 +7,11 @@ import { TransactionItem } from "@/types/transaction";
 
 export default function ViewTransactions() {
   const { data: transactionsData, isPending } = useGET({
-    queryKey: ["my-transactions"],
-    url: "transactions",
+    queryKey: [
+      "my-transactions",
+      { sort_by: "created_at", sort_direction: "asc" },
+    ],
+    url: "transactions?sort_by=created_at&sort_direction=asc",
     withAuth: true,
   });
 
