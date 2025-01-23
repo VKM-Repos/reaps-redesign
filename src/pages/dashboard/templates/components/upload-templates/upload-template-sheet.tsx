@@ -33,10 +33,10 @@ export default function UploadTemplateSheet({ refetch }: SheetProps) {
           isMobile
             ? "inset-y-0 inset-x-auto"
             : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"
-        } mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden`}
+        } mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-x-hidden`}
       >
         <div
-          className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
+          className={`h-full md:max-h-fit border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
         >
           <UploadTemplate action="create" refetch={refetch} setOpen={setOpen}/>
         </div>
