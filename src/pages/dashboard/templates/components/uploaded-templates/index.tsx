@@ -67,6 +67,7 @@ const UploadedTemplate = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [isViewerLoading, setIsViewerLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const { mutate: deleteTemplate, isPending } = useDELETE(
     `templates/${item?.id}`
   );
@@ -194,7 +195,7 @@ const UploadedTemplate = ({
                             </div>
                           </DialogContent>
                         </Dialog>
-                        <Sheet>
+                        <Sheet open={open} onOpenChange={setOpen}>
                           <SheetTrigger
                             className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
                           >
@@ -207,15 +208,16 @@ const UploadedTemplate = ({
                               isMobile
                                 ? "inset-y-0 inset-x-auto"
                                 : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"
-                            } w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden z-[9999]`}
+                            } w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-x-hidden z-[9999]`}
                           >
                             <div
-                              className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
+                              className={`h-full md:max-h-fit border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
                             >
                               <UploadTemplate
                                 action="edit"
                                 refetch={refetch}
                                 template={item}
+                                setOpen={setOpen}
                               />
                             </div>
                           </SheetContent>
