@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UploadTemplate from ".";
 import { useMediaQuery } from "react-responsive";
+import { useState } from "react";
 
 type SheetProps = {
   refetch: () => void;
@@ -10,8 +11,10 @@ type SheetProps = {
 export default function UploadTemplateSheet({ refetch }: SheetProps) {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isLarge = useMediaQuery({ query: "(max-width: 1100px)" });
+  const [open, setOpen] = useState(false);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
           className={`flex gap-4 items-center justify-center py-3 px-6 ${
@@ -35,7 +38,7 @@ export default function UploadTemplateSheet({ refetch }: SheetProps) {
         <div
           className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
         >
-          <UploadTemplate action="create" refetch={refetch} />
+          <UploadTemplate action="create" refetch={refetch} setOpen={setOpen}/>
         </div>
       </SheetContent>
     </Sheet>

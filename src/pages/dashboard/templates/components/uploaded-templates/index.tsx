@@ -67,6 +67,7 @@ const UploadedTemplate = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [isViewerLoading, setIsViewerLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const { mutate: deleteTemplate, isPending } = useDELETE(
     `templates/${item?.id}`
   );
@@ -194,7 +195,7 @@ const UploadedTemplate = ({
                             </div>
                           </DialogContent>
                         </Dialog>
-                        <Sheet>
+                        <Sheet open={open} onOpenChange={setOpen}>
                           <SheetTrigger
                             className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
                           >
@@ -216,6 +217,7 @@ const UploadedTemplate = ({
                                 action="edit"
                                 refetch={refetch}
                                 template={item}
+                                setOpen={setOpen}
                               />
                             </div>
                           </SheetContent>
