@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import useUserStore from "@/store/user-store";
 import { useCallback } from "react";
 import { toast } from "../ui/use-toast";
+import { queryClient } from "@/providers";
 
 export default function Logout({ setLoading }: { setLoading: any }) {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -51,6 +52,7 @@ export default function Logout({ setLoading }: { setLoading: any }) {
         variant: "default",
       });
       reset();
+      queryClient.clear();
       navigate("/login");
     } catch (error) {
       console.error("Log out error:", error);
