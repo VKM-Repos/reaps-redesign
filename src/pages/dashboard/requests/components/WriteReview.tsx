@@ -105,7 +105,7 @@ export default function WriteReview({
       },
     });
   }
-  console.log(request, "{{}}");
+
 
   return (
     <>

@@ -130,6 +130,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             maxSize={3000000}
             onDrop={(acceptedFiles) => {
               const file = acceptedFiles[0];
+         
               // Directly pass the file to the form field's onChange handler
               if (file) {
                 field.onChange(file);
@@ -152,7 +153,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                       props.error ? "text-red-500" : "text-[#868687]"
                     } text-sm  w-full`}
                   >
-                    {!field.value ? (
+                    {field.value === null || field.value === undefined || field.value?.length === 0 ? (
                       <span className="flex items-center justify-center gap-2">
                         <UploadIcon /> <span>Click to Upload</span>
                       </span>
