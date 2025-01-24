@@ -1,31 +1,16 @@
 import ArrowLeft from "@/components/custom/Icons/ArrowLeft";
 import { useNavigate } from "react-router-dom";
-import { useGET } from "@/hooks/useGET.hook";
-import Loader from "@/components/custom/Loader";
 import TransactionTable from "./transaction-table";
-import { TransactionItem } from "@/types/transaction";
 
 export default function ViewTransactions() {
-  const { data: transactionsData, isPending } = useGET({
-    queryKey: [
-      "my-transactions",
-      { sort_by: "created_at", sort_direction: "asc" },
-    ],
-    url: "transactions?sort_by=created_at&sort_direction=asc",
-    withAuth: true,
-  });
-
   const navigate = useNavigate();
 
   const handleFunc = () => {
     navigate("/pricing");
   };
 
-  const transactions: TransactionItem[] = transactionsData?.items || [];
-
   return (
     <>
-      {isPending && <Loader />}
       <div className="flex flex-col gap-[1.25rem]">
         <div className="flex flex-col gap-[1.25rem] mx-auto w-full">
           <div className="flex gap-3 items-center">
@@ -45,7 +30,7 @@ export default function ViewTransactions() {
           </p>
         </div>
         <div className="mx-auto my-0 flex w-full flex-col items-center justify-center">
-          <TransactionTable data={transactions} />
+          <TransactionTable />
         </div>
       </div>
     </>
