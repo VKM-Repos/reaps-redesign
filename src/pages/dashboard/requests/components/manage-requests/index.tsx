@@ -59,7 +59,7 @@ function RenderFunctions({ item }: { item: any }) {
                 <SignatureIcon />
                 <span>Reviewers</span>
               </DialogTrigger>
-              <ReviewersList />
+              <ReviewersList request_id={item.id} />
             </Dialog>
           </>
         </DropdownMenuGroup>
