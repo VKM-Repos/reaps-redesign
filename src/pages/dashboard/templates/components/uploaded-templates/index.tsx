@@ -24,8 +24,6 @@ import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import UploadTemplate from "../upload-templates";
 import { Skeleton } from "@/components/ui/skeleton";
 import Cancel from "@/components/custom/Icons/Cancel";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import { getFileExtension } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
 import { useDELETE } from "@/hooks/useDelete.hook";
@@ -57,7 +55,6 @@ const UploadedTemplate = ({
   refetch,
   item,
   templateName,
-  templateUrl,
 }: {
   refetch: () => void;
   item: any;
@@ -101,12 +98,6 @@ const UploadedTemplate = ({
       setTimeout(() => setIsViewerLoading(false), 4000);
     }
   }, [item]);
-  const docs = [
-    {
-      uri: templateUrl,
-      fileType: getFileExtension(templateUrl),
-    },
-  ];
   useEffect(() => {
     const hideIframeToolbar = () => {
       // Ensure the container exists
@@ -180,17 +171,18 @@ const UploadedTemplate = ({
                               {isViewerLoading ? (
                                 <Skeleton className="w-full h-[400px] rounded-lg" />
                               ) : (
-                                <DocViewer
-                                  documents={docs}
-                                  pluginRenderers={DocViewerRenderers}
-                                  config={{
-                                    header: {
-                                      disableHeader: true,
-                                      disableFileName: true,
-                                    },
-                                  }}
-                                  style={{ width: 650, height: 700 }}
-                                />
+                                <span>{"Template"}</span>
+                                // <DocViewer
+                                //   documents={docs}
+                                //   pluginRenderers={DocViewerRenderers}
+                                //   config={{
+                                //     header: {
+                                //       disableHeader: true,
+                                //       disableFileName: true,
+                                //     },
+                                //   }}
+                                //   style={{ width: 650, height: 700 }}
+                                // />
                               )}
                             </div>
                           </DialogContent>
@@ -243,7 +235,7 @@ const UploadedTemplate = ({
                 </DropdownMenu>
               </div>
               <div ref={containerRef}>
-                <DocViewer
+                {/* <DocViewer
                   documents={docs}
                   config={{
                     header: {
@@ -256,7 +248,7 @@ const UploadedTemplate = ({
                     disableThemeScrollbar: true,
                   }}
                   style={{ width: 400, height: 400 }}
-                />
+                /> */}
               </div>
             </div>
           </div>
