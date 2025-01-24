@@ -10,6 +10,7 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
+// Schema for validating refresh token response
 const refreshTokenSchema = z.object({
   access_token: z.string(),
   refresh_token: z.string(),
@@ -31,27 +32,29 @@ const refreshTokenSchema = z.object({
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
+// Refresh lock mechanism
+let isRefreshing = false;
+let refreshSubscribers: Array<(token: string) => void> = [];
+let retryCount = 0;
+const MAX_RETRIES = 1;
+
+const onRTokenRefreshed = (token: string) => {
+  refreshSubscribers.forEach((callback) => callback(token));
+  refreshSubscribers = [];
+};
+
+const addSubscriber = (callback: (token: string) => void) => {
+  refreshSubscribers.push(callback);
+};
+
 export const createApiInstance = (baseURL: string): AxiosInstance => {
-  const apiInstance = axios.create({
-    baseURL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    timeout: 10000
-    // withCredentials: true,  // enabling this causes cors error on dev, dont know why
-  });
+  const apiInstance = axios.create({ baseURL, timeout: 10000 });
 
   apiInstance.interceptors.request.use(async (config) => {
-    const userStore = useUserStore.getState();
-    const { accessToken, user } = userStore;
-
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
-    if (user?.institution_context) {
+    const { accessToken, user } = useUserStore.getState();
+    if (accessToken) config.headers["Authorization"] = `Bearer ${accessToken}`;
+    if (user?.institution_context)
       config.headers["institution-context"] = user.institution_context;
-    }
-
     return config;
   });
 
@@ -59,54 +62,59 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
     (response) => response,
     async (error: AxiosError) => {
       const originalRequest = error.config as CustomAxiosRequestConfig;
-
-      // Retry the request only if we encounter a 401 and haven't retried yet
       if (
         originalRequest &&
         error.response?.status === 401 &&
         !originalRequest._retry
       ) {
         originalRequest._retry = true;
+        if (isRefreshing) {
+          return new Promise((resolve) => {
+            addSubscriber((token) => {
+              originalRequest.headers["Authorization"] = `Bearer ${token}`;
+              resolve(apiInstance(originalRequest));
+            });
+          });
+        }
 
+        if (retryCount >= MAX_RETRIES) {
+          alert("Session expired. Please log in again.");
+          useUserStore.setState({
+            accessToken: null,
+            refreshToken: null,
+            user: null,
+          });
+          return Promise.reject(error);
+        }
+
+        retryCount++;
+        isRefreshing = true;
         try {
           const newTokens = await getRefreshToken();
-          useUserStore.setState({
-            accessToken: newTokens.access_token,
-            refreshToken: newTokens.refresh_token,
-            user: newTokens.user,
-          });
-
-          // Update the request with the new access token and retry
+          retryCount = 0;
+          useUserStore.setState(newTokens);
+          onRTokenRefreshed(newTokens.access_token);
           originalRequest.headers[
             "Authorization"
           ] = `Bearer ${newTokens.access_token}`;
-
-          // Only retry the request once with the updated token
           return apiInstance(originalRequest);
         } catch (refreshError) {
-          // Handle refresh token failure (e.g., log out the user)
-          if (
-            axios.isAxiosError(refreshError) &&
-            refreshError.response?.status === 403
-          ) {
-            useUserStore.setState({
-              accessToken: null,
-              refreshToken: null,
-              user: null,
-            });
-          }
+          isRefreshing = false;
+          useUserStore.setState({
+            accessToken: null,
+            refreshToken: null,
+            user: null,
+          });
           return Promise.reject(refreshError);
         }
       }
-
-      // If we can't handle the error, reject it as usual
       return Promise.reject(error);
     }
   );
-
   return apiInstance;
 };
 
+// Function to call the refresh token endpoint
 const getRefreshToken = async () => {
   const userStore = useUserStore.getState();
   const { refreshToken, user } = userStore;
@@ -124,11 +132,13 @@ const getRefreshToken = async () => {
     },
   });
 
+  // Validate the response using the schema
   const validatedData = refreshTokenSchema.parse(response.data);
 
   return validatedData;
 };
 
+// Error handler for logging
 export const handleApiError = (error: unknown): Promise<never> => {
   if (error instanceof AxiosError) {
     if (error.response) {

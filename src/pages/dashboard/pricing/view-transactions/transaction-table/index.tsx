@@ -8,19 +8,11 @@ import { TransactionItem } from "@/types/transaction";
 import { useGET } from "@/hooks/useGET.hook";
 import { statusColorMap } from "./columns";
 
-type Props = {
-  data: TransactionItem[];
-};
-// export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-//   FAILED: { bg: "#FC8D94", text: "#320104" },
-//   SUCCESS: { bg: "#80EF80", text: "#0E1A0E" },
-//   PENDING: { bg: "#FFDEFF", text: "#410A70" },
-// };
-const TransactionTable = ({ data }: Props) => {
+const TransactionTable = () => {
   const { data: transactionsData, refetch } = useGET({
     queryKey: ["my-transactions"],
-    url: "transactions",
-    withAuth: true,
+    url: `transactions?sort_by=created_at&sort_direction=desc&skip=0&limit=100`,
+    enabled: true,
   });
 
   const transactions: TransactionItem[] = transactionsData?.items || [];
@@ -134,7 +126,7 @@ const TransactionTable = ({ data }: Props) => {
   ];
   return (
     <div className="w-full">
-      {data.length > 0 ? (
+      {transactions.length > 0 ? (
         <CustomTable data={transactions} columns={columns} />
       ) : (
         <EmptyTransactions />
