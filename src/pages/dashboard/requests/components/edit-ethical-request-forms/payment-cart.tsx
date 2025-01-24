@@ -110,7 +110,7 @@ export default function PaymentCart({ showApproval }: Props) {
                   Ethical Approval Request Fee
                 </h1>
                 <Badge className="text-primary bg-[#192C8A1A] w-full max-w-fit flex items-center justify-center hover:bg-[#192C8A1A] text-[0.625rem] font-semibold">
-                  {user.user_type}
+                  {user?.user_type}
                 </Badge>
               </div>
               <h1 className="font-extrabold text-3xl text-[#192C8A] plus-jarkata-sans">
