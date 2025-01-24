@@ -149,11 +149,7 @@ export default function AssignReviewer({ request }: { request: any }) {
                       className="border-none hover:border-none focus:border-none w-full focus-visible:outline-none text-sm"
                     />
                   </div>
-                  <ReviewersList refetch={refetch_assigned} request={request} />
-                  {/* <DialogClose disabled={numOfReviewers < 1}>
-                                {/* assign at least one reviewer before close 
-                                <Button variant={numOfReviewers < 1 ? "ghost" : "default"} className="!py-3 !px-6 font-semibold rounded-[0.5rem] w-full max-w-[9.375rem]">Finish</Button>
-                            </DialogClose>  */}
+                  <ReviewersList refetch={refetch_assigned} request={request} assignedList={assigned?.items}/>
                 </div>
               </div>
               <h1 className="font-semibold text-[1.2rem]">
