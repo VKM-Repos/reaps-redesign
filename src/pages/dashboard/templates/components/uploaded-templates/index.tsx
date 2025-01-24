@@ -24,8 +24,6 @@ import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import UploadTemplate from "../upload-templates";
 import { Skeleton } from "@/components/ui/skeleton";
 import Cancel from "@/components/custom/Icons/Cancel";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import { getFileExtension } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
 import { useDELETE } from "@/hooks/useDelete.hook";
@@ -57,7 +55,6 @@ const UploadedTemplate = ({
   refetch,
   item,
   templateName,
-  templateUrl,
 }: {
   refetch: () => void;
   item: any;
@@ -67,6 +64,7 @@ const UploadedTemplate = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [isViewerLoading, setIsViewerLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const { mutate: deleteTemplate, isPending } = useDELETE(
     `templates/${item?.id}`
   );
@@ -100,12 +98,6 @@ const UploadedTemplate = ({
       setTimeout(() => setIsViewerLoading(false), 4000);
     }
   }, [item]);
-  const docs = [
-    {
-      uri: templateUrl,
-      fileType: getFileExtension(templateUrl),
-    },
-  ];
   useEffect(() => {
     const hideIframeToolbar = () => {
       // Ensure the container exists
@@ -179,22 +171,23 @@ const UploadedTemplate = ({
                               {isViewerLoading ? (
                                 <Skeleton className="w-full h-[400px] rounded-lg" />
                               ) : (
-                                <DocViewer
-                                  documents={docs}
-                                  pluginRenderers={DocViewerRenderers}
-                                  config={{
-                                    header: {
-                                      disableHeader: true,
-                                      disableFileName: true,
-                                    },
-                                  }}
-                                  style={{ width: 650, height: 700 }}
-                                />
+                                <span>{"Template"}</span>
+                                // <DocViewer
+                                //   documents={docs}
+                                //   pluginRenderers={DocViewerRenderers}
+                                //   config={{
+                                //     header: {
+                                //       disableHeader: true,
+                                //       disableFileName: true,
+                                //     },
+                                //   }}
+                                //   style={{ width: 650, height: 700 }}
+                                // />
                               )}
                             </div>
                           </DialogContent>
                         </Dialog>
-                        <Sheet>
+                        <Sheet open={open} onOpenChange={setOpen}>
                           <SheetTrigger
                             className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
                           >
@@ -207,15 +200,16 @@ const UploadedTemplate = ({
                               isMobile
                                 ? "inset-y-0 inset-x-auto"
                                 : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"
-                            } w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden z-[9999]`}
+                            } w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-x-hidden z-[9999]`}
                           >
                             <div
-                              className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
+                              className={`h-full md:max-h-fit border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
                             >
                               <UploadTemplate
                                 action="edit"
                                 refetch={refetch}
                                 template={item}
+                                setOpen={setOpen}
                               />
                             </div>
                           </SheetContent>
@@ -241,7 +235,7 @@ const UploadedTemplate = ({
                 </DropdownMenu>
               </div>
               <div ref={containerRef}>
-                <DocViewer
+                {/* <DocViewer
                   documents={docs}
                   config={{
                     header: {
@@ -254,7 +248,7 @@ const UploadedTemplate = ({
                     disableThemeScrollbar: true,
                   }}
                   style={{ width: 400, height: 400 }}
-                />
+                /> */}
               </div>
             </div>
           </div>

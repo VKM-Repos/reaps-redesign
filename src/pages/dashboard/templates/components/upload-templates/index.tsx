@@ -8,26 +8,32 @@ import FormInput from "@/components/custom/FormInput";
 import { SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import GoogleDocLarge from "@/components/custom/Icons/GoogleDocLarge";
-import { usePOST } from "@/hooks/usePOST.hook";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
-import { usePATCH } from "@/hooks/usePATCH.hook";
+import useUserStore from "@/store/user-store";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Please add the file name" }),
-  department: z.string().min(1, { message: "Please add the file name" }),
+  department: z.string()
+      .min(1, { message: "Please input the department name" })
+      .min(10, { message: "Department field must contain a minimum of 10 characters"}),
   file: z.instanceof(File, { message: "Please upload a file" }),
 });
 export default function UploadTemplate({
   refetch,
   template,
   action,
+  setOpen,
 }: {
   refetch: () => void;
   template?: any;
   action: "create" | "edit";
+  setOpen: (open: boolean) => void;
 }) {
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const userStore = useUserStore.getState();
+  const { accessToken } = userStore;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,73 +61,65 @@ export default function UploadTemplate({
       });
     }, 300);
   };
-  const successCallBack = () => {
-    toast({
-      title: "Feedback",
-      description:
-        action == "create"
-          ? "Your template has been submitted."
-          : "Your template has been changed.",
-      variant: "default",
-    });
-    refetch();
-  };
 
-  const errorCallBack = (error: any) => {
-    const message = error?.response?.data?.detail;
-    toast({
-      title: "Error",
-      description: message,
-      variant: "destructive",
-    });
-    refetch();
-  };
-
-  const { mutate, isPending, isSuccess } = usePOST("templates", {
-    contentType: " multipart/form-data",
-    callback: successCallBack,
-    errorCallBack: errorCallBack,
-  });
-  console.log(template?.id, "?????");
-
-  const { mutate: update, isPending: updating } = usePATCH(
-    `templates?template_id=${template?.id}`,
-    {
-      contentType: " multipart/form-data",
-      callback: successCallBack,
-      errorCallBack: errorCallBack,
-    }
-  );
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: any) {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("department", values.department);
     formData.append("file", values.file);
 
-    switch (action) {
-      case "create":
-        mutate(formData);
-        break;
-      case "edit":
-        update(formData, {
-          onSuccess: () => {
-            console.log("Successfully uploaded");
-          },
-          onError: () => {
-            console.log("Error updating template");
-          },
+    const url =
+      action === "create"
+        ? "templates"
+        : `templates?template_id=${template?.id}`;
+    const method = action === "create" ? "POST" : "PATCH";
+
+    setIsLoading(true);
+    toast({
+      title: "Uploading",
+      description: "Uploading template....",
+      variant: "default",
+    });
+    try {
+      const response = await fetch(`https://reaps.vhdo.org/api/${url}`, {
+        method,
+        body: formData,
+        headers: {
+          "institution-context": "ai",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Feedback",
+          description:
+            action == "create"
+              ? "Your template has been submitted."
+              : "Your template has been changed.",
+          variant: "default",
         });
-        break;
-      default:
-        console.error("Invalid action");
-        break;
+        refetch();
+      } else {
+        throw new Error("Failed to submit data");
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.detail;
+      toast({
+        title: "Error",
+        description: message,
+        variant: "destructive",
+      });
+      refetch();
+    } finally {
+      setIsLoading(false);
     }
+    setOpen(false);
   }
 
   return (
     <>
-      {isPending || isSuccess || updating ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="w-full mx-auto">
@@ -161,6 +159,7 @@ export default function UploadTemplate({
                           "application/docx": [".docx"],
                           "application/xls": [".xls"],
                           "application/xlsx": [".xlsx"],
+                          "application/pdf": [".pdf"],
                         }}
                         multiple={false}
                         onDrop={(acceptedFiles) => {
@@ -222,7 +221,6 @@ export default function UploadTemplate({
                 <SheetClose className="bg-[hsl(var(--ghost))] text-[hsl(var(--ghost-foreground))] !py-2 !px-6 rounded">
                   Cancel
                 </SheetClose>
-                <SheetClose>
                   <Button
                     variant={
                       isValid && uploadProgress === 100 ? "default" : "ghost"
@@ -232,7 +230,6 @@ export default function UploadTemplate({
                   >
                     Finish
                   </Button>
-                </SheetClose>
               </div>
             </form>
           </Form>
