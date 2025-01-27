@@ -272,9 +272,6 @@ const ApplicationSummary = ({ handleNext, requestDetails }: Props) => {
                         {file instanceof File ? file?.name : file?.name}
                       </span>
                     </span>
-                    {/* <span className="text-xs text-gray-500">
-                      {(file?.size / 1024).toFixed(2)} KB
-                    </span> */}
                   </div>
                 </div>
               );
