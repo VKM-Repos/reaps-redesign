@@ -1,9 +1,9 @@
 import PageTitle from "../../components/PageTitle";
-import SeachFilter from "../../components/SeachFilter";
+// import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import { useGET } from "@/hooks/useGET.hook";
@@ -12,11 +12,11 @@ import ReviewerRequestTable from "../../components/request-tables/reviewer";
 
 export default function ApprovedRequest() {
   const [loading, setLoading] = useState(false);
-  const [statuses, setStatuses] = useState<string[]>([]);
-  const [showStatuses, setShowStatuses] = useState(false);
-  const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
+  // const [statuses, setStatuses] = useState<string[]>([]);
+  // const [showStatuses, setShowStatuses] = useState(false);
+  // const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
   const navigate = useNavigate();
-  const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
+  // const reviewStatuses = ["Unreviewed", "Reviewed", "Reopened"];
 
   const { data: approved_requuest, isPending: fetching_approved_request } =
     useGET({
@@ -38,17 +38,15 @@ export default function ApprovedRequest() {
 
   const handleFunc = () => {
     setLoading(true);
-    console.log(showStatuses);
-    console.log(appliedStatuses);
     setTimeout(() => {
       navigate("/requests/create");
       setLoading(false);
     }, 5000);
   };
 
-  useEffect(() => {
-    setStatuses(reviewStatuses);
-  }, []);
+  // useEffect(() => {
+  //   setStatuses(reviewStatuses);
+  // }, []);
 
   return (
     <>
@@ -67,12 +65,12 @@ export default function ApprovedRequest() {
           </Button>
         </div>
         <div className="flex items-center justify-between mt-12 mb-4">
-          <SeachFilter
+          {/* <SeachFilter
             statuses={statuses}
             setLoading={setLoading}
             setShowStatuses={setShowStatuses}
             setAppliedStatuses={setAppliedStatuses}
-          />
+          /> */}
           <div className="lg:flex items-center gap-1 hidden">
             <span>
               <a href="" className="font-semibold underline text-black">
