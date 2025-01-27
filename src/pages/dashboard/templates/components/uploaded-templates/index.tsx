@@ -7,13 +7,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useRef, useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import View from "@/components/custom/Icons/View";
+// import {
+//   Dialog,
+//   DialogClose,
+//   DialogContent,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+// import View from "@/components/custom/Icons/View";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
@@ -23,10 +23,12 @@ import { useMediaQuery } from "react-responsive";
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import UploadTemplate from "../upload-templates";
 import { Skeleton } from "@/components/ui/skeleton";
-import Cancel from "@/components/custom/Icons/Cancel";
+// import Cancel from "@/components/custom/Icons/Cancel";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
 import { useDELETE } from "@/hooks/useDelete.hook";
+// import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
+import Download from "@/components/custom/Icons/Download";
 
 export default function UploadedTemplates({
   templates,
@@ -36,9 +38,9 @@ export default function UploadedTemplates({
   refetch: () => void;
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-8 w-full">
       {templates?.items?.map((template: any) => (
-        <div key={template.id} className="w-full md:max-w-[25.875rem]">
+        <div key={template.id} className="w-full">
           <UploadedTemplate
             refetch={refetch}
             item={template}
@@ -123,69 +125,39 @@ const UploadedTemplate = ({
     // Cleanup in case the component unmounts
     return () => clearTimeout(timeoutId);
   }, []);
+  console.log(item, "rar");
+
   return (
     <>
       {isPending ? (
         <Loader />
       ) : (
-        <div className="w-full md:max-w-[25.875rem] py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
+        <div className="w-full max-w-[300px] py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
           <div className="py-3 flex justify-between">
-            <div className="flex flex-col gap-3 h-[400px]">
+            <div className="flex flex-col gap-3 w-full">
               <div className="flex justify-between w-full items-center gap-5">
                 <div className="flex items-center gap-5">
                   <img src={RedFile} />
 
-                  <p className="">{templateName}</p>
+                  <div className="w-full">
+                    <p className="text-sm mb-1">{templateName}</p>
+                    <p className="font-light text-sm">{item.department}</p>
+                  </div>
                 </div>
                 <DropdownMenu modal={false}>
                   <DropdownMenuTrigger className="rotate-90">
                     <MoreIcon />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
-                    <DropdownMenuGroup className="flex flex-col justify-center items-start">
+                    <DropdownMenuGroup className="flex flex-col justify-center items-start ">
                       <>
-                        <Dialog>
-                          <DialogTrigger
-                            className={`text-black flex justify-center items-center gap-2 p-3`}
-                          >
-                            <View />
-                            <span>View</span>
-                          </DialogTrigger>
-                          <DialogContent
-                            className={` ${
-                              isMobile ? "w-full h-full" : "w-auto h-[95%]"
-                            }  w-[650px] mx-auto my-auto overflow-y-scroll scrollbar scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-w-1.5 scrollbar-thumb-gray-500`}
-                            showCloseButton={false}
-                          >
-                            {isMobile && (
-                              <DialogClose className="fixed top-[2.5rem] right-[2rem] z-[100]">
-                                <Cancel />
-                              </DialogClose>
-                            )}
-                            <div
-                              className={`${
-                                isMobile ? "overflow-scroll" : ""
-                              } w-full mx-auto`}
-                            >
-                              {isViewerLoading ? (
-                                <Skeleton className="w-full h-[400px] rounded-lg" />
-                              ) : (
-                                <span>{"Template"}</span>
-                                // <DocViewer
-                                //   documents={docs}
-                                //   pluginRenderers={DocViewerRenderers}
-                                //   config={{
-                                //     header: {
-                                //       disableHeader: true,
-                                //       disableFileName: true,
-                                //     },
-                                //   }}
-                                //   style={{ width: 650, height: 700 }}
-                                // />
-                              )}
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                        <a
+                          href={item.file_path}
+                          className="flex gap-2 text-black justify-center items-center px-2 py-2"
+                          download
+                        >
+                          <Download /> Download
+                        </a>
                         <Sheet>
                           <SheetTrigger
                             className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
@@ -233,23 +205,11 @@ const UploadedTemplate = ({
                 </DropdownMenu>
               </div>
               <div ref={containerRef}>
-                {/* <DocViewer
-                  documents={docs}
-                  config={{
-                    header: {
-                      disableHeader: true,
-                      disableFileName: true,
-                      retainURLParams: false,
-                    },
-                  }}
-                  theme={{
-                    disableThemeScrollbar: true,
-                  }}
-                  style={{ width: 400, height: 400 }}
-                /> */}
+                {/* <TemplateCard template={item} /> */}
               </div>
             </div>
           </div>
+
           <div
             className={`h-full max-h-[13.25rem] w-full md:max-w-[25.875rem] rounded-lg overflow-hidden`}
           >
