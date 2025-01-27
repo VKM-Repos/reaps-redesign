@@ -34,7 +34,7 @@ import Loader from "@/components/custom/Loader";
 
 const FormSchema = z.object({
   reviewer_id: z.string({
-    required_error: "Please select a rviewer.",
+    required_error: "Please select a reviewer.",
   }),
   request_id: z.string().optional(),
 });
@@ -42,9 +42,11 @@ const FormSchema = z.object({
 export function ReviewersList({
   request,
   refetch,
+  assignedList,
 }: {
   request: any;
   refetch: () => void;
+  assignedList: any[]
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -53,6 +55,8 @@ export function ReviewersList({
       request_id: request?.id,
     },
   });
+
+
   const { data: reviewers } = useGET({
     url: "users?user_type=reviewer",
     queryKey: ["GET_USERS_IN_ASSIGN_REVIEW_PAGE"],
@@ -65,6 +69,9 @@ export function ReviewersList({
   const reviewerName = reviewer
     ? `${reviewer.first_name} ${reviewer.last_name}`.trim()
     : "Select Reviewer...";
+
+
+  
   const { mutate, isPending: assigning_reviewer } = usePOST("reviews/assign");
   function onSubmit(data: z.infer<typeof FormSchema>) {
     mutate(data, {
@@ -123,8 +130,16 @@ export function ReviewersList({
                         <CommandList>
                           <CommandEmpty>No reviewer found.</CommandEmpty>
                           <CommandGroup>
-                            {reviewers?.items.map((reviewer: any) => (
-                              <CommandItem
+                            {reviewers?.items.map((reviewer: any) => {
+                              const isAssigned =
+                               Array.isArray(assignedList) && assignedList.length > 0
+                                  ? assignedList.some(
+                                      (assigned: any) =>
+                                        assigned?.reviewer.id === reviewer?.id
+                                    )
+                                  : false;
+                              return (
+                                <CommandItem
                                 key={reviewer.id}
                                 value={reviewer?.id}
                                 onSelect={() => {
@@ -135,13 +150,14 @@ export function ReviewersList({
                                 <Check
                                   className={cn(
                                     "ml-auto",
-                                    reviewer.id === field.value
+                                    isAssigned || reviewer.id === field.value
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
                                 />
                               </CommandItem>
-                            ))}
+                              )
+                            })}
                           </CommandGroup>
                         </CommandList>
                       </Command>

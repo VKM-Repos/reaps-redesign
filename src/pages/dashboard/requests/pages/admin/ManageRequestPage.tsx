@@ -1,9 +1,8 @@
 import PageTitle from "../../components/PageTitle";
-import SeachFilter from "../../components/SeachFilter";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/custom/Loader";
 import ManageRequests from "../../components/manage-requests";
@@ -13,7 +12,7 @@ import { useGET } from "@/hooks/useGET.hook";
 
 export default function ManageRequestPage() {
   const [loading, setLoading] = useState(false);
-  const [statuses, setStatuses] = useState<string[]>([]);
+  // const [statuses, setStatuses] = useState<string[]>([]);
   const [showStatuses, setShowStatuses] = useState(false);
   const [appliedStatuses, setAppliedStatuses] = useState<string[]>([]);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -25,7 +24,7 @@ export default function ManageRequestPage() {
       setLoading(false);
     }, 5000);
   };
-  const manageStatuses = ["Awaiting", "Reviewed", "Assigned", "In Progress"];
+  // const manageStatuses = ["Awaiting", "Reviewed", "Assigned", "In Progress"];
 
   const deleteStatusUpdate = (status: string) => {
     setAppliedStatuses((prev) => prev.filter((val) => val !== status));
@@ -38,9 +37,9 @@ export default function ManageRequestPage() {
     queryKey: ["GET_REQUEST_MANAGE_REQUEST_PAGE"],
   });
 
-  useEffect(() => {
-    setStatuses(manageStatuses);
-  }, []);
+  // useEffect(() => {
+  //   setStatuses(manageStatuses);
+  // }, []);
 
   return (
     <>
@@ -59,12 +58,12 @@ export default function ManageRequestPage() {
           </Button>
         </div>
         <div className="flex items-center justify-between mt-12 mb-4">
-          <SeachFilter
+          {/* <SeachFilter
             statuses={statuses}
             setLoading={setLoading}
             setShowStatuses={setShowStatuses}
             setAppliedStatuses={setAppliedStatuses}
-          />
+          /> */}
           <div className="lg:flex items-center gap-1 hidden">
             <span>
               <a href="" className="font-semibold underline text-black">

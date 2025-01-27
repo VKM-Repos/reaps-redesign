@@ -3,7 +3,8 @@ import { useMediaQuery } from "react-responsive";
 import EmptyState from "./components/emptystate";
 import { useGET } from "@/hooks/useGET.hook";
 import UploadTemplateSheet from "./components/upload-templates/upload-template-sheet";
-import TemplateGrid from "./components/template-grid";
+// import TemplateGrid from "./components/template-grid";
+import UploadedTemplates from "./components/uploaded-templates";
 
 export default function Templates() {
   const isLarge = useMediaQuery({ query: "(max-width: 1100px)" });
@@ -32,9 +33,9 @@ export default function Templates() {
         </div>
         <div className="mb-24">
           {templates?.items?.length !== 0 ? (
-            // <UploadedTemplates templates={templates} refetch={refetch} />
-            <TemplateGrid templates={templates} />
+            <UploadedTemplates templates={templates} refetch={refetch} />
           ) : (
+            // <TemplateGrid templates={templates} />
             <EmptyState>
               <UploadTemplateSheet refetch={refetch} />
             </EmptyState>

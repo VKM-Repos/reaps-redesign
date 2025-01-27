@@ -105,7 +105,7 @@ export default function WriteReview({
       },
     });
   }
-  console.log(request, "{{}}");
+
 
   return (
     <>
@@ -128,19 +128,19 @@ export default function WriteReview({
                       <p className="text-center text-lg font-semibold">
                         How satisfied are you with the quality of the request?
                       </p>
-                      <div className="!w-full">
+                      <div className="!w-full mx-auto">
                         <FormField
                           control={form.control}
                           name="status"
                           render={() => (
-                            <FormItem className="w-full flex flex-wrap gap-3 items-center justify-center">
+                            <FormItem className="w-full flex flex-col md:flex-row gap-3 items-center justify-center">
                               {remarks.map((remark) => (
                                 <FormField
                                   key={remark.id}
                                   control={form.control}
                                   name="status"
                                   render={({ field }) => (
-                                    <FormItem className="!w-full min-w-[24rem] md:min-w-0 justify-self-end !my-0">
+                                    <FormItem className="!w-full min-w-[18rem] md:min-w-0 justify-self-end !my-0">
                                       <FormControl>
                                         <label
                                           className={
