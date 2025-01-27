@@ -18,7 +18,6 @@ import {
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import ArrowLeftDouble from "@/assets/arrow-left-doube.svg";
 import ArrowRightDouble from "@/assets/arrow-right-double.svg";
-import { useState } from "react";
 
 export const CustomCell = ({
   value,
@@ -88,36 +87,7 @@ export default function CustomTable({
   const page_number = Math.ceil(total_entries / pageSize);
   const start = pageIndex * pageSize + 1;
   const end = Math.min(start + pageSize - 1, total_entries);
-  const [visibleStart, setVisibleStart] = useState(0);
 
-  const allPages = Array.from({ length: page_number }, (_, i) => i);
-  const visible_pages =
-    page_number <= 5
-      ? allPages // Show all if fewer than max pages
-      : [
-          ...allPages.slice(0, 2), // First two
-          ...(visibleStart > 2 ? ["..."] : []), // Ellipsis if middle pages are hidden
-          ...allPages.slice(
-            Math.max(visibleStart, 2),
-            Math.min(visibleStart + 2, page_number - 2)
-          ),
-          ...(visibleStart + 2 < page_number - 2 ? ["..."] : []), // Ellipsis before last two
-          ...allPages.slice(page_number - 2, page_number), // Last two
-        ];
-
-  const handleNextPages = () => {
-    if (pageIndex < page_number - 1) {
-      table.setPageIndex(pageIndex + 1);
-      setVisibleStart(Math.min(visibleStart + 2, page_number - 2));
-    }
-  };
-
-  const handlePreviousPages = () => {
-    if (pageIndex > 0) {
-      table.setPageIndex(pageIndex - 1);
-      setVisibleStart(Math.max(visibleStart - 2, 0));
-    }
-  };
 
   return (
     <div className="w-full flex flex-col gap-6 mb-[6rem] ">
@@ -194,38 +164,52 @@ export default function CustomTable({
           <div className="flex gap-[0.625rem] items-center">
             <button
               className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full w-[3rem] h-[3rem] flex items-center justify-center"
-              disabled={pageIndex === 0}
-              onClick={() => handlePreviousPages()}
+              disabled={!table.getCanPreviousPage}
+              onClick={() => table.previousPage()}
             >
               <img src={ArrowLeftDouble} />
             </button>
-            {/* Page Numbers */}
-            <div className="flex gap-1 items-center font-medium">
-              {visible_pages.map((page: any, index) =>
-                page === "..." ? (
-                  <span key={index} className="text-[#20293A]">
-                    ...
-                  </span>
-                ) : (
+            <ul className="flex gap-1 items-center font-medium">
+              {Array.from({ length: table.getPageCount() }, (_, index) => {
+                const currentPage = table.getState().pagination.pageIndex;
+                const totalPages = table.getPageCount();
+                if (index === 0 ||
+                  index === totalPages - 1 ||
+                  Math.abs(index - currentPage) <= 1
+                 ) {
+                  return (
+                    <li key={index}>
                   <button
                     key={index}
                     className={`rounded-full w-[3rem] h-[3rem] flex items-center justify-center ${
-                      pageIndex === page
+                      currentPage === index
                         ? "text-[#FFFFFF] bg-[#051467]"
                         : "text-[#20293A] hover:bg-[#14155E14]"
                     }`}
-                    onClick={() => table.setPageIndex(page)}
+                    onClick={() => table.setPageIndex(index)}
                   >
-                    {page + 1}
+                    {index + 1}
                   </button>
-                )
+                </li>
               )}
-            </div>
+              else if (
+                (index === currentPage - 2 || index === currentPage + 2) &&
+                Math.abs(index - currentPage) > 1
+              ){
+                return (
+                  <li key={index} className="text-[#20293A]">
+                    ...
+                  </li>
+                );
+              }
+              return null;
+            })}
+            </ul>
 
             <button
               className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full w-[3rem] h-[3rem] flex items-center justify-center"
-              disabled={pageIndex >= page_number - 1}
-              onClick={() => handleNextPages()}
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.nextPage()}
             >
               <img src={ArrowRightDouble} />
             </button>
