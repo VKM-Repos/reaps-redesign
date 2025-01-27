@@ -14,17 +14,21 @@ import useUserStore from "@/store/user-store";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Please add the file name" }),
-  department: z.string().min(1, { message: "Please add the file name" }),
+  department: z.string()
+      .min(1, { message: "Please input the department name" })
+      .min(10, { message: "Department field must contain a minimum of 10 characters"}),
   file: z.instanceof(File, { message: "Please upload a file" }),
 });
 export default function UploadTemplate({
   refetch,
   template,
   action,
+  setOpen,
 }: {
   refetch: () => void;
   template?: any;
   action: "create" | "edit";
+  setOpen: (open: boolean) => void;
 }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -110,6 +114,7 @@ export default function UploadTemplate({
     } finally {
       setIsLoading(false);
     }
+    setOpen(false);
   }
 
   return (
@@ -216,7 +221,6 @@ export default function UploadTemplate({
                 <SheetClose className="bg-[hsl(var(--ghost))] text-[hsl(var(--ghost-foreground))] !py-2 !px-6 rounded">
                   Cancel
                 </SheetClose>
-                <SheetClose>
                   <Button
                     variant={
                       isValid && uploadProgress === 100 ? "default" : "ghost"
@@ -226,7 +230,6 @@ export default function UploadTemplate({
                   >
                     Finish
                   </Button>
-                </SheetClose>
               </div>
             </form>
           </Form>

@@ -71,8 +71,8 @@ export function LoginForm() {
         const searchParams = new URLSearchParams(location.search);
         const redirectPath = searchParams.get("redirect") || "/home";
 
-        const requiredRole = searchParams.get("role");
-        if (requiredRole && requiredRole !== responseData.user.user_type) {
+        const requiredEmail = searchParams.get("email");
+        if (requiredEmail && requiredEmail !== responseData.user.email) {
           navigate("/home");
         } else {
           navigate(redirectPath);

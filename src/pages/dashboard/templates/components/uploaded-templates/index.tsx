@@ -29,6 +29,7 @@ import Loader from "@/components/custom/Loader";
 import { useDELETE } from "@/hooks/useDelete.hook";
 // import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
 import Download from "@/components/custom/Icons/Download";
+import Cancel from "@/components/custom/Icons/Cancel";
 
 export default function UploadedTemplates({
   templates,
@@ -66,6 +67,7 @@ const UploadedTemplate = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [isViewerLoading, setIsViewerLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const { mutate: deleteTemplate, isPending } = useDELETE(
     `templates/${item?.id}`
   );
@@ -150,56 +152,97 @@ const UploadedTemplate = ({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
                     <DropdownMenuGroup className="flex flex-col justify-center items-start ">
-                      <>
-                        <a
-                          href={item.file_path}
-                          className="flex gap-2 text-black justify-center items-center px-2 py-2"
-                          download
+                      <a
+                        href={item.file_path}
+                        className="flex gap-2 text-black justify-center items-center px-2 py-2"
+                        download
+                      >
+                        <Download /> Download
+                      </a>
+                      {/* <Dialog>
+                        <DialogTrigger
+                          className={`text-black flex justify-center items-center gap-2 p-3`}
                         >
-                          <Download /> Download
-                        </a>
-                        <Sheet>
-                          <SheetTrigger
-                            className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
+                          <View />
+                          <span>View</span>
+                        </DialogTrigger>
+                        <DialogContent
+                          className={` ${
+                            isMobile ? "w-full h-full" : "w-auto h-[95%]"
+                          }  w-[650px] mx-auto my-auto overflow-y-scroll scrollbar scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-w-1.5 scrollbar-thumb-gray-500`}
+                          showCloseButton={false}
+                        >
+                          {isMobile && (
+                            <DialogClose className="fixed top-[2.5rem] right-[2rem] z-[100]">
+                              <Cancel />
+                            </DialogClose>
+                          )}
+                          <div
+                            className={`${
+                              isMobile ? "overflow-scroll" : ""
+                            } w-full mx-auto`}
                           >
-                            <PencilEdit />
-                            <span>Change</span>
-                          </SheetTrigger>
-                          <SheetContent
-                            side={isMobile ? "bottom" : "top"}
-                            className={` ${
-                              isMobile
-                                ? "inset-y-0 inset-x-auto"
-                                : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"
-                            } w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-y-hidden z-[9999]`}
+                            {isViewerLoading ? (
+                              <Skeleton className="w-full h-[400px] rounded-lg" />
+                            ) : (
+                              <span>{"Template"}</span>
+                              // <DocViewer
+                              //   documents={docs}
+                              //   pluginRenderers={DocViewerRenderers}
+                              //   config={{
+                              //     header: {
+                              //       disableHeader: true,
+                              //       disableFileName: true,
+                              //     },
+                              //   }}
+                              //   style={{ width: 650, height: 700 }}
+                              // />
+                            )}
+                          </div>
+                        </DialogContent>
+                      </Dialog> */}
+                      <Sheet open={open} onOpenChange={setOpen}>
+                        <SheetTrigger
+                          className={`text-black flex justify-center items-center gap-2 py-3 px-2`}
+                        >
+                          <PencilEdit />
+                          <span>Change</span>
+                        </SheetTrigger>
+                        <SheetContent
+                          side={isMobile ? "bottom" : "top"}
+                          className={` ${
+                            isMobile
+                              ? "inset-y-0 inset-x-auto"
+                              : "inset-y-auto inset-x-[30%] rounded-3xl md:!pb-12 md:!pt-0"
+                          } w-full mx-auto px-2 md:max-w-[35rem] focus-visible:outline-none overflow-x-hidden z-[9999]`}
+                        >
+                          <div
+                            className={`h-full md:max-h-fit border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
                           >
-                            <div
-                              className={`h-full md:max-h-[31.5rem] border-none w-full flex flex-col gap-[2.5rem] rounded-2xl `}
-                            >
-                              <UploadTemplate
-                                action="edit"
-                                refetch={refetch}
-                                template={item}
-                              />
-                            </div>
-                          </SheetContent>
-                        </Sheet>
-                        <Sheet>
-                          <SheetTrigger
-                            className={`flex justify-center items-center gap-2 text-black ${
-                              isMobile ? "p-2" : "p-3"
-                            }`}
-                          >
-                            <DeleteSmallIcon />
-                            <span>Delete</span>
-                          </SheetTrigger>
-                          <RenderDeleteSheet
-                            text="Are you sure you want to delete this template?"
-                            data={item}
-                            deleteItem={deleteTableItem}
-                          />
-                        </Sheet>
-                      </>
+                            <UploadTemplate
+                              action="edit"
+                              refetch={refetch}
+                              template={item}
+                              setOpen={setOpen}
+                            />
+                          </div>
+                        </SheetContent>
+                      </Sheet>
+                      <Sheet>
+                        <SheetTrigger
+                          className={`flex justify-center items-center gap-2 text-black ${
+                            isMobile ? "p-2" : "p-3"
+                          }`}
+                        >
+                          <DeleteSmallIcon />
+                          <span>Delete</span>
+                        </SheetTrigger>
+                        <RenderDeleteSheet
+                          text="Are you sure you want to delete this template?"
+                          data={item}
+                          deleteItem={deleteTableItem}
+                        />
+                      </Sheet>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
