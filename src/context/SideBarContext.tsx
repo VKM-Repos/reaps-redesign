@@ -119,11 +119,6 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
               icon: <DocumentIcon />,
             },
             {
-              label: "Approved Request",
-              path: "/requests/approved-requests",
-              icon: <DocumentIcon />,
-            },
-            {
               label: "Manage Request",
               path: "/requests/manage-requests",
               icon: <FileManage />,
