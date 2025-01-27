@@ -18,6 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { FileWarning } from "lucide-react";
+import { RequestItems } from "@/types/requests";
 
 type Props = {
   handleNext: () => void;
@@ -143,9 +144,7 @@ const ApplicationSummary = ({ handleNext, requestDetails }: Props) => {
                   <div className="flex items-center gap-4 px-3 py-2 border border-[#040C21] bg-[#192C8A14] rounded-md w-full max-w-fit">
                     <div className="flex justify-center items-center aspect-square h-[1.375rem] w-[1.375rem] rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                       <div
-                        className={`flex items-center justify-center rounded-full h-[0.875rem] w-[0.875rem] ${
-                          questionValue ? "bg-black" : "bg-transparent"
-                        }`}
+                        className={`flex items-center justify-center rounded-full h-[0.875rem] w-[0.875rem] bg-black`}
                       ></div>
                     </div>
                     <Label className="text-base capitalize">
@@ -210,6 +209,26 @@ const ApplicationSummary = ({ handleNext, requestDetails }: Props) => {
         type: "optional",
       })),
     ];
+    const new_required_docs = {
+      ethical_request_files: allRequiredDocs.reduce((acc, doc) => {
+        const storeFile = ethical_request_files[doc.name];
+        const requestFile = requestDetails?.[doc.name as keyof RequestItems];
+
+        if (typeof requestFile === "string") {
+          acc[doc.name] = {
+            name: requestFile.split("/").pop() || "unknown", // Extract file name from URL
+            size: 0, // Set size to 0 as it's unavailable for URLs
+            type: "application/octet-stream", // Set a generic MIME type
+          };
+        } else if (storeFile) {
+          acc[doc.name] = storeFile;
+        } else {
+          acc[doc.name] = null;
+        }
+  
+        return acc;
+      }, {} as Record<string, File | { name: string; size: number; type: string } | null>),
+    }
     return (
       <section>
         <div className="flex justify-between items-center">
@@ -230,7 +249,7 @@ const ApplicationSummary = ({ handleNext, requestDetails }: Props) => {
         {/* Map out supporting documents */}
         <div className="md:grid md:grid-cols-2 gap-8 flex flex-col mt-4">
           {allRequiredDocs.map((doc) => {
-            const file: any = ethical_request_files[doc.name];
+            const file: any = new_required_docs.ethical_request_files[doc.name];
             if (file) {
               const documentName = doc.label;
               return (
@@ -253,9 +272,9 @@ const ApplicationSummary = ({ handleNext, requestDetails }: Props) => {
                         {file instanceof File ? file?.name : file?.name}
                       </span>
                     </span>
-                    <span className="text-xs text-gray-500">
+                    {/* <span className="text-xs text-gray-500">
                       {(file?.size / 1024).toFixed(2)} KB
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               );
