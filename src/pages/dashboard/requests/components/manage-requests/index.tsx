@@ -17,6 +17,8 @@ import InstitutionRequestSummary from "../../view-requests/admin";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import SignatureIcon from "@/components/custom/Icons/Signature";
 import ReviewersList from "./reviewers-list";
+import { statusColorMap, truncateString } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 type TableRequestsProps = {
   institutionTableData: {
@@ -85,12 +87,12 @@ export default function ManageRequests({
       header: () => (
         <CustomCell
           value={"Title"}
-          className="font-bold w-full min-w-[15rem]"
+          className="font-bold w-full min-w-[10rem]"
         />
       ),
       accessorKey: "research_title",
       cell: (info) => (
-        <CustomCell value={info.getValue()} className="min-w-[15rem] w-full" />
+        <CustomCell value={info.getValue()} className="min-w-[10rem] w-full" />
       ),
     },
     {
@@ -116,29 +118,57 @@ export default function ManageRequests({
     },
     {
       header: () => (
-        <CustomCell
-          value={"Email"}
-          className="font-bold w-full min-w-[10rem]"
-        />
+        <CustomCell value={"Email"} className="font-bold w-full min-w-[8rem]" />
       ),
       accessorKey: "user.email",
       cell: ({ getValue }) => (
         <CustomCell
-          className="w-full min-w-[10rem] text-left"
-          value={getValue()}
+          className="w-full min-w-[8rem] text-left"
+          value={truncateString(getValue(), 15)}
         />
       ),
     },
     {
       header: () => (
         <CustomCell
+          value={"Status"}
+          className="font-bold w-full min-w-[8.75rem]"
+        />
+      ),
+      accessorKey: "status",
+      cell: ({ getValue }) => (
+        <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
+          <Badge
+            style={{
+              color: statusColorMap[getValue()]?.text || "#000000",
+              backgroundColor: statusColorMap[getValue()]?.bg || "#192C8A",
+            }}
+            className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
+          >
+            <div
+              style={{
+                backgroundColor: statusColorMap[getValue()]?.text || "#192C8A",
+              }}
+              className="w-[5px] h-[5px] rounded-full"
+            ></div>
+            {getValue()}
+          </Badge>
+        </span>
+      ),
+    },
+    {
+      header: () => (
+        <CustomCell
           value={"Submission"}
-          className="font-bold w-full min-w-[10rem]"
+          className="font-bold w-full min-w-[12rem]"
         />
       ),
       accessorKey: "created_at",
       cell: ({ getValue }) => (
-        <CustomCell className="w-full" value={formatDate(getValue())} />
+        <CustomCell
+          className="w-full max-w-[12rem]"
+          value={formatDate(getValue())}
+        />
       ),
     },
     // {
@@ -171,14 +201,14 @@ export default function ManageRequests({
     // },
     {
       accessorKey: "custom",
-      header: () => <CustomCell value="" className="w-full md:max-w-[2rem]" />,
+      header: () => <CustomCell value="" className="w-full md:max-w-[1rem]" />,
       meta: { cellType: "custom" },
       cell: ({ row }) => {
         const item = row.original;
         return (
           <CustomCell
             value={<RenderFunctions item={item} />}
-            className="flex justify-center items-center justify-self-end w-full md:max-w-[2rem]"
+            className="flex justify-center items-center justify-self-end w-full md:max-w-[1rem]"
           />
         );
       },
