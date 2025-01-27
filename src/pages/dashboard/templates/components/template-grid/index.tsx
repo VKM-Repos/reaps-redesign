@@ -7,8 +7,7 @@ export default function TemplateGrid({ templates }: TemplateGridProps) {
 
   return (
     <div>
-      template
-      <div className="flex">
+      <div className="flex flex-wrap gap-5">
         {templates?.items?.map((template: any) => (
           <TemplateCard template={template} />
         ))}
