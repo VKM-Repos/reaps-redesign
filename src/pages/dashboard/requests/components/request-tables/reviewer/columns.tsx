@@ -1,7 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { CustomCell } from "@/components/custom/CustomTable";
-import { statusColorMap } from "@/lib/utils";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import View from "@/components/custom/Icons/View";
 import ReviewerRequestSummary from "../../../view-requests/reviewer";
@@ -27,6 +25,21 @@ const columns: Array<ColumnDef<any>> = [
       />
     ),
     accessorKey: "fullName",
+    cell: (info) => (
+      <CustomCell
+        value={info.getValue()}
+        className="min-w-[10rem] whitespace-nowrap "
+      />
+    ),
+  },
+  {
+    header: () => (
+      <CustomCell
+        value={"Applicant Email"}
+        className="font-bold w-full min-w-[10rem] "
+      />
+    ),
+    accessorKey: "email",
     cell: (info) => (
       <CustomCell
         value={info.getValue()}
@@ -66,34 +79,6 @@ const columns: Array<ColumnDef<any>> = [
             value={formattedTime}
             className="min-w-[10rem] w-full overflow-x-hidden"
           />
-        </div>
-      );
-    },
-  },
-  {
-    header: () => (
-      <CustomCell value={"Status"} className="font-bold w-full min-w-[7rem]" />
-    ),
-    accessorKey: "status",
-    cell: ({ row }) => {
-      const item = row.original;
-      return (
-        <div className="flex items-center w-full min-w-[7rem] font-normal">
-          <Badge
-            style={{
-              color: statusColorMap[item.status]?.text || "#000000",
-              backgroundColor: statusColorMap[item.status]?.bg || "#192C8A",
-            }}
-            className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-normal text-xs whitespace-nowrap "
-          >
-            <div
-              style={{
-                backgroundColor: statusColorMap[item.status]?.text || "#000000",
-              }}
-              className="w-[5px] h-[5px] rounded-full"
-            ></div>
-            {item.status}
-          </Badge>
         </div>
       );
     },
