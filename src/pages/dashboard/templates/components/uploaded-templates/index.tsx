@@ -29,7 +29,7 @@ import Loader from "@/components/custom/Loader";
 import { useDELETE } from "@/hooks/useDelete.hook";
 // import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
 import Download from "@/components/custom/Icons/Download";
-import Cancel from "@/components/custom/Icons/Cancel";
+// import Cancel from "@/components/custom/Icons/Cancel";
 
 export default function UploadedTemplates({
   templates,
