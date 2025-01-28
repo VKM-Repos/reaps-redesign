@@ -24,8 +24,8 @@ export default function ViewTransactions() {
             <h1 className="text-[1.875rem] font-bold">Your transactions</h1>
           </div>
           <p className="text-sm text-[#454745]">
-            Here you can see the details of all the payments you have made ,
-            please not that you will only find the transaction history of only
+            Here you can see the details of all the payments you have made,
+            please note that you will only find the transaction history of only
             payments made online and not offline
           </p>
         </div>

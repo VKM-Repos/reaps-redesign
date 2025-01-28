@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomFormField, {
   FormFieldType,
 } from "@/components/custom/CustomFormField";
@@ -18,6 +19,7 @@ import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
 import Line from "@/assets/line.svg";
 import { useState } from "react";
+import { useGET } from "@/hooks/useGET.hook";
 
 type SummaryPageProps = {
   isApproval?: boolean;
@@ -30,7 +32,6 @@ const Summary = ({
   handlePrint,
   isApproval,
   activeTab = "request table",
-  reviews,
   request,
 }: SummaryPageProps) => {
   const { data } = useRequestsStore();
@@ -133,15 +134,18 @@ const Summary = ({
 
   function onSubmit() {
     try {
-      setTimeout(() => {
-        if (handlePrint) {
-          handlePrint();
-        }
-      }, 3000);
+      if (handlePrint) {
+        handlePrint();
+      }
     } catch (error) {
       console.error(error);
     }
   }
+
+  const { data: reviews_data } = useGET({
+    url: `reviews/request/${request?.id}`,
+    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
+  });
 
   return (
     <>
@@ -272,10 +276,7 @@ const Summary = ({
                               pathname.includes(
                                 "/requests/review-requests"
                               ))) ? (
-                            <a
-                              href={file?.href}
-                              className="p-2"
-                            >
+                            <a href={file?.href} className="p-2">
                               <span>
                                 <Download />
                               </span>
@@ -303,10 +304,10 @@ const Summary = ({
                     Comments and Reviews
                   </h1>
                 </div>
-                {reviews?.length > 0 ? (
+                {reviews_data?.items.length > 0 ? (
                   <div className="flex flex-col gap-6">
                     {/* do not show reviews from Reviewers to researchers*/}
-                    {reviews?.map((reviewer: any) => {
+                    {reviews_data?.items?.map((reviewer: any) => {
                       // const remark = review_remarks.find(
                       //     (r) => r.text === reviewer.remark
                       // );

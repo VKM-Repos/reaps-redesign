@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -33,20 +34,18 @@ interface ReviewRemark {
 
 interface WriteReviewProps {
   request_id: string;
-  request?: any;
+  data?: any;
   remarks: ReviewRemark[];
   buttonText: string;
   closeDialog: () => void;
-  refetch: () => void;
 }
 
 export default function WriteReview({
   request_id,
-  request,
+  data,
   remarks,
   buttonText,
   closeDialog,
-  refetch,
 }: WriteReviewProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,20 +61,22 @@ export default function WriteReview({
     reset,
   } = form;
 
-  const { data: reviewer_reviews, isPending: fetch_reviewers_review } = useGET({
+  const { data: reviewer_reviews } = useGET({
     url: `reviews/reviewer`,
     queryKey: ["FETCH_REVIEW_BY_REVIEWER", request_id],
   });
+
   const review_id = reviewer_reviews?.items?.find(
-    (item: any) => item.request?.id === request?.id
+    (item: any) => item.request?.id === request_id
   )?.id;
+
   const { mutate: write_review, isPending: updating_review } = usePATCH(
     `reviews/${review_id}`,
     { method: "PATCH", contentType: "multipart/form-data" }
   );
 
   const { mutate: write_final_review, isPending: updating_final_review } =
-    usePOST(`reviews/final-review/${request?.id}`, {
+    usePOST(`reviews/final-review/${data.request?.id}`, {
       contentType: "multipart/form-data",
     });
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -92,7 +93,6 @@ export default function WriteReview({
           description: "Review has been sent.",
           variant: "default",
         });
-        refetch();
         reset();
         closeDialog();
       },
@@ -106,10 +106,9 @@ export default function WriteReview({
     });
   }
 
-
   return (
     <>
-      {fetch_reviewers_review || updating_review || updating_final_review ? (
+      {updating_review || updating_final_review ? (
         <Loader />
       ) : (
         <WriteReviewWrapper>

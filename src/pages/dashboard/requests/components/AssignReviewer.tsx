@@ -3,7 +3,6 @@ import CustomTable, {
   CustomCell,
 } from "@/components/custom/CustomTable";
 import SearchIcon from "@/components/custom/Icons/Search";
-import Loader from "@/components/custom/Loader";
 import { DialogContent } from "@/components/ui/dialog";
 import { useGET } from "@/hooks/useGET.hook";
 import { useState } from "react";
@@ -12,17 +11,12 @@ import { useDELETE } from "@/hooks/useDelete.hook";
 import { toast } from "@/components/ui/use-toast";
 
 export default function AssignReviewer({ request }: { request: any }) {
-  const {
-    data: assigned,
-    isPending: fetching_assigned,
-    refetch: refetch_assigned,
-  } = useGET({
+  const { data: assigned, refetch: refetch_assigned } = useGET({
     url: `reviews/request/${request?.id}`,
     queryKey: ["GET_ASSIGNED_IN_ASSIGN_REVIEW_PAGE", request?.id],
   });
 
-  const { mutate: un_assign, isPending: un_assigning } =
-    useDELETE("reviews/unassign");
+  const { mutate: un_assign } = useDELETE("reviews/unassign");
   function un_assign_review(request_id: string, reviewer_id: string) {
     un_assign(
       { request_id, reviewer_id },
@@ -127,52 +121,48 @@ export default function AssignReviewer({ request }: { request: any }) {
 
   return (
     <>
-      {fetching_assigned || un_assigning ? (
-        <Loader />
-      ) : (
-        <DialogContent className="fixed !w-full !max-w-[70rem] h-[90%] mx-auto">
-          <div className="w-full mt-[5.5rem] px-[3.5rem] overflow-y-scroll">
-            <div className="flex flex-col justify-start gap-[1.875rem] mx-auto">
-              <div className="flex flex-col justify-start gap-[1.875rem] bg-white z-[99] w-full mx-auto">
-                <h1 className="font-semibold text-[1.875rem]">
-                  Assign Reviewer
-                </h1>
-                <div className="flex justify-between w-full">
-                  <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem] w-full min-w-[13rem] md:min-w-[21rem] max-w-[21rem]">
-                    <SearchIcon />
-                    <input
-                      name="search"
-                      placeholder="Search"
-                      type="search"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      className="border-none hover:border-none focus:border-none w-full focus-visible:outline-none text-sm"
-                    />
-                  </div>
-                  <ReviewersList refetch={refetch_assigned} request={request} assignedList={assigned?.items}/>
+      <DialogContent className="fixed !w-full !max-w-[70rem] h-[90%] mx-auto">
+        <div className="w-full mt-[5.5rem] px-[3.5rem] overflow-y-scroll">
+          <div className="flex flex-col justify-start gap-[1.875rem] mx-auto">
+            <div className="flex flex-col justify-start gap-[1.875rem] bg-white z-[99] w-full mx-auto">
+              <h1 className="font-semibold text-[1.875rem]">Assign Reviewer</h1>
+              <div className="flex justify-between w-full">
+                <div className="flex py-3 px-4 gap-2 border border-[#0E0F0C1F] rounded-[0.625rem] w-full min-w-[13rem] md:min-w-[21rem] max-w-[21rem]">
+                  <SearchIcon />
+                  <input
+                    name="search"
+                    placeholder="Search"
+                    type="search"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="border-none hover:border-none focus:border-none w-full focus-visible:outline-none text-sm"
+                  />
                 </div>
-              </div>
-              <h1 className="font-semibold text-[1.2rem]">
-                Reviewers for{" "}
-                <span className="text-primary">
-                  ({request?.research_title})
-                </span>
-              </h1>
-              <div className="w-full max-w-[95%] ">
-                <CustomTable
-                  columns={columnData}
-                  data={assigned?.items || []}
-                  localSearch={searchTerm}
-                  setLocalSearch={setSearchTerm}
-                  customTableClassName="p-5 w-full"
-                  customHeaderRowClassName="bg-[#14155E14] border-b-[#0E0F0C1F] !my-3 !py-2 !px-6 rounded-[.625rem]"
-                  customRowClassName="!border-b-[#0E0F0C1F] !border !border-b !my-3 !px-6 !py-0 hover:bg-[#14155E14] !rounded-[.625rem]"
+                <ReviewersList
+                  refetch={refetch_assigned}
+                  request={request}
+                  assignedList={assigned?.items}
                 />
               </div>
             </div>
+            <h1 className="font-semibold text-[1.2rem]">
+              Reviewers for{" "}
+              <span className="text-primary">({request?.research_title})</span>
+            </h1>
+            <div className="w-full max-w-[95%] ">
+              <CustomTable
+                columns={columnData}
+                data={assigned?.items || []}
+                localSearch={searchTerm}
+                setLocalSearch={setSearchTerm}
+                customTableClassName="p-5 w-full"
+                customHeaderRowClassName="bg-[#14155E14] border-b-[#0E0F0C1F] !my-3 !py-2 !px-6 rounded-[.625rem]"
+                customRowClassName="!border-b-[#0E0F0C1F] !border !border-b !my-3 !px-6 !py-0 hover:bg-[#14155E14] !rounded-[.625rem]"
+              />
+            </div>
           </div>
-        </DialogContent>
-      )}
+        </div>
+      </DialogContent>
     </>
   );
 }

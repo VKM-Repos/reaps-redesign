@@ -99,7 +99,7 @@ const TransactionTable = () => {
                 color: statusColorMap[item.status]?.text || "#000000",
                 backgroundColor: statusColorMap[item.status]?.bg || "#192C8A",
               }}
-              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-normal text-xs"
+              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-normal capitalize text-xs"
             >
               <div
                 style={{
@@ -108,7 +108,7 @@ const TransactionTable = () => {
                 }}
                 className="w-[5px] h-[5px] rounded-full "
               ></div>
-              {item.status}
+              <span>{item.status.toLowerCase()}</span>
             </Badge>
           </div>
         );
