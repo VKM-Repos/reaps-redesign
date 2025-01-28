@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomFormField, {
   FormFieldType,
 } from "@/components/custom/CustomFormField";
@@ -133,11 +134,9 @@ const Summary = ({
 
   function onSubmit() {
     try {
-      setTimeout(() => {
-        if (handlePrint) {
-          handlePrint();
-        }
-      }, 3000);
+      if (handlePrint) {
+        handlePrint();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -272,10 +271,7 @@ const Summary = ({
                               pathname.includes(
                                 "/requests/review-requests"
                               ))) ? (
-                            <a
-                              href={file?.href}
-                              className="p-2"
-                            >
+                            <a href={file?.href} className="p-2">
                               <span>
                                 <Download />
                               </span>

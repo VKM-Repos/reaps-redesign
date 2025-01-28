@@ -1,5 +1,5 @@
 import React from "react";
-import PageTitle from "./PageTitle";
+import PageTitle from "../../../../components/custom/PageTitle";
 import { useNavigate } from "react-router-dom";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import { Button } from "@/components/ui/button";

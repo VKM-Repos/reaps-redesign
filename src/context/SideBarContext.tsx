@@ -104,11 +104,6 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
           icon: <More />,
         },
         {
-          label: "Pricing",
-          path: "/pricing",
-          icon: <InvoiceIcon />,
-        },
-        {
           label: "Requests",
           path: "/requests",
           icon: <DocumentIcon />,
