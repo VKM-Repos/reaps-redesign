@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "@tanstack/react-query";
 import { createApiInstance } from "@/config/axiosInstance";
 import { useNavigate, useLocation } from "react-router-dom";

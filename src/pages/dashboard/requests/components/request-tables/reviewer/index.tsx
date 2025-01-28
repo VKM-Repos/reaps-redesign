@@ -8,8 +8,6 @@ type Props = {
 };
 
 const ReviewerRequestTable = ({ data }: Props) => {
-  console.log(data, "////");
-
   return (
     <div className="w-full">
       {data.length > 0 ? (

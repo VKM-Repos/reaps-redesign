@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,7 +38,6 @@ interface WriteReviewProps {
   remarks: ReviewRemark[];
   buttonText: string;
   closeDialog: () => void;
-  refetch: () => void;
 }
 
 export default function WriteReview({
@@ -46,7 +46,6 @@ export default function WriteReview({
   remarks,
   buttonText,
   closeDialog,
-  refetch,
 }: WriteReviewProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,7 +61,7 @@ export default function WriteReview({
     reset,
   } = form;
 
-  const { data: reviewer_reviews, isPending: fetch_reviewers_review } = useGET({
+  const { data: reviewer_reviews } = useGET({
     url: `reviews/reviewer`,
     queryKey: ["FETCH_REVIEW_BY_REVIEWER", request_id],
   });
@@ -92,7 +91,6 @@ export default function WriteReview({
           description: "Review has been sent.",
           variant: "default",
         });
-        refetch();
         reset();
         closeDialog();
       },
@@ -106,10 +104,9 @@ export default function WriteReview({
     });
   }
 
-
   return (
     <>
-      {fetch_reviewers_review || updating_review || updating_final_review ? (
+      {updating_review || updating_final_review ? (
         <Loader />
       ) : (
         <WriteReviewWrapper>

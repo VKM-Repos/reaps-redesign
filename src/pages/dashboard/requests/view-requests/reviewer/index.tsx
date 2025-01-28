@@ -35,11 +35,7 @@ export default function ReviewerRequestSummary({
       queryKey: ["FETCH_REQUEST_DETAILS", request?.id],
     }
   );
-  const {
-    data: reviews,
-    isPending: fetching_reviews,
-    refetch: refetch_reviews,
-  } = useGET({
+  const { data: reviews, isPending: fetching_reviews } = useGET({
     url: `reviews/request/${request?.id}`,
     queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
   });
@@ -132,7 +128,6 @@ export default function ReviewerRequestSummary({
                     </DialogTrigger>
                     <WriteReview
                       request_id={request?.id}
-                      refetch={refetch_reviews}
                       closeDialog={closeDialog}
                       request={request}
                       remarks={review_remarks}
@@ -170,7 +165,6 @@ export default function ReviewerRequestSummary({
             <div className="w-full">
               <WriteReview
                 request_id={request?.id}
-                refetch={refetch_reviews}
                 closeDialog={closeDialog}
                 request={request}
                 remarks={review_remarks}

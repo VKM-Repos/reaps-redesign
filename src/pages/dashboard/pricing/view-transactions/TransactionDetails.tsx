@@ -216,7 +216,7 @@ function TransactionDetailsContent({
                 }}
                 className="w-[5px] h-[5px] rounded-full "
               ></div>
-              {transaction.status ?? "---"}
+              {transaction.status.toLowerCase() ?? "---"}
             </Badge>
           </div>
         </div>

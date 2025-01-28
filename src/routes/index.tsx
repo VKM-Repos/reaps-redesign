@@ -17,12 +17,11 @@ import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
 import InstitutionAccount from "@/pages/dashboard/institution/account";
 import Transactions from "@/pages/dashboard/institution/account/transactions";
-import MyRequest from "@/pages/dashboard/requests/pages/admin/MyRequest";
-import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/ManageRequestPage";
+import MyRequest from "@/pages/dashboard/requests/pages/admin/my-request";
+import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/manage-request";
 import Templates from "@/pages/dashboard/templates";
 import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
-import ApprovedRequest from "@/pages/dashboard/requests/pages/admin/ApprovedRequest";
 
 const router = [
   {
@@ -80,12 +79,6 @@ const router = [
             path: "requests/my-requests",
             title: "My Request",
             element: MyRequest,
-          },
-          {
-            name: "Approved Request",
-            path: "requests/approved-requests",
-            title: "Approved Request",
-            element: ApprovedRequest,
           },
           {
             name: "Manage Request",
