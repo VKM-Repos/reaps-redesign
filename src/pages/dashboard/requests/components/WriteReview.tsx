@@ -34,7 +34,7 @@ interface ReviewRemark {
 
 interface WriteReviewProps {
   request_id: string;
-  request?: any;
+  data?: any;
   remarks: ReviewRemark[];
   buttonText: string;
   closeDialog: () => void;
@@ -42,7 +42,7 @@ interface WriteReviewProps {
 
 export default function WriteReview({
   request_id,
-  request,
+  data,
   remarks,
   buttonText,
   closeDialog,
@@ -65,16 +65,18 @@ export default function WriteReview({
     url: `reviews/reviewer`,
     queryKey: ["FETCH_REVIEW_BY_REVIEWER", request_id],
   });
+
   const review_id = reviewer_reviews?.items?.find(
-    (item: any) => item.request?.id === request?.id
+    (item: any) => item.request?.id === request_id
   )?.id;
+
   const { mutate: write_review, isPending: updating_review } = usePATCH(
     `reviews/${review_id}`,
     { method: "PATCH", contentType: "multipart/form-data" }
   );
 
   const { mutate: write_final_review, isPending: updating_final_review } =
-    usePOST(`reviews/final-review/${request?.id}`, {
+    usePOST(`reviews/final-review/${data.request?.id}`, {
       contentType: "multipart/form-data",
     });
   function onSubmit(values: z.infer<typeof formSchema>) {

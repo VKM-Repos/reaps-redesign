@@ -91,8 +91,8 @@ export default function MyRequest() {
       }`,
       email: item?.request?.user.email,
       created_at: item?.request?.created_at,
-      expiration_date: item?.expiration_date,
       request: item?.request,
+      all: item,
     })) || [];
 
   return (

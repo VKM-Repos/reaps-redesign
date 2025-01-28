@@ -48,7 +48,7 @@ const columns: Array<ColumnDef<any>> = [
   {
     header: () => (
       <CustomCell
-        value={"Approved Date"}
+        value={"Submission"}
         className="font-bold w-full min-w-[6rem]"
       />
     ),
@@ -88,7 +88,7 @@ const columns: Array<ColumnDef<any>> = [
     cell: ({ row }) => (
       <div className="flex place-content-center items-center gap-2">
         <CustomCell
-          value={<ReviewerRequestSummary request={row.original.request} />}
+          value={<ReviewerRequestSummary data={row.original} />}
           className="flex justify-center items-center w-full md:max-w-[3rem]"
         />
       </div>

@@ -11,14 +11,13 @@ import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
 import WriteReview from "../../components/WriteReview";
 import { Dialog, DialogClose, DialogTrigger } from "@/components/ui/dialog";
-import { useGET } from "@/hooks/useGET.hook";
 import View from "@/components/custom/Icons/View";
 
 export default function ReviewerRequestSummary({
-  request,
+  data,
   activeTab,
 }: {
-  request: any;
+  data: any;
   activeTab?: string;
 }) {
   const [activeSection, setActiveSection] = useState("");
@@ -34,11 +33,6 @@ export default function ReviewerRequestSummary({
   //     queryKey: ["FETCH_REQUEST_DETAILS", request?.id],
   //   }
   // );
-
-  const { data: reviews } = useGET({
-    url: `reviews/request/${request?.id}`,
-    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
-  });
 
   // navigate to sections on summary page
   const handleNavClick =
@@ -129,9 +123,9 @@ export default function ReviewerRequestSummary({
                       </button>
                     </DialogTrigger>
                     <WriteReview
-                      request_id={request?.id}
+                      request_id={data.all?.request?.id}
                       closeDialog={closeDialog}
-                      request={request}
+                      data={data?.all}
                       remarks={review_remarks}
                       buttonText="Submit review"
                     />
@@ -150,8 +144,8 @@ export default function ReviewerRequestSummary({
             </div>
             <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
               <Summary
-                reviews={reviews?.items || []}
-                request={request}
+                reviews={data?.all}
+                request={data?.all?.request}
                 activeTab={activeTab}
               />
             </div>
@@ -166,9 +160,9 @@ export default function ReviewerRequestSummary({
             </SheetTrigger>
             <div className="w-full">
               <WriteReview
-                request_id={request?.id}
+                request_id={data.all?.request?.id}
                 closeDialog={closeDialog}
-                request={request}
+                data={data?.all}
                 remarks={review_remarks}
                 buttonText="Submit review"
               />

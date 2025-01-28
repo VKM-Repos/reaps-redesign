@@ -76,7 +76,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ request }) => {
         <WriteReview
           closeDialog={closeSheet}
           request_id={request?.id}
-          request={request}
+          data={request}
           remarks={finalReviewRemarks}
           buttonText="Submit final review"
         />
