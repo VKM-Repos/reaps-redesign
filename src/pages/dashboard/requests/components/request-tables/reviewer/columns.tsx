@@ -1,7 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { CustomCell } from "@/components/custom/CustomTable";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import View from "@/components/custom/Icons/View";
 import ReviewerRequestSummary from "../../../view-requests/reviewer";
 
 const columns: Array<ColumnDef<any>> = [
@@ -90,14 +88,7 @@ const columns: Array<ColumnDef<any>> = [
     cell: ({ row }) => (
       <div className="flex place-content-center items-center gap-2">
         <CustomCell
-          value={
-            <Sheet>
-              <SheetTrigger className="flex gap-2">
-                <View /> <span>View</span>
-              </SheetTrigger>
-              <ReviewerRequestSummary request={row.original.request} />
-            </Sheet>
-          }
+          value={<ReviewerRequestSummary request={row.original.request} />}
           className="flex justify-center items-center w-full md:max-w-[3rem]"
         />
       </div>
