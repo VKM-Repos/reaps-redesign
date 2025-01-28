@@ -35,13 +35,23 @@ export default function MyRequest() {
     reopened: "&status=Re Opened",
   };
 
-  // Generate URL dynamically based on active tab and filters
   const getActiveUrl = () => {
-    let baseUrl = tabUrls[activeTab] || "";
-    if (activeTab === "my_request" && filters.length > 0) {
-      const statusKey = filters[0]?.replace(" ", "_") || "submitted";
-      baseUrl += statusUrls[statusKey] || "";
+    const baseUrl = tabUrls[activeTab];
+    if (!baseUrl) {
+      console.error(`No URL found for activeTab: ${activeTab}`);
+      return "";
     }
+
+    // Apply status filter only for the "my_request" tab
+    if (activeTab === "my_request") {
+      const statusKey = filters[0]?.toLowerCase().replace(/ /g, "_");
+      const statusFilter = statusKey && statusUrls[statusKey];
+
+      // Append the status filter to the base URL, if it exists
+      return statusFilter ? `${baseUrl}${statusFilter}` : baseUrl;
+    }
+
+    // Return the base URL for other tabs
     return baseUrl;
   };
 
@@ -101,7 +111,7 @@ export default function MyRequest() {
           }
         />
         {user?.user_type === "reviewer" ? (
-          <Tabs className="w-full space-y-4">
+          <Tabs defaultValue="my_request" className="w-full space-y-4">
             <TabsList className="border-b-[1px] w-full">
               <TabsTrigger
                 value="my_request"
@@ -164,12 +174,14 @@ export default function MyRequest() {
           <TableWrapper
             search={<SearchGlobal />}
             filter={
-              <FilterGlobal
-                statuses={Object.keys(statusUrls).map((status) =>
-                  status.replace(/_/g, " ")
-                )}
-                onApplyFilters={applyFilters}
-              />
+              activeTab === "my_request" && (
+                <FilterGlobal
+                  statuses={Object.keys(statusUrls).map((status) =>
+                    status.replace(/_/g, " ")
+                  )}
+                  onApplyFilters={applyFilters}
+                />
+              )
             }
           >
             {isPending ? <Loader /> : <RequestTable data={requestItems} />}
