@@ -15,15 +15,16 @@ import { useEffect, useState } from "react";
 
 export default function MyRequest() {
   const statusUrls: any = {
-    my_request: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Payment Confirmed`,
-    drafts: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Not Submitted Yet`,
+    all: `requests/users/me`,
+    submitted: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Submitted`,
+    not_submitted_yet: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Not Submitted Yet`,
+    under_review: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Review in Progress`,
     reopened: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
-    review_request: `reviews/reviewer`,
   };
 
   const navigate = useNavigate();
 
-  const [selectedStatus, setSelectedStatus] = useState<string>("my_request");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { data, isPending, refetch } = useGET({
     url: statusUrls[selectedStatus],
     queryKey: ["FETCH_REQUESTS", selectedStatus],
@@ -69,8 +70,8 @@ export default function MyRequest() {
           search={<SearchGlobal />}
           filter={
             <FilterGlobal
-              statuses={Object.keys(statusUrls).map((key) =>
-                key.replace("_", " ").toLowerCase()
+              statuses={Object.keys(statusUrls).map((status) =>
+                status.replace(/_/g, " ")
               )}
               onApplyFilters={applyFilters}
             />
