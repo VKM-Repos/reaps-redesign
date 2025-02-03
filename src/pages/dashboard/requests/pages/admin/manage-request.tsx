@@ -12,6 +12,7 @@ import FilterGlobal from "@/components/custom/FilterGlobal";
 import { TransitionElement } from "@/lib/transitions";
 import { useEffect, useState } from "react";
 import ManageRequestTable from "../../components/request-tables/admin";
+import { RequestItems } from "@/types/requests";
 
 export default function ManageRequestPage() {
   const statusUrls: any = {
@@ -54,18 +55,21 @@ export default function ManageRequestPage() {
     refetch();
   }, [selectedStatus]);
 
-  const transformItems = (items: any) =>
-    items.map((item: any) => ({
-      id: item.id,
-      research_title: item.research_title,
-      fullName: `${item.user.first_name} ${item.user.last_name}`,
-      email: item.user.email,
-      created_at: item.created_at,
-      status: item.status,
-      all: item,
-    }));
+  const transformItems = (items: any): RequestItems[] | any => {
+    if (!Array.isArray(items)) return [];
 
-  const tableData = data?.items ? transformItems(data.items) : [];
+    return items.map((item: any) => ({
+      id: item?.id,
+      research_title: item?.request?.research_title,
+      fullName: `${item?.request?.user?.first_name} ${item?.request?.user?.last_name}`,
+      email: item?.request?.user?.email,
+      created_at: item?.request?.created_at,
+      status: item?.request?.status,
+      all: item?.request,
+    }));
+  };
+
+  const tableData = transformItems(data);
 
   return (
     <TransitionElement>

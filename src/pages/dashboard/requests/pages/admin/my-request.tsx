@@ -33,9 +33,14 @@ export default function MyRequest() {
 
   const applyFilters = (filters: { statuses: string[] }) => {
     if (filters.statuses.length > 0) {
+      const formattedStatus = filters.statuses[0]
+        .toLowerCase()
+        .replace(/\s+/g, "_");
+
       const newStatus = Object.keys(statusUrls).find(
-        (key) => key === filters.statuses[0].toLowerCase().replace(" ", "_")
+        (key) => key === formattedStatus
       );
+
       if (newStatus) setSelectedStatus(newStatus);
     }
   };
@@ -89,7 +94,7 @@ export default function MyRequest() {
             </div>
           }
         >
-          {isPending ? <Loader /> : <RequestTable data={data ?? []} />}
+          {isPending ? <Loader /> : <RequestTable data={data?.items ?? []} />}
         </TableWrapper>
       </div>
     </TransitionElement>
