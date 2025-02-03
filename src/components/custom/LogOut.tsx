@@ -14,6 +14,7 @@ import useUserStore from "@/store/user-store";
 import { useCallback } from "react";
 import { toast } from "../ui/use-toast";
 import { queryClient } from "@/providers";
+import axios from "axios";
 
 export default function Logout({ setLoading }: { setLoading: any }) {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -24,20 +25,16 @@ export default function Logout({ setLoading }: { setLoading: any }) {
     setLoading(true);
     try {
       const baseURL = import.meta.env.VITE_APP_BASE_URL;
-      const response = await fetch(
-        `${baseURL}auth/token/revoke?token=${refreshToken}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "Institution-Context": "ai",
-          },
-        }
-      );
+      const response = await axios.delete(`${baseURL}auth/token/revoke`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Institution-Context": "ai",
+        },
+        params: { token: refreshToken },
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage = errorData.detail || "error logging out";
+      if (response.status !== 200) {
+        const errorMessage = response.data?.detail || "Error logging out";
         toast({
           title: "Error",
           description: errorMessage,
@@ -56,6 +53,11 @@ export default function Logout({ setLoading }: { setLoading: any }) {
       navigate("/login");
     } catch (error) {
       console.error("Log out error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
