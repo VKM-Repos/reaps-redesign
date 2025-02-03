@@ -24,15 +24,18 @@ export default function MyRequest() {
   const [filters, setFilters] = useState<string[]>([]);
 
   const tabUrls: Record<string, string> = {
-    my_request: `requests/users/me?sort_direction=asc&skip=0&limit=100`,
+    my_request: `requests/users/me`,
     review_request: `reviews/reviewer?sort_direction=asc&skip=0&limit=100`,
   };
 
   const statusUrls: Record<string, string> = {
-    submitted: "&status=Payment Confirmed",
-    drafts: "&status=Not Submitted Yet",
-    under_review: "&status=Review in Progress",
-    reopened: "&status=Re Opened",
+    all: "?sort_direction=asc&skip=0&limit=100",
+    submitted: "?sort_direction=asc&skip=0&limit=100&status=Payment Confirmed",
+    not_submitted_yet:
+      "?sort_direction=asc&skip=0&limit=100&status=Not Submitted Yet",
+    under_review:
+      "?sort_direction=asc&skip=0&limit=100&status=Review in Progress",
+    reopened: "?sort_direction=asc&skip=0&limit=100&status=Re Opened",
   };
 
   const getActiveUrl = () => {
@@ -91,8 +94,8 @@ export default function MyRequest() {
       }`,
       email: item?.request?.user.email,
       created_at: item?.request?.created_at,
-      expiration_date: item?.expiration_date,
       request: item?.request,
+      all: item,
     })) || [];
 
   return (

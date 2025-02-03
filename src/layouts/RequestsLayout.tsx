@@ -27,7 +27,7 @@ export default function RequestsLayout({ children }: Props) {
   const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const goBackRequests = () => {
-    navigate(-1);
+    navigate("/requests");
     setTimeout(() => {
       resetStore();
     }, 2000);

@@ -15,10 +15,12 @@ import ManageRequestTable from "../../components/request-tables/admin";
 
 export default function ManageRequestPage() {
   const statusUrls: any = {
-    all: `requests`,
-    approved: `approved-requests`,
-    submitted: `requests?sort_direction=asc&skip=0&limit=100&status=Submitted`,
-    reopened: `requests?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
+    all: `approved-requests`,
+    new: `approved-requests?sort_direction=asc&skip=0&limit=100&status=New`,
+    approved: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Approved`,
+    reopened: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
+    declined: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Declined`,
+    review_in_progress: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Review in Progress`,
     // add more fields to filter
   };
 
@@ -32,9 +34,14 @@ export default function ManageRequestPage() {
 
   const applyFilters = (filters: { statuses: string[] }) => {
     if (filters.statuses.length > 0) {
+      const formattedStatus = filters.statuses[0]
+        .toLowerCase()
+        .replace(/\s+/g, "_");
+
       const newStatus = Object.keys(statusUrls).find(
-        (key) => key === filters.statuses[0].toLowerCase().replace(" ", "_")
+        (key) => key === formattedStatus
       );
+
       if (newStatus) setSelectedStatus(newStatus);
     }
   };
@@ -83,7 +90,7 @@ export default function ManageRequestPage() {
           filter={
             <FilterGlobal
               statuses={Object.keys(statusUrls).map((key) =>
-                key.replace("_", " ").toLowerCase()
+                key.replace(/_/g, " ").toLowerCase()
               )}
               onApplyFilters={applyFilters}
             />
