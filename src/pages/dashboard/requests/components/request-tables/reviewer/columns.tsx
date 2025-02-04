@@ -1,6 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { CustomCell } from "@/components/custom/CustomTable";
 import ReviewerRequestSummary from "../../../view-requests/reviewer";
+import { Badge } from "@/components/ui/badge";
+import { statusColorMap } from "@/lib/utils";
 
 const columns: Array<ColumnDef<any>> = [
   {
@@ -81,7 +83,39 @@ const columns: Array<ColumnDef<any>> = [
       );
     },
   },
+  {
+    header: () => (
+      <CustomCell
+        value={"Status"}
+        className="font-bold w-full min-w-[8.75rem]"
+      />
+    ),
+    accessorKey: "status",
+    cell: ({ row }) => {
+      const item = row.original.all;
+      console.log(row);
 
+      return (
+        <span className="text-left min-w-[6rem] flex justify-left">
+          <Badge
+            style={{
+              color: statusColorMap[item.status]?.text || "#000000",
+              backgroundColor: statusColorMap[item.status]?.bg || "#192C8A",
+            }}
+            className="flex gap-1 items-center justify-center p-1 text-[10px] rounded-[2.25rem]"
+          >
+            <div
+              style={{
+                backgroundColor: statusColorMap[item.status]?.text || "#192C8A",
+              }}
+              className="w-[5px] h-[5px] rounded-full"
+            ></div>
+            {item.status}
+          </Badge>
+        </span>
+      );
+    },
+  },
   {
     header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
     accessorKey: "action",
