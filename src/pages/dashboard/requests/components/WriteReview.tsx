@@ -64,6 +64,7 @@ export default function WriteReview({
   const { data: reviewer_reviews } = useGET({
     url: `reviews/reviewer`,
     queryKey: ["FETCH_REVIEW_BY_REVIEWER", request_id],
+    enabled: activeRole != "admin",
   });
 
   const review_id = reviewer_reviews?.items?.find(
@@ -76,7 +77,7 @@ export default function WriteReview({
   );
 
   const { mutate: write_final_review, isPending: updating_final_review } =
-    usePOST(`reviews/final-review/${data.request?.id}`, {
+    usePOST(`reviews/final-review/${request_id}`, {
       contentType: "multipart/form-data",
     });
   function onSubmit(values: z.infer<typeof formSchema>) {
