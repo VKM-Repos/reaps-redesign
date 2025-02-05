@@ -134,20 +134,20 @@ const UploadedTemplate = ({
       {isPending ? (
         <Loader />
       ) : (
-        <div className="w-full max-w-[300px] py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
+        <div className="w-full max-w-[300px] max-h-[400px] h-[130px] py-5 px-[0.625rem] bg-[#F2F5F9] rounded-2xl hover:bg-[#E0E5EC] cursor-pointer">
           <div className="py-3 flex justify-between">
             <div className="flex flex-col gap-3 w-full">
               <div className="flex justify-between w-full items-center gap-5">
                 <div className="flex items-center gap-5">
                   <img src={RedFile} />
 
-                  <div className="w-full">
+                  <div className="w-full flex flex-col gap-2">
                     <p className="text-sm mb-1">{templateName}</p>
                     <p className="font-light text-sm">{item.department}</p>
                   </div>
                 </div>
                 <DropdownMenu modal={false}>
-                  <DropdownMenuTrigger className="rotate-90">
+                  <DropdownMenuTrigger className="rotate-90 flex justify-center items-center">
                     <MoreIcon />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-full max-w-24 .dropdown-shadow">
