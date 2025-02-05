@@ -15,15 +15,16 @@ import { useEffect, useState } from "react";
 
 export default function MyRequest() {
   const statusUrls: any = {
-    my_request: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Payment Confirmed`,
-    drafts: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Not Submitted Yet`,
+    all: `requests/users/me`,
+    submitted: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Submitted`,
+    not_submitted_yet: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Not Submitted Yet`,
+    under_review: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Review in Progress`,
     reopened: `requests/users/me?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
-    review_request: `reviews/reviewer`,
   };
 
   const navigate = useNavigate();
 
-  const [selectedStatus, setSelectedStatus] = useState<string>("my_request");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { data, isPending, refetch } = useGET({
     url: statusUrls[selectedStatus],
     queryKey: ["FETCH_REQUESTS", selectedStatus],
@@ -32,9 +33,14 @@ export default function MyRequest() {
 
   const applyFilters = (filters: { statuses: string[] }) => {
     if (filters.statuses.length > 0) {
+      const formattedStatus = filters.statuses[0]
+        .toLowerCase()
+        .replace(/\s+/g, "_");
+
       const newStatus = Object.keys(statusUrls).find(
-        (key) => key === filters.statuses[0].toLowerCase().replace(" ", "_")
+        (key) => key === formattedStatus
       );
+
       if (newStatus) setSelectedStatus(newStatus);
     }
   };
@@ -69,8 +75,8 @@ export default function MyRequest() {
           search={<SearchGlobal />}
           filter={
             <FilterGlobal
-              statuses={Object.keys(statusUrls).map((key) =>
-                key.replace("_", " ").toLowerCase()
+              statuses={Object.keys(statusUrls).map((status) =>
+                status.replace(/_/g, " ")
               )}
               onApplyFilters={applyFilters}
             />
@@ -88,7 +94,7 @@ export default function MyRequest() {
             </div>
           }
         >
-          {isPending ? <Loader /> : <RequestTable data={data ?? []} />}
+          {isPending ? <Loader /> : <RequestTable data={data?.items ?? []} />}
         </TableWrapper>
       </div>
     </TransitionElement>
