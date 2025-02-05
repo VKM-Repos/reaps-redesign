@@ -42,7 +42,6 @@ interface WriteReviewProps {
 
 export default function WriteReview({
   request_id,
-  data,
   remarks,
   buttonText,
   closeDialog,
