@@ -69,7 +69,7 @@ export default function ResearcherHomePage() {
         <h1 className="text-[1.375rem] font-bold">
           Institution Research Template
         </h1>
-        <div className="w-full mx-auto flex flex-col md:flex-row justify-between overflow-x-scroll scrollbar-hide items-center gap-7">
+        <div className="w-full mx-auto flex flex-col md:flex-row justify-start overflow-x-scroll scrollbar-hide items-center gap-7">
           {templates?.items?.map((template: never) => (
             <TemplateCard template={template} />
           ))}
