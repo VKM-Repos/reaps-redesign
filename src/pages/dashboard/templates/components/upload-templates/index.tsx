@@ -14,9 +14,12 @@ import useUserStore from "@/store/user-store";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Please add the file name" }),
-  department: z.string()
-      .min(1, { message: "Please input the department name" })
-      .min(10, { message: "Department field must contain a minimum of 10 characters"}),
+  department: z
+    .string()
+    .min(1, { message: "Please input the department name" })
+    .min(10, {
+      message: "Department field must contain a minimum of 10 characters",
+    }),
   file: z.instanceof(File, { message: "Please upload a file" }),
 });
 export default function UploadTemplate({
@@ -72,7 +75,7 @@ export default function UploadTemplate({
       action === "create"
         ? "templates"
         : `templates?template_id=${template?.id}`;
-    const method = action === "create" ? "POST" : "PATCH";
+    const method = action === "create" ? "POST" : "PUT";
 
     setIsLoading(true);
     toast({
@@ -221,15 +224,15 @@ export default function UploadTemplate({
                 <SheetClose className="bg-[hsl(var(--ghost))] text-[hsl(var(--ghost-foreground))] !py-2 !px-6 rounded">
                   Cancel
                 </SheetClose>
-                  <Button
-                    variant={
-                      isValid && uploadProgress === 100 ? "default" : "ghost"
-                    }
-                    type="submit"
-                    className="!py-3 !px-6 rounded"
-                  >
-                    Finish
-                  </Button>
+                <Button
+                  variant={
+                    isValid && uploadProgress === 100 ? "default" : "ghost"
+                  }
+                  type="submit"
+                  className="!py-3 !px-6 rounded"
+                >
+                  Finish
+                </Button>
               </div>
             </form>
           </Form>
