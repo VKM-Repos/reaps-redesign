@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import FormInput from "@/components/custom/FormInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 
@@ -18,14 +18,12 @@ import {
 import { countries, CountryListItemType } from "country-list-json";
 import countryFlags from "@/lib/data/countries.json";
 import { Label } from "@/components/ui/label";
-import CustomFormField, {
-  FormFieldType,
-} from "@/components/custom/CustomFormField";
 import Loader from "@/components/custom/Loader";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import { formatISODate } from "@/lib/utils";
 import useUserStore from "@/store/user-store";
 import { toast } from "@/components/ui/use-toast";
+import CalendarIcon from "/icons/calendar-03.svg";
 
 type FlagData = {
   url: string;
@@ -39,6 +37,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   const [dialCode, setDialCode] = useState("+93");
   const [selectedFlag, setSelectedFlag] = useState();
   const { user, updateUser } = useUserStore();
+  const dateRef = useRef<HTMLInputElement | null>(null);
   const formSchema = z.object({
     first_name: z.string().min(1, { message: "Please fill this field" }),
     last_name: z.string().min(1, { message: "Please fill this field" }),
@@ -131,6 +130,10 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
       },
     });
   }
+  const handleClickDate = () => {
+    console.log(dateRef);
+    dateRef.current?.showPicker();
+  };
   return (
     <>
       {isPending && <Loader />}
@@ -157,12 +160,33 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                   required: "This field is required",
                 })}
               />
-              <CustomFormField
+              {/* <CustomFormField
                 name="date_of_birth"
                 fieldType={FormFieldType.DATE}
                 control={form.control}
                 label="Date of Birth"
+              /> */}
+              <FormInput
+                label="Date of Birth"
+                type="date"
+                {...register("date_of_birth", {
+                  required: "This field is required",
+                })}
+                className="invisible "
+                ref={dateRef}
               />
+              <Button
+                variant="outline"
+                type="button"
+                onClick={handleClickDate}
+                className="-mt-16 z-10"
+              >
+                {form.getValues().date_of_birth}{" "}
+                <img
+                  src={CalendarIcon}
+                  className="ml-auto h-4 w-4 opacity-50 text-black"
+                />
+              </Button>
               <div className="flex gap-2">
                 <div className="flex flex-col text-xs mt-2">
                   <Select
