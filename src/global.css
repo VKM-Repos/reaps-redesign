@@ -90,6 +90,19 @@
   }
 }
 
+input[type="date"] {
+  -moz-appearance: none;
+-webkit-appearance: none;
+
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button,
+input::-webkit-calender-picker-indicator {
+   -webkit-appearance: none !important; 
+   display: none;
+}
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
