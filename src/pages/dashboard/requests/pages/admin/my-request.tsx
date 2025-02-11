@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import PageTitle from "../../../../../components/custom/PageTitle";
+import PageTitle from "@/components/custom/PageTitle";
 import LinkIcon from "@/components/custom/Icons/LinkIcon";
 import { Button } from "@/components/ui/button";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
@@ -51,7 +51,7 @@ export default function MyRequest() {
 
   useEffect(() => {
     refetch();
-  }, [selectedStatus]);
+  }, []);
 
   return (
     <TransitionElement>

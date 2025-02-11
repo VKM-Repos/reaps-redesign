@@ -111,9 +111,7 @@ const columns: Array<ColumnDef<TransactionItem>> = [
     accessorKey: "action",
     minSize: 50,
     maxSize: 100,
-    cell: ({ row }) => (
-      <TransactionDetails refetch={() => {}} transaction={row.original} />
-    ),
+    cell: ({ row }) => <TransactionDetails id={row.id} />,
   },
 ];
 

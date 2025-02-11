@@ -69,6 +69,7 @@ export default function MyRequest() {
   };
 
   useEffect(() => {
+    if (!tabUrls[activeTab]) return;
     refetch();
   }, [activeTab, filters]);
 

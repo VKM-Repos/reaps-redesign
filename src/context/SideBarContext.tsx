@@ -3,7 +3,6 @@ import DocumentIcon from "@/components/custom/sidebar-icons/document-icon";
 import HomeIcon from "@/components/custom/sidebar-icons/home-icon";
 import InvoiceIcon from "@/components/custom/sidebar-icons/invoice-icon";
 import More from "@/components/custom/sidebar-icons/more-icon";
-import FileView from "@/components/custom/sidebar-icons/file-view";
 import FileManage from "@/components/custom/sidebar-icons/file-management";
 import DialPad from "@/components/custom/sidebar-icons/dialpad-square-01";
 import School from "@/components/custom/sidebar-icons/school";
@@ -11,7 +10,7 @@ import ProfileTwo from "@/components/custom/sidebar-icons/profile-02";
 import UserMultiple from "@/components/custom/sidebar-icons/user-multiple-02";
 import Bank from "@/components/custom/sidebar-icons/bank";
 import useUserStore from "@/store/user-store";
-import User from "@/components/custom/Icons/User";
+import AuditLog from "@/components/custom/sidebar-icons/auditlog-icon";
 
 type SideBarLink = {
   label: string;
@@ -149,67 +148,27 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
         }
       );
       break;
-    case "super admin":
+    case "super_admin":
       sideBarLinks.push(
         {
           label: "Home",
           path: "/home",
           icon: <HomeIcon />,
         },
-
         {
-          label: "Specialization",
-          path: "/specialization",
-          icon: <More />,
+          label: "Institutions",
+          path: "/institutions",
+          icon: <School />,
         },
         {
-          label: "Requests",
-          path: "/requests",
-          icon: <DocumentIcon />,
-          subLinks: [
-            {
-              label: "My Requests",
-              path: "/requests/my-requests",
-              icon: <DocumentIcon />,
-            },
-            {
-              label: "Review Request",
-              path: "/requests/review-requests",
-              icon: <FileView />,
-            },
-            {
-              label: "Manage Request",
-              path: "/requests/manage-requests",
-              icon: <FileManage />,
-            },
-            {
-              label: "Templates",
-              path: "/templates",
-              icon: <DialPad />,
-            },
-          ],
+          label: "Audit Log",
+          path: "/audit-log",
+          icon: <AuditLog />,
         },
         {
-          label: "Super Admin",
-          path: "/super-admin",
-          icon: <User />,
-          subLinks: [
-            {
-              label: "Institutions",
-              path: "/super-admin/institutions",
-              icon: <School />,
-            },
-            {
-              label: "users",
-              path: "/super-admin/users",
-              icon: <UserMultiple />,
-            },
-            {
-              label: "Account",
-              path: "/institution/account",
-              icon: <Bank />,
-            },
-          ],
+          label: "Account",
+          path: "/account",
+          icon: <Bank />,
         }
       );
       break;

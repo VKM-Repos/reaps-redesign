@@ -26,7 +26,7 @@ export function LoginForm() {
   const form = useForm<LoginRequestData>({ resolver: zodResolver(formSchema) });
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUser } = useUserStore();
+  const { setUser, setTokens } = useUserStore();
 
   const login = useCallback(
     async (data: LoginRequestData) => {
@@ -64,9 +64,9 @@ export function LoginForm() {
 
         setUser({
           user: responseData.user,
-          access_token: responseData.access_token,
-          refresh_token: responseData.refresh_token,
         });
+
+        setTokens(responseData.access_token, responseData.refresh_token);
 
         const searchParams = new URLSearchParams(location.search);
         const redirectPath = searchParams.get("redirect") || "/home";
