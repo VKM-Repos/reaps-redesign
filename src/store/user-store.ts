@@ -12,12 +12,9 @@ export interface UserStore {
   accessToken: string | null;
   refreshToken: string | null;
   loading: boolean;
-  setUser: (data: {
-    user: User;
-    access_token: string;
-    refresh_token: string;
-  }) => void;
+  setUser: (data: { user: User }) => void;
   updateUser: (user: User) => void;
+  setTokens: (accessToken: string, refreshToken: string) => void;
   setActiveRole: (role: UserRole | null) => void;
   setUserId: (userId: string | null) => void;
   setLoading: (isLoading: boolean) => void;
@@ -38,18 +35,15 @@ const useUserStore = create<UserStore>(
       accessToken: null,
       refreshToken: null,
       loading: false,
-      setUser: ({ user, access_token, refresh_token }) =>
+      setUser: ({ user }) =>
         set({
           user,
           userId: user.id,
-          accessToken: access_token,
-          refreshToken: refresh_token,
           activeRole: user.user_type as UserRole,
         }),
-      updateUser: (user) =>
-        set({
-          user,
-        }),
+      updateUser: (user) => set({ user }),
+      setTokens: (accessToken, refreshToken) =>
+        set({ accessToken, refreshToken }),
       setActiveRole: (role) => set({ activeRole: role }),
       setUserId: (userId) => set({ userId }),
       setLoading: (isLoading) => set({ loading: isLoading }),
