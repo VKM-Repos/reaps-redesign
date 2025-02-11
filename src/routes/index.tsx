@@ -22,6 +22,8 @@ import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/manage-req
 import Templates from "@/pages/dashboard/templates";
 import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
+import InstitutionInformation from "@/pages/dashboard/institutions/[id]/information";
+import Institutions from "@/pages/dashboard/institutions";
 
 const router = [
   {
@@ -127,43 +129,6 @@ const router = [
         ],
       },
       {
-        name: "Super Admin",
-        path: "super-admin",
-        title: "Super Admin",
-        routes: [
-          {
-            name: "Institutions",
-            path: "super-admin/institutions",
-            title: "Institutions",
-            element: InstitutionUsers,
-          },
-          {
-            name: "Users",
-            path: "super-admin/users",
-            title: "Users",
-            element: InstitutionUsers,
-          },
-          {
-            name: "Institution Profile",
-            path: "institution/profile",
-            title: "Institution Profile",
-            element: InstitutionProfile,
-          },
-          {
-            name: "Institution Account",
-            path: "institution/account",
-            title: "Institution Account",
-            element: InstitutionAccount,
-          },
-          {
-            name: "Institution Account Transactions",
-            path: "institution/account/transactions",
-            title: "Institution Account Transactions",
-            element: Transactions,
-          },
-        ],
-      },
-      {
         name: "Specialization",
         path: "specialization",
         title: "Specialization",
@@ -184,12 +149,49 @@ const router = [
         ],
       },
       {
+        name: "Institutions",
+        path: "institutions",
+        title: "Institutions",
+        element: Institutions,
+        routes: [
+          {
+            name: "Information",
+            path: "institutions/:id",
+            title: "Information",
+            element: InstitutionInformation,
+          },
+          {
+            name: "Users",
+            path: "institutions/:id/users",
+            title: "Users",
+            element: InstitutionInformation,
+          },
+          {
+            name: "Requests",
+            path: "institutions/:id/requests",
+            title: "Requests",
+            element: InstitutionInformation,
+          },
+          {
+            name: "Configuration",
+            path: "institutions/:id/configs",
+            title: "Configuration",
+            element: InstitutionInformation,
+          },
+          {
+            name: "Transactions",
+            path: "institutions/:id/transactions",
+            title: "Transactions",
+            element: InstitutionInformation,
+          },
+        ],
+      },
+      {
         name: "Settings",
         path: "settings",
         title: "Settings",
         element: Settings,
       },
-      // change templates path to requests/templates
       {
         name: "Templates",
         path: "templates",
