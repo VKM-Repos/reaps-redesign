@@ -1,6 +1,5 @@
 import CategoryTable from "./view-pricing";
 import { categories } from "../requests/components/ethical-request-approval/data/categories";
-import { useNavigate } from "react-router-dom";
 import { TransitionElement } from "@/lib/transitions";
 import PageTitle from "@/components/custom/PageTitle";
 import TableWrapper from "@/components/custom/TableWrapper";

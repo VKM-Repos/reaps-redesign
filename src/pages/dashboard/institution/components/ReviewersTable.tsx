@@ -71,7 +71,7 @@ export function RenderFunctions({
                 title="Downgrade"
               />
             </DropdownMenuItem>
-            {activeRole === "super admin" && (
+            {activeRole === "super_admin" && (
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()}
                 className="flex items-center gap-2 cursor-pointer"

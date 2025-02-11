@@ -42,7 +42,7 @@ export default function Requests() {
         {/* tab */}
         {tableData && tableData.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {activeRole === "admin" || activeRole === "super admin" ? (
+            {activeRole === "admin" || activeRole === "super_admin" ? (
               <Tabs
                 defaultValue="request users"
                 onValueChange={(val) => setActiveTab(val)}
