@@ -14,16 +14,18 @@ import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import ResearcherRequestSummary from "../../view-requests/researcher";
 import { toast } from "@/components/ui/use-toast";
+import { RequestItems } from "@/types/requests";
+import TransactionDetails from "@/pages/dashboard/pricing/view-transactions/TransactionDetails";
 
 type ActionProps = {
-  item: any;
+  item: RequestItems;
   deleteRequest: (item: string) => void;
   editRequest: () => void;
   isMobile?: boolean;
 };
 
 type Props = {
-  data: any;
+  data: RequestItems;
 };
 
 const Actions = ({ data }: Props) => {
@@ -85,7 +87,7 @@ function ActionsDefault({ item, deleteRequest, editRequest }: ActionProps) {
 function ActionsMobile({ item, deleteRequest, editRequest }: ActionProps) {
   return (
     <>
-      <div className="flex gap-2 justify-center items-center">
+      <div className="w-full flex gap-2 justify-center items-center">
         <SharedActions
           item={item}
           deleteRequest={deleteRequest}
@@ -104,7 +106,7 @@ function SharedActions({
   isMobile = false,
 }: ActionProps) {
   return (
-    <>
+    <div className="text-xs">
       <Sheet>
         <SheetTrigger
           className={`text-black flex justify-center items-center gap-2 ${
@@ -114,36 +116,33 @@ function SharedActions({
           <View />
           {isMobile ? null : <span>View</span>}
         </SheetTrigger>
-        <ResearcherRequestSummary request={item.request} />
+        <ResearcherRequestSummary request={item} />
       </Sheet>
-
       <div>
         <button
           onClick={editRequest}
           className={`${
-            !item?.request.can_edit === false
+            !item?.can_edit === false
               ? "text-black"
               : "text-black/30 cursor-not-allowed"
           } items-center flex justify-center gap-2 ${isMobile ? "p-2" : "p-3"}`}
-          disabled={item?.request.can_edit === false}
+          disabled={item?.can_edit === false}
         >
           <PencilEdit />
           {isMobile ? null : <span>Edit</span>}
         </button>
       </div>
-
       {/* disable delete option */}
-
       <Sheet>
         <SheetTrigger
           className={`flex justify-center items-center gap-2 
              ${
-               item?.request.can_edit !== false
+               item?.can_edit !== false
                  ? "text-black"
                  : "text-black/30 cursor-not-allowed"
              } 
             ${isMobile ? "p-2" : "p-3"}`}
-          disabled={item?.request.can_edit === false}
+          disabled={item?.can_edit === false}
         >
           <DeleteSmallIcon />
           {isMobile ? null : <span>Delete</span>}
@@ -154,6 +153,7 @@ function SharedActions({
           deleteItem={deleteRequest}
         />
       </Sheet>
-    </>
+      <TransactionDetails id={item.id} />
+    </div>
   );
 }
