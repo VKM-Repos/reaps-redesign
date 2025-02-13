@@ -22,8 +22,12 @@ import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/manage-req
 import Templates from "@/pages/dashboard/templates";
 import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
-import InstitutionInformation from "@/pages/dashboard/institutions/[id]/information";
 import Institutions from "@/pages/dashboard/institutions";
+import InstitutionInformationPage from "@/pages/dashboard/institutions/[id]/information";
+import InstitutionUsersPage from "@/pages/dashboard/institutions/[id]/users";
+import InstitutionRequestsPage from "@/pages/dashboard/institutions/[id]/requests";
+import InstitutionConfigurationPage from "@/pages/dashboard/institutions/[id]/configuration";
+import InstitutionTransactionsPage from "@/pages/dashboard/institutions/[id]/transactions";
 
 const router = [
   {
@@ -158,31 +162,31 @@ const router = [
             name: "Information",
             path: "institutions/:id",
             title: "Information",
-            element: InstitutionInformation,
+            element: InstitutionInformationPage,
           },
           {
             name: "Users",
             path: "institutions/:id/users",
             title: "Users",
-            element: InstitutionInformation,
+            element: InstitutionUsersPage,
           },
           {
             name: "Requests",
             path: "institutions/:id/requests",
             title: "Requests",
-            element: InstitutionInformation,
+            element: InstitutionRequestsPage,
           },
           {
             name: "Configuration",
             path: "institutions/:id/configs",
             title: "Configuration",
-            element: InstitutionInformation,
+            element: InstitutionConfigurationPage,
           },
           {
             name: "Transactions",
             path: "institutions/:id/transactions",
             title: "Transactions",
-            element: InstitutionInformation,
+            element: InstitutionTransactionsPage,
           },
         ],
       },
