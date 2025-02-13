@@ -148,7 +148,7 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
         }
       );
       break;
-    case "super_admin":
+    case "super admin":
       sideBarLinks.push(
         {
           label: "Home",

@@ -49,7 +49,7 @@ const Home = () => {
               Request Ethical Approval
             </Button>
           </div>
-          {activeRole === "admin" || activeRole === "super_admin" ? (
+          {activeRole === "admin" || activeRole === "super admin" ? (
             activeRole === "admin" ? (
               <InstitutionAdminHome />
             ) : (
