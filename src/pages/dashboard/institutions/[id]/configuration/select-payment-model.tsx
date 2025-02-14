@@ -65,7 +65,7 @@ const SelectPaymentModel = () => {
   return (
     <div className="w-full space-y-6">
       <div className="w-full flex items-center justify-between">
-        <Label>Payment Model</Label>
+        <Label>Payment model</Label>
         <div className="w-full max-w-[478px] flex flex-col text-xs mt-2">
           <Select
             key={selectedModel}
@@ -93,7 +93,7 @@ const SelectPaymentModel = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="border rounded-lg p-6 flex flex-col gap-4"
+            className="border rounded-[1.5rem] p-6 flex flex-col gap-4"
           >
             {selectedModel === "Per submission" && (
               <>
@@ -102,7 +102,7 @@ const SelectPaymentModel = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full flex items-center justify-between">
-                      <Label>Tax Type</Label>
+                      <Label>Tax type</Label>
                       <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                         <Select onValueChange={field.onChange}>
                           <SelectTrigger className="w-full mt-2 px-3 py-6 text-[#868687] font-normal border-[#868687] border-[1.5px]">
@@ -128,7 +128,7 @@ const SelectPaymentModel = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full flex items-center justify-between">
-                      <Label>Tax Rate</Label>
+                      <Label>Tax rate (fixed or %)</Label>
                       <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                         <FormControl>
                           <Input
@@ -152,7 +152,7 @@ const SelectPaymentModel = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full flex items-center justify-between">
-                      <Label>Subscription Date</Label>
+                      <Label>Subscription date</Label>
                       <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                         <FormControl>
                           <Input
@@ -172,7 +172,7 @@ const SelectPaymentModel = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full flex items-center justify-between">
-                      <Label>Grace Period</Label>
+                      <Label>Grace period (days)</Label>
                       <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                         <FormControl>
                           <Input

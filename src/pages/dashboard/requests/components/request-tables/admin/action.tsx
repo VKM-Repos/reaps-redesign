@@ -20,11 +20,11 @@ export default function Action({ item }: { item: any }) {
         <MoreIcon />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="rounded-xl rounded-r-none p-1 w-fit .dropdown-shadow">
-        <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
+        <DropdownMenuGroup className="flex flex-col gap-2 justify-center items-start">
           <>
             <Sheet>
               <SheetTrigger
-                className={`text-black flex justify-center items-center gap-2 p-3`}
+                className={`w-full text-sm text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 p-2`}
               >
                 <View />
                 <span>View</span>
@@ -33,7 +33,7 @@ export default function Action({ item }: { item: any }) {
             </Sheet>
             <Dialog>
               <DialogTrigger
-                className={`text-black flex justify-center items-center gap-2 p-3`}
+                className={`w-full text-sm text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 p-2`}
               >
                 <SignatureIcon />
                 <span>Reviewers</span>
