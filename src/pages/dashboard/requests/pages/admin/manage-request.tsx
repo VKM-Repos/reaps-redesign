@@ -16,7 +16,7 @@ import { RequestItems } from "@/types/requests";
 
 export default function ManageRequestPage() {
   const statusUrls: any = {
-    all: `approved-requests`,
+    all: `approved-requests/all`,
     new: `approved-requests?sort_direction=asc&skip=0&limit=100&status=New`,
     approved: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Approved`,
     reopened: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
