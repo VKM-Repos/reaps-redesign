@@ -8,7 +8,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const InstitutionsSidebar = () => {
+type InstitutionsSidebarProps = {
+  institution: any;
+};
+const InstitutionsSidebar = ({ institution }: InstitutionsSidebarProps) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -33,17 +36,17 @@ const InstitutionsSidebar = () => {
         </Avatar>
 
         <h6 className=" text-black/60 font-semibold text-base">
-          University Of Abuja
+          {institution?.name}
         </h6>
         <a
           href={`#`}
           className=" text-[#608FEB] font-light text-xs pb-4 underline"
         >
-          info@uniabuja.edu.ng
+          {institution?.email}
         </a>
         <span className="bg-ghost w-full p-1 text-[#868687]  text-xs whitespace-nowrap flex gap-2">
           <strong>Onboarded on:</strong>
-          <p>19/01/2024</p>
+          <p>{institution?.joined}</p>
         </span>
       </div>
 
@@ -51,7 +54,7 @@ const InstitutionsSidebar = () => {
         {links.map((route) => (
           <Link
             key={route.label}
-            to={route.path.replace(":id", "1234")}
+            to={route.path.replace(":id", institution?.id)}
             className={`${
               pathname.endsWith(route.path.replace(":id", "1234"))
                 ? "text-[#515152] font-semibold"
