@@ -68,7 +68,7 @@ export default function ReviewerRequestSummary({
   };
   return (
     <Sheet>
-      <SheetTrigger className="flex gap-2">
+      <SheetTrigger className="flex items-center text-sm gap-2">
         <View /> <span>View</span>
       </SheetTrigger>
       <SheetContent

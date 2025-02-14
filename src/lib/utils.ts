@@ -29,44 +29,37 @@ export function getFileExtension(url: string): string {
   return match ? match[1].toLowerCase() : " ";
 }
 
-export function mapStatus(status: string) {
-  const statusMap: Record<string, string> = {
-    "Not Yet Reviewed": "Unreviewed",
-    PENDING: "Pending",
-    APPROVED: "Approved",
-    DECLINED: "Declined",
-    SUCCESS: "Success",
-    FAILED: "Failed",
-    "Review in Progress": "Under Review",
-  };
-
-  // Return the mapped value if it exists, or the original status formatted
-  return statusMap[status] || status.charAt(0) + status.slice(1).toLowerCase();
-}
-
 export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
-  "Not Submitted Yet": { bg: "#FFEB99", text: "#705C00" },
-  "Submitted": { bg: "#D6F8C7", text: "#1A3E1E" },
   "Awaiting Remita Upload": { bg: "#FFF4D1", text: "#A67B00" },
   "Awaiting Remita Confirmation": { bg: "#FFF4D1", text: "#A67B00" },
   "Awaiting Payment Confirmation": { bg: "#FFF4D1", text: "#A67B00" },
-  "Waiver": { bg: "#B9E6FF", text: "#084D71" },
-  "Payment Confirmed": { bg: "#D6F8C7", text: "#1A3E1E" },
+  Waiver: { bg: "#B9E6FF", text: "#084D71" },
   "Payment Declined": { bg: "#FC8D94", text: "#320104" },
-  "Review in Progress": { bg: "#FFEB99", text: "#705C00" },
-  "Re Opened": { bg: "#FFD3B6", text: "#8C3D00" },
-  "Approved": { bg: "#80EF80", text: "#0E1A0E" },
-  "Declined": { bg: "#FC8D94", text: "#320104" },
   "More Information Needed": { bg: "#FFD3B6", text: "#8C3D00" },
-  "Satisfactory": { bg: "#D6F8C7", text: "#1A3E1E" },
-  "Unsatisfactory": { bg: "#FC8D94", text: "#320104" },
+  Satisfactory: { bg: "#D6F8C7", text: "#1A3E1E" },
+  Unsatisfactory: { bg: "#FC8D94", text: "#320104" },
   "Not Yet Reviewed": { bg: "#FFEB99", text: "#705C00" },
-  "Closed": { bg: "#B3B3B3", text: "#2C2C2C" },
+
+  // Mainly used
+  "Payment Confirmed": { bg: "#D6F8C7", text: "#1A3E1E" },
+  Success: { bg: "#E5FFE5", text: "#00C000" },
+  Active: { bg: "#E5FFE5", text: "#00C000" },
+  Inactive: { bg: "#FFE5E6", text: "#FF000A" },
+  Pending: { bg: "#FFFBE5", text: "#CCAF09" },
+  failed: { bg: "#FFE5E8", text: "#BF1E2C" },
+  Declined: { bg: "#FFE5E8", text: "#BF1E2C" },
+  Approved: { bg: "#E5FFEB", text: "#01BC29" },
+  "Review in Progress": { bg: "#FFF2E5", text: "#452609" },
+  "Not Submitted Yet": { bg: "#E5EDFF", text: "#040C21" },
+  Submitted: { bg: "#FFE5F8", text: "#1A1318" },
+  Reviewed: { bg: "#E8E5FF", text: "#1D0AF5" },
+  "Re Opened": { bg: "#FAEBE1", text: "#F5720A" },
+  New: { bg: "#E5F2FF", text: "#067EF6" },
 };
 
-export function truncateString(str:string, maxLength:number, suffix = "...") {
+export function truncateString(str: string, maxLength: number, suffix = "...") {
   if (str.length <= maxLength) {
-    return str; // No truncation needed
+    return str;
   }
   return str.slice(0, maxLength) + suffix;
 }
