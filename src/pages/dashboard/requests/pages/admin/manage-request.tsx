@@ -53,7 +53,7 @@ export default function ManageRequestPage() {
 
   useEffect(() => {
     refetch();
-  }, [selectedStatus]);
+  }, []);
 
   const transformItems = (items: any): RequestItems[] | any => {
     if (!Array.isArray(items)) return [];

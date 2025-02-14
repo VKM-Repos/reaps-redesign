@@ -9,7 +9,7 @@ import { useGET } from "@/hooks/useGET.hook";
 import { statusColorMap } from "./columns";
 
 const TransactionTable = () => {
-  const { data: transactionsData, refetch } = useGET({
+  const { data: transactionsData } = useGET({
     queryKey: ["my-transactions"],
     url: `transactions?sort_by=created_at&sort_direction=desc&skip=0&limit=100`,
     enabled: true,
@@ -119,9 +119,7 @@ const TransactionTable = () => {
       accessorKey: "action",
       minSize: 50,
       maxSize: 100,
-      cell: ({ row }) => (
-        <TransactionDetails refetch={refetch} transaction={row.original} />
-      ),
+      cell: ({ row }) => <TransactionDetails id={row.id} />,
     },
   ];
   return (

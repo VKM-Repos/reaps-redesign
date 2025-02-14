@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/sheet";
 import HoverCancel from "@/components/custom/Icons/HoverCancel";
 import { Badge } from "@/components/ui/badge";
-import { statusColorMap } from "./transaction-table/columns";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import { useToast } from "@/components/ui/use-toast";
 import { useRef } from "react";
@@ -22,6 +21,7 @@ import { useGET } from "@/hooks/useGET.hook";
 import Loader from "@/components/custom/Loader";
 import View from "@/components/custom/Icons/View";
 import { TransactionItem } from "@/types/transaction";
+import { statusColorMap } from "@/lib/utils";
 
 type Props = {
   id: string;

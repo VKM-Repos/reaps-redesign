@@ -1,5 +1,5 @@
-import { QueryClient, type QueryClientConfig } from '@tanstack/react-query';
-import React from 'react';
+import { QueryClient, type QueryClientConfig } from "@tanstack/react-query";
+import React from "react";
 
 const queryClientSettings: QueryClientConfig = {
   defaultOptions: {

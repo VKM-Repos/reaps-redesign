@@ -25,13 +25,16 @@ const Home = () => {
     }, 5000);
   };
 
-
   return (
     <>
       {loading && <Loader />}
       <div className="flex flex-col gap-10">
         {activeRole === "reviewer" && (
-          <AssignedReuqustCard name={user?.first_name ?? ""} reviewed="37" pending="5" />
+          <AssignedReuqustCard
+            name={user?.first_name ?? ""}
+            reviewed="37"
+            pending="5"
+          />
         )}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">

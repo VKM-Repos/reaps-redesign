@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import TransactionDetails from "../TransactionDetails";
+import TransactionDetails from "../transaction-details";
 import { TransactionItem } from "@/types/transaction";
 
 export const statusColorMap: { [key: string]: { bg: string; text: string } } = {

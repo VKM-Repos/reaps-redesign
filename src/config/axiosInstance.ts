@@ -10,7 +10,6 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-// Schema for validating refresh token response
 const refreshTokenSchema = z.object({
   access_token: z.string(),
   refresh_token: z.string(),
@@ -32,29 +31,24 @@ const refreshTokenSchema = z.object({
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
-// Refresh lock mechanism
-let isRefreshing = false;
-let refreshSubscribers: Array<(token: string) => void> = [];
-let retryCount = 0;
-const MAX_RETRIES = 1;
-
-const onRTokenRefreshed = (token: string) => {
-  refreshSubscribers.forEach((callback) => callback(token));
-  refreshSubscribers = [];
-};
-
-const addSubscriber = (callback: (token: string) => void) => {
-  refreshSubscribers.push(callback);
-};
-
 export const createApiInstance = (baseURL: string): AxiosInstance => {
-  const apiInstance = axios.create({ baseURL, timeout: 10000 });
+  const apiInstance = axios.create({
+    baseURL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-  apiInstance.interceptors.request.use(async (config) => {
+  apiInstance.interceptors.request.use((config) => {
     const { accessToken, user } = useUserStore.getState();
-    if (accessToken) config.headers["Authorization"] = `Bearer ${accessToken}`;
-    if (user?.institution_context)
+
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+    if (user?.institution_context) {
       config.headers["institution-context"] = user.institution_context;
+    }
+
     return config;
   });
 
@@ -62,93 +56,90 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
     (response) => response,
     async (error: AxiosError) => {
       const originalRequest = error.config as CustomAxiosRequestConfig;
-      if (
-        originalRequest &&
-        error.response?.status === 401 &&
-        !originalRequest._retry
-      ) {
+
+      if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-        if (isRefreshing) {
-          return new Promise((resolve) => {
-            addSubscriber((token) => {
-              originalRequest.headers["Authorization"] = `Bearer ${token}`;
-              resolve(apiInstance(originalRequest));
-            });
-          });
-        }
 
-        if (retryCount >= MAX_RETRIES) {
-          alert("Session expired. Please log in again.");
-          useUserStore.setState({
-            accessToken: null,
-            refreshToken: null,
-            user: null,
-          });
-          return Promise.reject(error);
-        }
-
-        retryCount++;
-        isRefreshing = true;
         try {
           const newTokens = await getRefreshToken();
-          retryCount = 0;
-          useUserStore.setState(newTokens);
-          onRTokenRefreshed(newTokens.access_token);
+
+          console.log("New refresh_token", newTokens.refresh_token);
+
+          // Update Zustand store
+          useUserStore.setState(() => ({
+            accessToken: newTokens.access_token,
+            refreshToken: newTokens.refresh_token,
+          }));
+
+          // Retry request with new token
           originalRequest.headers[
             "Authorization"
           ] = `Bearer ${newTokens.access_token}`;
           return apiInstance(originalRequest);
         } catch (refreshError) {
-          isRefreshing = false;
-          useUserStore.setState({
-            accessToken: null,
-            refreshToken: null,
-            user: null,
-          });
+          if (
+            axios.isAxiosError(refreshError) &&
+            refreshError.response?.status === 403
+          ) {
+            useUserStore.getState().reset();
+          }
           return Promise.reject(refreshError);
         }
       }
+
       return Promise.reject(error);
     }
   );
+
   return apiInstance;
 };
 
-// Function to call the refresh token endpoint
 const getRefreshToken = async () => {
-  const userStore = useUserStore.getState();
-  const { refreshToken, user } = userStore;
+  const { refreshToken, user } = useUserStore.getState();
 
   if (!refreshToken || !user?.institution_context) {
     throw new Error("No refresh token or institution context available.");
   }
 
-  const response = await axios.post(`${baseUrl}auth/refresh`, null, {
+  const url = new URL(`${baseUrl}auth/refresh`);
+  url.searchParams.append("refresh_token", refreshToken);
+  console.log("Old refresh_token", refreshToken);
+
+  const response = await fetch(url.toString(), {
+    method: "POST",
     headers: {
+      "Content-Type": "application/json",
       "institution-context": user.institution_context,
-    },
-    params: {
-      refresh_token: refreshToken,
     },
   });
 
-  // Validate the response using the schema
-  const validatedData = refreshTokenSchema.parse(response.data);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      `Failed to refresh token: ${errorData.detail || response.statusText}`
+    );
+  }
 
-  return validatedData;
+  const data = await response.json();
+  const newTokens = refreshTokenSchema.parse(data);
+
+  // localStorage.setItem("accessToken", newTokens.access_token);
+  // localStorage.setItem("refreshToken", newTokens.refresh_token);
+
+  return newTokens;
 };
 
-// Error handler for logging
 export const handleApiError = (error: unknown): Promise<never> => {
   if (error instanceof AxiosError) {
-    if (error.response) {
-      console.error("Request failed with status code:", error.response.status);
-      console.error("Response data:", error.response.data);
-    } else if (error.request) {
-      console.error("No response received. Request:", error.request);
-    } else {
-      console.error("Request setup error:", error.message);
-    }
+    console.error(
+      error.response
+        ? `Request failed with status ${
+            error.response.status
+          }: ${JSON.stringify(error.response.data)}`
+        : error.request
+        ? "No response received from server."
+        : `Error setting up request: ${error.message}`
+    );
   } else {
     console.error("An unexpected error occurred:", error);
   }
