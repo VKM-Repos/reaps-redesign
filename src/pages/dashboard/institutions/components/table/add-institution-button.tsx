@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import AddIcon from "@/components/custom/Icons/AddIcon";
 import { useRef } from "react";
+import CreateInstitutionForm from "../forms/create-institution-form";
 
 export function AddInstitutionButton({ refetch }: { refetch: () => void }) {
   const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
@@ -26,12 +27,15 @@ export function AddInstitutionButton({ refetch }: { refetch: () => void }) {
           Add
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[80%] overflow-y-scroll h-full no-scrollbar py-10">
+      <DialogContent className="w-[50%] overflow-y-scroll h-full no-scrollbar py-10">
         <div className="mt-12 px-7">
           <h2 className="text-center text-xl2 font-semibold font-inter">
             Add Institution
           </h2>
-          Enter details to create admin account
+          <p className="text-sm text-center">
+            Enter details to create admin account
+          </p>
+          <CreateInstitutionForm />
           <DialogClose asChild>
             <Button
               ref={closeDialogBtn}
