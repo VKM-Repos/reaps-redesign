@@ -15,7 +15,7 @@ import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import ResearcherRequestSummary from "../../view-requests/researcher";
 import { toast } from "@/components/ui/use-toast";
 import { RequestItems } from "@/types/requests";
-import TransactionDetails from "@/pages/dashboard/pricing/view-transactions/TransactionDetails";
+import TransactionDetails from "./transaction-details";
 
 type ActionProps = {
   item: RequestItems;
@@ -109,8 +109,8 @@ function SharedActions({
     <div className="text-xs">
       <Sheet>
         <SheetTrigger
-          className={`text-black flex justify-center items-center gap-2 ${
-            isMobile ? "p-2" : "p-3"
+          className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
+            isMobile ? "p-1" : "p-2"
           }`}
         >
           <View />
@@ -125,7 +125,9 @@ function SharedActions({
             !item?.can_edit === false
               ? "text-black"
               : "text-black/30 cursor-not-allowed"
-          } items-center flex justify-center gap-2 ${isMobile ? "p-2" : "p-3"}`}
+          } w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
+            isMobile ? "p-1" : "p-2"
+          }`}
           disabled={item?.can_edit === false}
         >
           <PencilEdit />
@@ -135,13 +137,13 @@ function SharedActions({
       {/* disable delete option */}
       <Sheet>
         <SheetTrigger
-          className={`flex justify-center items-center gap-2 
+          className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 
              ${
                item?.can_edit !== false
                  ? "text-black"
                  : "text-black/30 cursor-not-allowed"
              } 
-            ${isMobile ? "p-2" : "p-3"}`}
+            ${isMobile ? "p-1" : "p-2"}`}
           disabled={item?.can_edit === false}
         >
           <DeleteSmallIcon />

@@ -1,9 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { CustomCell } from "@/components/custom/CustomTable";
 import { RequestItems } from "@/types/requests";
-import { statusColorMap } from "@/lib/utils";
 import Actions from "./actions";
+import StatusPill from "@/components/custom/StatusPill";
 
 const columns: Array<ColumnDef<RequestItems>> = [
   {
@@ -96,21 +95,7 @@ const columns: Array<ColumnDef<RequestItems>> = [
       const item = row.original;
       return (
         <div className="flex items-center w-full min-w-[7rem] font-normal">
-          <Badge
-            style={{
-              color: statusColorMap[item.status]?.text || "#000000",
-              backgroundColor: statusColorMap[item.status]?.bg || "#192C8A",
-            }}
-            className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] whitespace-nowrap font-normal text-xs"
-          >
-            <div
-              style={{
-                backgroundColor: statusColorMap[item.status]?.text || "#000000",
-              }}
-              className="w-[5px] h-[5px] rounded-full"
-            ></div>
-            {item.status}
-          </Badge>
+          <StatusPill status={item.status} />
         </div>
       );
     },

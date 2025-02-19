@@ -20,7 +20,6 @@ import Transactions from "@/pages/dashboard/institution/account/transactions";
 import MyRequest from "@/pages/dashboard/requests/pages/admin/my-request";
 import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/manage-request";
 import Templates from "@/pages/dashboard/templates";
-import ViewTransactions from "@/pages/dashboard/pricing/view-transactions";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
 import Institutions from "@/pages/dashboard/institutions";
 import InstitutionInformationPage from "@/pages/dashboard/institutions/[id]/information";
@@ -143,14 +142,6 @@ const router = [
         path: "pricing",
         title: "Pricing",
         element: Pricing,
-        routes: [
-          {
-            name: "Transactions",
-            path: "pricing/your-transactions",
-            title: "Transactions",
-            element: ViewTransactions,
-          },
-        ],
       },
       {
         name: "Institutions",

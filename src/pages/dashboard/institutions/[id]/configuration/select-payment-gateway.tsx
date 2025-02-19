@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import PAYSTACK_LOGO from "/img/paystack_logo.png";
+import REMITTA_LOGO from "/img/remita_logo 1.png";
 
 const bankOptions = [
   "GTBank",
@@ -53,7 +55,7 @@ type FormSchemaType = {
 };
 
 const SelectPaymentGateway = () => {
-  const gateways = ["paystack", "remitta"];
+  const gateways = ["Paystack", "Remitta"];
   const [selectedGateway, setSelectedGateway] = useState<string>("");
 
   const form = useForm<FormSchemaType[keyof FormSchemaType]>({
@@ -73,7 +75,7 @@ const SelectPaymentGateway = () => {
   return (
     <div className="w-full space-y-6">
       <div className="w-full flex items-center justify-between">
-        <Label>Select Payment Gateway</Label>
+        <Label>Choose payment gateway</Label>
         <div className="w-full max-w-[478px] flex flex-col text-xs mt-2">
           <Select
             key={selectedGateway}
@@ -101,9 +103,20 @@ const SelectPaymentGateway = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="border rounded-lg p-6 flex flex-col gap-4"
+            className="border rounded-[1.5rem] p-6 flex flex-col gap-4"
           >
             <>
+              <picture>
+                <img
+                  className="h-[18px]"
+                  src={
+                    selectedGateway === "Paystack"
+                      ? PAYSTACK_LOGO
+                      : REMITTA_LOGO
+                  }
+                  alt="logo"
+                />
+              </picture>
               <FormField
                 name="bank"
                 control={form.control}
@@ -128,13 +141,12 @@ const SelectPaymentGateway = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 name="accountNumber"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="w-full flex items-center justify-between">
-                    <Label>Account Number</Label>
+                    <Label>Account number</Label>
                     <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                       <FormControl>
                         <Input
@@ -148,13 +160,12 @@ const SelectPaymentGateway = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 name="accountName"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="w-full flex items-center justify-between">
-                    <Label>Account Name</Label>
+                    <Label>Account name</Label>
                     <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                       <FormControl>
                         <Input
@@ -171,14 +182,14 @@ const SelectPaymentGateway = () => {
               />
             </>
 
-            {selectedGateway === "remitta" && (
+            {selectedGateway === "Remitta" && (
               <>
                 <FormField
                   name="apiKey"
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full flex items-center justify-between">
-                      <Label>API Key</Label>
+                      <Label>API key</Label>
                       <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                         <FormControl>
                           <Input
@@ -219,7 +230,7 @@ const SelectPaymentGateway = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full flex items-center justify-between">
-                      <Label>Service Type ID</Label>
+                      <Label>Service type ID</Label>
                       <div className="w-full max-w-[450px] flex flex-col text-xs mt-2">
                         <FormControl>
                           <Input

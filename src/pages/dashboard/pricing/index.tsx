@@ -1,4 +1,4 @@
-import CategoryTable from "./view-pricing";
+import CategoryTable from "./category";
 import { categories } from "../requests/components/ethical-request-approval/data/categories";
 import { TransitionElement } from "@/lib/transitions";
 import PageTitle from "@/components/custom/PageTitle";
