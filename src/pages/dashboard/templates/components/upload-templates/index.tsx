@@ -78,11 +78,6 @@ export default function UploadTemplate({
     const method = action === "create" ? "POST" : "PUT";
 
     setIsLoading(true);
-    toast({
-      title: "Uploading",
-      description: "Uploading template....",
-      variant: "default",
-    });
     try {
       const response = await fetch(`https://reaps.vhdo.org/api/${url}`, {
         method,
