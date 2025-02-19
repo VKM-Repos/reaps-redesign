@@ -16,10 +16,10 @@ import HoverCancel from "@/components/custom/Icons/HoverCancel";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import { useToast } from "@/components/ui/use-toast";
 import { useGET } from "@/hooks/useGET.hook";
-import Loader from "@/components/custom/Loader";
 import { TransactionItem } from "@/types/transaction";
 import TransactionsIcon from "@/components/custom/sidebar-icons/transactions-icon";
 import StatusPill from "@/components/custom/StatusPill";
+import { useCallback, useEffect } from "react";
 
 type Props = {
   id: string;
@@ -27,9 +27,30 @@ type Props = {
 
 export default function TransactionDetails({ id }: Props) {
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+  const { toast } = useToast();
+
+  const { data, isError, refetch } = useGET({
+    url: `transactions/by-request/${id}`,
+    queryKey: ["request_transaction", id],
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Something went wrong",
+        description: "Cannot fetch transaction details",
+        variant: "destructive",
+      });
+    }
+  }, [isError, toast]);
+
+  const handleRefetch = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return isMobile ? (
-    <Sheet>
+    <Sheet onOpenChange={(isOpen) => isOpen && handleRefetch()}>
       <SheetTrigger
         className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
           isMobile ? "p-1" : "p-2"
@@ -42,11 +63,11 @@ export default function TransactionDetails({ id }: Props) {
         <SheetClose className="absolute right-6 top-6 !w-fit mx-auto py-0 px-0 ml-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
           <HoverCancel />
         </SheetClose>
-        <Content id={id} />
+        <Content data={data} />
       </SheetContent>
     </Sheet>
   ) : (
-    <Dialog>
+    <Dialog onOpenChange={(isOpen) => isOpen && handleRefetch()}>
       <DialogTrigger
         className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
           isMobile ? "p-1" : "p-2"
@@ -59,26 +80,15 @@ export default function TransactionDetails({ id }: Props) {
         Details of the selected transaction
       </DialogDescription>
       <DialogContent className="w-full max-w-[800px] h-full md:max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
-        <Content id={id} />
+        <Content data={data} />
       </DialogContent>
       <DialogClose></DialogClose>
     </Dialog>
   );
 }
 
-function Content({ id }: { id: string }) {
+function Content({ data }: any) {
   const { toast } = useToast();
-
-  const {
-    data,
-    isPending: isTransactionsLoading,
-    isError,
-    refetch,
-  } = useGET({
-    url: `transactions/by-request/${id}`,
-    queryKey: ["request_transaction"],
-    enabled: !!id,
-  });
 
   const transaction: TransactionItem = data;
 
@@ -87,20 +97,20 @@ function Content({ id }: { id: string }) {
     { method: "PUT" }
   );
 
-  // const formattedAmount = new Intl.NumberFormat("en-NG", {
-  //   style: "currency",
-  //   currency: "NGN",
-  // }).format(transaction?.amount);
+  const formattedAmount = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+  }).format(transaction?.amount);
 
-  // const formattedDate = new Intl.DateTimeFormat("en-US", {
-  //   year: "numeric",
-  //   month: "long",
-  //   day: "numeric",
-  //   hour: "2-digit",
-  //   minute: "2-digit",
-  //   second: "2-digit",
-  //   hour12: true,
-  // }).format(new Date(transaction?.request.created_at));
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(new Date(transaction?.request.created_at));
 
   const handleRequeryTransaction = () => {
     toast({
@@ -118,7 +128,6 @@ function Content({ id }: { id: string }) {
             description: `Transaction status: ${data.status}`,
             variant: "default",
           });
-          refetch();
         },
         onError: (error) => {
           const errorMessage =
@@ -136,14 +145,6 @@ function Content({ id }: { id: string }) {
 
   return (
     <>
-      {isTransactionsLoading && <Loader />}
-      {isError &&
-        toast({
-          title: "Something went wrong",
-          description: "cannot fetch transaction details",
-          variant: "destructive",
-        })}
-
       <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
         <p className="pb-4 px-[1.125rem] font-semibold text-xl2">
           Transaction Details
@@ -172,7 +173,7 @@ function Content({ id }: { id: string }) {
           </div>
           <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
             <p className="text-bold font-semibold">Amount</p>
-            {/* <p className="text-[#868687]">{formattedAmount}</p> */}
+            <p className="text-[#868687]">{formattedAmount}</p>
           </div>
         </div>
         <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] text-[#868687] rounded-[1.25rem] flex flex-col justify-between gap-3 p-6">
@@ -199,7 +200,7 @@ function Content({ id }: { id: string }) {
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
             <p className="font-bold text-sm">Date of Transaction:</p>
             <p className="flex items-center gap-2">
-              {/* <span>{formattedDate ?? "---"}</span> */}
+              <span>{formattedDate ?? "---"}</span>
             </p>
           </div>
           <div className="flex gap-5 text-sm items-center text-[#515152]">
