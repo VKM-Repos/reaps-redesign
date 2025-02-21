@@ -16,12 +16,12 @@ import { RequestItems } from "@/types/requests";
 
 export default function ManageRequestPage() {
   const statusUrls: any = {
-    all: `approved-requests/all`,
-    new: `approved-requests?sort_direction=asc&skip=0&limit=100&status=New`,
-    approved: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Approved`,
-    reopened: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
-    declined: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Declined`,
-    review_in_progress: `approved-requests?sort_direction=asc&skip=0&limit=100&status=Review in Progress`,
+    all: `requests`,
+    new: `requests?sort_direction=asc&skip=0&limit=100&status=New`,
+    approved: `requests?sort_direction=asc&skip=0&limit=100&status=Approved`,
+    reopened: `requests?sort_direction=asc&skip=0&limit=100&status=Re Opened`,
+    declined: `requests?sort_direction=asc&skip=0&limit=100&status=Declined`,
+    review_in_progress: `requests?sort_direction=asc&skip=0&limit=100&status=Review in Progress`,
     // add more fields to filter
   };
 
@@ -60,16 +60,17 @@ export default function ManageRequestPage() {
 
     return items.map((item: any) => ({
       id: item?.id,
-      research_title: item?.request?.research_title,
-      fullName: `${item?.request?.user?.first_name} ${item?.request?.user?.last_name}`,
-      email: item?.request?.user?.email,
-      created_at: item?.request?.created_at,
-      status: item?.request?.status,
+      research_title: item?.research_title,
+      fullName: `${item?.user?.first_name} ${item?.user?.last_name}`,
+      email: item?.user?.email,
+      created_at: item?.created_at,
+      status: item?.status,
       all: item?.request,
+      request: item,
     }));
   };
 
-  const tableData = transformItems(data);
+  const tableData = transformItems(data?.items);
 
   return (
     <TransitionElement>
