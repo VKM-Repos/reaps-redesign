@@ -22,6 +22,8 @@ export default function ResearcherRequestSummary({
 }: {
   request: RequestItems;
 }) {
+  console.log(request, "????");
+
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const handleSummaryPrint = useReactToPrint({
@@ -32,7 +34,6 @@ export default function ResearcherRequestSummary({
     url: `status-tracker/requests/${request?.id}`,
     queryKey: ["GET_STATUS_CHECKER", request?.id],
   });
-  console.log(statusChecker);
 
   const currentStatus: string =
     statusChecker !== undefined
