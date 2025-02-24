@@ -6,14 +6,15 @@ import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useMediaQuery } from "react-responsive";
 import ArrowRight from "@/components/custom/Icons/ArrowRight";
-import { RequestItems } from "@/types/requests";
+import type { RequestItems } from "@/types/requests";
+import { useGET } from "@/hooks/useGET.hook";
 
 const statuses = [
   "Request Submitted",
   "Payment Confirmed",
   "Assigned to a Reviewer",
   "Review in Progress",
-  "Approval",
+  "Approved",
 ];
 
 export default function ResearcherRequestSummary({
@@ -27,8 +28,17 @@ export default function ResearcherRequestSummary({
     contentRef: summaryRef,
   });
 
-  const currentStatus: string = "Payment Confirmed";
-  const isApproval = currentStatus === "Approval";
+  const { data: statusChecker } = useGET({
+    url: `status-tracker/requests/${request.id}`,
+    queryKey: ["GET_STATUS_CHECKER", request.id],
+  });
+  console.log(statusChecker);
+
+  const currentStatus: string =
+    statusChecker !== undefined
+      ? statusChecker[0]?.status
+      : "Request Submitted";
+  const isApproval = currentStatus === "Approved";
   const currentIndex = statuses.indexOf(currentStatus);
   const [showTracker, setShowTracker] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 737px)" });
@@ -37,6 +47,7 @@ export default function ResearcherRequestSummary({
     <SheetContent side="bottom" className="h-full overflow-y-scroll md:!p-0">
       {showTracker && isMobile ? (
         <StatusTracker
+          status={statusChecker}
           currentIndex={currentIndex}
           currentStatus={currentStatus}
           isApproval={isApproval}
@@ -48,6 +59,7 @@ export default function ResearcherRequestSummary({
         <div className="w-full relative" ref={summaryRef}>
           {!isMobile && (
             <StatusTracker
+              status={statusChecker}
               currentIndex={currentIndex}
               currentStatus={currentStatus}
               isApproval={isApproval}

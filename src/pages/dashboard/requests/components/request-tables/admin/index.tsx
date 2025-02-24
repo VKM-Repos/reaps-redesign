@@ -8,9 +8,11 @@ type Props = {
 };
 
 const ManageRequestTable = ({ data }: Props) => {
+  console.log(data, "<<<<<");
+
   return (
     <div className="w-full">
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <CustomTable data={data} columns={columns} />
       ) : (
         <div className="mx-auto my-0 w-full md:4/5 flex flex-col justify-center items-center mb-10">
