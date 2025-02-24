@@ -30,6 +30,7 @@ export interface RequestItems {
   updated_at: string;
   can_edit: boolean;
   user: User;
+  request: RequestItems
 }
 
 export interface RequestArray {

@@ -49,7 +49,7 @@ export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
   failed: { bg: "#FFE5E8", text: "#BF1E2C" },
   Declined: { bg: "#FFE5E8", text: "#BF1E2C" },
   Approved: { bg: "#E5FFEB", text: "#01BC29" },
-  "Review in Progress": { bg: "#FFF2E5", text: "#452609" },
+  "Review In Progress": { bg: "#FFF2E5", text: "#452609" },
   "Not Submitted Yet": { bg: "#E5EDFF", text: "#040C21" },
   Submitted: { bg: "#FFE5F8", text: "#1A1318" },
   Reviewed: { bg: "#E8E5FF", text: "#1D0AF5" },

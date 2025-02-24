@@ -105,6 +105,7 @@ function SharedActions({
   editRequest,
   isMobile = false,
 }: ActionProps) {
+
   return (
     <div className="text-xs">
       <Sheet>
@@ -116,19 +117,17 @@ function SharedActions({
           <View />
           {isMobile ? null : <span>View</span>}
         </SheetTrigger>
-        <ResearcherRequestSummary request={item} />
+        <ResearcherRequestSummary request={item.request} />
       </Sheet>
       <div>
         <button
           onClick={editRequest}
           className={`${
-            !item?.can_edit === false
-              ? "text-black"
-              : "text-black/30 cursor-not-allowed"
+            item?.can_edit ? "text-black" : "text-black/30 cursor-not-allowed"
           } w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
             isMobile ? "p-1" : "p-2"
           }`}
-          disabled={item?.can_edit === false}
+          disabled={!item?.can_edit}
         >
           <PencilEdit />
           {isMobile ? null : <span>Edit</span>}
@@ -155,7 +154,9 @@ function SharedActions({
           deleteItem={deleteRequest}
         />
       </Sheet>
-      <TransactionDetails id={item.id} />
+      {item && item.status === "Not Submitted Yet" ? null : (
+        <TransactionDetails id={item?.id} />
+      )}
     </div>
   );
 }

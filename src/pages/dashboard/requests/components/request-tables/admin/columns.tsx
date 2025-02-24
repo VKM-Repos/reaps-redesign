@@ -106,7 +106,9 @@ const columns: Array<ColumnDef<any>> = [
     header: () => <CustomCell value="" className="w-full md:max-w-[1rem]" />,
     meta: { cellType: "custom" },
     cell: ({ row }) => {
-      const item = row.original.all;
+      const item = row.original;
+      console.log(item, "@@@");
+
       return (
         <CustomCell
           value={<Action item={item} />}
