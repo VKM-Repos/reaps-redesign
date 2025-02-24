@@ -416,6 +416,7 @@ const Summary = ({
                         ? "text-white rounded-2 py-3 !bg-primary "
                         : "text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]"
                     } !max-w-[9.375rem] w-full font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`}
+                    // biome-ignore lint/complexity/noUselessTernary: <explanation>
                     disabled={isApproval ? false : true}
                   >
                     Print

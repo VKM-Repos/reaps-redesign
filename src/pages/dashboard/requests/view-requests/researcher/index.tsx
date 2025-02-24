@@ -29,8 +29,8 @@ export default function ResearcherRequestSummary({
   });
 
   const { data: statusChecker } = useGET({
-    url: `status-tracker/requests/${request.id}`,
-    queryKey: ["GET_STATUS_CHECKER", request.id],
+    url: `status-tracker/requests/${request?.id}`,
+    queryKey: ["GET_STATUS_CHECKER", request?.id],
   });
   console.log(statusChecker);
 
@@ -84,6 +84,7 @@ export default function ResearcherRequestSummary({
               </SheetClose>
             </div>
             {isMobile && (
+              // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
               <div
                 className="flex items-center text-[#192C8A] py-3 w-[95%] mx-auto"
                 onClick={() => {
