@@ -14,6 +14,8 @@ import SignatureIcon from "@/components/custom/Icons/Signature";
 import ReviewersList from "./reviewers-list";
 
 export default function Action({ item }: { item: any }) {
+  console.log(item, "???----");
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
@@ -29,7 +31,7 @@ export default function Action({ item }: { item: any }) {
                 <View />
                 <span>View</span>
               </SheetTrigger>
-              <InstitutionRequestSummary request={item} />
+              <InstitutionRequestSummary request={item?.request} />
             </Sheet>
             <Dialog>
               <DialogTrigger

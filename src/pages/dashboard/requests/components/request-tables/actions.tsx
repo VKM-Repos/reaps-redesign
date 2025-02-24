@@ -105,7 +105,6 @@ function SharedActions({
   editRequest,
   isMobile = false,
 }: ActionProps) {
-  console.log(item);
 
   return (
     <div className="text-xs">
@@ -118,7 +117,7 @@ function SharedActions({
           <View />
           {isMobile ? null : <span>View</span>}
         </SheetTrigger>
-        <ResearcherRequestSummary request={item} />
+        <ResearcherRequestSummary request={item.request} />
       </Sheet>
       <div>
         <button

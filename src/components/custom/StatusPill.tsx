@@ -7,7 +7,7 @@ type Props = {
 
 const formatStatus = (status: string) => {
   return status
-    .toLowerCase()
+    ?.toLowerCase()
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
