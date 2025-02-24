@@ -1,10 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { CustomCell } from "@/components/custom/CustomTable";
-import { RequestItems } from "@/types/requests";
 import Actions from "./actions";
 import StatusPill from "@/components/custom/StatusPill";
 
-const columns: Array<ColumnDef<RequestItems>> = [
+const columns: Array<ColumnDef<any>> = [
   {
     header: () => (
       <CustomCell value={"Title"} className="font-bold w-full min-w-[10rem] " />
@@ -107,7 +106,7 @@ const columns: Array<ColumnDef<RequestItems>> = [
     cell: ({ row }) => (
       <div className="flex place-content-end items-center gap-2">
         <CustomCell
-          value={<Actions data={row.original} />}
+          value={<Actions data={row.original.request} />}
           className="flex justify-center items-center w-full md:max-w-[3rem]"
         />
       </div>
