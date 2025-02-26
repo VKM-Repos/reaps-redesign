@@ -11,7 +11,6 @@ import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "react-responsive";
 import Download from "@/components/custom/Icons/Download";
-import { useLocation } from "react-router-dom";
 import useUserStore from "@/store/user-store";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import User from "@/components/custom/Icons/User";
@@ -55,7 +54,6 @@ const Summary = ({
   const { register } = form;
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const { activeRole } = useUserStore();
-  const { pathname } = useLocation();
 
   const application = getApplicationData(request);
   const filteredDocs = getSupportDocs(request);
@@ -155,8 +153,8 @@ const Summary = ({
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">
                     Supporting Document
                   </h1>
-                  {(activeRole === "reviewer" &&
-                    activeTab === "review table") ||
+                  {/* {(activeRole === "reviewer" &&
+                    activeTab === "review_request") ||
                     ((pathname.includes("/requests/review-requests") ||
                       pathname.includes("/requests/manage-requests")) && (
                       <p className="text-[#000066] flex gap-2 items-center font-semibold cursor-pointer">
@@ -166,7 +164,7 @@ const Summary = ({
                         </span>{" "}
                         <Download />
                       </p>
-                    ))}
+                    ))} */}
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
                   {filteredDocs.map((file, index) => {
@@ -186,7 +184,7 @@ const Summary = ({
                           className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                         >
                           <span className="flex gap-2 items-center justify-center">
-                            {activeTab === "review_request" ? (
+                            {activeTab === "review_request" || !(activeRole == "user") ? (
                               <span className="text-black text-[0.8rem]">
                                 <GoogleDoc />
                               </span>
@@ -202,18 +200,6 @@ const Summary = ({
                                 <Download />
                               </span>
                             </a>
-                          {/* {activeTab === "review table" ||
-                          (activeRole === "admin" &&
-                            (pathname.includes("/requests/manage-requests") ||
-                              pathname.includes(
-                                "/requests/review-requests"
-                              ))) ? (
-                            
-                          ) : (
-                            <span className="p-2">
-                              <span className="text-[1rem]">x</span>
-                            </span>
-                          )} */}
                         </div>
                       </div>
                     );
