@@ -24,7 +24,7 @@ export default function Sidebar() {
         </div>
       </div>
       <div className="scrollbar-hide h-[calc(100vh-130px)] overflow-y-scroll">
-        <ul className="flex flex-col gap-8 px-6 pb-10">
+        <ul className="flex flex-col gap-6 px-6 pb-10">
           {links.map(({ path, icon, label, subLinks }) => {
             if (
               activeRole === "admin" &&
@@ -32,8 +32,10 @@ export default function Sidebar() {
             ) {
               return (
                 <div key={label} className="flex flex-col gap-4">
-                  <div className="text-black/30 text-xs uppercase">{label}</div>
-                  <div className="flex flex-col gap-8">
+                  <div className="text-[#9B9E9B]/60 text-xs uppercase font-bold">
+                    {label}
+                  </div>
+                  <div className="flex flex-col gap-6">
                     {subLinks &&
                       subLinks.map(({ path, icon, label }) => (
                         <Link
@@ -41,9 +43,9 @@ export default function Sidebar() {
                           to={path}
                           className={`${
                             path.includes(pathname)
-                              ? "text-black"
-                              : "text-black/30"
-                          } hover:text-black flex items-center justify-start space-x-4`}
+                              ? "text-[#515152] font-semibold"
+                              : "text-[#868687]"
+                          } hover:text-[#515152] text-sm font-normal flex items-center justify-start space-x-4`}
                         >
                           <span>{icon}</span>
                           <span>{label}</span>
@@ -59,8 +61,10 @@ export default function Sidebar() {
                 key={label}
                 to={path}
                 className={`${
-                  path.includes(pathname) ? "text-black" : "text-black/30"
-                } hover:text-black flex items-center justify-start space-x-4`}
+                  path.includes(pathname)
+                    ? "text-[#515152] font-semibold"
+                    : "text-[#868687]"
+                } hover:text-[#515152] font-normal text-sm flex items-center justify-start space-x-4`}
               >
                 <span>{icon}</span>
                 <span>{label}</span>
