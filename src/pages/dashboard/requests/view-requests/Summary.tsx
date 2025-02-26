@@ -11,15 +11,14 @@ import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "react-responsive";
 import Download from "@/components/custom/Icons/Download";
-import { useLocation } from "react-router-dom";
 import useUserStore from "@/store/user-store";
 import GoogleDoc from "@/components/custom/Icons/GoogleDoc";
 import User from "@/components/custom/Icons/User";
 import Smile from "@/assets/smile.svg";
 import Unhappy from "@/assets/unhappy.svg";
 import Line from "@/assets/line.svg";
-import { useState } from "react";
 import { useGET } from "@/hooks/useGET.hook";
+import { RequestItems } from "@/types/requests";
 
 type SummaryPageProps = {
   fetchCount: number;
@@ -33,7 +32,7 @@ const Summary = ({
   fetchCount,
   handlePrint,
   isApproval,
-  activeTab = "request table",
+  activeTab,
   request,
 }: SummaryPageProps) => {
   const { data } = useRequestsStore();
@@ -55,84 +54,10 @@ const Summary = ({
   const { register } = form;
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const { activeRole } = useUserStore();
-  const { pathname } = useLocation();
 
-  const [application] = useState([
-    {
-      name: "question1",
-      label:
-        "Are you the principal investigator or Local Principal Investigator?",
-      value: request?.are_you_investigator_or_local_principal_investigator
-        ? "Yes"
-        : "No",
-    },
-    {
-      name: "question3",
-      label: "Is there a Co-Principal Investigator?",
-      value: request?.has_co_principal_investigator ? "Yes" : "No",
-    },
-    {
-      name: "question4",
-      label: "Is the project sponsored?",
-      value: request?.has_project_sponsored ? "Yes" : "No",
-    },
-    {
-      name: "question5",
-      label: "Did You Complete Ethics Training?",
-      value: request?.completed_ethics_training ? "Yes" : "No",
-    },
-    {
-      name: "question6",
-      label:
-        "Will materials or tissue specimens be shipped out of the country?",
-      value: request?.specimen_will_be_shipped_out ? "Yes" : "No",
-    },
-    {
-      name: "question7",
-      label: "What is the duration of the Research? (months)",
-      value: request?.duration_of_research_in_years,
-    },
-  ]);
-  const [supportDocData] = useState([
-    {
-      id: "requirement1",
-      label: "Curriculum Vitae",
-      name: "CV",
-      href: request?.cv,
-    },
-    {
-      id: "requirement2",
-      label: "Cover Letter/Application Letter",
-      name: "Cover Letter",
-      href: request?.cover_letter,
-    },
-    {
-      id: "requirement3",
-      label: "Proposal",
-      name: "Proposal",
-      href: request?.proposal,
-    },
-    {
-      id: "requirement4",
-      label: "Research Tools/Questionnaire",
-      name: "Research Tools",
-      href: request?.questionnaire,
-    },
-    {
-      id: "requirement5",
-      label: "Informed Consent Form",
-      name: "Informed Consent Form",
-      href: request?.consent_form,
-    },
-    // {
-    //   id: "requirement6",
-    //   label: "Materials Transfer Agreement Form",
-    //   name: "Materials Transfer Agreement Form",
-    //   href:
-    // },
-  ]);
+  const application = getApplicationData(request);
+  const filteredDocs = getSupportDocs(request);
 
-  const filteredDocs = supportDocData.filter((doc) => doc.href);
 
   function onSubmit() {
     try {
@@ -228,18 +153,18 @@ const Summary = ({
                   <h1 className="text-[1.375rem] font-semibold pt-10 pb-5 md:py-5">
                     Supporting Document
                   </h1>
-                  {(activeRole === "reviewer" &&
-                    activeTab === "review table") ||
+                  {/* {(activeRole === "reviewer" &&
+                    activeTab === "review_request") ||
                     ((pathname.includes("/requests/review-requests") ||
                       pathname.includes("/requests/manage-requests")) && (
-                      <p className="text-[#000066] items-center flex gap-2 items-center font-semibold cursor-pointer">
+                      <p className="text-[#000066] flex gap-2 items-center font-semibold cursor-pointer">
                         {" "}
                         <span className="underline">
                           download all supporting documents
                         </span>{" "}
                         <Download />
                       </p>
-                    ))}
+                    ))} */}
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-8 flex flex-col">
                   {filteredDocs.map((file, index) => {
@@ -259,9 +184,7 @@ const Summary = ({
                           className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                         >
                           <span className="flex gap-2 items-center justify-center">
-                            {activeTab === "review table" ||
-                            pathname.includes("/requests/review-requests") ||
-                            pathname.includes("/requests/manage-requests") ? (
+                            {activeTab === "review_request" || !(activeRole == "user") ? (
                               <span className="text-black text-[0.8rem]">
                                 <GoogleDoc />
                               </span>
@@ -272,22 +195,11 @@ const Summary = ({
                             )}
                             <span>{file.name}</span>
                           </span>
-                          {activeTab === "review table" ||
-                          (activeRole === "admin" &&
-                            (pathname.includes("/requests/manage-requests") ||
-                              pathname.includes(
-                                "/requests/review-requests"
-                              ))) ? (
-                            <a href={file?.href} className="p-2">
+                          <a href={file?.href} className="p-2">
                               <span>
                                 <Download />
                               </span>
                             </a>
-                          ) : (
-                            <span className="p-2">
-                              <span className="text-[1rem]">x</span>
-                            </span>
-                          )}
                         </div>
                       </div>
                     );
@@ -434,3 +346,53 @@ const Summary = ({
 };
 
 export default Summary;
+
+
+const getApplicationData = (request: RequestItems) => [
+  {
+    name: "question1",
+    label: "Are you the principal investigator or Local Principal Investigator?",
+    value: request?.are_you_investigator_or_local_principal_investigator ? "Yes" : "No",
+  },
+  {
+    name: "question3",
+    label: "Is there a Co-Principal Investigator?",
+    value: request?.has_co_principal_investigator ? "Yes" : "No",
+  },
+  {
+    name: "question4",
+    label: "Is the project sponsored?",
+    value: request?.has_project_sponsored ? "Yes" : "No",
+  },
+  {
+    name: "question5",
+    label: "Did You Complete Ethics Training?",
+    value: request?.completed_ethics_training ? "Yes" : "No",
+  },
+  {
+    name: "question6",
+    label: "Will materials or tissue specimens be shipped out of the country?",
+    value: request?.specimen_will_be_shipped_out ? "Yes" : "No",
+  },
+  {
+    name: "question7",
+    label: "What is the duration of the Research? (months)",
+    value: request?.duration_of_research_in_years ?? "N/A",
+  },
+];
+
+const getSupportDocs = (request: RequestItems) =>
+  [
+    { id: "requirement1", label: "Curriculum Vitae", name: "CV", href: request?.cv },
+    { id: "requirement2", label: "Cover Letter/Application Letter", name: "Cover Letter", href: request?.cover_letter },
+    { id: "requirement3", label: "Proposal", name: "Proposal", href: request?.proposal },
+    { id: "requirement4", label: "Research Tools/Questionnaire", name: "Research Tools", href: request?.questionnaire },
+    { id: "requirement5", label: "Informed Consent Form", name: "Informed Consent Form", href: request?.consent_form },
+    { id: "requirement6", label: "Materials Transfer Agreement Form", name: "Materials Transfer Agreement Form", href: request?.specimen_will_be_shipped_out_letter },
+    { id: "requirement7", label: "Sponsor Attestation Statement", name: "Sponsor Attestation Statement", href: request?.sponsor_attestation_letter },
+    { id: "requirement8", label: "Supervisor Attestation Statement", name: "Supervisor Attestation Statement", href: request?.supervisor_attestation_statement },
+    { id: "requirement9", label: "HOD Attestation Form", name: "HOD Attestation Form", href: request?.hod_attestation },
+    { id: "requirement10", label: "Letter of Support", name: "Letter of Support", href: request?.letter_of_support_from_investigator },
+    { id: "requirement11", label: "Evidence of Completion", name: "Evidence of Completion", href: request?.evidence_of_completion },
+  ].filter((doc) => doc.href);
+

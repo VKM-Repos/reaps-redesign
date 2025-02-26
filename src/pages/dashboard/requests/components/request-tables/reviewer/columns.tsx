@@ -106,7 +106,7 @@ const columns: Array<ColumnDef<any>> = [
     cell: ({ row }) => (
       <div className="flex place-content-center items-center gap-2">
         <CustomCell
-          value={<ReviewerRequestSummary data={row.original} />}
+          value={<ReviewerRequestSummary data={row.original} activeTab="review_request"/>}
           className="flex justify-center items-center w-full md:max-w-[3rem]"
         />
       </div>
