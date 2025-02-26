@@ -14,7 +14,6 @@ import CreateRequests from "@/pages/dashboard/requests/create-requests";
 import ViewRequests from "@/pages/dashboard/requests/view-requests/researcher";
 import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
-import MyRequest from "@/pages/dashboard/requests/pages/admin/my-request";
 import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/manage-request";
 import Templates from "@/pages/dashboard/templates";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
@@ -81,9 +80,9 @@ const router = [
           },
           {
             name: "My Request",
-            path: "requests/my-requests",
+            path: "requests",
             title: "My Request",
-            element: MyRequest,
+            element: Requests,
           },
           {
             name: "Manage Request",

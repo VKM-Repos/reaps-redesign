@@ -8,7 +8,7 @@ import {
 import FilterIcon from "./Icons/Filter";
 import ArrowRight from "./Icons/ArrowRight";
 import Tick from "./Icons/Tick";
-import { Label } from "../ui/label";
+// import { Label } from "../ui/label";
 
 type Props = {
   statuses: string[]; // Available statuses
@@ -25,20 +25,20 @@ const FilterGlobal: React.FC<Props> = ({ statuses, onApplyFilters }) => {
     "Status"
   );
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  // const [startDate, setStartDate] = useState<Date | undefined>();
+  // const [endDate, setEndDate] = useState<Date | undefined>();
 
   const handleSelectStatus = (status: string) => {
     setSelectedStatuses([status]); // Allow only one selected status
   };
 
   const applyFilters = () => {
-    onApplyFilters({ statuses: selectedStatuses, startDate, endDate });
+    onApplyFilters({ statuses: selectedStatuses });
     setOpen(false); // Close the dropdown after applying filters
   };
 
-  const handleStartDateChange = (date: Date) => setStartDate(date);
-  const handleEndDateChange = (date: Date) => setEndDate(date);
+  // const handleStartDateChange = (date: Date) => setStartDate(date);
+  // const handleEndDateChange = (date: Date) => setEndDate(date);
 
   return (
     <div className="flex gap-2 p-1 items-center w-fit">
@@ -79,7 +79,7 @@ const FilterGlobal: React.FC<Props> = ({ statuses, onApplyFilters }) => {
             </div>
 
             {/* Date Filter */}
-            <div className="gap-2 flex flex-col justify-center">
+            {/* <div className="gap-2 flex flex-col justify-center">
               <p className="font-semibold text-sm text-[#6A6C6A] px-1">Date</p>
               <button onClick={() => setActiveContent("Date")}>
                 <div
@@ -95,7 +95,7 @@ const FilterGlobal: React.FC<Props> = ({ statuses, onApplyFilters }) => {
                   </span>
                 </div>
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="border-l-[#0E0F0C1F] border"></div>
 
@@ -132,38 +132,39 @@ const FilterGlobal: React.FC<Props> = ({ statuses, onApplyFilters }) => {
             ) : (
               // Date Range
               activeContent === "Date" && (
-                <div className="gap-2 flex flex-col justify-center">
-                  <div className="flex gap-3 items-center">
-                    <div className="flex flex-col gap-1">
-                      <Label className="text-xs text-[#6A6C6A]">
-                        Start Date
-                      </Label>
-                      <input
-                        type="date"
-                        value={
-                          startDate ? startDate.toISOString().split("T")[0] : ""
-                        }
-                        onChange={(e) =>
-                          handleStartDateChange(new Date(e.target.value))
-                        }
-                        className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Label className="text-xs text-[#6A6C6A]">End Date</Label>
-                      <input
-                        type="date"
-                        value={
-                          endDate ? endDate.toISOString().split("T")[0] : ""
-                        }
-                        onChange={(e) =>
-                          handleEndDateChange(new Date(e.target.value))
-                        }
-                        className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]"
-                      />
-                    </div>
-                  </div>
-                </div>
+                // <div className="gap-2 flex flex-col justify-center">
+                //   <div className="flex gap-3 items-center">
+                //     <div className="flex flex-col gap-1">
+                //       <Label className="text-xs text-[#6A6C6A]">
+                //         Start Date
+                //       </Label>
+                //       <input
+                //         type="date"
+                //         value={
+                //           startDate ? startDate.toISOString().split("T")[0] : ""
+                //         }
+                //         onChange={(e) =>
+                //           handleStartDateChange(new Date(e.target.value))
+                //         }
+                //         className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]"
+                //       />
+                //     </div>
+                //     <div className="flex flex-col gap-1">
+                //       <Label className="text-xs text-[#6A6C6A]">End Date</Label>
+                //       <input
+                //         type="date"
+                //         value={
+                //           endDate ? endDate.toISOString().split("T")[0] : ""
+                //         }
+                //         onChange={(e) =>
+                //           handleEndDateChange(new Date(e.target.value))
+                //         }
+                //         className="border border-[#0E0F0C1F] rounded-lg p-2 text-xs text-[#6A6C6A] w-full min-w-[5.5rem]"
+                //       />
+                //     </div>
+                //   </div>
+                // </div>
+                <></>
               )
             )}
             {/* Action Buttons */}
