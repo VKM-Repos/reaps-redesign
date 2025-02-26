@@ -22,6 +22,7 @@ import { useState } from "react";
 import { useGET } from "@/hooks/useGET.hook";
 
 type SummaryPageProps = {
+  fetchCount: number;
   isApproval?: boolean;
   handlePrint?: () => void;
   activeTab?: string;
@@ -29,6 +30,7 @@ type SummaryPageProps = {
   request?: any;
 };
 const Summary = ({
+  fetchCount,
   handlePrint,
   isApproval,
   activeTab = "request table",
@@ -144,7 +146,7 @@ const Summary = ({
 
   const { data: reviews_data } = useGET({
     url: `reviews/request/${request?.id}`,
-    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id],
+    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id, fetchCount],
   });
 
   return (
@@ -334,7 +336,7 @@ const Summary = ({
                             <div className="grid grid-cols-2 gap-x-2 items-center">
                               <span
                                 className="w-fit justify-self-end"
-                                style={{ color: `#34A853` }}
+                                style={{ color: "#34A853" }}
                               >
                                 <img
                                   src={
@@ -343,7 +345,7 @@ const Summary = ({
                                       ? Smile
                                       : Unhappy
                                   }
-                                  style={{ color: `#34A853` }}
+                                  style={{ color: "#34A853" }}
                                   alt={reviewer.reviewer?.first_name}
                                 />
                               </span>
@@ -363,7 +365,7 @@ const Summary = ({
                           </div>
                           <div className="pl-2 flex gap-1">
                             <div className="py-2 px-3">
-                              <img src={Line} />
+                              <img src={Line} alt="image_photo" />
                               <p>&nbsp;</p>
                             </div>
                             <div className="grid grid-rows-2 gap-y-1">
