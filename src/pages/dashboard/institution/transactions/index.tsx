@@ -6,6 +6,7 @@ import { useGET } from "@/hooks/useGET.hook";
 import { TransactionItem } from "@/types/transaction";
 import TransactionTable from "./table";
 import Loader from "@/components/custom/Loader";
+import PageTitle from "@/components/custom/PageTitle";
 
 const InstitutionTransactions = () => {
   const { data: transactionsData, isPending } = useGET({
@@ -17,7 +18,8 @@ const InstitutionTransactions = () => {
   const transactions: TransactionItem[] = transactionsData?.items || [];
   return (
     <TransitionElement>
-      <div className="flex flex-col gap-y-[4rem] p-8">
+      <div className="flex flex-col gap-[1.25rem]">
+        <PageTitle title="Transactions" actions={null} />
         <TableWrapper
           search={<SearchGlobal />}
           filter={<FilterGlobal onApplyFilters={() => {}} statuses={[]} />}

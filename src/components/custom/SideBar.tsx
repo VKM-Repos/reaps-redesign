@@ -42,7 +42,7 @@ export default function Sidebar() {
                           key={label}
                           to={path}
                           className={`${
-                            path.includes(pathname)
+                            path.endsWith(pathname)
                               ? "text-[#515152] font-semibold"
                               : "text-[#868687]"
                           } hover:text-[#515152] text-sm font-normal flex items-center justify-start space-x-4`}
