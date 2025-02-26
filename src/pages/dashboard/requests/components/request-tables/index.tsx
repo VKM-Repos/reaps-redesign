@@ -1,7 +1,7 @@
 import CustomTable from "@/components/custom/CustomTable";
 import columns from "./columns";
 import EmptyRequests from "../empty-state";
-import { RequestItems } from "@/types/requests";
+import type { RequestItems } from "@/types/requests";
 
 type Props = {
   data: RequestItems[];
