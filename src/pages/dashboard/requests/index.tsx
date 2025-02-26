@@ -24,8 +24,8 @@ export default function MyRequest() {
   const [filters, setFilters] = useState<string[]>([]);
 
   const tabUrls: Record<string, string> = {
-    my_request: `requests/users/me`,
-    review_request: `reviews/reviewer?sort_direction=asc&skip=0&limit=100`,
+    my_request: "requests/users/me",
+    review_request: "reviews/reviewer?sort_direction=asc&skip=0&limit=100",
   };
 
   const statusUrls: Record<string, string> = {
@@ -147,7 +147,7 @@ export default function MyRequest() {
               actions={
                 <div className="lg:flex items-center gap-1 hidden">
                   <span>
-                    <a href="" className="font-semibold underline text-black">
+                    <a href="#" className="font-semibold underline text-black">
                       The approval process
                     </a>
                   </span>
