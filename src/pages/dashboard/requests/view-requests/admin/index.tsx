@@ -45,7 +45,7 @@ export default function InstitutionRequestSummary({
           </div>
         )}
       <div className="px-4">
-        <Summary reviews={reviews?.items} request={request} />
+        <Summary fetchCount={0} reviews={reviews?.items} request={request} />
       </div>
     </SheetContent>
   );
