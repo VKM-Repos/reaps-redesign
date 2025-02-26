@@ -122,6 +122,7 @@ function SharedActions({
       </Sheet>
       <div>
         <button
+          type="button"
           onClick={editRequest}
           className={`${
             item?.can_edit ? "text-black" : "text-black/30 cursor-not-allowed"
