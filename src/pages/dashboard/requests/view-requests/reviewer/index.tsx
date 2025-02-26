@@ -21,6 +21,8 @@ export default function ReviewerRequestSummary({
   activeTab?: string;
 }) {
   const [activeSection, setActiveSection] = useState("");
+  const [fetchReviewCount, setFetchReviewCount] = useState(0);
+
   const close_dialog_ref = useRef<HTMLButtonElement | null>(null);
   const review_remarks = [
     { id: "1", text: "Satisfactory", color: "#34A853", icon: Smile },
@@ -35,6 +37,8 @@ export default function ReviewerRequestSummary({
   // );
 
   // navigate to sections on summary page
+  console.log(data, "**??");
+
   const handleNavClick =
     (sectionId: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
@@ -65,6 +69,7 @@ export default function ReviewerRequestSummary({
   );
   const closeDialog = () => {
     close_dialog_ref?.current?.click();
+    setFetchReviewCount((fetchReviewCount) => fetchReviewCount + 1);
   };
   return (
     <Sheet>
@@ -118,7 +123,10 @@ export default function ReviewerRequestSummary({
                 <div className="mt-3 w-full">
                   <Dialog>
                     <DialogTrigger className="w-full">
-                      <button className="bg-primary text-white rounded-full flex items-center justify-center  px-6 py-[1.375rem] max-w-[13rem] md:w-full w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6">
+                      <button
+                        type="button"
+                        className="bg-primary text-white rounded-full flex items-center justify-center  px-6 py-[1.375rem] max-w-[13rem] md:w-full w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6"
+                      >
                         Write your Review
                       </button>
                     </DialogTrigger>
@@ -144,6 +152,7 @@ export default function ReviewerRequestSummary({
             </div>
             <div className="my-0 mx-auto md:mt-[3.875rem] md:absolute md:right-10 md:w-full max-w-[90%] md:max-w-[75%]">
               <Summary
+                fetchCount={fetchReviewCount}
                 reviews={data?.all}
                 request={data?.all?.request}
                 activeTab={activeTab}
@@ -154,7 +163,10 @@ export default function ReviewerRequestSummary({
         <div className="md:hidden mt-auto">
           <Sheet>
             <SheetTrigger className="w-full fixed bottom-4">
-              <button className="bg-primary text-white rounded-full flex items-center justify-center max-w-[13rem] md:w-full px-6 py-[1.375rem] w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6">
+              <button
+                type="button"
+                className="bg-primary text-white rounded-full flex items-center justify-center max-w-[13rem] md:w-full px-6 py-[1.375rem] w-full h-[3.5rem] md:relative md:right-auto md:bottom-auto fixed bottom-4 right-6"
+              >
                 Write your Review
               </button>
             </SheetTrigger>

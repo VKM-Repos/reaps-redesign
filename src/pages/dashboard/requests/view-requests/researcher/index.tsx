@@ -22,6 +22,8 @@ export default function ResearcherRequestSummary({
 }: {
   request: RequestItems;
 }) {
+  console.log(request, "????");
+
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const handleSummaryPrint = useReactToPrint({
@@ -32,7 +34,6 @@ export default function ResearcherRequestSummary({
     url: `status-tracker/requests/${request?.id}`,
     queryKey: ["GET_STATUS_CHECKER", request?.id],
   });
-  console.log(statusChecker);
 
   const currentStatus: string =
     statusChecker !== undefined
@@ -47,6 +48,7 @@ export default function ResearcherRequestSummary({
     <SheetContent side="bottom" className="h-full overflow-y-scroll md:!p-0">
       {showTracker && isMobile ? (
         <StatusTracker
+          requestId={request?.id}
           status={statusChecker}
           currentIndex={currentIndex}
           currentStatus={currentStatus}
@@ -59,6 +61,7 @@ export default function ResearcherRequestSummary({
         <div className="w-full relative" ref={summaryRef}>
           {!isMobile && (
             <StatusTracker
+              requestId={request?.id}
               status={statusChecker}
               currentIndex={currentIndex}
               currentStatus={currentStatus}
@@ -100,6 +103,7 @@ export default function ResearcherRequestSummary({
             <div className="mx-auto my-0 md:absolute md:right-0 md:w-10/12">
               <div className="w-[85%] mx-auto">
                 <Summary
+                  fetchCount={0}
                   reviews={[]}
                   request={request}
                   isApproval={isApproval}

@@ -104,6 +104,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ request }) => {
                   <Dialog>
                     <DialogTrigger>
                       <button
+                        type="button"
                         className="bg-white action-shadow rounded-[2.75rem] px-6 py-[1.375rem] font-semibold max-w-fit"
                         onClick={() => handleStepForward(index)}
                         style={{
@@ -121,6 +122,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ request }) => {
                   <Sheet>
                     <SheetTrigger>
                       <button
+                        type="button"
                         className="bg-white action-shadow rounded-[2.75rem] px-6 py-[1.375rem] font-semibold max-w-fit"
                         onClick={() => handleStepForward(index)}
                         style={{
@@ -134,7 +136,11 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ request }) => {
                     </SheetTrigger>
                     {content}
                     <SheetClose>
-                      <button className="hidden" ref={closeSheetRef}>
+                      <button
+                        type="button"
+                        className="hidden"
+                        ref={closeSheetRef}
+                      >
                         Close sheet
                       </button>
                     </SheetClose>
@@ -146,6 +152,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ request }) => {
         )}
       </AnimatePresence>
       <button
+        type="button"
         className="max-w-fit text-white flex items-center gap-3 px-6 py-[1.375rem] action-shadow rounded-[2.75rem] border border-4 border-[#FFD13A] bg-primary"
         onClick={() => setShowButtons((prev) => !prev)}
       >
@@ -155,7 +162,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ request }) => {
             !showButtons ? "rotate-180" : "rotate-0"
           } flex transition-all duration-150 delay-75 items-center`}
         >
-          <img src={CircleArrowDown} />
+          <img src={CircleArrowDown} alt="Arrow down" />
         </span>
       </button>
     </div>

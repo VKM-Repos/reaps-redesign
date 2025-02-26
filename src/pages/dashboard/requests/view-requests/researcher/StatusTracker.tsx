@@ -3,7 +3,7 @@ import BlueCheckmark from "@/components/custom/Icons/BlueCheckmark";
 import Line from "@/components/custom/Icons/Line";
 import Record from "@/components/custom/Icons/Record";
 import StatusHelp from "@/components/custom/Icons/StatusHelp";
-import { Button } from "@/components/ui/button";
+import { useGET } from "@/hooks/useGET.hook";
 import { useMediaQuery } from "react-responsive";
 
 type StatusTrackerProps = {
@@ -11,18 +11,25 @@ type StatusTrackerProps = {
   currentStatus: string;
   statuses: string[];
   isApproval: boolean;
-  handlePrint: () => void;
+  handlePrint?: () => void;
   setShowTracker: React.Dispatch<React.SetStateAction<boolean>>;
   status: any[];
+  requestId: string;
 };
 export default function StatusTracker({
   currentIndex,
   currentStatus,
   isApproval,
   statuses,
-  handlePrint,
   setShowTracker,
+  requestId,
 }: StatusTrackerProps) {
+  const { data } = useGET({
+    url: `transactions/by-request/${requestId}`,
+    queryKey: ["request_transaction", requestId],
+    enabled: !!requestId,
+  });
+
   const isMobile = useMediaQuery({ query: "(max-width: 737px)" });
   const handleFunc = () => {
     setShowTracker(false);
@@ -100,17 +107,17 @@ export default function StatusTracker({
         </div>
         {!isMobile && (
           <div className="w-full -mt-6 flex items-center justify-start mx-auto">
-            <Button
-              onClick={handlePrint}
+            <a
+              href={isApproval ? data?.request?.approval_status_file : "#"}
+              download
               className={`${
                 isApproval
-                  ? "text-white rounded-2 py-3 !bg-primary "
+                  ? "text-white rounded-[2.75rem] py-2 !bg-primary "
                   : "text-[#6A6C6A] rounded-[2.75rem] py-[1.375rem]"
-              }  w-full max-w-[9.375rem] font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29]`}
-              disabled={isApproval ? false : true}
+              }  w-full max-w-[9.375rem] font-semibold px-6 border border-[#0C0C0F29] bg-inherit hover:bg-inherit hover:border-[#0C0C0F29] text-center justify-center`}
             >
               Print
-            </Button>
+            </a>
           </div>
         )}
       </div>

@@ -61,9 +61,9 @@ export default function WriteReview({
   } = form;
 
   const { data: reviewer_reviews } = useGET({
-    url: `reviews/reviewer`,
+    url: "reviews/reviewer",
     queryKey: ["FETCH_REVIEW_BY_REVIEWER", request_id],
-    enabled: activeRole != "admin",
+    enabled: activeRole !== "admin",
   });
 
   const review_id = reviewer_reviews?.items?.find(
@@ -148,8 +148,8 @@ export default function WriteReview({
                                           style={{
                                             border:
                                               field.value === remark.text
-                                                ? "0.2rem solid " + remark.color
-                                                : "0.5px solid " + remark.color,
+                                                ? `0.2rem solid ${remark.color}`
+                                                : `0.5px solid ${remark.color}`,
                                             color: `${remark.color}`,
                                           }}
                                         >
@@ -171,6 +171,7 @@ export default function WriteReview({
                                               style={{
                                                 color: `${remark.color}`,
                                               }}
+                                              alt="remark"
                                             />
                                           </span>
                                           <span

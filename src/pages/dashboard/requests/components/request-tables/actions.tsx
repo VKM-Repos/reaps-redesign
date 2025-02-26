@@ -14,7 +14,7 @@ import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import ResearcherRequestSummary from "../../view-requests/researcher";
 import { toast } from "@/components/ui/use-toast";
-import { RequestItems } from "@/types/requests";
+import type { RequestItems } from "@/types/requests";
 import TransactionDetails from "./transaction-details";
 
 type ActionProps = {
@@ -67,7 +67,7 @@ function ActionsDefault({ item, deleteRequest, editRequest }: ActionProps) {
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <button>
+          <button type="button">
             <MoreIcon />
           </button>
         </DropdownMenuTrigger>
@@ -105,6 +105,7 @@ function SharedActions({
   editRequest,
   isMobile = false,
 }: ActionProps) {
+  console.log(item, "SHARED");
 
   return (
     <div className="text-xs">
@@ -117,10 +118,11 @@ function SharedActions({
           <View />
           {isMobile ? null : <span>View</span>}
         </SheetTrigger>
-        <ResearcherRequestSummary request={item.request} />
+        <ResearcherRequestSummary request={item} />
       </Sheet>
       <div>
         <button
+          type="button"
           onClick={editRequest}
           className={`${
             item?.can_edit ? "text-black" : "text-black/30 cursor-not-allowed"
