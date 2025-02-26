@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useContext } from "react";
 import DocumentIcon from "@/components/custom/sidebar-icons/document-icon";
 import HomeIcon from "@/components/custom/sidebar-icons/home-icon";
-import InvoiceIcon from "@/components/custom/sidebar-icons/invoice-icon";
 import More from "@/components/custom/sidebar-icons/more-icon";
 import FileManage from "@/components/custom/sidebar-icons/file-management";
 import DialPad from "@/components/custom/sidebar-icons/dialpad-square-01";
@@ -11,6 +10,9 @@ import UserMultiple from "@/components/custom/sidebar-icons/user-multiple-02";
 import Bank from "@/components/custom/sidebar-icons/bank";
 import useUserStore from "@/store/user-store";
 import AuditLog from "@/components/custom/sidebar-icons/auditlog-icon";
+import TransactionsIcon from "@/components/custom/sidebar-icons/transactions-icon";
+import Puzzle2 from "@/components/custom/sidebar-icons/puzzle2";
+import Activities from "@/components/custom/sidebar-icons/activities";
 
 type SideBarLink = {
   label: string;
@@ -57,11 +59,6 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
           label: "Specialization",
           path: "/specialization",
           icon: <More />,
-        },
-        {
-          label: "Pricing",
-          path: "/pricing",
-          icon: <InvoiceIcon />,
         }
       );
       break;
@@ -81,11 +78,6 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
           label: "Specialization",
           path: "/specialization",
           icon: <More />,
-        },
-        {
-          label: "Pricing",
-          path: "/pricing",
-          icon: <InvoiceIcon />,
         }
       );
       break;
@@ -140,9 +132,19 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
               icon: <ProfileTwo />,
             },
             {
-              label: "Account",
-              path: "/institution/account",
-              icon: <Bank />,
+              label: "Categories",
+              path: "/institution/categories",
+              icon: <Puzzle2 size="24" />,
+            },
+            {
+              label: "Activities",
+              path: "/institution/activities",
+              icon: <Activities size="24" />,
+            },
+            {
+              label: "Transactions",
+              path: "/institution/transactions",
+              icon: <TransactionsIcon size="24" />,
             },
           ],
         }
