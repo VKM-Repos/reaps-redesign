@@ -40,7 +40,7 @@ export default function SharedActions({
           } items-center flex justify-center gap-2 ${isMobile ? "p-2" : "p-3"}`}
           disabled={item?.can_edit === false}
         >
-          <PencilEdit />
+          <PencilEdit size={14}/>
           {isMobile ? null : <span>Edit</span>}
         </button>
       </div>

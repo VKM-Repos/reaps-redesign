@@ -131,7 +131,7 @@ function SharedActions({
           }`}
           disabled={!item?.can_edit}
         >
-          <PencilEdit />
+          <PencilEdit size={14}/>
           {isMobile ? null : <span>Edit</span>}
         </button>
       </div>
