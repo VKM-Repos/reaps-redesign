@@ -74,6 +74,8 @@ const Summary = ({
     queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id, fetchCount],
   });
 
+  console.log(reviews_data)
+
   return (
     <>
       <div className="w-full flex items-center justify-center">
@@ -289,27 +291,27 @@ const Summary = ({
                                   ? reviewer?.comment
                                   : "No Comment Yet"}
                               </p>
-                              {/*{file && (*/}
-                              {/*  <div*/}
-                              {/*    key={file}*/}
-                              {/*    className="w-full max-w-[28rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2"*/}
-                              {/*  >*/}
-                              {/*    <span className="flex gap-6 items-center justify-center">*/}
-                              {/*      <span className="text-black text-[0.8rem]">*/}
-                              {/*        <GoogleDoc />*/}
-                              {/*      </span>*/}
-                              {/*      <span>{file}</span>*/}
-                              {/*    </span>*/}
-                              {/*    <button*/}
-                              {/*      className="p-2"*/}
-                              {/*      onClick={() => handleDownload(file)}*/}
-                              {/*    >*/}
-                              {/*      <span>*/}
-                              {/*        <Download />*/}
-                              {/*      </span>*/}
-                              {/*    </button>*/}
-                              {/*  </div>*/}
-                              {/*)}*/}
+                              {reviewer && request?.approval_status_file && (
+                             <div
+                             key={reviewer?.id}
+                             className="w-full min-w-[22rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2"
+                             >
+                              <span className="flex gap-6 items-center justify-center">
+                              <span className="text-black text-[0.8rem]">
+                              <GoogleDoc />
+                              </span>
+                               <span>Approval Status File</span>
+                              </span>
+                              <a
+                              className="p-2"
+                              href={request?.approval_status_file}
+                              >
+                                <span>
+                                <Download />
+                                </ span>
+                              </ a>
+                              </div>
+                              )}  
                             </div>
                           </div>
                         </div>
