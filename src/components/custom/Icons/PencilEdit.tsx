@@ -1,8 +1,9 @@
-export default function PencilEdit() {
+export default function PencilEdit({ size }: { size?: number}) {
+  console.log(size)
   return (
     <svg
-      width="14"
-      height="14"
+      width={size ?? 24}
+      height={size ?? 24}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
