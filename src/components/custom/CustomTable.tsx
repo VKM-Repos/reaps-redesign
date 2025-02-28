@@ -14,6 +14,7 @@ import {
   flexRender,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import ArrowLeftDouble from "@/assets/arrow-left-doube.svg";
@@ -70,12 +71,15 @@ export default function CustomTable({
       columnFilters: columnFilters,
     },
     initialState: {
+      sorting: [{ id: "created_at", desc: true }],
       pagination: { pageIndex: 0, pageSize: 6 },
     },
     onGlobalFilterChange: setLocalSearch ?? setGlobalFilter,
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    enableSorting: true,
   });
 
   // calculate the total number of entries,
