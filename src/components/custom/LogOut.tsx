@@ -50,7 +50,7 @@ export default function Logout({ setLoading }: { setLoading: any }) {
 
       toast({
         title: "See you again!",
-        description: `Thanks for sticking around!`,
+        description: "Thanks for sticking around!",
         variant: "default",
       });
       reset();

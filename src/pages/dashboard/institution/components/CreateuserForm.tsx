@@ -22,11 +22,12 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 
-import { countries, CountryListItemType } from "country-list-json";
+import { countries, type CountryListItemType } from "country-list-json";
 import countryFlags from "@/lib/data/countries.json";
 import { usePOST } from "@/hooks/usePOST.hook";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
+import { useGET } from "@/hooks/useGET.hook";
 const FormSchema = z.object({
   first_name: z.string().min(1, {
     message: "Please fill this field.",
@@ -78,11 +79,10 @@ export function CreateUserForm({
     { title: "PHD", value: "phd" },
   ];
 
-  const descriptions = [
-    { title: "Student", value: "Student" },
-    { title: "Researcher", value: "Researcher" },
-  ];
-  // console.log(CountryList.getAll());
+  const { data: descriptions } = useGET({
+    url: "price-categories-by-context",
+    queryKey: ["GET_CATEGORY_DESC"],
+  });
 
   useEffect(() => {
     setCountries(countries);
@@ -114,7 +114,7 @@ export function CreateUserForm({
     });
   const { mutate, isPending } = usePOST("users");
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    data.password = data.first_name + "_Password@123";
+    data.password = `${data.first_name}_Password@123`;
     mutate(data, {
       onSuccess: () => {
         toast({
@@ -234,25 +234,25 @@ export function CreateUserForm({
                           <SelectContent>
                             <SelectGroup>
                               <SelectLabel>Country Codes</SelectLabel>
-                              {combinedData &&
-                                combinedData.map((country) => (
-                                  <SelectItem
-                                    key={country.name}
-                                    value={country.name}
-                                  >
-                                    <div className="flex gap-4 items-center justify-center">
-                                      <span>
-                                        <img
-                                          src={country.flag}
-                                          height="24px"
-                                          width="24px"
-                                        />
-                                      </span>
-                                      <span>{country.name}</span>
-                                      <span>{country.dial_code}</span>
-                                    </div>
-                                  </SelectItem>
-                                ))}
+                              {combinedData?.map((country) => (
+                                <SelectItem
+                                  key={country.name}
+                                  value={country.name}
+                                >
+                                  <div className="flex gap-4 items-center justify-center">
+                                    <span>
+                                      <img
+                                        alt={country.flag}
+                                        src={country.flag}
+                                        height="24px"
+                                        width="24px"
+                                      />
+                                    </span>
+                                    <span>{country.name}</span>
+                                    <span>{country.dial_code}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -312,12 +312,14 @@ export function CreateUserForm({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {educationLevels &&
-                          educationLevels.map((educationLevel) => (
-                            <SelectItem value={educationLevel.value}>
-                              {educationLevel.title}
-                            </SelectItem>
-                          ))}
+                        {educationLevels?.map((educationLevel) => (
+                          <SelectItem
+                            key={educationLevel.value}
+                            value={educationLevel.value}
+                          >
+                            {educationLevel.title}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -340,11 +342,20 @@ export function CreateUserForm({
                       </FormControl>
                       <SelectContent>
                         {educationLevels &&
-                          descriptions.map((description) => (
-                            <SelectItem value={description.value}>
-                              {description.title}
-                            </SelectItem>
-                          ))}
+                          descriptions?.map(
+                            (description: {
+                              category: string;
+                              description: string;
+                              price: number;
+                            }) => (
+                              <SelectItem
+                                key={description.description}
+                                value={description.category}
+                              >
+                                {description.category}
+                              </SelectItem>
+                            )
+                          )}
                       </SelectContent>
                     </Select>
                   </FormItem>
