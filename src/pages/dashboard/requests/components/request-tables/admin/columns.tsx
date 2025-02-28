@@ -55,6 +55,8 @@ const columns: Array<ColumnDef<any>> = [
       />
     ),
     accessorKey: "created_at",
+    sortingFn: 'datetime',
+    sortDescFirst: true,
     cell: ({ row }) => {
       const item = row.original;
       const date = item.created_at ? new Date(item.created_at) : null;
@@ -107,7 +109,7 @@ const columns: Array<ColumnDef<any>> = [
     meta: { cellType: "custom" },
     cell: ({ row }) => {
       const item = row.original;
-      console.log(item, "@@@");
+      // console.log(item, "@@@");
 
       return (
         <CustomCell
