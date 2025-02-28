@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/custom/FormInput";
-import { Props } from "@/types/forms.types";
+import type { Props } from "@/types/forms.types";
 import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import { useMobileContext } from "@/context/MobileContext";
 import {
@@ -22,8 +22,10 @@ import {
 import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import Loader from "@/components/custom/Loader";
-import { countries, CountryListItemType } from "country-list-json";
+import { countries, type CountryListItemType } from "country-list-json";
 import countryFlags from "@/lib/data/countries.json";
+import { useGET } from "@/hooks/useGET.hook";
+import axios from "axios";
 
 enum EducationLevel {
   HIGH_SCHOOL = "high_school",
@@ -158,6 +160,18 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
       console.error(error);
     }
   }
+  const [descriptions, setDescriptions] = useState([]);
+  useEffect(() => {
+    const fetchDescriptions = () => {
+      axios
+        .get("https://reaps.vhdo.org/api/price-categories-by-context", {
+          headers: { "institution-context": "ai" },
+        })
+        .then((response) => setDescriptions(response.data));
+    };
+    fetchDescriptions();
+  }, []);
+  console.log(descriptions, ">>>>>>");
 
   return (
     <>
@@ -235,23 +249,22 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Country Codes</SelectLabel>
-                        {combinedData &&
-                          combinedData.map((country) => (
-                            <SelectItem key={country.name} value={country.name}>
-                              <div className="flex items-center justify-center gap-4">
-                                <span>
-                                  <img
-                                    src={country.flag}
-                                    height="24px"
-                                    width="24px"
-                                    alt={country.name}
-                                  />
-                                </span>
-                                <span>{country.name}</span>
-                                <span>{country.dial_code}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
+                        {combinedData?.map((country) => (
+                          <SelectItem key={country.name} value={country.name}>
+                            <div className="flex items-center justify-center gap-4">
+                              <span>
+                                <img
+                                  src={country.flag}
+                                  height="24px"
+                                  width="24px"
+                                  alt={country.name}
+                                />
+                              </span>
+                              <span>{country.name}</span>
+                              <span>{country.dial_code}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -349,11 +362,20 @@ export function PersonalInfo({ handleNext, handleGoBack }: Props) {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Description</SelectLabel>
-                        {Object.values(Description).map((description) => (
-                          <SelectItem key={description} value={description}>
-                            {description}
-                          </SelectItem>
-                        ))}
+                        {descriptions?.map(
+                          (description: {
+                            category: string;
+                            description: string;
+                            price: number;
+                          }) => (
+                            <SelectItem
+                              key={description?.description}
+                              value={description?.category}
+                            >
+                              {description?.category}
+                            </SelectItem>
+                          )
+                        )}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
