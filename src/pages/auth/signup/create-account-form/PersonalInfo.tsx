@@ -24,7 +24,6 @@ import { Label } from "@/components/ui/label";
 import Loader from "@/components/custom/Loader";
 import { countries, type CountryListItemType } from "country-list-json";
 import countryFlags from "@/lib/data/countries.json";
-import { useGET } from "@/hooks/useGET.hook";
 import axios from "axios";
 
 enum EducationLevel {
