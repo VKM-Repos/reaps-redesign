@@ -14,6 +14,7 @@ import Location from "@/components/custom/Icons/Location";
 import UserSetting from "@/components/custom/Icons/UserSetting";
 import { LogoSignature } from "./forms/LogoSignature";
 import SettingsIcon from "@/components/custom/Icons/SettingsIcon";
+import PaymentConfiguration from "./forms/PaymentConfiguration";
 
 export default function InstitutionProfile() {
   const [isOpenIndex, setOpenIndex] = useState<number | null>();
@@ -50,7 +51,7 @@ export default function InstitutionProfile() {
       title: "Account and Configuration",
       label: "View your payment profile",
       icon: <SettingsIcon />,
-      content: <LogoSignature />,
+      content: <PaymentConfiguration />,
     },
 
   ];
