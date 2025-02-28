@@ -25,12 +25,14 @@ export default function Logout({ setLoading }: { setLoading: any }) {
     try {
       const baseURL = import.meta.env.VITE_APP_BASE_URL;
       const response = await fetch(
-        `${baseURL}auth/token/revoke?token=${refreshToken}`,
+        `https://api.allorigins.win/get?url=${encodeURIComponent(
+          `${baseURL}auth/token/revoke?token=${refreshToken}`
+        )}`,
         {
           method: "DELETE",
           headers: {
+            Accept: "*/*",
             "Content-Type": "application/json",
-            "Institution-Context": "ai",
           },
         }
       );
