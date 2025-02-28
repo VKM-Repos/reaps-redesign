@@ -73,7 +73,7 @@ export default function PaymentCart({ showApproval }: Props) {
 
         resetStore();
 
-        navigate("/pricing/your-transactions");
+        navigate("/requests");
       },
       onError: (error: any) => {
         console.error("Error received:", error);

@@ -5,7 +5,6 @@ import { renderRoutes } from "./generateRoutes";
 import Home from "@/pages/dashboard/home";
 import Requests from "@/pages/dashboard/requests";
 import Specialization from "@/pages/dashboard/specialization";
-import Pricing from "@/pages/dashboard/pricing";
 import Settings from "@/pages/dashboard/settings";
 import LoginPage from "@/pages/auth/login";
 import OnboardingPage from "@/pages/auth/signup";
@@ -15,9 +14,6 @@ import CreateRequests from "@/pages/dashboard/requests/create-requests";
 import ViewRequests from "@/pages/dashboard/requests/view-requests/researcher";
 import InstitutionUsers from "@/pages/dashboard/institution/users";
 import InstitutionProfile from "@/pages/dashboard/institution/profile";
-import InstitutionAccount from "@/pages/dashboard/institution/account";
-import Transactions from "@/pages/dashboard/institution/account/transactions";
-import MyRequest from "@/pages/dashboard/requests/pages/admin/my-request";
 import ManageRequestPage from "@/pages/dashboard/requests/pages/admin/manage-request";
 import Templates from "@/pages/dashboard/templates";
 import ModifyRequest from "@/pages/dashboard/requests/edit-requests";
@@ -27,6 +23,9 @@ import InstitutionUsersPage from "@/pages/dashboard/institutions/[id]/users";
 import InstitutionRequestsPage from "@/pages/dashboard/institutions/[id]/requests";
 import InstitutionConfigurationPage from "@/pages/dashboard/institutions/[id]/configuration";
 import InstitutionTransactionsPage from "@/pages/dashboard/institutions/[id]/transactions";
+import InstitutionCategories from "@/pages/dashboard/institution/categories";
+import InstitutionActivities from "@/pages/dashboard/institution/activities";
+import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 
 const router = [
   {
@@ -81,9 +80,9 @@ const router = [
           },
           {
             name: "My Request",
-            path: "requests/my-requests",
+            path: "requests",
             title: "My Request",
-            element: MyRequest,
+            element: Requests,
           },
           {
             name: "Manage Request",
@@ -118,16 +117,22 @@ const router = [
             element: InstitutionProfile,
           },
           {
-            name: "Institution Account",
-            path: "institution/account",
-            title: "Institution Account",
-            element: InstitutionAccount,
+            name: "Institution Categories",
+            path: "institution/categories",
+            title: "Institution Categories",
+            element: InstitutionCategories,
           },
           {
-            name: "Institution Account Transactions",
-            path: "institution/account/transactions",
-            title: "Institution Account Transactions",
-            element: Transactions,
+            name: "Institution Activities",
+            path: "institution/activities",
+            title: "Institution Activities",
+            element: InstitutionActivities,
+          },
+          {
+            name: "Institution Transactions",
+            path: "institution/transactions",
+            title: "Institution Transactions",
+            element: InstitutionTransactions,
           },
         ],
       },
@@ -136,12 +141,6 @@ const router = [
         path: "specialization",
         title: "Specialization",
         element: Specialization,
-      },
-      {
-        name: "Pricing",
-        path: "pricing",
-        title: "Pricing",
-        element: Pricing,
       },
       {
         name: "Institutions",

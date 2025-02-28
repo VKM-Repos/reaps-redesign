@@ -76,7 +76,7 @@ export default function PaymentCart({ showApproval }: Props) {
         // im supposed to get a respose from server containing checkout url which should
         // redirect to payment gateway page, after successful payment, redirect to transcations page
 
-        navigate("/pricing/your-transactions");
+        navigate("/requests");
       },
       onError: (error: any) => {
         console.error("Error received:", error);

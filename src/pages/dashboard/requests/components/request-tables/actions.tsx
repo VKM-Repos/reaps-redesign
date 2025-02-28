@@ -108,7 +108,7 @@ function SharedActions({
   console.log(item, "SHARED");
 
   return (
-    <div className="text-xs">
+    <div className="w-full text-xs">
       <Sheet>
         <SheetTrigger
           className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
@@ -131,7 +131,7 @@ function SharedActions({
           }`}
           disabled={!item?.can_edit}
         >
-          <PencilEdit />
+          <PencilEdit size={14}/>
           {isMobile ? null : <span>Edit</span>}
         </button>
       </div>

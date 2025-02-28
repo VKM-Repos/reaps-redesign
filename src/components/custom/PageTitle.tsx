@@ -11,7 +11,7 @@ export default function PageTitle({ title, actions, description }: Props) {
         <h1 className="text-[1.875rem] font-bold">{title}</h1>
         {actions}
       </div>
-      <p className="text-sm text-[#454745]">{description}</p>
+      <p className="text-sm text-[#454745] max-w-md">{description}</p>
     </>
   );
 }

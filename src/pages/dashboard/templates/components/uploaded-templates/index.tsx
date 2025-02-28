@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from "react";
 // } from "@/components/ui/dialog";
 // import View from "@/components/custom/Icons/View";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import DeleteSmallIcon from "@/components/custom/Icons/DeleteSmallIcon";
 import RenderDeleteSheet from "@/components/custom/DeleteSheet";
 import { useMediaQuery } from "react-responsive";
 // import { mock_templates } from "@/lib/helpers";
@@ -29,6 +28,7 @@ import Loader from "@/components/custom/Loader";
 import { useDELETE } from "@/hooks/useDelete.hook";
 // import TemplateCard from "@/pages/dashboard/home/custom/TemplateCard";
 import Download from "@/components/custom/Icons/Download";
+import Delete from "@/components/custom/Icons/Delete";
 // import Cancel from "@/components/custom/Icons/Cancel";
 
 export default function UploadedTemplates({
@@ -231,10 +231,10 @@ const UploadedTemplate = ({
                       <Sheet>
                         <SheetTrigger
                           className={`flex justify-center items-center gap-2 text-black ${
-                            isMobile ? "p-2" : "p-3"
+                            isMobile ? "p-2" : "px-2 py-3"
                           }`}
                         >
-                          <DeleteSmallIcon />
+                          <Delete />
                           <span>Delete</span>
                         </SheetTrigger>
                         <RenderDeleteSheet
