@@ -292,24 +292,19 @@ const Summary = ({
                                   : "No Comment Yet"}
                               </p>
                               {reviewer && request?.approval_status_file && (
-                             <div
-                             key={reviewer?.id}
-                             className="w-full min-w-[22rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2"
-                             >
-                              <span className="flex gap-6 items-center justify-center">
-                              <span className="text-black text-[0.8rem]">
-                              <GoogleDoc />
-                              </span>
-                               <span>Approval Status File</span>
-                              </span>
-                              <a
-                              className="p-2"
-                              href={request?.approval_status_file}
-                              >
-                                <span>
-                                <Download />
-                                </ span>
-                              </ a>
+                             <div key={reviewer?.id}
+                                className="w-full min-w-[22rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2">
+                                <span className="flex gap-6 items-center justify-center">
+                                  <span className="text-black text-[0.8rem]">
+                                  <GoogleDoc />
+                                  </span>
+                                  <span>Approval Status File</span>
+                                </span>
+                                <a className="p-2" href={request?.approval_status_file}>
+                                  <span>
+                                    <Download />
+                                  </ span>
+                                </ a>
                               </div>
                               )}  
                             </div>
