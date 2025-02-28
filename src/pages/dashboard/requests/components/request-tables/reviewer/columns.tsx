@@ -54,6 +54,8 @@ const columns: Array<ColumnDef<any>> = [
       />
     ),
     accessorKey: "created_at",
+    sortingFn: "datetime",
+    sortDescFirst: true,
     cell: ({ row }) => {
       const item = row.original;
       const date = item.created_at ? new Date(item.created_at) : null;
