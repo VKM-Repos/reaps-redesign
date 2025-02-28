@@ -63,7 +63,7 @@ const formSchema = z
     gender: z.nativeEnum(Gender, {
       message: "Please select your gender",
     }),
-    description: z.nativeEnum(Description, {
+    description: z.string().min(1, {
       message: "Please select a description of yourself",
     }),
   })
