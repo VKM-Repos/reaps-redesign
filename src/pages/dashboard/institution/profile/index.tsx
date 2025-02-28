@@ -13,6 +13,7 @@ import School from "@/components/custom/sidebar-icons/school";
 import Location from "@/components/custom/Icons/Location";
 import UserSetting from "@/components/custom/Icons/UserSetting";
 import { LogoSignature } from "./forms/LogoSignature";
+import SettingsIcon from "@/components/custom/Icons/SettingsIcon";
 
 export default function InstitutionProfile() {
   const [isOpenIndex, setOpenIndex] = useState<number | null>();
@@ -45,6 +46,13 @@ export default function InstitutionProfile() {
       icon: <UserSetting />,
       content: <LogoSignature />,
     },
+    {
+      title: "Account and Configuration",
+      label: "View your payment profile",
+      icon: <SettingsIcon />,
+      content: <LogoSignature />,
+    },
+
   ];
 
   return (
