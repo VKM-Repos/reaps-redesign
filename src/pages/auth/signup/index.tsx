@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import {
-  OnboardingFormStore,
+  type OnboardingFormStore,
   useOnboardingFormStore,
 } from "@/store/CreateOnboardingFormStore";
 import Loader from "@/components/custom/Loader";
@@ -77,7 +77,7 @@ export default function OnboardingPage() {
 
         toast({
           title: "Feedback",
-          description: `user created`,
+          description: "user created",
           variant: "default",
         });
 
