@@ -70,7 +70,7 @@ const Summary = ({
   }
 
   const { data: reviews_data } = useGET({
-    url: `reviews/request/${request?.id}`,
+    url: `reviews/review-by-request-admin-type/${request?.id}`,
     queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id, fetchCount],
   });
 
