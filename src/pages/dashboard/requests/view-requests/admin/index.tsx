@@ -40,7 +40,7 @@ export default function InstitutionRequestSummary({
       </div>
       {activeRole === "admin" &&
         pathname.includes("/requests/manage-requests") && (
-          <div className="fixed bottom-0 right-0 p-8 z-[10000] w-full">
+          <div className="fixed bottom-0 right-0 p-8 z-[10000] w-full max-w-fit">
             <ActionButton request={request} />
           </div>
         )}

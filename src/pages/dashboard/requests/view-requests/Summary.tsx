@@ -78,7 +78,7 @@ const Summary = ({
 
   return (
     <>
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center mb-24">
         <div className="md:4/5 md:ml-20 md:my-10 mb-10 flex flex-col gap-6 max-w-4xl">
           <Form {...form}>
             <form
@@ -222,11 +222,9 @@ const Summary = ({
                 </div>
                 {reviews_data?.items.length > 0 ? (
                   <div className="flex flex-col gap-6">
+
                     {/* do not show reviews from Reviewers to researchers*/}
                     {reviews_data?.items?.map((reviewer: any) => {
-                      // const remark = review_remarks.find(
-                      //     (r) => r.text === reviewer.remark
-                      // );
                       return (
                         <div
                           key={reviewer.id}
@@ -291,21 +289,18 @@ const Summary = ({
                                   ? reviewer?.comment
                                   : "No Comment Yet"}
                               </p>
-                              {reviewer && request?.approval_status_file && (
-                             <div key={reviewer?.id}
-                                className="w-full min-w-[22rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2">
-                                <span className="flex gap-6 items-center justify-center">
-                                  <span className="text-black text-[0.8rem]">
-                                  <GoogleDoc />
-                                  </span>
-                                  <span>Approval Status File</span>
-                                </span>
-                                <a className="p-2" href={request?.approval_status_file}>
-                                  <span>
-                                    <Download />
-                                  </ span>
-                                </ a>
-                              </div>
+                              {reviewer?.review_document && (
+                                <div key={reviewer?.id} className="w-full min-w-[25rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2 bg-inherit">
+                                    <span className="flex gap-2 items-center justify-center">
+                                      <span className="text-black text-[0.8rem]">
+                                        <GoogleDoc />
+                                      </span>
+                                      <span>Correction/Explanatory Document</span>
+                                    </span>
+                                    <a href={reviewer?.review_document} className="p-2">
+                                      <Download />
+                                    </a>
+                                </div>
                               )}  
                             </div>
                           </div>
