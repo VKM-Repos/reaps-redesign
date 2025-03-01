@@ -69,12 +69,30 @@ const Summary = ({
     }
   }
 
+  const is_researcher = activeRole === "user";
+
+
+  const endpoint = is_researcher
+    ? `reviews/review-by-request-admin-type/${request?.id}`
+    : `reviews/review/${request?.id}`;
+  
+  const queryKey = [
+    "FETCH_REVIEW_BY_REQUEST_ID",
+    request?.id,
+    fetchCount,
+
+  ];
+  
   const { data: reviews_data } = useGET({
-    url: `reviews/review-by-request-admin-type/${request?.id}`,
-    queryKey: ["FETCH_REVIEW_BY_REQUEST_ID", request?.id, fetchCount],
+    url: endpoint,
+    queryKey,
   });
 
-  console.log(reviews_data)
+  const reviews = reviews_data?.items || [];
+  const admin_review = is_researcher ? reviews[0] : null;
+
+  console.log(endpoint, queryKey, reviews)
+  console.log(admin_review)
 
   return (
     <>
@@ -220,96 +238,12 @@ const Summary = ({
                     Comments and Reviews
                   </h1>
                 </div>
-                {reviews_data?.items.length > 0 ? (
-                  <div className="flex flex-col gap-6">
-
-                    {/* do not show reviews from Reviewers to researchers*/}
-                    {reviews_data?.items?.map((reviewer: any) => {
-                      return (
-                        <div
-                          key={reviewer.id}
-                          className="p-3 flex flex-col gap-[0.625rem] border-b border-b-[#0E0F0C1F]"
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-[0.625rem]">
-                              <div className="rounded-full bg-[#14155E14] p-2">
-                                <User />
-                              </div>
-                              <div className="flex flex-col gap-1">
-                                <p className="font-semibold text-sm">
-                                  {reviewer.reviewer.first_name}{" "}
-                                  {reviewer.reviewer.last_name}
-                                </p>
-                                <p className="text-sm text-[#868687] ">
-                                  {reviewer.reviewer?.last_name}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-x-2 items-center">
-                              <span
-                                className="w-fit justify-self-end"
-                                style={{ color: "#34A853" }}
-                              >
-                                <img
-                                  src={
-                                    reviewer.status === "Satisfactory" ||
-                                    reviewer.status === "Approved"
-                                      ? Smile
-                                      : Unhappy
-                                  }
-                                  style={{ color: "#34A853" }}
-                                  alt={reviewer.reviewer?.first_name}
-                                />
-                              </span>
-                              <span
-                                style={{
-                                  color:
-                                    reviewer.status === "Satisfactory" ||
-                                    reviewer.status === "Approved"
-                                      ? "#34A853"
-                                      : "#000",
-                                }}
-                                className="text-sm jusify-self-end"
-                              >
-                                {reviewer.status}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="pl-2 flex gap-1">
-                            <div className="py-2 px-3">
-                              <img src={Line} alt="image_photo" />
-                              <p>&nbsp;</p>
-                            </div>
-                            <div className="grid grid-rows-2 gap-y-1">
-                              <p
-                                key={reviewer.id}
-                                className="text-sm text-[#6A6A6B]"
-                              >
-                                {reviewer?.comment
-                                  ? reviewer?.comment
-                                  : "No Comment Yet"}
-                              </p>
-                              {reviewer?.review_document && (
-                                <div key={reviewer?.id} className="w-full min-w-[25rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2 bg-inherit">
-                                    <span className="flex gap-2 items-center justify-center">
-                                      <span className="text-black text-[0.8rem]">
-                                        <GoogleDoc />
-                                      </span>
-                                      <span>Correction/Explanatory Document</span>
-                                    </span>
-                                    <a href={reviewer?.review_document} className="p-2">
-                                      <Download />
-                                    </a>
-                                </div>
-                              )}  
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                {is_researcher ? (
+                  admin_review ? renderReview(admin_review) : <p>No Review Available</p>
+                ) : reviews.length > 0 ? (
+                  <div className="flex flex-col gap-6">{reviews.map(renderReview)}</div>
                 ) : (
-                  <p>No reviews yet.</p>
+                  <p>No Reviews Available</p>
                 )}
               </section>
 
@@ -388,3 +322,71 @@ const getSupportDocs = (request: RequestItems) =>
     { id: "requirement11", label: "Evidence of Completion", name: "Evidence of Completion", href: request?.evidence_of_completion },
   ].filter((doc) => doc.href);
 
+
+const renderReview = (reviewer: any) => (
+  <div
+    key={reviewer.id}
+    className="p-3 flex flex-col gap-[0.625rem] border-b border-b-[#0E0F0C1F]"
+  >
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-[0.625rem]">
+        <div className="rounded-full bg-[#14155E14] p-2">
+          <User />
+        </div>
+        <div className="flex flex-col gap-1">
+          <p className="font-semibold text-sm">
+            {reviewer.reviewer?.first_name} {reviewer.reviewer?.last_name}
+          </p>
+          <p className="text-sm text-[#868687]">
+            {reviewer.reviewer?.last_name}
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-x-2 items-center">
+        <span className="w-fit justify-self-end">
+          <img
+            src={["Satisfactory", "Approved"].includes(reviewer.status) ? Smile : Unhappy}
+            alt={reviewer.reviewer?.first_name}
+          />
+        </span>
+        <span
+          style={{
+            color: ["Satisfactory", "Approved"].includes(reviewer.status)
+              ? "#34A853"
+              : "#000",
+          }}
+          className="text-sm justify-self-end"
+        >
+          {reviewer.status}
+        </span>
+      </div>
+    </div>
+    <div className="pl-2 flex gap-1">
+      <div className="py-2 px-3">
+        <img src={Line} alt="image_photo" />
+        <p>&nbsp;</p>
+      </div>
+      <div className="grid grid-rows-2 gap-y-1">
+        <p key={reviewer.id} className="text-sm text-[#6A6A6B]">
+          {reviewer?.comment || "No Comment Yet"}
+        </p>
+        {reviewer?.review_document && (
+          <div
+            key={reviewer.id}
+            className="w-full min-w-[25rem] flex justify-between items-center border border-gray-300 px-6 rounded-md mb-2 bg-inherit"
+          >
+            <span className="flex gap-2 items-center justify-center">
+              <span className="text-black text-[0.8rem]">
+                <GoogleDoc />
+              </span>
+              <span>Correction/Explanatory Document</span>
+            </span>
+            <a href={reviewer.review_document} className="p-2">
+              <Download />
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+);
