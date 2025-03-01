@@ -70,7 +70,7 @@ const Summary = ({
 
   const endpoint = is_researcher
     ? `reviews/review-by-request-admin-type/${request?.id}`
-    : `reviews/review/request/${request?.id}`;
+    : `reviews/request/${request?.id}`;
   
   const queryKey = [
     "FETCH_REVIEW_BY_REQUEST_ID",
