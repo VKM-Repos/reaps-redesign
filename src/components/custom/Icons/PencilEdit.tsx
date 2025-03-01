@@ -1,5 +1,5 @@
 export default function PencilEdit({ size }: { size?: number}) {
-  console.log(size)
+
   return (
     <svg
       width={size ?? 24}
