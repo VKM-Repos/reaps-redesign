@@ -17,6 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { queryClient } from "@/providers";
 import { useGET } from "@/hooks/useGET.hook";
 import { usePATCH } from "@/hooks/usePATCH.hook";
+import PaymentCart from "../components/edit-ethical-request-forms/payment-cart";
 
 const ModifyRequest = () => {
   const { data, step, setStep, resetStore } = useEthicalRequestStore();
@@ -26,6 +27,13 @@ const ModifyRequest = () => {
   const searchParams = new URLSearchParams(location.search);
 
   const request_id = searchParams.get("id");
+
+  const { data: payment_config } = useGET({
+    url: `payment-configs-by-context`,
+    queryKey: ["GET_PAYMENT_CONFIGS"],
+  });
+
+  const isManual = payment_config?.payment_type?.toLowerCase() === "manual";
 
   const { data: request_details } = useGET({
     url: `requests/${request_id}`,
@@ -60,6 +68,21 @@ const ModifyRequest = () => {
       });
 
       formData.append("can_edit", JSON.stringify(true));
+
+      if (isManual) {
+        const fileEntries = Object.entries(data.evidence_of_payment);
+
+        if (fileEntries.length > 0) {
+          const [, file] = fileEntries[0];
+          if (file instanceof File) {
+            formData.append("evidence_of_payment", file);
+          } else {
+            console.error("Invalid file format:", file);
+          }
+        } else {
+          console.error("No file found in evidence_of_payment");
+        }
+      }
 
       editRequest(formData, {
         onSuccess: (response) => {
@@ -125,9 +148,11 @@ const ModifyRequest = () => {
         return (
           <ApplicationSummary
             requestDetails={request_details}
-            handleNext={handleSubmit(onSubmitHandler)}
+            handleNext={handleNext}
           />
         );
+      case 6:
+        return <PaymentCart handleNext={handleSubmit(onSubmitHandler)} />;
       default:
         return null;
     }

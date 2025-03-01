@@ -16,11 +16,20 @@ import Loader from "@/components/custom/Loader";
 import SelectSpecialization from "../components/ethical-request-forms/select-specialization";
 import { queryClient } from "@/providers";
 import { useNavigate } from "react-router-dom";
+import PaymentCart from "../components/ethical-request-forms/payment-cart";
+import { useGET } from "@/hooks/useGET.hook";
 
 const CreateRequests = () => {
   const { data, step, setStep, resetStore } = useEthicalRequestStore();
 
   const navigate = useNavigate();
+
+  const { data: payment_config } = useGET({
+    url: `payment-configs-by-context`,
+    queryKey: ["GET_PAYMENT_CONFIGS"],
+  });
+
+  const isManual = payment_config?.payment_type?.toLowerCase() === "manual";
 
   const { mutate, isPending } = usePOST("requests", {
     contentType: "multipart/form-data",
@@ -48,7 +57,22 @@ const CreateRequests = () => {
         }
       });
 
-      formData.append("can_edit", JSON.stringify(true));
+      formData.append("can_edit", JSON.stringify(false));
+
+      if (isManual) {
+        const fileEntries = Object.entries(data.evidence_of_payment);
+
+        if (fileEntries.length > 0) {
+          const [, file] = fileEntries[0];
+          if (file instanceof File) {
+            formData.append("evidence_of_payment", file);
+          } else {
+            console.error("Invalid file format:", file);
+          }
+        } else {
+          console.error("No file found in evidence_of_payment");
+        }
+      }
 
       mutate(formData, {
         onSuccess: () => {
@@ -94,9 +118,10 @@ const CreateRequests = () => {
       case 4:
         return <SupportingDocuments handleNext={handleNext} />;
       case 5:
-        return (
-          <ApplicationSummary handleNext={handleSubmit(onSubmitHandler)} />
-        );
+        return <ApplicationSummary handleNext={handleNext} />;
+      case 6:
+        return <PaymentCart handleNext={handleSubmit(onSubmitHandler)} />;
+
       default:
         return null;
     }

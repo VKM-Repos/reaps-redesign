@@ -11,7 +11,7 @@ const Stepper: React.FC<StepperProps> = ({ step, setStep, array }) => {
   const progressWidth = ((step - 1) / (totalSteps - 1)) * 100;
 
   return (
-    <div className="flex flex-col gap-4 w-full mx-auto min-w-[18.75rem] max-w-[32rem] my-0">
+    <div className="flex flex-col gap-4 w-full mx-auto md:max-w-[32rem] max-w-[10rem] my-0">
       {/* Progress Bar */}
       <div className="relative w-full mx-auto h-[2.5px] bg-gray-200 rounded-full">
         <motion.div
