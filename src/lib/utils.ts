@@ -63,3 +63,10 @@ export function truncateString(str: string, maxLength: number, suffix = "...") {
   }
   return str.slice(0, maxLength) + suffix;
 }
+
+export const formatCurrency = (amount: number | string): string => {
+  const numberValue = typeof amount === "string" ? parseFloat(amount) : amount;
+  if (isNaN(numberValue)) return "Invalid amount";
+
+  return `${numberValue.toLocaleString("en-NG")}`;
+};
