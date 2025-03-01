@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import Cancel from "@/components/custom/Icons/Cancel";
 import { useMediaQuery } from "react-responsive";
 import { requestsArray } from "@/lib/helpers";
-import ProfileDropDown from "@/pages/dashboard/home/custom/ProfileDropDown";
 import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import Stepper from "@/components/custom/Stepper";
 import {
@@ -58,7 +57,7 @@ export default function RequestsLayout({ children }: Props) {
                   <Stepper
                     step={step - 1}
                     setStep={setStep}
-                    array={requestsArray}
+                    array={requestsArray.slice(0, -1)}
                   />
                 </div>
               )}
@@ -66,7 +65,7 @@ export default function RequestsLayout({ children }: Props) {
 
             <div className="flex items-center justify-end w-full max-w-fit gap-1">
               {/* Not sure profile dropdown is important here */}
-              <ProfileDropDown />
+              {/* <ProfileDropDown /> */}
               <Sheet>
                 <SheetTrigger>
                   <Cancel />
