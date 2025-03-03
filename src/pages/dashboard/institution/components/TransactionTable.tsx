@@ -1,5 +1,5 @@
 import CustomTable, {
-  ColumnSetup,
+  type ColumnSetup,
   CustomCell,
 } from "@/components/custom/CustomTable";
 import { useState } from "react";
@@ -124,7 +124,7 @@ export default function TransactionTable({
                   backgroundColor: statusColorMap[item]?.text || "#192C8A",
                 }}
                 className="w-[5px] h-[5px] rounded-full"
-              ></div>
+              />
               {item}
             </Badge>
           </span>
