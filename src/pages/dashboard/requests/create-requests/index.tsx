@@ -78,7 +78,7 @@ const CreateRequests = () => {
         onSuccess: () => {
           toast({
             title: "Success",
-            description: `Saved to drafts`,
+            description: `Request created`,
             variant: "default",
           });
 
