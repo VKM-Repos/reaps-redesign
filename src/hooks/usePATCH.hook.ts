@@ -26,7 +26,7 @@ export const usePATCH = (
         baseURL || import.meta.env.VITE_APP_BASE_URL
       );
       const response =
-        method == "PUT"
+        method === "PUT"
           ? await axiosInstance.put(url, values, {
               headers: {
                 "Content-Type": contentType,
@@ -43,13 +43,13 @@ export const usePATCH = (
       console.log(returnedData);
       // toast.success("Success");
 
-      callback && callback(returnedData);
+      callback?.(returnedData);
     },
     onError: (error: { response: { data: any } }) => {
       // (err?.data?.message instanceof Array) ? toast.error(err?.data?.message[0]) : toast.error(err?.data?.message)
       console.log(error);
       
-      errorCallBack && errorCallBack(error);
+      errorCallBack?.(error);
       toast({
       title: "Error",
       description: error?.response?.data?.detail,

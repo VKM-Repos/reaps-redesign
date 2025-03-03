@@ -41,17 +41,18 @@ export const getApplicationData = (request: RequestItems) => [
   
   export const getSupportDocs = (request: RequestItems) =>
     [
-      { id: "requirement1", label: "Curriculum Vitae", name: "CV", href: request?.cv },
+      { id: "requirement1", label: "2-page curriculum vitae (CV)", name: "CV", href: request?.cv },
       { id: "requirement2", label: "Cover Letter/Application Letter", name: "Cover Letter", href: request?.cover_letter },
       { id: "requirement3", label: "Proposal", name: "Proposal", href: request?.proposal },
       { id: "requirement4", label: "Research Tools/Questionnaire", name: "Research Tools", href: request?.questionnaire },
-      { id: "requirement5", label: "Informed Consent Form", name: "Informed Consent Form", href: request?.consent_form },
+      { id: "requirement5", label: "Consent Form", name: "Informed Consent Form", href: request?.consent_form },
       { id: "requirement6", label: "Materials Transfer Agreement Form", name: "Materials Transfer Agreement Form", href: request?.specimen_will_be_shipped_out_letter },
-      { id: "requirement7", label: "Sponsor Attestation Statement", name: "Sponsor Attestation Statement", href: request?.sponsor_attestation_letter },
-      { id: "requirement8", label: "Supervisor Attestation Statement", name: "Supervisor Attestation Statement", href: request?.supervisor_attestation_statement },
-      { id: "requirement9", label: "HOD Attestation Form", name: "HOD Attestation Form", href: request?.hod_attestation },
-      { id: "requirement10", label: "Letter of Support", name: "Letter of Support", href: request?.letter_of_support_from_investigator },
+      { id: "requirement7", label: "Sponsor Attestation Letter", name: "Sponsor Attestation Statement", href: request?.sponsor_attestation_letter },
+      { id: "requirement8", label: "Supervisor Attestation Letter", name: "Supervisor Attestation Statement", href: request?.supervisor_attestation_statement },
+      { id: "requirement9", label: "HOD Attestation", name: "HOD Attestation Form", href: request?.hod_attestation },
+      { id: "requirement10", label: "Letter of Support from Investigator", name: "Letter of Support", href: request?.letter_of_support_from_investigator },
       { id: "requirement11", label: "Evidence of Completion", name: "Evidence of Completion", href: request?.evidence_of_completion },
+      { id: "requirement12", label: "One-page Plain Language Summary", name: "One-page Plain Language Summary", href: request?.language_summary },
     ].filter((doc) => doc.href);
   
   

@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import PencilEdit from "@/components/custom/Icons/PencilEdit";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import { questionsData } from "./questions";
 import { Label } from "@/components/ui/label";
 import GreenCheckmark from "@/components/custom/Icons/GreenCheckmark";
-import PaymentCart from "./payment-cart";
 
 type Props = {
   handleNext: () => void;
@@ -16,18 +14,10 @@ type Props = {
 const ApplicationSummary = ({ handleNext }: Props) => {
   const { data, setStep } = useEthicalRequestStore();
   const { ethical_request_questions, ethical_request_files } = data;
-  const [showPaymentCart, setShowPaymentCart] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const handleEditRequest = (step: number) => {
     setStep(step);
-  };
-
-  const proceedToPay = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.preventDefault();
-    setShowPaymentCart(true);
   };
 
   const ResearchInfoPreview = () => {
@@ -258,49 +248,29 @@ const ApplicationSummary = ({ handleNext }: Props) => {
 
   return (
     <>
-      {showPaymentCart ? (
-        <>
-          <PaymentCart
-            showApproval={() => {
-              setShowPaymentCart(false);
-            }}
-          />
-        </>
-      ) : (
-        <section className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
-          <div className="flex flex-col justify-center items-center">
-            <h1 className="text-xl2 font-semibold pt-5 pb-5 md:py-2">
-              Your application summary
-            </h1>
-            <p className="text-sm text-[#868786]">
-              Please ensure all data is inputted correctly before making
-              payments
-            </p>
-          </div>
-          <div className="md:4/5 w-full mx-auto my-0 flex flex-col gap-12">
-            <ResearchInfoPreview />
-            <ApplicationInfoPreview />
-            <SupportingDocsPreview />
-          </div>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4">
-            <Button
-              variant="outline"
-              onClick={handleNext}
-              className="rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]"
-            >
-              Save & Continue later
-            </Button>
-            <Button
-              onClick={(event) => {
-                proceedToPay(event);
-              }}
-              className="focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6"
-            >
-              Proceed to pay
-            </Button>
-          </div>
-        </section>
-      )}
+      <section className="w-full px-4 md:w-4/5 md:px-0 mx-auto my-0 antialiased relative flex flex-col gap-6">
+        <div className="flex flex-col justify-center items-center">
+          <h1 className="text-xl2 font-semibold pt-5 pb-5 md:py-2">
+            Your application summary
+          </h1>
+          <p className="text-sm text-[#868786]">
+            Please ensure all data is inputted correctly before making payments
+          </p>
+        </div>
+        <div className="md:4/5 w-full mx-auto my-0 flex flex-col gap-12">
+          <ResearchInfoPreview />
+          <ApplicationInfoPreview />
+          <SupportingDocsPreview />
+        </div>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-5 my-4">
+          <Button
+            onClick={handleNext}
+            className="focus:outline-none w-full md:max-w-[15.625rem] py-3 px-6"
+          >
+            Proceed to pay
+          </Button>
+        </div>
+      </section>
     </>
   );
 };

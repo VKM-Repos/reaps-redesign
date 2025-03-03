@@ -29,7 +29,7 @@ const StatusPill = ({ status }: Props) => {
           backgroundColor: statusColorMap[formattedStatus]?.text || "#000000",
         }}
         className="w-[5px] h-[5px] rounded-full"
-      ></div>
+      />
       {formattedStatus}
     </Badge>
   );

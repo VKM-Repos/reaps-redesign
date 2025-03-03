@@ -17,3 +17,12 @@ interface TransactionItem {
   description: string;
   request: RequestItems;
 }
+
+interface ManualTransactionItem {
+  id: string;
+  fullName: string;
+  email: number;
+  status: string;
+  created_at: string;
+  evidence_of_payment: string;
+}
