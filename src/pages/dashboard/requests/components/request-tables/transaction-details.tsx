@@ -36,9 +36,6 @@ export default function TransactionDetails({ id }: Props) {
 
   const isManual = payment_config?.payment_type?.toLowerCase() === "manual";
 
-  console.log(isManual)
- 
-
   return isMobile ? (
     <Sheet onOpenChange={(isOpen) => isOpen}>
       <SheetTrigger
