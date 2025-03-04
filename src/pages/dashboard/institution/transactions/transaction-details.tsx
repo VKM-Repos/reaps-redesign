@@ -20,7 +20,7 @@ import { useRef } from "react";
 import { useGET } from "@/hooks/useGET.hook";
 import Loader from "@/components/custom/Loader";
 import View from "@/components/custom/Icons/View";
-import { TransactionItem } from "@/types/transaction";
+import type { TransactionItem } from "@/types/transaction";
 import { statusColorMap } from "@/lib/utils";
 
 type Props = {
@@ -68,7 +68,7 @@ export default function TransactionDetails({ id }: Props) {
         <TransactionDetailsContent close_dialog={handle_close_dialog} id={id} />
       </DialogContent>
       <DialogClose>
-        <span ref={close_dialog_ref} className="hidden"></span>
+        <span ref={close_dialog_ref} className="hidden" />
       </DialogClose>
     </Dialog>
   );

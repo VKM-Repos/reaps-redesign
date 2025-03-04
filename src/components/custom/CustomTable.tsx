@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "../ui/table";
 import {
-  ColumnDef,
+  type ColumnDef,
   getCoreRowModel,
   useReactTable,
   flexRender,
@@ -92,7 +92,6 @@ export default function CustomTable({
   const start = pageIndex * pageSize + 1;
   const end = Math.min(start + pageSize - 1, total_entries);
 
-
   return (
     <div className="w-full flex flex-col gap-6 mb-[6rem] ">
       <div
@@ -167,55 +166,59 @@ export default function CustomTable({
           </div>
           <div className="flex gap-[0.625rem] items-center">
             <button
+              type="button"
               className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full w-[3rem] h-[3rem] flex items-center justify-center"
               disabled={!table.getCanPreviousPage}
               onClick={() => table.previousPage()}
             >
-              <img src={ArrowLeftDouble} />
+              <img src={ArrowLeftDouble} alt="Arrow left" />
             </button>
             <ul className="flex gap-1 items-center font-medium">
               {Array.from({ length: table.getPageCount() }, (_, index) => {
                 const currentPage = table.getState().pagination.pageIndex;
                 const totalPages = table.getPageCount();
-                if (index === 0 ||
+                if (
+                  index === 0 ||
                   index === totalPages - 1 ||
                   Math.abs(index - currentPage) <= 1
-                 ) {
+                ) {
                   return (
                     <li key={index}>
-                  <button
-                    key={index}
-                    className={`rounded-full w-[3rem] h-[3rem] flex items-center justify-center ${
-                      currentPage === index
-                        ? "text-[#FFFFFF] bg-[#051467]"
-                        : "text-[#20293A] hover:bg-[#14155E14]"
-                    }`}
-                    onClick={() => table.setPageIndex(index)}
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              )}
-              else if (
-                (index === currentPage - 2 || index === currentPage + 2) &&
-                Math.abs(index - currentPage) > 1
-              ){
-                return (
-                  <li key={index} className="text-[#20293A]">
-                    ...
-                  </li>
-                );
-              }
-              return null;
-            })}
+                      <button
+                        type="button"
+                        key={index}
+                        className={`rounded-full w-[3rem] h-[3rem] flex items-center justify-center ${
+                          currentPage === index
+                            ? "text-[#FFFFFF] bg-[#051467]"
+                            : "text-[#20293A] hover:bg-[#14155E14]"
+                        }`}
+                        onClick={() => table.setPageIndex(index)}
+                      >
+                        {index + 1}
+                      </button>
+                    </li>
+                  );
+                } else if (
+                  (index === currentPage - 2 || index === currentPage + 2) &&
+                  Math.abs(index - currentPage) > 1
+                ) {
+                  return (
+                    <li key={index} className="text-[#20293A]">
+                      ...
+                    </li>
+                  );
+                }
+                return null;
+              })}
             </ul>
 
             <button
+              type="button"
               className="bg-[#14155E14] hover:bg-[#14155E33] rounded-full w-[3rem] h-[3rem] flex items-center justify-center"
               disabled={!table.getCanNextPage()}
               onClick={() => table.nextPage()}
             >
-              <img src={ArrowRightDouble} />
+              <img src={ArrowRightDouble} alt="Arrow right" />
             </button>
           </div>
         </div>

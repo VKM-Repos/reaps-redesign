@@ -1,5 +1,5 @@
-import { UserRole } from "@/types/role";
-import { User } from "@/types/user";
+import type { UserRole } from "@/types/role";
+import type { User } from "@/types/user";
 import type { StateCreator } from "zustand";
 import { create } from "zustand";
 import type { PersistOptions } from "zustand/middleware";
