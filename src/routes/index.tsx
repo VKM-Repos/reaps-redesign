@@ -26,11 +26,18 @@ import InstitutionTransactionsPage from "@/pages/dashboard/institutions/[id]/tra
 import InstitutionCategories from "@/pages/dashboard/institution/categories";
 import InstitutionActivities from "@/pages/dashboard/institution/activities";
 import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
+import CountdownPage from "@/components/custom/CountdownPage";
 
 const router = [
   {
     layout: AuthLayout,
     routes: [
+      {
+        name: "countdown",
+        path: 'countdown',
+        title: 'countdown',
+        element: CountdownPage,
+      },
       {
         name: "login",
         path: "login",
