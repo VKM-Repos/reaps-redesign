@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function CountdownPage() {
     const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 5);
+    targetDate.setDate(targetDate.getDate() + 4);
   
     const calculateTimeLeft = () => {
       const difference = targetDate.getTime() - new Date().getTime();
