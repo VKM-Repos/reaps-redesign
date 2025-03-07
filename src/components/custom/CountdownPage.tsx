@@ -29,7 +29,7 @@ export default function CountdownPage() {
 
     
     return (
-        <article className="h-[100dvh] w-full max-w-[80%] mx-auto mb-4">
+        <article className="h-full w-full max-w-[80%] mx-auto mb-4">
             <figure className="flex items-center justify-center">
                 <img src={ConstructionImg} alt="Workers setting up REAPS" />
             </figure>
