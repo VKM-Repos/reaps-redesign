@@ -12,6 +12,7 @@ module.exports = {
     fontFamily: {
       barlow: ["Barlow Condensed", "sans-serif"],
       inter: ["Inter", "sans-serif"],
+      dmSans: ["DM Sans", "sans-serif"]
     },
     fontSize: {
       xs: [
