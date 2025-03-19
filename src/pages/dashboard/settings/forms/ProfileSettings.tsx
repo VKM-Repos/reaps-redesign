@@ -111,7 +111,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
   }, [defaultValues.country_code, combinedData]);
 
   useEffect(() => {
-    fetchDescriptions();
+    if (user?.user_type === "admin") fetchDescriptions();
   }, []);
 
   const { mutate, isPending } = usePATCH("users/me", { method: "PUT" });
@@ -178,6 +178,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                   required: "This field is required",
                 })}
               />
+              {(user?.user_type === "admin") &&
               <div className="flex gap-2">
                 <div className="w-full">
                   <Label>Category</Label>
@@ -212,6 +213,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                   </Select>
                 </div>
               </div>
+              }
               <FormInput
                 label="Date of Birth"
                 type="date"
