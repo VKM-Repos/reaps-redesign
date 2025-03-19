@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import FormInput from "@/components/custom/FormInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 
@@ -24,90 +24,98 @@ import { formatISODate } from "@/lib/utils";
 import useUserStore from "@/store/user-store";
 import { toast } from "@/components/ui/use-toast";
 import CalendarIcon from "/icons/calendar-03.svg";
+import axios from "axios";
 
-type FlagData = {
-  url: string;
-  alpha3: string;
-  name: string;
-  file_url: string;
-  license: string;
-};
+const API_BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+
+const formSchema = z.object({
+  first_name: z.string().min(1, { message: "Please fill this field" }),
+  last_name: z.string().min(1, { message: "Please fill this field" }),
+  description: z.string().min(1, { message: "Please enter a category" }),
+  phone_number: z
+    .string()
+    .min(1, { message: "Please fill this field" })
+    .regex(/^\d+$/, {
+      message: "Phone number should contain only numbers",
+    }),
+  country_code: z.string().min(1, { message: "Please enter a country code" }),
+  date_of_birth: z.any(),
+});
+
+
 
 export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
+
   const [dialCode, setDialCode] = useState("+93");
-  const [selectedFlag, setSelectedFlag] = useState();
+  const [selectedFlag, setSelectedFlag] = useState<any>();   
+  const [descriptions, setDescriptions] = useState([]);
+
   const { user, updateUser } = useUserStore();
+
   const dateRef = useRef<HTMLInputElement | null>(null);
-  const formSchema = z.object({
-    first_name: z.string().min(1, { message: "Please fill this field" }),
-    last_name: z.string().min(1, { message: "Please fill this field" }),
-    phone_number: z
-      .string()
-      .min(1, { message: "Please fill this field" })
-      .regex(/^\d+$/, {
-        message: "Phone number should contain only numbers",
-      }),
-    country_code: z.string().min(1, { message: "Please enter a country code" }),
-    date_of_birth: z.any(),
-  });
 
   const defaultValues = {
     first_name: user?.first_name || "",
     last_name: user?.last_name || "",
+    description: user?.description || "",
     phone_number: user?.phone_number || "",
     country_code: user?.country_code || "+234",
     date_of_birth: user?.date_of_birth || "2024-10-27T23:00:00.000Z",
   };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
   const {
     register,
     formState: { isValid },
     setValue,
     watch,
   } = form;
-  const [flags] = useState<FlagData[]>(countryFlags);
-  const [countriesData] = useState<CountryListItemType[]>(countries);
-  // performance issues on this component
-  const flagsMap = useMemo(() => {
-    return new Map(flags.map((flag) => [flag.name, flag.file_url]));
-  }, [flags]);
-
-  const combinedData = useMemo(() => {
-    return countriesData
-      .map((country) => ({
-        ...country,
-        flag: flagsMap.get(country.name) || "",
-      }))
-      .filter((country) => flagsMap.has(country.name));
-  }, [countriesData, flagsMap]);
 
   const countryCode = watch("country_code", defaultValues.country_code);
 
-  useMemo(() => {
+  const flagsMap = useMemo(
+    () => new Map(countryFlags.map((flag) => [flag.name, flag.file_url])),
+    []
+  );
+  
+  const combinedData = useMemo(
+    () =>
+      countries
+        .map((country) => ({
+          ...country,
+          flag: flagsMap.get(country.name) || "",
+        }))
+        .filter((country) => flagsMap.has(country.name)),
+    [flagsMap]
+  );
+
+
+  const setCodeFlagData = (initialCountry: CountryListItemType) => {
+    setDialCode(initialCountry.dial_code);
+    setSelectedFlag(initialCountry.flag);
+  }
+  
+  useEffect(() => {
     if (defaultValues.country_code) {
-      const initialCountry: any = combinedData.find(
+      const initialCountry = combinedData.find(
         (country) => country.dial_code === defaultValues.country_code
       );
       if (initialCountry) {
-        setDialCode(initialCountry.dial_code);
-        setSelectedFlag(initialCountry.flag);
+        setCodeFlagData(initialCountry)
       }
     }
   }, [defaultValues.country_code, combinedData]);
 
-  // const combinedData = countriesData
-  //   .filter((country) => flags.some((f) => f.name === country.name))
-  //   .map((country) => {
-  //     const flag = flags.find((f) => f.name === country.name);
-  //     return {
-  //       ...country,
-  //       flag: flag?.file_url || "",
-  //     };
-  //   });
+  useEffect(() => {
+    fetchDescriptions();
+  }, []);
+
   const { mutate, isPending } = usePATCH("users/me", { method: "PUT" });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.date_of_birth = formatISODate(values.date_of_birth);
     mutate(values, {
@@ -130,10 +138,20 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
       },
     });
   }
-  const handleClickDate = () => {
-    console.log(dateRef);
+
+  const  openDatePicker = () => {
     dateRef.current?.showPicker();
   };
+
+  const fetchDescriptions = () => {
+    axios
+      .get(`${API_BASE_URL}price-categories-by-context`, {
+        headers: { "institution-context": user?.institution_context ?? "ai" },
+      })
+      .then((response) => setDescriptions(response.data));
+  };  
+
+
   return (
     <>
       {isPending && <Loader />}
@@ -160,12 +178,40 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
                   required: "This field is required",
                 })}
               />
-              {/* <CustomFormField
-                name="date_of_birth"
-                fieldType={FormFieldType.DATE}
-                control={form.control}
-                label="Date of Birth"
-              /> */}
+              <div className="flex gap-2">
+                <div className="w-full">
+                  <Label>Category</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      form.setValue("description", value)
+                    }
+                    value={form.watch("description")}
+                  >
+                    <SelectTrigger className="mt-2 w-full min-w-[7.5rem]">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Category</SelectLabel>
+                        {descriptions?.map(
+                          (description: {
+                            category: string;
+                            description: string;
+                            price: number;
+                          }) => (
+                            <SelectItem
+                              key={description?.description}
+                              value={description?.category}
+                            >
+                              {description?.category}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
               <FormInput
                 label="Date of Birth"
                 type="date"
@@ -178,7 +224,7 @@ export const ProfileSettings = ({ onSave }: { onSave: () => void }) => {
               <Button
                 variant="outline"
                 type="button"
-                onClick={handleClickDate}
+                onClick={openDatePicker}
                 className="-mt-16 z-10"
               >
                 {form.getValues().date_of_birth}{" "}
