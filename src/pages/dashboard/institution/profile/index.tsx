@@ -9,7 +9,6 @@ import { ProfileSettings } from "./forms/ProfileSettings";
 
 import ArrowDown from "/icons/arrow-down-01.svg";
 import School from "@/components/custom/sidebar-icons/school";
-// import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Location from "@/components/custom/Icons/Location";
 import UserSetting from "@/components/custom/Icons/UserSetting";
 import { LogoSignature } from "./forms/LogoSignature";
@@ -25,7 +24,7 @@ export default function InstitutionProfile() {
      queryKey: ["GET_PAYMENT_CONFIGS"],
    });
 
-  const isManual = payment_config?.payment_type?.toLowerCase() === "manual";
+  const showPaymentConfig = ["online", "waiver"].includes(payment_config?.payment_type?.toLowerCase());
 
   const handleToggle = (index: number) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -54,12 +53,16 @@ export default function InstitutionProfile() {
       icon: <UserSetting />,
       content: <LogoSignature />,
     },
-    {
-      title: "Account and Configuration",
-      label: "View your payment profile",
-      icon: <SettingsIcon />,
-      content: <PaymentConfiguration />,
-    },
+    ...(showPaymentConfig
+      ? [
+          {
+            title: "Account and Configuration",
+            label: "View your payment profile",
+            icon: <SettingsIcon />,
+            content: <PaymentConfiguration />,
+          },
+        ]
+      : []),
 
   ];
 
@@ -70,7 +73,6 @@ export default function InstitutionProfile() {
       </div>
 
       {settings
-        .filter(setting => !(isManual && setting.title === "Account and Configuration"))
         .map((setting, index) => (
           <Collapsible
             key={index}
