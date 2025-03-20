@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import AddIcon from "@/components/custom/Icons/AddIcon";
 import { CreateUserForm } from "./CreateuserForm";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export function AddNewUserButton({
   refetch,

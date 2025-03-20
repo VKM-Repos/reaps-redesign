@@ -7,26 +7,21 @@ import {
 } from "@/components/ui/dialog";
 
 import { useRef, useState } from "react";
-import { UserGradeForm } from "./UserGradeForm";
-import { UserActivationForm } from "./UserActivationForm";
 
 export function UserViewDialog({
-  title,
   user,
-  refetch,
 }: {
-  title: string;
+  title?: string;
   user: any;
-  refetch: () => void;
+  refetch?: () => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
 
-  const handleClosDialog = () => {
-    refetch();
-    closeDialogBtn.current?.click();
-  };
-  console.log(user, "/////");
+  // const handleClosDialog = () => {
+  //   refetch();
+  //   closeDialogBtn.current?.click();
+  // };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

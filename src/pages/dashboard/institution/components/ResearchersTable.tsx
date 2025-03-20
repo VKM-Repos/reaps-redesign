@@ -17,7 +17,6 @@ import { UserGradeDialog } from "./UserGradeDialog";
 import { Check } from "lucide-react";
 import Cancel from "@/components/custom/Icons/Cancel";
 import useUserStore from "@/store/user-store";
-import { UserViewDialog } from "./userViewDialog";
 import Eye from "@/components/custom/Icons/Eye";
 import { AddNewUserButton } from "./AddNewUserButton";
 
