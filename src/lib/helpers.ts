@@ -111,10 +111,12 @@ export const requirements: RequirementMapping = {
 };
 
 export const requestsArray = [
+  "",
   "Research Info",
   "Application Info",
   "Supporting docs",
   "Summary",
+  "",
 ];
 
 export const signupArray = [

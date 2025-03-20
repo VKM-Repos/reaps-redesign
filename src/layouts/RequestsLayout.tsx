@@ -51,13 +51,13 @@ export default function RequestsLayout({ children }: Props) {
                 <div className="w-full flex flex-col items-center justify-center gap-y-4">
                   {isMobile && (
                     <p className="text-center w-full font-[600] text-sm">
-                      {requestsArray[step - 2]}
+                      {requestsArray[step - 1]}
                     </p>
                   )}
                   <Stepper
                     step={step - 1}
                     setStep={setStep}
-                    array={requestsArray.slice(0, -1)}
+                    array={requestsArray.slice(1, -1)}
                   />
                 </div>
               )}

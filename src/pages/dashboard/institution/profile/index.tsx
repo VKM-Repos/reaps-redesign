@@ -9,16 +9,22 @@ import { ProfileSettings } from "./forms/ProfileSettings";
 
 import ArrowDown from "/icons/arrow-down-01.svg";
 import School from "@/components/custom/sidebar-icons/school";
-// import { useOnboardingFormStore } from "@/store/CreateOnboardingFormStore";
 import Location from "@/components/custom/Icons/Location";
 import UserSetting from "@/components/custom/Icons/UserSetting";
 import { LogoSignature } from "./forms/LogoSignature";
 import SettingsIcon from "@/components/custom/Icons/SettingsIcon";
 import PaymentConfiguration from "./forms/PaymentConfiguration";
+import { useGET } from "@/hooks/useGET.hook";
 
 export default function InstitutionProfile() {
   const [isOpenIndex, setOpenIndex] = useState<number | null>();
-  //   const { data } = useOnboardingFormStore();
+
+  const { data: payment_config } = useGET({
+     url: `payment-configs-by-context`,
+     queryKey: ["GET_PAYMENT_CONFIGS"],
+   });
+
+  const showPaymentConfig = ["online", "waiver"].includes(payment_config?.payment_type?.toLowerCase());
 
   const handleToggle = (index: number) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -47,12 +53,16 @@ export default function InstitutionProfile() {
       icon: <UserSetting />,
       content: <LogoSignature />,
     },
-    {
-      title: "Account and Configuration",
-      label: "View your payment profile",
-      icon: <SettingsIcon />,
-      content: <PaymentConfiguration />,
-    },
+    ...(showPaymentConfig
+      ? [
+          {
+            title: "Account and Configuration",
+            label: "View your payment profile",
+            icon: <SettingsIcon />,
+            content: <PaymentConfiguration />,
+          },
+        ]
+      : []),
 
   ];
 
@@ -62,37 +72,38 @@ export default function InstitutionProfile() {
         <h1 className="text-[1.875rem] font-bold">Institution Profile</h1>
       </div>
 
-      {settings.map((setting, index) => (
-        <Collapsible
-          key={index}
-          open={isOpenIndex === index}
-          onOpenChange={() => handleToggle(index)}
-          className="w-full"
-        >
-          <CollapsibleTrigger className="w-full">
-            <div className="flex gap-4 justify-between items-center w-full p-4">
-              <div className="flex gap-4 items-center">
-                <div className="bg-accent p-2.5 rounded-full">
-                  {setting.icon}
-                </div>
-                <div className="gap-3 flex flex-col justify-center items-start text-[#040C21]">
-                  <div className="font-semibold">{setting.title}</div>
-                  <div className="text-sm text-left font-normal">
-                    {setting.label}
+      {settings
+        .map((setting, index) => (
+          <Collapsible
+            key={index}
+            open={isOpenIndex === index}
+            onOpenChange={() => handleToggle(index)}
+            className="w-full"
+          >
+            <CollapsibleTrigger className="w-full">
+              <div className="flex gap-4 justify-between items-center w-full p-4">
+                <div className="flex gap-4 items-center">
+                  <div className="bg-accent p-2.5 rounded-full">
+                    {setting.icon}
+                  </div>
+                  <div className="gap-3 flex flex-col justify-center items-start text-[#040C21]">
+                    <div className="font-semibold">{setting.title}</div>
+                    <div className="text-sm text-left font-normal">
+                      {setting.label}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <img
-                src={ArrowDown}
-                className={isOpenIndex === index ? "rotate-180" : "rotate-0"}
-              />
-            </div>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="border-t border-[#0E0F0C1F] rounded-r-4 rounded-b-4 px-4 pb-6 pt-4">
-            {setting.content}
-          </CollapsibleContent>
-        </Collapsible>
+                <img
+                  src={ArrowDown}
+                  className={isOpenIndex === index ? "rotate-180" : "rotate-0"}
+                />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="border-t border-[#0E0F0C1F] rounded-r-4 rounded-b-4 px-4 pb-6 pt-4">
+              {setting.content}
+            </CollapsibleContent>
+          </Collapsible>
       ))}
     </div>
   );
