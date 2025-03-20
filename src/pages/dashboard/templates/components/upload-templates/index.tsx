@@ -66,6 +66,8 @@ export default function UploadTemplate({
   };
 
   async function onSubmit(values: any) {
+    const baseURL = import.meta.env.VITE_APP_BASE_URL;
+
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("department", values.department);
@@ -79,7 +81,7 @@ export default function UploadTemplate({
 
     setIsLoading(true);
     try {
-      const response = await fetch(`https://reaps.vhdo.org/api/${url}`, {
+      const response = await fetch(`${baseURL}${url}`, {
         method,
         body: formData,
         headers: {
