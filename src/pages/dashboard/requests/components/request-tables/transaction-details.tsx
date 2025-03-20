@@ -19,7 +19,8 @@ import { useGET } from "@/hooks/useGET.hook";
 import { TransactionItem } from "@/types/transaction";
 import TransactionsIcon from "@/components/custom/sidebar-icons/transactions-icon";
 import StatusPill from "@/components/custom/StatusPill";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
+import Loader from "@/components/custom/Loader";
 
 type Props = {
   id: string;
@@ -27,30 +28,16 @@ type Props = {
 
 export default function TransactionDetails({ id }: Props) {
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const { toast } = useToast();
 
-  const { data, isError, refetch } = useGET({
-    url: `transactions/by-request/${id}`,
-    queryKey: ["request_transaction", id],
-    enabled: !!id,
+  const { data: payment_config } = useGET({
+    url: `payment-configs-by-context`,
+    queryKey: ["GET_PAYMENT_CONFIGS"],
   });
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        title: "Something went wrong",
-        description: "Cannot fetch transaction details",
-        variant: "destructive",
-      });
-    }
-  }, [isError, toast]);
-
-  const handleRefetch = useCallback(() => {
-    refetch();
-  }, [refetch]);
+  const isManual = payment_config?.payment_type?.toLowerCase() === "manual";
 
   return isMobile ? (
-    <Sheet onOpenChange={(isOpen) => isOpen && handleRefetch()}>
+    <Sheet onOpenChange={(isOpen) => isOpen}>
       <SheetTrigger
         className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
           isMobile ? "p-1" : "p-2"
@@ -62,12 +49,12 @@ export default function TransactionDetails({ id }: Props) {
       <SheetContent className="w-full h-full pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4">
         <SheetClose className="absolute right-6 top-6 !w-fit mx-auto py-0 px-0 ml-4 flex items-center justify-start opacity-70 rounded-full hover:bg-[#14155E14] transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
           <HoverCancel />
-        </SheetClose>
-        <Content data={data} />
+        </SheetClose> 
+        {isManual ? <ManualTransactionContent /> : <AutomaticTransactionContent id={id} />}
       </SheetContent>
     </Sheet>
   ) : (
-    <Dialog onOpenChange={(isOpen) => isOpen && handleRefetch()}>
+    <Dialog onOpenChange={(isOpen) => isOpen }>
       <DialogTrigger
         className={`w-full text-black hover:bg-primary/10 rounded-lg flex justify-start items-center gap-2 ${
           isMobile ? "p-1" : "p-2"
@@ -79,16 +66,59 @@ export default function TransactionDetails({ id }: Props) {
       <DialogDescription className="hidden">
         Details of the selected transaction
       </DialogDescription>
-      <DialogContent className="w-full max-w-[800px] h-full md:max-h-[650px] pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
-        <Content data={data} />
+      {/* max-h-650 */}
+      <DialogContent className="w-full max-w-[800px] h-full md:max-h-fit  pt-[1.25rem] pb-[1.125rem] flex flex-col gap-4 rounded-[1.25rem]">
+        {isManual ? <ManualTransactionContent /> : <AutomaticTransactionContent id={id} />}
       </DialogContent>
       <DialogClose></DialogClose>
     </Dialog>
   );
 }
 
-function Content({ data }: any) {
+
+function ManualTransactionContent() {
+  return (
+    <>
+     <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
+        <p className="pb-4 px-[1.125rem] font-semibold text-xl2">
+          Transaction Details
+        </p>
+      </div>
+      <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-4 justify-center p-5">
+          <div className="flex flex-col gap-4 md:flex-row md:gap-unset md:justify-between md:items-center">
+            <div className="flex flex-col gap-2 text-sm justify-center text-[#515152] w-full">
+              <h2 className="text-bold font-semibold">This is a manual transaction</h2>
+              <p>Make sure you have uploaded your evidence of payment.</p>
+            </div>
+          </div>
+      </div>
+    </>
+  )
+}
+
+
+function AutomaticTransactionContent({ id }: any) {
   const { toast } = useToast();
+  const { data, isError, isPending } = useGET({
+    url: `transactions/by-request/${id}`,
+    queryKey: ["request_transaction", id],
+    enabled: !!id,
+  });
+   
+
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Something went wrong",
+        description: "Cannot fetch transaction details",
+        variant: "destructive",
+      });
+    }
+  }, [isError, toast]);
+
+  // const handleRefetch = useCallback(() => {
+  //   refetch();
+  // }, [refetch]);
 
   const transaction: TransactionItem = data;
 
@@ -145,6 +175,7 @@ function Content({ data }: any) {
 
   return (
     <>
+        {isPending && <Loader />}
       <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
         <p className="pb-4 px-[1.125rem] font-semibold text-xl2">
           Transaction Details

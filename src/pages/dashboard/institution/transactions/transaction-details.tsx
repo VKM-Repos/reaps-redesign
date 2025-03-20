@@ -93,7 +93,7 @@ function TransactionDetailsContent({
     queryKey: ["request_transaction"],
   });
 
-  const transaction: TransactionItem = data;
+  const transaction: TransactionItem = data ?? null;
 
   const { mutate: requery, isPending: isRequerying } = usePATCH(
     `transactions/${transaction?.transaction_reference}/re-query`,
@@ -101,19 +101,19 @@ function TransactionDetailsContent({
   );
 
   const formattedAmount = new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-  }).format(transaction?.amount);
+      style: "currency",
+      currency: "NGN",
+    }).format(transaction?.amount);
 
-  const formattedDate = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  }).format(new Date(transaction?.request.created_at));
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(new Date(transaction?.request.created_at));
 
   const handleRequeryTransaction = () => {
     toast({
@@ -157,96 +157,106 @@ function TransactionDetailsContent({
           description: "cannot fetch transaction details",
           variant: "destructive",
         })}
-
-      <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
+   
+        <div className="border-[#0E0F0C1F] border-b flex justify-between items-center text-[#040C21] w-full">
         <p className="pb-4 px-[1.125rem] font-semibold text-xl2">
           Transaction Details
         </p>
       </div>
-      <div className="w-full flex flex-col gap-4">
-        <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-4 justify-between p-5">
-          <div className="flex flex-col gap-4 md:flex-row md:gap-unset md:justify-between md:items-center">
-            <div className="flex flex-col gap-2 text-sm justify-center text-[#515152] w-full">
-              <p className="text-bold font-semibold">Name of Researcher</p>
-              <p className="text-[#868687]">
-                {transaction?.request.user.first_name +
-                  " " +
-                  transaction?.request.user.last_name}
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 text-sm justify-center text-[#515152] w-full">
-              <p className="text-bold font-semibold">Category</p>
-              <p className="text-[#868687] capitalize">
-                {transaction?.request.user.description ?? "Undergraduate"} -{" "}
-                <strong>
-                  {transaction?.request.user.education_level ?? "Researcher"}
-                </strong>
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
-            <p className="text-bold font-semibold">Amount</p>
-            <p className="text-[#868687]">{formattedAmount}</p>
-          </div>
+      {!transaction ?     
+        <div className="text-center text-gray-500 py-6">
+          <p className="text-xl font-semibold">Transaction Not Found</p>
+          <p className="text-[#868687] text-sm">No transaction details available for this request.</p>
         </div>
-        <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] text-[#868687] rounded-[1.25rem] flex flex-col justify-between gap-3 p-6">
-          <div className="font-semibold py-4">
-            <p>Details</p>
-          </div>
-          <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Request ID:</p>
-            <p>{transaction?.id ?? "---"}</p>
-          </div>
-          <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Research Topic:</p>
-            <p>{transaction?.request.research_title ?? "---"}</p>
-          </div>
-          <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Transaction Reference:</p>
-            <p>{transaction?.transaction_reference ?? "---"}</p>
-          </div>
-          <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Remita Reference:</p>
-            <p>{transaction?.rrr ?? "---"}</p>
-          </div>
+        :
+        <>
+          <div className="w-full flex flex-col gap-4">
+            <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] rounded-[1.25rem] flex flex-col gap-4 justify-between p-5">
+              
+              <div className="flex flex-col gap-4 md:flex-row md:gap-unset md:justify-between md:items-center">
+                <div className="flex flex-col gap-2 text-sm justify-center text-[#515152] w-full">
+                  <p className="text-bold font-semibold">Name of Researcher</p>
+                  <p className="text-[#868687]">
+                    {transaction?.request.user.first_name +
+                      " " +
+                      transaction?.request.user.last_name}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2 text-sm justify-center text-[#515152] w-full">
+                  <p className="text-bold font-semibold">Category</p>
+                  <p className="text-[#868687] capitalize">
+                    {transaction?.request.user.description ?? "Undergraduate"} -{" "}
+                    <strong>
+                      {transaction?.request.user.education_level ?? "Researcher"}
+                    </strong>
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 text-sm justify-center text-[#515152]">
+                <p className="text-bold font-semibold">Amount</p>
+                <p className="text-[#868687]">{formattedAmount}</p>
+              </div>
+            </div>
+            <div className="w-full max-w-[85%] md:max-w-[95%] mx-auto my-0 border border-[#0E0F0C1F] text-[#868687] rounded-[1.25rem] flex flex-col justify-between gap-3 p-6">
+              <div className="font-semibold py-4">
+                <p>Details</p>
+              </div>
+              <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
+                <p className="font-bold text-sm">Request ID:</p>
+                <p>{transaction?.id ?? "---"}</p>
+              </div>
+              <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
+                <p className="font-bold text-sm">Research Topic:</p>
+                <p>{transaction?.request.research_title ?? "---"}</p>
+              </div>
+              <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
+                <p className="font-bold text-sm">Transaction Reference:</p>
+                <p>{transaction?.transaction_reference ?? "---"}</p>
+              </div>
+              <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
+                <p className="font-bold text-sm">Remita Reference:</p>
+                <p>{transaction?.rrr ?? "---"}</p>
+              </div>
 
-          <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
-            <p className="font-bold text-sm">Date of Transaction:</p>
-            <p className="flex items-center gap-2">
-              <span>{formattedDate ?? "---"}</span>
-            </p>
-          </div>
-          <div className="flex gap-5 text-sm items-center text-[#515152]">
-            <p className="font-bold">Status:</p>
-            <Badge
-              style={{
-                color: statusColorMap[transaction?.status]?.text || "#000000",
-                backgroundColor:
-                  statusColorMap[transaction?.status]?.bg || "#192C8A",
-              }}
-              className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-[400]"
+              <div className="flex flex-col md:flex-row gap-3 md:gap-5 text-sm items-start md:items-center text-[#515152]">
+                <p className="font-bold text-sm">Date of Transaction:</p>
+                <p className="flex items-center gap-2">
+                  <span>{formattedDate ?? "---"}</span>
+                </p>
+              </div>
+              <div className="flex gap-5 text-sm items-center text-[#515152]">
+                <p className="font-bold">Status:</p>
+                <Badge
+                  style={{
+                    color: statusColorMap[transaction?.status]?.text || "#000000",
+                    backgroundColor:
+                      statusColorMap[transaction?.status]?.bg || "#192C8A",
+                  }}
+                  className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem] font-[400]"
+                >
+                  <div
+                    style={{
+                      backgroundColor:
+                        statusColorMap[transaction?.status]?.text || "#192C8A",
+                    }}
+                    className="w-[5px] h-[5px] rounded-full "
+                  ></div>
+                  {transaction?.status.toLowerCase() ?? "---"}
+                </Badge>
+              </div>
+            </div>
+            <button
+              onClick={handleRequeryTransaction}
+              className="min-w-[13.75rem] py-[0.313rem] px-3 rounded border border-[#14155E] text-[#0D1F00] bg-white fixed bottom-6 right-6"
+              disabled={isRequerying}
             >
-              <div
-                style={{
-                  backgroundColor:
-                    statusColorMap[transaction?.status]?.text || "#192C8A",
-                }}
-                className="w-[5px] h-[5px] rounded-full "
-              ></div>
-              {transaction?.status.toLowerCase() ?? "---"}
-            </Badge>
+              <p className="font-bold text-sm">
+                {isRequerying ? "Re-querying..." : "Re-query transaction status"}
+              </p>
+            </button>
           </div>
-        </div>
-        <button
-          onClick={handleRequeryTransaction}
-          className="min-w-[13.75rem] py-[0.313rem] px-3 rounded border border-[#14155E] text-[#0D1F00] bg-white fixed bottom-6 right-6"
-          disabled={isRequerying}
-        >
-          <p className="font-bold text-sm">
-            {isRequerying ? "Re-querying..." : "Re-query transaction status"}
-          </p>
-        </button>
-      </div>
+        </>
+        }
     </>
   );
 }

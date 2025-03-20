@@ -17,6 +17,8 @@ import { UserGradeDialog } from "./UserGradeDialog";
 import { Check } from "lucide-react";
 import Cancel from "@/components/custom/Icons/Cancel";
 import useUserStore from "@/store/user-store";
+import Eye from "@/components/custom/Icons/Eye";
+import { AddNewUserButton } from "./AddNewUserButton";
 
 // type usersTableDataProps = {
 //   usersTableData: {
@@ -52,13 +54,23 @@ function RenderFunctions({
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <button>
+          <button type="button">
             <MoreIcon />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="rounded-xl rounded-r-none py-2 px-4 w-fit .dropdown-shadow">
+        <DropdownMenuContent className="rounded-xl space-y-2 rounded-r-none py-2 px-4 w-fit .dropdown-shadow">
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="flex items-center gap-2 cursor-pointer"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <Eye />
+              {/* <UserViewDialog refetch={refetch} user={item} title="View" />{" "} */}
+              <AddNewUserButton user={item} action="edit" refetch={refetch} />
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
           <DropdownMenuGroup className="flex flex-col gap-3 justify-center items-start">
-            {item?.user_type != "admin" && (
+            {item?.user_type !== "admin" && (
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()}
                 className="flex items-center gap-2 cursor-pointer"
@@ -71,7 +83,7 @@ function RenderFunctions({
                 />
               </DropdownMenuItem>
             )}
-            {item?.user_type != "user" && (
+            {item?.user_type !== "user" && (
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()}
                 className="flex items-center gap-2 cursor-pointer"

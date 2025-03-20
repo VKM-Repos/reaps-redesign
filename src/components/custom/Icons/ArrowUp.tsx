@@ -1,5 +1,6 @@
 export default function ArrowUp() {
   return (
+    // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
     <svg
       width="20"
       height="20"
