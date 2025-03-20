@@ -72,7 +72,7 @@ export default function WriteReview({
 
   const { mutate: write_review, isPending: updating_review } = usePATCH(
     `reviews/${review_id}`,
-    { method: "PATCH", contentType: "multipart/form-data" }
+    { method: "PUT", contentType: "multipart/form-data" }
   );
 
   const { mutate: write_final_review, isPending: updating_final_review } =

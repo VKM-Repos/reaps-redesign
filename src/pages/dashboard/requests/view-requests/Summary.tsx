@@ -54,7 +54,6 @@ const Summary = ({
   const application = getApplicationData(request);
   const filteredDocs = getSupportDocs(request);
 
-
   function onSubmit() {
     try {
       if (handlePrint) {
@@ -67,18 +66,12 @@ const Summary = ({
 
   const is_researcher = activeRole === "user";
 
-
   const endpoint = is_researcher
     ? `reviews/review-by-request-admin-type/${request?.id}`
     : `reviews/request/${request?.id}`;
-  
-  const queryKey = [
-    "FETCH_REVIEW_BY_REQUEST_ID",
-    request?.id,
-    fetchCount,
 
-  ];
-  
+  const queryKey = ["FETCH_REVIEW_BY_REQUEST_ID", request?.id, fetchCount];
+
   const { data: reviews_data } = useGET({
     url: endpoint,
     queryKey,
@@ -86,7 +79,6 @@ const Summary = ({
 
   const reviews = reviews_data?.items || [];
   const admin_review = is_researcher ? reviews_data : null;
-
 
   return (
     <>
@@ -125,39 +117,37 @@ const Summary = ({
                   Application Information
                 </h1>
                 <div className="grid md:grid-cols-2 gap-8 ">
-                  <>
-                    {application.map((question) => (
-                      <div key={question.label} className="flex flex-col gap-2">
-                        <div className="text-sm text-[#454745]">
-                          {question.label}&nbsp;
-                          <span className="text-red-500">*</span>
-                        </div>
-                        <div
-                          key={question.name}
-                          className={`flex items-center gap-4 px-3 py-2 border border-[#040C21] ${
-                            question.name === "question7"
-                              ? "bg-inherit"
-                              : "bg-[#192C8A14]"
-                          } rounded-md w-full max-w-fit`}
-                        >
-                          {question.name === "question7" ? (
+                  {application.map((question) => (
+                    <div key={question.label} className="flex flex-col gap-2">
+                      <div className="text-sm text-[#454745]">
+                        {question.label}&nbsp;
+                        <span className="text-red-500">*</span>
+                      </div>
+                      <div
+                        key={question.name}
+                        className={`flex items-center gap-4 px-3 py-2 border border-[#040C21] ${
+                          question.name === "question7"
+                            ? "bg-inherit"
+                            : "bg-[#192C8A14]"
+                        } rounded-md w-full max-w-fit`}
+                      >
+                        {question.name === "question7" ? (
+                          <Label className="text-base capitalize">
+                            {question.value}
+                          </Label>
+                        ) : (
+                          <>
+                            <div className="flex justify-center items-center aspect-square h-[1.375rem] w-[1.375rem] rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                              <div className="flex items-center justify-center rounded-full h-[0.875rem] w-[0.875rem] bg-black" />
+                            </div>
                             <Label className="text-base capitalize">
                               {question.value}
                             </Label>
-                          ) : (
-                            <>
-                              <div className="flex justify-center items-center aspect-square h-[1.375rem] w-[1.375rem] rounded-full border border-[#868687] text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                                <div className="flex items-center justify-center rounded-full h-[0.875rem] w-[0.875rem] bg-black"></div>
-                              </div>
-                              <Label className="text-base capitalize">
-                                {question.value}
-                              </Label>
-                            </>
-                          )}
-                        </div>
+                          </>
+                        )}
                       </div>
-                    ))}
-                  </>
+                    </div>
+                  ))}
                 </div>
               </section>
 
@@ -198,7 +188,8 @@ const Summary = ({
                           className="w-full flex justify-between items-center border border-gray-300 px-2 py-1 rounded-md mb-2"
                         >
                           <span className="flex gap-2 items-center justify-center">
-                            {activeTab === "review_request" || !(activeRole == "user") ? (
+                            {activeTab === "review_request" ||
+                            !(activeRole === "user") ? (
                               <span className="text-black text-[0.8rem]">
                                 <GoogleDoc />
                               </span>
@@ -210,10 +201,10 @@ const Summary = ({
                             <span>{file.name}</span>
                           </span>
                           <a href={file?.href} className="p-2">
-                              <span>
-                                <Download />
-                              </span>
-                            </a>
+                            <span>
+                              <Download />
+                            </span>
+                          </a>
                         </div>
                       </div>
                     );
@@ -233,9 +224,15 @@ const Summary = ({
                   </h1>
                 </div>
                 {is_researcher ? (
-                  admin_review ? renderReview(admin_review) : <p>No Review yet.</p>
+                  admin_review ? (
+                    renderReview(admin_review)
+                  ) : (
+                    <p>No Review yet.</p>
+                  )
                 ) : reviews.length > 0 ? (
-                  <div className="flex flex-col gap-6">{reviews.map(renderReview)}</div>
+                  <div className="flex flex-col gap-6">
+                    {reviews.map(renderReview)}
+                  </div>
                 ) : (
                   <p>No Reviews Available</p>
                 )}
