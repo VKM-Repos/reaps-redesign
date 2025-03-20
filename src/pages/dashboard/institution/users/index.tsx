@@ -37,7 +37,9 @@ export default function Requests() {
       <div className="flex flex-col gap-12 mb-20 w-full max-w-full ">
         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
           <h1 className="text-[1.875rem] font-bold">Users</h1>
-          {tableData.length > 0 && <AddNewUserButton refetch={refetch} />}
+          {tableData.length > 0 && (
+            <AddNewUserButton action="new" refetch={refetch} />
+          )}
         </div>
         {/* tab */}
         {tableData && tableData.length > 0 ? (
