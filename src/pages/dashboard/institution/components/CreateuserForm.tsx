@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,6 +29,7 @@ import { usePOST } from "@/hooks/usePOST.hook";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
 import { useGET } from "@/hooks/useGET.hook";
+import { usePATCH } from "@/hooks/usePATCH.hook";
 const FormSchema = z.object({
   first_name: z.string().min(1, {
     message: "Please fill this field.",
@@ -52,6 +54,7 @@ const FormSchema = z.object({
     message: "Please fill this field.",
   }),
   description: z.string().min(1, { message: "Please fill this field" }),
+  user_type: z.string().min(1, { message: "Please fill this field" }),
 });
 
 type FlagData = {
@@ -63,8 +66,12 @@ type FlagData = {
 };
 
 export function CreateUserForm({
+  action,
+  user,
   handleClosDialog,
 }: {
+  action: string;
+  user: any;
   handleClosDialog: () => void;
 }) {
   const [countriesData, setCountries] = useState<CountryListItemType[]>([]);
@@ -79,6 +86,12 @@ export function CreateUserForm({
     { title: "PHD", value: "phd" },
   ];
 
+  const userTypes = [
+    { title: "user", value: "user" },
+    { title: "Researcher", value: "researcher" },
+    { title: "Admin", value: "admin" },
+  ];
+
   const { data: descriptions } = useGET({
     url: "price-categories-by-context",
     queryKey: ["GET_CATEGORY_DESC"],
@@ -91,16 +104,17 @@ export function CreateUserForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone_number: "",
-      country_code: "+234",
-      gender: "",
-      date_of_birth: "2026-01-01",
+      first_name: user?.first_name || "",
+      last_name: user?.last_name || "",
+      email: user?.email || "",
+      phone_number: user?.phone_number || "",
+      country_code: user?.country_code || "+234",
+      gender: user?.gender || "",
+      date_of_birth: user?.date_of_birth || "2026-01-01",
       password: "password",
-      education_level: "",
-      description: "",
+      education_level: user?.education_level || "",
+      description: user?.description || "",
+      user_type: user?.user_type || "user",
     },
   });
   const combinedData = countriesData
@@ -113,35 +127,61 @@ export function CreateUserForm({
       };
     });
   const { mutate, isPending } = usePOST("users");
+  const { mutate: updateUser, isPending: updatingUser } = usePATCH(
+    `users/${user?.id}`,
+    { method: "PUT" }
+  );
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    data.password = `${data.first_name}_Password@123`;
-    mutate(data, {
-      onSuccess: () => {
-        toast({
-          title: "Feedback",
-          description: "User has been created.",
-          variant: "default",
-        });
-        handleClosDialog();
-      },
-      onError: (error: any) => {
-        toast({
-          title: "Error",
-          description: error.response.data.detail,
-          variant: "destructive",
-        });
-      },
-    });
+    if (action === "edit") {
+      updateUser(data, {
+        onSuccess: () => {
+          toast({
+            title: "Feedback",
+            description: "User has been updated.",
+            variant: "default",
+          });
+          handleClosDialog();
+        },
+        onError: (error: any) => {
+          toast({
+            title: "Error",
+            description: error.response.data.detail,
+            variant: "destructive",
+          });
+        },
+      });
+    } else {
+      data.password = `${data.first_name}_Password@123`;
+      mutate(data, {
+        onSuccess: () => {
+          toast({
+            title: "Feedback",
+            description: "User has been created.",
+            variant: "default",
+          });
+          handleClosDialog();
+        },
+        onError: (error: any) => {
+          toast({
+            title: "Error",
+            description: error.response.data.detail,
+            variant: "destructive",
+          });
+        },
+      });
+    }
   }
+  console.log(user, "???");
 
   return (
     <>
-      {isPending ? (
+      {isPending || updatingUser ? (
         <Loader />
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-8">
+              <h2 className="text-[18px] font-semibold">User details</h2>
               <div className="flex items-center gap-5  ">
                 <FormField
                   control={form.control}
@@ -328,21 +368,21 @@ export function CreateUserForm({
               <FormField
                 control={form.control}
                 name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Which best Describes you</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a description" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {educationLevels &&
-                          descriptions?.map(
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Which best Describes you</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={field?.value} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {descriptions?.map(
                             (description: {
                               category: string;
                               description: string;
@@ -356,6 +396,44 @@ export function CreateUserForm({
                               </SelectItem>
                             )
                           )}
+                        </SelectContent>
+                      </Select>
+                      {action === "edit" && (
+                        <FormDescription className="text-[14px]">
+                          current user description:{" "}
+                          <span className="font-semibold">
+                            {user?.description}
+                          </span>
+                        </FormDescription>
+                      )}
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="user_type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>user type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select user type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {userTypes?.map((userType) => (
+                          <SelectItem
+                            key={userType.value}
+                            value={userType.value}
+                          >
+                            {userType.title}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -370,7 +448,9 @@ export function CreateUserForm({
               >
                 Cancel
               </Button>
-              <Button type="submit">Done</Button>
+              <Button type="submit">
+                {action === "new" ? "Done" : "Save changes"}
+              </Button>
             </div>
           </form>
         </Form>
