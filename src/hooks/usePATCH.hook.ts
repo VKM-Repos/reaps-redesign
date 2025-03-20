@@ -30,6 +30,8 @@ export const usePATCH = (
           ? await axiosInstance.put(url, values, {
               headers: {
                 "Content-Type": contentType,
+                "Accept": "application/json",
+                
               },
             })
           : await axiosInstance.patch(url, values, {
