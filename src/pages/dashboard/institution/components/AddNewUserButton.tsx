@@ -51,7 +51,8 @@ export function AddNewUserButton({
                 {user?.first_name} {user?.last_name}
               </h2>
               <h4 className="text-[#515152] text-[14px] font-semibold text-center mb-10">
-                User type: {user?.user_type}
+                User type:{" "}
+                <span className="capitalize"> {user?.user_type}</span>
               </h4>
             </>
           )}
