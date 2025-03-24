@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ColumnDef } from "@tanstack/react-table";
 import { CustomCell } from "@/components/custom/CustomTable";
-import { Badge } from "@/components/ui/badge";
-import { statusColorMap } from "@/lib/utils";
 import Action from "./action";
+import StatusPill from "@/components/custom/StatusPill";
 
 const columns: Array<ColumnDef<any>> = [
   {
@@ -86,32 +85,15 @@ const columns: Array<ColumnDef<any>> = [
   },
   {
     header: () => (
-      <CustomCell
-        value={"Status"}
-        className="font-bold w-full min-w-[8.75rem]"
-      />
+      <CustomCell value={"Status"} className="font-bold w-full min-w-[7rem]" />
     ),
     accessorKey: "status",
     cell: ({ row }) => {
       const item = row.original;
       return (
-        <span className="text-left min-w-[8.75rem] flex justify-left !text-xs">
-          <Badge
-            style={{
-              color: statusColorMap[item.status]?.text || "#000000",
-              backgroundColor: statusColorMap[item.status]?.bg || "#192C8A",
-            }}
-            className="flex gap-1 items-center justify-center py-1 px-2 rounded-[2.25rem]"
-          >
-            <div
-              style={{
-                backgroundColor: statusColorMap[item.status]?.text || "#192C8A",
-              }}
-              className="w-[5px] h-[5px] rounded-full"
-            ></div>
-            {item.status}
-          </Badge>
-        </span>
+        <div className="flex items-center w-full min-w-[7rem] font-normal">
+          <StatusPill status={item.status} />
+        </div>
       );
     },
   },

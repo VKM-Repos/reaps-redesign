@@ -57,8 +57,6 @@ const CreateRequests = () => {
         }
       });
 
-      formData.append("can_edit", JSON.stringify(false));
-
       if (isManual) {
         const fileEntries = Object.entries(data.evidence_of_payment);
 
@@ -73,6 +71,12 @@ const CreateRequests = () => {
           console.error("No file found in evidence_of_payment");
         }
       }
+
+      const hasEvidenceOfPayment =
+        isManual &&
+        data.evidence_of_payment &&
+        Object.keys(data.evidence_of_payment).length > 0;
+      formData.append("can_edit", JSON.stringify(!hasEvidenceOfPayment));
 
       mutate(formData, {
         onSuccess: () => {

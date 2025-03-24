@@ -30,13 +30,13 @@ const refreshTokenSchema = z.object({
 });
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+let isRefreshing = false;
+let refreshQueue: ((token: string) => void)[] = [];
 
 export const createApiInstance = (baseURL: string): AxiosInstance => {
   const apiInstance = axios.create({
     baseURL,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
   });
 
   apiInstance.interceptors.request.use((config) => {
@@ -45,7 +45,8 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
-    if (user?.institution_context) {
+
+    if (user?.user_type !== "super admin" && user?.institution_context) {
       config.headers["institution-context"] = user.institution_context;
     }
 
@@ -60,31 +61,53 @@ export const createApiInstance = (baseURL: string): AxiosInstance => {
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 
-        try {
-          const newTokens = await getRefreshToken();
+        if (!isRefreshing) {
+          isRefreshing = true;
 
-          console.log("New refresh_token", newTokens.refresh_token);
+          try {
+            const newTokens = await getRefreshToken();
 
-          // Update Zustand store
-          useUserStore.setState(() => ({
-            accessToken: newTokens.access_token,
-            refreshToken: newTokens.refresh_token,
-          }));
+            // Store tokens in Zustand before retrying requests
+            useUserStore.setState(() => ({
+              accessToken: newTokens.access_token,
+              refreshToken: newTokens.refresh_token,
+            }));
 
-          // Retry request with new token
-          originalRequest.headers[
-            "Authorization"
-          ] = `Bearer ${newTokens.access_token}`;
-          return apiInstance(originalRequest);
-        } catch (refreshError) {
-          if (
-            axios.isAxiosError(refreshError) &&
-            refreshError.response?.status === 403
-          ) {
-            useUserStore.getState().reset();
+            // Resolve all queued requests with new token
+            refreshQueue.forEach((callback) =>
+              callback(newTokens.access_token)
+            );
+            refreshQueue = [];
+
+            isRefreshing = false;
+
+            // Retry original request with new token
+            originalRequest.headers[
+              "Authorization"
+            ] = `Bearer ${newTokens.access_token}`;
+            return apiInstance(originalRequest);
+          } catch (refreshError) {
+            isRefreshing = false;
+            refreshQueue = [];
+
+            if (
+              axios.isAxiosError(refreshError) &&
+              [401, 403].includes(refreshError.response?.status ?? 0)
+            ) {
+              forceLogout();
+            }
+
+            return Promise.reject(refreshError);
           }
-          return Promise.reject(refreshError);
         }
+
+        // Queue request and wait for token refresh
+        return new Promise((resolve) => {
+          refreshQueue.push((token) => {
+            originalRequest.headers["Authorization"] = `Bearer ${token}`;
+            resolve(apiInstance(originalRequest));
+          });
+        });
       }
 
       return Promise.reject(error);
@@ -98,11 +121,13 @@ const getRefreshToken = async () => {
   const { refreshToken, user } = useUserStore.getState();
 
   if (!refreshToken || !user?.institution_context) {
+    forceLogout();
     throw new Error("No refresh token or institution context available.");
   }
 
   const url = new URL(`${baseUrl}auth/refresh`);
   url.searchParams.append("refresh_token", refreshToken);
+
   console.log("Old refresh_token", refreshToken);
 
   const response = await fetch(url.toString(), {
@@ -114,6 +139,7 @@ const getRefreshToken = async () => {
   });
 
   if (!response.ok) {
+    forceLogout();
     const errorData = await response.json();
     throw new Error(
       `Failed to refresh token: ${errorData.detail || response.statusText}`
@@ -121,12 +147,12 @@ const getRefreshToken = async () => {
   }
 
   const data = await response.json();
-  const newTokens = refreshTokenSchema.parse(data);
+  return refreshTokenSchema.parse(data);
+};
 
-  // localStorage.setItem("accessToken", newTokens.access_token);
-  // localStorage.setItem("refreshToken", newTokens.refresh_token);
-
-  return newTokens;
+const forceLogout = () => {
+  useUserStore.getState().reset();
+  window.location.href = "/login";
 };
 
 export const handleApiError = (error: unknown): Promise<never> => {

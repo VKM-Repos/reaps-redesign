@@ -4,7 +4,7 @@ import React from "react";
 const queryClientSettings: QueryClientConfig = {
   defaultOptions: {
     queries: {
-      retry: 3,
+      retry: 1,
       refetchOnMount: true,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
