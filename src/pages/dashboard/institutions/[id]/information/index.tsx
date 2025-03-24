@@ -54,9 +54,9 @@ const InstitutionInformationPage = () => {
     isError,
     isPending,
   } = useGET({
-    url: `payment-configs/${id}`,
-    queryKey: ["GET-PAYMENT-CONFIG", id],
-    enabled: !!id,
+    url: `payment-configs/context/${data?.institution_context}`,
+    queryKey: ["GET-PAYMENT-CONFIG", data?.institution_context],
+    enabled: !!data?.institution_context,
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -156,7 +156,7 @@ const InstitutionInformationPage = () => {
                 />
               </span>
               <DialogTitle className="text-center text-xl2 font-semibold font-inter">
-                Incomplete!
+                Attention!
               </DialogTitle>
               <DialogDescription className="text-sm text-center">
                 You need to set up the payment profile for this institution
