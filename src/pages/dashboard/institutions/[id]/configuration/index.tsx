@@ -11,27 +11,23 @@ import { useParams } from "react-router-dom";
 const InstitutionConfigurationPage = () => {
   const { id } = useParams();
 
-  const {
-    data: payment_config,
-    // isError,
-    // isPending,
-  } = useGET({
-    url: `payment-configs/${id}`,
-    queryKey: ["GET-PAYMENT-CONFIG", id],
-    enabled: !!id,
-  });
-
-  const { data: institution_details } = useGET({
+  // Fetch institution details
+  const { data } = useGET({
     url: `institutions/${id}`,
     queryKey: ["GET-INSTITUTION-DETAILS", id],
     enabled: !!id,
   });
 
+  // Fetch payment config
+  const { data: payment_config } = useGET({
+    url: `payment-configs/context/${data?.institution_context}`,
+    queryKey: ["GET-PAYMENT-CONFIG", data?.institution_context],
+    enabled: !!data?.institution_context,
+  });
+
   const paymentType = useMemo(() => {
     return payment_config?.payment_type || "manual";
   }, [payment_config]);
-
-  console.log(institution_details);
 
   return (
     <InstitutionLayout>
@@ -42,7 +38,7 @@ const InstitutionConfigurationPage = () => {
             <h5 className="font-semibold text-lg">Payment type</h5>
             <SelectPaymentType
               type={paymentType}
-              context={institution_details?.institution_context}
+              context={data?.institution_context}
             />
 
             {paymentType !== "manual" && (

@@ -57,7 +57,7 @@ export function ActivateInstitution() {
 
   return (
     <>
-      {(isPending || isLoading) && <Loader />}
+      {isPending && <Loader />}
       <Dialog>
         <DialogTrigger asChild>
           <Button
