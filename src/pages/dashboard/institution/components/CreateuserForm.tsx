@@ -87,8 +87,8 @@ export function CreateUserForm({
   ];
 
   const userTypes = [
-    { title: "user", value: "user" },
-    { title: "Researcher", value: "researcher" },
+    { title: "Researcher", value: "user" },
+    { title: "Reviewer", value: "reviewer" },
     { title: "Admin", value: "admin" },
   ];
 
@@ -171,7 +171,6 @@ export function CreateUserForm({
       });
     }
   }
-  console.log(user, "???");
 
   return (
     <>
