@@ -7,7 +7,7 @@ import { useGlobalFilter } from "@/context/GlobalFilterContext";
 import { Link } from "react-router-dom";
 import { Institution } from "@/types/institutions";
 import View from "@/components/custom/Icons/View";
-import { Badge } from "@/components/ui/badge";
+import StatusPill from "@/components/custom/StatusPill";
 
 type Props = {
   data: Institution[];
@@ -18,7 +18,7 @@ function RenderFunctions({ item }: { item: any }) {
     <>
       <Link
         className="text-black flex items-center gap-2"
-        to={`/institutions/${item.id}`}
+        to={`/institutions/${item?.id}`}
         state={{ institution }}
       >
         View <View />
@@ -37,7 +37,7 @@ const InstitutionTable = ({ data }: Props) => {
           className="font-bold w-full min-w-[15rem]"
         />
       ),
-      accessorKey: "name",
+      accessorKey: "institution_name",
       cell: (info) => (
         <CustomCell value={info.getValue()} className="min-w-[15rem] w-full" />
       ),
@@ -60,11 +60,11 @@ const InstitutionTable = ({ data }: Props) => {
     {
       header: () => (
         <CustomCell
-          value={"Onboarded on"}
+          value={"Address"}
           className="font-bold w-full min-w-[8rem]"
         />
       ),
-      accessorKey: "joined",
+      accessorKey: "address",
       cell: ({ getValue }) => (
         <CustomCell value={getValue()} className="min-w-[8rem] w-full" />
       ),
@@ -74,23 +74,16 @@ const InstitutionTable = ({ data }: Props) => {
         <CustomCell value={"Status"} className=" w-full min-w-[3rem]" />
       ),
       accessorKey: "status",
-      cell: ({ getValue }) => (
-        <Badge
-          className={`flex items-center justify-center capitalize font-light gap-1 ${
-            getValue() == "active"
-              ? "bg-[#E5FFE5] text-[#00C000]"
-              : "bg-[#FFE5E6] text-[#FF000A]"
-          }`}
-        >
-          <div
-            className={`h-1 w-1 ${
-              getValue() == "active" ? "bg-[#00C000] " : "bg-[#FF000A] "
-            } rounded-full`}
-          />{" "}
-          {getValue()}
-        </Badge>
-      ),
+      cell: ({ getValue }) => {
+        const status = getValue();
+        return !status ? null : (
+          <div className="flex items-center w-full min-w-[7rem] font-normal">
+            <StatusPill status={status} />
+          </div>
+        );
+      },
     },
+
     {
       accessorKey: "custom",
       header: () => <CustomCell value="" className="w-full md:max-w-[3rem]" />,
@@ -106,6 +99,7 @@ const InstitutionTable = ({ data }: Props) => {
       },
     },
   ];
+
   return (
     <div className="w-full">
       {data.length > 0 ? (
