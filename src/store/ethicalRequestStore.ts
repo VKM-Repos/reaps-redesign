@@ -15,6 +15,7 @@ export interface EthicalRequestStore {
     ethical_request_questions: EthicalRequestQuestions;
     ethical_request_files: EthicalRequestFiles;
     evidence_of_payment: EthicalRequestFiles;
+    can_edit: boolean;
   };
   setStep: (step: number) => void;
   setData: (data: Partial<EthicalRequestStore["data"]>) => void;
@@ -36,6 +37,7 @@ export const useEthicalRequestStore = create<EthicalRequestStore>(
         ethical_request_questions: {},
         ethical_request_files: {},
         evidence_of_payment: {},
+        can_edit: true,
       },
 
       setStep: (step) => set({ step }),
@@ -77,6 +79,7 @@ export const useEthicalRequestStore = create<EthicalRequestStore>(
             ethical_request_questions: {},
             ethical_request_files: {},
             evidence_of_payment: {},
+            can_edit: true,
           },
         });
         localStorage.removeItem("EthicalRequestStore");
