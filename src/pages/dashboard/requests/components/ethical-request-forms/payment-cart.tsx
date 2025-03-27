@@ -5,29 +5,29 @@ import { LockKeyhole } from "lucide-react";
 import { useGET } from "@/hooks/useGET.hook";
 import { formatCurrency } from "@/lib/utils";
 import ManualPayment from "./manual-payment";
-import Loader from "@/components/custom/Loader";
 
-type Props = {
-  handleNext: () => void;
-};
+interface PaymentCartProps {
+  isLoading: boolean;
+  isManual: boolean;
+  onSaveAndContinue: () => Promise<void>;
+  onMakePayment: () => Promise<void>;
+}
 
-export default function PaymentCart({ handleNext }: Props) {
+export default function PaymentCart({
+  isLoading,
+  isManual,
+  onSaveAndContinue,
+  onMakePayment,
+}: PaymentCartProps) {
   const { data: user } = useGET({
     url: "auth/me",
     queryKey: ["GET_USER"],
-  });
-
-  const { data: payment_config, isPending } = useGET({
-    url: `payment-configs-by-context`,
-    queryKey: ["GET_PAYMENT_CONFIGS"],
   });
 
   const { data: price_category } = useGET({
     url: "price-categories-by-context",
     queryKey: ["GET_PRICE_CATEGORY"],
   });
-
-  const isManual = payment_config?.payment_type?.toLowerCase() === "manual";
 
   const payment = price_category?.find(
     (category: any) =>
@@ -41,15 +41,13 @@ export default function PaymentCart({ handleNext }: Props) {
 
   return (
     <>
-      {isPending && <Loader />}
-
       <div className="p-4">
         <div className="w-full max-w-[560px] relative mx-auto my-0 antialiased  flex flex-col gap-y-4 p-6 items-center justify-start border rounded-xl">
           <div className="w-full absolute top-0 left-0 inset-x-0 rounded-t-xl border-t-[10px] border-t-primary border-[#0C0C0F] " />
           <h6 className="text-[0.85rem] text-[#040C21] font-light">
             Total Amount
           </h6>
-          <h1 className="font-extrabold text-3xl text-[#192C8A] plus-jarkata-sans">
+          <h1 className="font-extrabold text-3xl text-[#192C8A]">
             ₦{formatCurrency(paymentDetails.price)}
           </h1>
 
@@ -128,20 +126,21 @@ export default function PaymentCart({ handleNext }: Props) {
           <div className="w-full flex items-center py-3 flex-col-reverse md:flex-row md:justify-between gap-4">
             <Button
               variant="outline"
-              onClick={handleNext}
+              onClick={onSaveAndContinue}
+              disabled={isLoading}
               className="rounded-[2.75rem] py-[1.375rem] px-6 focus:outline-none button-hover w-full md:max-w-[15.625rem]"
             >
-              Save & Continue later
+              {isLoading ? "Processing..." : "Save & Continue later"}
             </Button>
             {isManual ? (
-              <ManualPayment handleNext={handleNext} />
+              <ManualPayment handleNext={onMakePayment} />
             ) : (
               <Button
-                onClick={handleNext}
-                disabled={paymentDetails.price < 0}
+                onClick={onMakePayment}
+                disabled={paymentDetails.price < 0 || isLoading}
                 className="w-full md:max-w-[12.5rem] py-3 px-6 rounded-1 text-white font-semibold flex md:justify-between items-center"
               >
-                <span>Make Payment</span>
+                <span>{isLoading ? "Processing..." : "Make Payment"}</span>
                 <span>
                   <ArrowLeft />
                 </span>
