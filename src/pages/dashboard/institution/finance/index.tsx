@@ -5,7 +5,7 @@ import RevenueBar from '@/assets/short-mockup-bar-chart.svg';
 import PaymentsBar from '@/assets/blue-mockup-bar-chart.svg';
 import ArrowUpRight from '@/assets/arrow-up-right-01.svg';
 import FinanceCards from "./cards";
-import MonthlyPaymentsChart, { RevenueCategoryChart } from "./charts/finance-charts";
+import { MonthlyPaymentsChart, PaymentByGenderChart, RevenueCategoryChart, RevenueComparisonChart } from "./charts";
 import {  MoreHorizontalIcon } from "lucide-react";
 import InstitutionPayments from "./payments";
 
@@ -49,7 +49,8 @@ export default function InstitutionFinanceOverview() {
                         <span><img src={ArrowUpRight} alt="Arrow up right icon"/></span>
                     </Link>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {finance_card_info.map((finance_info) => (
                         <FinanceCards 
                             title={finance_info.title} 
@@ -59,8 +60,9 @@ export default function InstitutionFinanceOverview() {
                             percent={finance_info.percent}
                             percentColor={finance_info.percentColor}/>
                     ))}
-                </div>
-                <div className="flex w-full gap-3 items-center justify-center ">
+                </section>
+
+                <section className="flex w-full gap-3 items-center justify-center ">
                     <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Monthly Payment</p>
@@ -86,9 +88,28 @@ export default function InstitutionFinanceOverview() {
                             <RevenueCategoryChart />
                         </div>
                     </div>
-                   
-                </div>
-                <InstitutionPayments />
+                </section>
+
+                <section className="flex w-full gap-3 items-center justify-center ">
+                    <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
+                        <div className="py-4 flex items-center justify-between">
+                            <p className="font-semibold text-[1.375rem]">Revenue Comparison</p>
+                            <div></div>
+                        </div>
+                        <RevenueComparisonChart />
+                    </div>
+                    <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
+                        <div className="py-4 flex items-center justify-between">
+                            <p className="font-semibold text-[1.375rem]">Payment by Gender</p>
+                        </div>
+                        <PaymentByGenderChart />
+                    </div>
+                </section>
+
+                <section>
+                    <InstitutionPayments />
+                </section>
+                
             </div>
         </TransitionElement>
     )
