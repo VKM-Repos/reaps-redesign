@@ -63,7 +63,7 @@ export default function InstitutionFinanceOverview() {
                 </section>
 
                 <section className="flex w-full gap-3 items-center justify-center ">
-                    <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4">
+                    <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Monthly Payment</p>
                             <div className="flex gap-2 items-center">
@@ -79,7 +79,7 @@ export default function InstitutionFinanceOverview() {
                         </div>
                         <MonthlyPaymentsChart />
                     </div>
-                    <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4">
+                    <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Revenue By Category</p>
                             <button><MoreHorizontalIcon className="w-6 h-6" /></button>
@@ -90,14 +90,25 @@ export default function InstitutionFinanceOverview() {
                     </div>
                 </section>
 
-                <section className="flex w-full gap-3 items-center justify-center ">
-                    <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
+                <section className="flex w-full h-full gap-3 items-center justify-center ">
+                    <div className="h-full w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-[1.375rem]">Revenue Comparison</p>
                             <div></div>
                         </div>
                         <RevenueComparisonChart />
+                        <p className="flex gap-3 items-center text-[#333] text-xs mt-4 justify-center w-full">
+                            <span className="flex gap-2 items-center">
+                                <span className="w-2 h-2 rounded-full bg-[#192C8A]"></span>
+                                <span>This Year</span>
+                            </span>
+                            <span className="flex gap-2 items-center ">
+                                <span className="w-2 h-2 rounded-full bg-[#D1D5DB]"></span>
+                                <span>Last Year</span>
+                            </span>
+                        </p>
                     </div>
+
                     <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-[1.375rem]">Payment by Gender</p>
