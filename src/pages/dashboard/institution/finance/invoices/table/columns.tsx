@@ -107,11 +107,11 @@ export const columns: ColumnDef<any>[] = [
         },
       },
       {
-          header: "",
-          accessorKey: "action",
-          minSize: 50,
-          maxSize: 100,
-          cell: () => <ViewInvoice />,
-        },
+        header: "",
+        accessorKey: "action",
+        minSize: 50,
+        maxSize: 100,
+        cell: () => <ViewInvoice />,
+      },
     
 ]

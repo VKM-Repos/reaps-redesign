@@ -1,5 +1,6 @@
 import { CustomCell } from "@/components/custom/CustomTable";
 import { ColumnDef } from "@tanstack/react-table";
+import ViewPayment from "./view-payment";
 
 export const columns: ColumnDef<any>[] = [
     {
@@ -28,7 +29,7 @@ export const columns: ColumnDef<any>[] = [
         header: () =>  (
             <CustomCell
                 value={"User Name"}
-                className="w-full text-left max-w-fit text-[#333740]"
+                className="w-full text-left max-w-fit  whitespace-nowrap text-[#333740]"
             />
             ),
         accessorKey: "user_name",
@@ -36,7 +37,7 @@ export const columns: ColumnDef<any>[] = [
           const user_name = row.original.user_name;
           return (
             <div
-              className="truncate max-w-fit overflow-hidden text-ellipsis whitespace-nowrap text-[#333740]"
+              className="truncate max-w-fit overflow-hidden text-ellipsis text-[#333740]"
               title={user_name}
             >
               {user_name}
@@ -66,11 +67,11 @@ export const columns: ColumnDef<any>[] = [
       },
       {
         header: () =>  (
-            <CustomCell
-                value={"Payment Category"}
-                className="w-full text-left min-w-[5.75rem] text-[#333740]"
-            />
-            ),
+          <CustomCell
+              value={"Payment Category"}
+              className="w-full text-left min-w-[5.75rem] text-[#333740]"
+          />
+          ),
         accessorKey: "payment_category",
         cell: ({ row }) => {
           return (
@@ -97,7 +98,7 @@ export const columns: ColumnDef<any>[] = [
           const date = row.original.date;
           return (
             <div
-              className="truncate min-w-[5.75rem] overflow-hidden text-ellipsis whitespace-nowrap text-pretty text-[#333740]"
+              className="truncate min-w-[5.75rem] overflow-hidden text-ellipsis text-[#333740]"
               title={date}
             >
               {date}
@@ -123,22 +124,11 @@ export const columns: ColumnDef<any>[] = [
           return <span className="text-[#333740]">{amount}</span>;
         },
       },
-    
-      // {
-      //   header: () =>  (
-      //       <CustomCell
-      //           value={"Status"}
-      //           className="w-full text-left min-w-[5rem]"
-      //       />
-      //       ),
-      //   accessorKey: "status",
-      //   cell: ({ row }) => {
-      //     const item = row.original;
-      //     return (
-      //       <div className="flex items-center w-full min-w-[5rem] font-normal">
-      //         <StatusPill status={item.status.toLocaleLowerCase()} />
-      //       </div>
-      //     );
-      //   },
-      // },
+    {
+      header: "",
+      accessorKey: "action",
+      minSize: 50,
+      maxSize: 100,
+      cell: () => <ViewPayment />,
+    },
 ]

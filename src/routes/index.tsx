@@ -28,7 +28,7 @@ import InstitutionActivities from "@/pages/dashboard/institution/activities";
 import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 import CountdownPage from "@/components/custom/CountdownPage";
 import InstitutionFinanceOverview from "@/pages/dashboard/institution/finance";
-import InstitutionInvoices from "@/pages/dashboard/institution/finance/invoices/invoice";
+import InstitutionInvoices from "@/pages/dashboard/institution/finance/invoices";
 
 const router = [
   {

@@ -7,7 +7,7 @@ import ArrowUpRight from '@/assets/arrow-up-right-01.svg';
 import FinanceCards from "./cards";
 import MonthlyPaymentsChart, { RevenueCategoryChart } from "./charts/finance-charts";
 import {  MoreHorizontalIcon } from "lucide-react";
-import InstitutionPayments from "./finance-payments-section";
+import InstitutionPayments from "./payments";
 
 
 const finance_card_info = [

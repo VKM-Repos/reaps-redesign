@@ -1,7 +1,7 @@
 import CustomTable from "@/components/custom/CustomTable";
 import { payments_data } from "./data";
 import { columns } from "./columns";
-import EmptyTransactions from "../../transactions/empty-transactions";
+import EmptyTransactions from "../../../transactions/empty-transactions";
 
 export default function InstitutionPaymentsTable() {
     return (

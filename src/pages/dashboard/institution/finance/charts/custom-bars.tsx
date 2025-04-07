@@ -15,7 +15,7 @@ export const SplitCurvedBar = ({ x, y, width, height, payload}: any) => {
             x={x}
             y={y}
             width={width}
-            height={topHeight}
+            height={(Math.max(0, topHeight))}
             fill="#D1D5DB"
             rx={topHeight > 4 ? 4 : 0}
             ry={topHeight > 4 ? 4 : 0}
@@ -25,7 +25,7 @@ export const SplitCurvedBar = ({ x, y, width, height, payload}: any) => {
             x={x}
             y={y + topHeight + gap}
             width={width}
-            height={bottomHeight}
+            height={Math.max(0, bottomHeight)}
             fill="#FFD13A"
             rx={2}
             ry={2}
