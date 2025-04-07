@@ -48,6 +48,8 @@ export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
   "Not Active": { bg: "#FFE5E6", text: "#FF000A" },
   Pending: { bg: "#FFFBE5", text: "#CCAF09" },
   Failed: { bg: "#FFE5E8", text: "#BF1E2C" },
+  Unpaid: { bg: "#FFE5E8", text: "#BF1E2C" },
+  Paid: { bg: "#D6F8C7", text: "#1A3E1E" },
   Declined: { bg: "#FFE5E8", text: "#BF1E2C" },
   Approved: { bg: "#E5FFEB", text: "#01BC29" },
   "Review In Progress": { bg: "#FFF2E5", text: "#452609" },
