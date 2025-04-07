@@ -25,7 +25,7 @@ export default function FinanceCards(props: FinanceCardsInfo) {
                         <span style={{ color: percentColor }}>{percent}</span> from last week
                     </p>
                 </div>
-                <img src={`${image}`} alt="Mock-up Bar Chart"/>
+                {parseFloat(percent.replace('%', '')) > 0 && <img src={`${image}`} alt="Mock-up Bar Chart"/>}
                 </div>
             </div>
         </div>
