@@ -19,7 +19,7 @@ export const MonthlyPaymentTooltip = ({ active, payload }: any) => {
   
       return (
         <div className="px-[.625rem] py-1 rounded-lg" style={{ backgroundColor: '#192C8A', border: '1px solid #ccc' }}>
-          <p className="text-sm text-white">Revenue {revenue >= 1000 ? `${revenue / 1000}k` : revenue}</p>
+          <p className="text-sm text-white">Revenue: {revenue >= 1000 ? `${revenue / 1000}k` : revenue}</p>
         </div>
       );
     }
