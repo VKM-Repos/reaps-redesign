@@ -27,6 +27,7 @@ import InstitutionCategories from "@/pages/dashboard/institution/categories";
 import InstitutionActivities from "@/pages/dashboard/institution/activities";
 import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 import CountdownPage from "@/components/custom/CountdownPage";
+import InstitutionFinanceOverview from "@/pages/dashboard/institution/finance";
 
 const router = [
   {
@@ -134,6 +135,20 @@ const router = [
             path: "institution/activities",
             title: "Institution Activities",
             element: InstitutionActivities,
+          },
+          {
+            name: "Institution Finance Overview",
+            path: "institution/finance-overview",
+            title: "Institution Finance Overview",
+            element: InstitutionFinanceOverview,
+            routes: [
+              {
+                name: "Institution Finance Overview",
+                path: "finance-overview/invoice",
+                title: "Institution Invoice",
+                element: InstitutionFinanceOverview,
+              }
+            ]
           },
           {
             name: "Institution Transactions",
