@@ -112,18 +112,18 @@ export const paymentsData = [
     ]
   
 export const revenueComparisonData = [
-    { month: 'January', this_year: 40, last_year: 90 },
-    { month: 'February', this_year: 80, last_year: 30 },
-    { month: 'March', this_year: 150, last_year: 90 },
-    { month: 'April', this_year: 98, last_year: 90 },
-    { month: 'May', this_year: 110, last_year: 90 },
-    { month: 'June', this_year: 40, last_year: 50 },
-    { month: 'July', this_year: 40, last_year: 70 },
-    { month: 'August', this_year: 80, last_year: 90 },
-    { month: 'September', this_year: 40, last_year: 90 },
-    { month: 'October', this_year: 100, last_year: 90 },
-    { month: 'November', this_year: 80, last_year: 90 },
-    { month: 'December', this_year: 60, last_year: 90 },
+    { month: 'January', current_year: 40, last_year: 90 },
+    { month: 'February', current_year: 80, last_year: 30 },
+    { month: 'March', current_year: 150, last_year: 90 },
+    { month: 'April', current_year: 98, last_year: 90 },
+    { month: 'May', current_year: 110, last_year: 90 },
+    { month: 'June', current_year: 40, last_year: 50 },
+    { month: 'July', current_year: 40, last_year: 70 },
+    { month: 'August', current_year: 80, last_year: 90 },
+    { month: 'September', current_year: 40, last_year: 90 },
+    { month: 'October', current_year: 100, last_year: 90 },
+    { month: 'November', current_year: 80, last_year: 90 },
+    { month: 'December', current_year: 60, last_year: 90 },
 ]
 
 export const paymentsGenderData = [

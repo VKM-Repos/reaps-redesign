@@ -105,6 +105,10 @@ export function RevenueComparisonChart() {
                 barCategoryGap={12} 
                 barGap={2}
                 margin={{ left: -30 }}>
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent hideLabel />}
+                />
                 <CartesianGrid horizontal={true} vertical={false} strokeDasharray="4 4" stroke="#E5E7EB"/>
                 <XAxis
                     dataKey="month"
@@ -119,7 +123,7 @@ export function RevenueComparisonChart() {
                     tickLine={false}
                     orientation="left"
                 />
-                <Bar dataKey='this_year' fill="#192C8A" radius={6} />
+                <Bar dataKey='current_year' fill="#192C8A" radius={6} />
                 <Bar dataKey='last_year' fill="#D1D5DB" radius={6}/>
             </BarChart>
         </ChartContainer>
@@ -182,7 +186,9 @@ export function PaymentByGenderChart() {
                      </Pie>
                 </PieChart>
             </ChartContainer>
+    
             <CustomLegend data={paymentsGenderData} />
+
         </div>
     )
 }
