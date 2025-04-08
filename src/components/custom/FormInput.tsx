@@ -31,7 +31,7 @@ const FormInput = forwardRef<HTMLInputElement, InputProps>(
       render={({ field }) => {
         const { value, onChange } = field;
         return (
-          <FormItem className="flex flex-col gap-0">
+          <FormItem className="flex flex-col gap-2">
             <FormLabel className="flex gap-0 mt-2 font-md">
               {label}
               {required && (
