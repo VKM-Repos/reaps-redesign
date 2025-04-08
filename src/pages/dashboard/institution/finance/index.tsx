@@ -6,8 +6,8 @@ import PaymentsBar from '@/assets/blue-mockup-bar-chart.svg';
 import ArrowUpRight from '@/assets/arrow-up-right-01.svg';
 import FinanceCards from "./cards";
 import { MonthlyPaymentsChart, PaymentByGenderChart, RevenueCategoryChart, RevenueComparisonChart } from "./charts";
-import {  MoreHorizontalIcon } from "lucide-react";
 import InstitutionPayments from "./payments";
+import { ShareExportPopover } from "./dialogs";
 
 
 const finance_card_info = [
@@ -66,15 +66,13 @@ export default function InstitutionFinanceOverview() {
                     <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Monthly Payment</p>
-                            <div className="flex gap-2 items-center">
+                            <div className="flex gap-2 items-center justify-center">
                                 <p className="flex gap-1 items-center">
                                     <span className="w-3 h-3 rounded-full bg-[#FFD13A]"></span>
                                     <span className="text-xs">Earning</span>
                                  
                                 </p>
-                                <button>
-                                    <MoreHorizontalIcon className="h-6 w-6" />
-                                </button>
+                                <ShareExportPopover />
                             </div>
                         </div>
                         <MonthlyPaymentsChart />
@@ -82,7 +80,7 @@ export default function InstitutionFinanceOverview() {
                     <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Revenue By Category</p>
-                            <button><MoreHorizontalIcon className="w-6 h-6" /></button>
+                            <ShareExportPopover />
                         </div>
                         <div className="w-full">
                             <RevenueCategoryChart />
@@ -94,7 +92,7 @@ export default function InstitutionFinanceOverview() {
                     <div className="h-full w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-[1.375rem]">Revenue Comparison</p>
-                            <div></div>
+                            <ShareExportPopover />
                         </div>
                         <RevenueComparisonChart />
                         <p className="flex gap-3 items-center text-[#333] text-xs mt-4 justify-center w-full">
@@ -114,6 +112,7 @@ export default function InstitutionFinanceOverview() {
                             <p className="font-semibold text-[1.375rem]">Payment by Gender</p>
                         </div>
                         <PaymentByGenderChart />
+                      
                     </div>
                 </section>
 
