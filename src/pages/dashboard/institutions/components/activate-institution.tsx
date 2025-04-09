@@ -21,7 +21,7 @@ export function ActivateInstitution() {
 
   const { mutate, isPending } = usePATCH(`institutions/${id}`);
 
-  const { data: institution, isLoading } = useGET({
+  const { data: institution } = useGET({
     url: `institutions/${id}`,
     queryKey: ["GET-INSTITUTION-DETAILS", id],
     enabled: !!id,

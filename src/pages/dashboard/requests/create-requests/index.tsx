@@ -53,12 +53,14 @@ const CreateRequests = () => {
     const onSubmitHandler: SubmitHandler<EthicalRequestStore> = async () => {
       const formData = new FormData();
 
+      // biome-ignore lint/complexity/noForEach: <explanation>
       Object.entries(data.ethical_request_files).forEach(([fileName, file]) => {
         if (file) {
           formData.append(fileName, file);
         }
       });
 
+      // biome-ignore lint/complexity/noForEach: <explanation>
       Object.entries(data.ethical_request_questions).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           formData.append(key, value.toString());
@@ -90,7 +92,7 @@ const CreateRequests = () => {
         onSuccess: () => {
           toast({
             title: "Success",
-            description: `Request created`,
+            description: "Request created",
             variant: "default",
           });
 
@@ -108,7 +110,7 @@ const CreateRequests = () => {
           const errorMessage =
             error?.detail ||
             (Array.isArray(error) && error[0]?.message) ||
-            (error?.response?.data && error.response.data.detail) ||
+            error?.response?.data?.detail ||
             "An unexpected error occurred";
 
           toast({

@@ -20,7 +20,7 @@ import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 type Props = {
-  handleNext: () => void;
+  handleNext: () => Promise<void>;
 };
 
 const MAX_FILE_SIZE = 3000000; // 3MB
@@ -62,18 +62,30 @@ const ManualPayment = ({ handleNext }: Props) => {
     formState: { isValid, errors },
   } = form;
 
-  const onSubmit = (values: any) => {
-    setLoading(true);
-    setTimeout(() => {
+  const onSubmit = async (values: any) => {
+    try {
+      setLoading(true);
+      // Update the store data
       setData({
         ...data,
         evidence_of_payment: {
           evidence_of_payment: values.evidence_of_payment,
         },
       });
-    }, 3000);
-    setLoading(false);
-    handleNext();
+
+      // Wait for a small delay to ensure store is updated
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Close the sheet
+      setOpen(false);
+
+      // Proceed to next step
+      await handleNext();
+    } catch (error) {
+      console.error("Error submitting payment evidence:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
