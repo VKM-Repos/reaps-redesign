@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { LoginResponseData } from "@/types/auth";
 import { toast } from "@/components/ui/use-toast";
 import useUserStore from "@/store/user-store";
+import { useGET } from "@/hooks/useGET.hook";
+import { isDescriptionInArray } from "@/lib/utils";
 
 const formSchema = z.object({
   email: z
@@ -26,7 +28,13 @@ export function LoginForm() {
   const form = useForm<LoginRequestData>({ resolver: zodResolver(formSchema) });
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUser, setTokens } = useUserStore();
+  const { setUser, setTokens, setCategoryExist } = useUserStore();
+  const [checkCategory, setCheckCategory] = useState(false);
+  const { data: descriptions } = useGET({
+    url: "price-categories-by-context",
+    queryKey: ["GET_CATEGORY_DESC"],
+    enabled: checkCategory,
+  });
 
   const login = useCallback(
     async (data: LoginRequestData) => {
@@ -53,9 +61,17 @@ export function LoginForm() {
           });
           throw new Error(errorMessage);
         }
-
+        setCheckCategory(true);
         const responseData: LoginResponseData = await response.json();
-
+        const isIncluded = isDescriptionInArray(
+          responseData.user?.description,
+          descriptions
+        );
+        if (isIncluded) {
+          setCategoryExist(true);
+        } else {
+          setCategoryExist(false);
+        }
         toast({
           title: "Feedback",
           description: "You have been logged in successfully",
@@ -83,7 +99,7 @@ export function LoginForm() {
         setIsLoading(false);
       }
     },
-    [location.search, navigate, setUser]
+    [location.search, navigate, setUser, setCategoryExist]
   );
 
   function onSubmit(data: LoginRequestData) {

@@ -113,7 +113,7 @@ export default function CustomTable({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className={`!h-auto w-full text-left font-bold`}
+                    className={"!h-auto w-full text-left font-bold"}
                   >
                     {header.isPlaceholder
                       ? null
