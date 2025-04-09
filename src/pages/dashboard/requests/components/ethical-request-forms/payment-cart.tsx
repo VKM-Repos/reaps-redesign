@@ -7,10 +7,11 @@ import { formatCurrency } from "@/lib/utils";
 import ManualPayment from "./manual-payment";
 
 interface PaymentCartProps {
-  isLoading: boolean;
-  isManual: boolean;
-  onSaveAndContinue: () => Promise<void>;
-  onMakePayment: () => Promise<void>;
+  isLoading?: boolean;
+  isManual?: boolean;
+  onSaveAndContinue?: () => Promise<void>;
+  onMakePayment?: () => Promise<void>;
+  handleNext: () => void;
 }
 
 export default function PaymentCart({

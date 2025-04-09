@@ -20,7 +20,7 @@ import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 type Props = {
-  handleNext: () => void;
+  handleNext: unknown;
 };
 
 const MAX_FILE_SIZE = 3000000; // 3MB
@@ -80,7 +80,7 @@ const ManualPayment = ({ handleNext }: Props) => {
       setOpen(false);
 
       // Proceed to next step
-      handleNext();
+      handleNext;
     } catch (error) {
       console.error("Error submitting payment evidence:", error);
     } finally {
