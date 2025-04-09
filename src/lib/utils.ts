@@ -5,6 +5,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function isDescriptionInArray(userDescription: any, categoriesArray: any) {
+    if (!Array.isArray(categoriesArray)) {
+        console.error("categoriesArray is not an array or is undefined");
+        return false;
+    }
+    return categoriesArray.some(item => 
+        item.description.toLowerCase().includes(userDescription.toLowerCase()) || 
+        userDescription.toLowerCase().includes(item.description.toLowerCase())
+    );
+}
+
 export function formatISODate(isoDateString: Date) {
   const date = new Date(isoDateString);
 

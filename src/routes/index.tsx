@@ -27,6 +27,8 @@ import InstitutionCategories from "@/pages/dashboard/institution/categories";
 import InstitutionActivities from "@/pages/dashboard/institution/activities";
 import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 import CountdownPage from "@/components/custom/CountdownPage";
+import PlainLayout from "@/layouts/PlainLayout";
+import InvoiceDetails from "@/pages/dashboard/invoice/invoice-details";
 
 const router = [
   {
@@ -34,8 +36,8 @@ const router = [
     routes: [
       {
         name: "countdown",
-        path: 'countdown',
-        title: 'countdown',
+        path: "countdown",
+        title: "countdown",
         element: CountdownPage,
       },
       {
@@ -202,6 +204,16 @@ const router = [
       {
         path: "*",
         element: NotFound,
+      },
+    ],
+  },
+  {
+    layout: PlainLayout,
+    routes: [
+      {
+        name: "invoice-details",
+        path: "invoice-details",
+        element: InvoiceDetails,
       },
     ],
   },

@@ -7,12 +7,14 @@ import { persist } from "zustand/middleware";
 
 export interface UserStore {
   user: User | null;
+  categoryExist: boolean;
   activeRole: UserRole | null;
   userId: string | null;
   accessToken: string | null;
   refreshToken: string | null;
   loading: boolean;
   setUser: (data: { user: User }) => void;
+  setCategoryExist: (categoryExist: boolean) => void;
   updateUser: (user: User) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
   setActiveRole: (role: UserRole | null) => void;
@@ -30,6 +32,7 @@ const useUserStore = create<UserStore>(
   (persist as MyPersist)(
     (set) => ({
       user: null,
+      categoryExist: false,
       activeRole: null,
       userId: null,
       accessToken: null,
@@ -46,10 +49,12 @@ const useUserStore = create<UserStore>(
         set({ accessToken, refreshToken }),
       setActiveRole: (role) => set({ activeRole: role }),
       setUserId: (userId) => set({ userId }),
+      setCategoryExist: (categoryExist) => set({ categoryExist }),
       setLoading: (isLoading) => set({ loading: isLoading }),
       reset: () =>
         set({
           user: null,
+          categoryExist: false,
           activeRole: null,
           userId: null,
           accessToken: null,

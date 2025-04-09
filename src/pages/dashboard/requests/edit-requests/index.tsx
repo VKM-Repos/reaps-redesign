@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
 import ResearchInformation from "../components/edit-ethical-request-forms/research-information";
 import ApplicationInformation from "../components/edit-ethical-request-forms/application-information";
 import SupportingDocuments from "../components/edit-ethical-request-forms/supporting-document";
 import SavingLoader from "../components/SavingLoader";
-import {
-  EthicalRequestStore,
-  useEthicalRequestStore,
-} from "@/store/ethicalRequestStore";
+import { useEthicalRequestStore } from "@/store/ethicalRequestStore";
 import ApplicationSummary from "../components/edit-ethical-request-forms/application-summary";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/custom/Loader";
@@ -18,18 +14,23 @@ import { queryClient } from "@/providers";
 import { useGET } from "@/hooks/useGET.hook";
 import { usePATCH } from "@/hooks/usePATCH.hook";
 import PaymentCart from "../components/edit-ethical-request-forms/payment-cart";
+import { RequestService } from "@/services/requestService";
 
 const ModifyRequest = () => {
-  const { data, step, setStep, resetStore } = useEthicalRequestStore();
+  const { step, setStep, resetStore } = useEthicalRequestStore();
   const navigate = useNavigate();
   const location = useLocation();
-
   const searchParams = new URLSearchParams(location.search);
-
   const request_id = searchParams.get("id");
+  const requestService = RequestService.getInstance();
 
-  const { data: payment_config } = useGET({
-    url: `payment-configs-by-context`,
+  const { data: user } = useGET({
+    url: "auth/me",
+    queryKey: ["GET_USER"],
+  });
+
+  const { data: payment_config, isPending: isConfigPending } = useGET({
+    url: `payment-configs/context/${user?.institution_context}`,
     queryKey: ["GET_PAYMENT_CONFIGS"],
   });
 
@@ -40,88 +41,74 @@ const ModifyRequest = () => {
     queryKey: ["GET_REQUEST_DETAILS"],
   });
 
-  const { mutate: editRequest, isPending: isEditing } = usePATCH(
+  const { mutate: editRequest, isPending: isRequestPending } = usePATCH(
     `requests/${request_id}`,
     { method: "PUT", contentType: "multipart/form-data" }
   );
 
-  const RenderRequestsForm = () => {
-    const handleNext = () => {
-      setStep(step + 1);
-    };
-
-    const { handleSubmit } = useForm<EthicalRequestStore>();
-
-    const onSubmitHandler: SubmitHandler<EthicalRequestStore> = async () => {
-      const formData = new FormData();
-
-      Object.entries(data.ethical_request_files).forEach(([fileName, file]) => {
-        if (file) {
-          formData.append(fileName, file);
-        }
-      });
-
-      Object.entries(data.ethical_request_questions).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          formData.append(key, value.toString());
-        }
-      });
-
-      if (isManual) {
-        const fileEntries = Object.entries(data.evidence_of_payment);
-
-        if (fileEntries.length > 0) {
-          const [, file] = fileEntries[0];
-          if (file instanceof File) {
-            formData.append("evidence_of_payment", file);
-          } else {
-            console.error("Invalid file format:", file);
-          }
-        } else {
-          console.error("No file found in evidence_of_payment");
-        }
-      }
-
-      const hasEvidenceOfPayment =
-        isManual &&
-        data.evidence_of_payment &&
-        Object.keys(data.evidence_of_payment).length > 0;
-      formData.append("can_edit", JSON.stringify(!hasEvidenceOfPayment));
-
+  const handleSaveAndContinue = async () => {
+    try {
+      const formData = await requestService.editRequest("save", isManual);
       editRequest(formData, {
-        onSuccess: (response) => {
-          console.log(response);
-
+        onSuccess: () => {
           toast({
-            title: "Success",
-            description: `Request updated`,
-            variant: "default",
+            description: "Request saved successfully",
           });
-
           queryClient.invalidateQueries({
             predicate: (query: any) => query.queryKey.includes(["requests"]),
           });
-
           resetStore();
-
           navigate("/requests");
         },
-        onError: (error: any) => {
-          console.error("Error received:", error);
-
-          const errorMessage =
-            error?.detail ||
-            (Array.isArray(error) && error[0]?.message) ||
-            (error?.response?.data && error.response.data.detail) ||
-            "An unexpected error occurred";
-
+        onError: () => {
           toast({
-            title: "Error",
-            description: errorMessage,
             variant: "destructive",
+            description: "Failed to save request",
           });
         },
       });
+    } catch (error) {
+      console.error("Error in save action:", error);
+      toast({
+        variant: "destructive",
+        description: "An error occurred while saving",
+      });
+    }
+  };
+
+  const handleMakePayment = async () => {
+    try {
+      const formData = await requestService.editRequest("payment", isManual);
+      editRequest(formData, {
+        onSuccess: () => {
+          toast({
+            description: "Payment processed successfully",
+          });
+          queryClient.invalidateQueries({
+            predicate: (query: any) => query.queryKey.includes(["requests"]),
+          });
+          resetStore();
+          navigate("/requests");
+        },
+        onError: () => {
+          toast({
+            variant: "destructive",
+            description: "Failed to process payment",
+          });
+        },
+      });
+    } catch (error) {
+      console.error("Error in payment action:", error);
+      toast({
+        variant: "destructive",
+        description: "An error occurred while processing payment",
+      });
+    }
+  };
+
+  const RenderRequestsForm = () => {
+    const handleNext = () => {
+      setStep(step + 1);
     };
 
     switch (step) {
@@ -156,7 +143,14 @@ const ModifyRequest = () => {
           />
         );
       case 6:
-        return <PaymentCart handleNext={handleSubmit(onSubmitHandler)} />;
+        return (
+          <PaymentCart
+            isLoading={isConfigPending || isRequestPending}
+            isManual={isManual}
+            onSaveAndContinue={handleSaveAndContinue}
+            onMakePayment={handleMakePayment}
+          />
+        );
       default:
         return null;
     }
@@ -164,7 +158,7 @@ const ModifyRequest = () => {
 
   return (
     <>
-      {isEditing && <Loader />}
+      {isRequestPending && <Loader />}
       <div className="flex flex-col gap-[1.25rem] mb-20">
         <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
           <h1 className="text-[1.875rem] font-bold">Requests</h1>
