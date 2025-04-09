@@ -1,5 +1,3 @@
-
-
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import OptionsIcon from '@/assets/more-horizontal-circle-01.svg';
@@ -11,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/custom/FormInput";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export function ShareExportPopover() {
     return (
@@ -29,30 +28,35 @@ export function ShareExportPopover() {
     )
 };
 
-const emailSchema = z.object({
+export const emailSchema = z.object({
     email: z
       .string()
       .nonempty("This field is required")
       .transform((val) => val.split(",").map((e) => e.trim()))
-      .refine((emails) => emails.every((email) => z.string().email().safeParse(email).success), {
-        message: "One or more emails are invalid",
-      }),
+      .refine(
+        (emails) => Array.isArray(emails) && emails.every((email) => z.string().email().safeParse(email).success),
+        {
+          message: "One or more emails are invalid",
+        }
+      ),
   });
 
 function ShareDialog() {
-
+    const [open, setOpen] = useState(false);
     const form = 
         useForm<z.infer<typeof emailSchema>>({
             resolver: zodResolver(emailSchema),
-        });
+    });
 
-    const { register, handleSubmit, formState } = form;
+    const { register, handleSubmit, reset, formState } = form;
     const onSubmit = (values: z.infer<typeof emailSchema>) => {
-        console.log(values.email)
+        console.log(values.email);
+        setOpen(false);
+        reset();
     }
 
-    return (
-        <Dialog>
+    return (      
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>
                 <button className="flex gap-2 items-center p-3">
                     <img src={ShareIcon} alt="Share Icon" />

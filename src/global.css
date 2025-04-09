@@ -93,6 +93,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  [aria-selected="true"] {
+    @apply bg-gray-400;
+  }
+  
+  [aria-selected="true"]:hover {
+    @apply bg-gray-600;
+  }
+  
+  [aria-selected="false"]:hover {
+    @apply bg-gray-400;
+  }
 }
 
 input[type="date"] {

@@ -7,7 +7,8 @@ import ArrowUpRight from '@/assets/arrow-up-right-01.svg';
 import FinanceCards from "./cards";
 import { MonthlyPaymentsChart, PaymentByGenderChart, RevenueCategoryChart, RevenueComparisonChart } from "./charts";
 import InstitutionPayments from "./payments";
-import { ShareExportPopover } from "./dialogs";
+import { ShareExportPopover } from "./overlays/share-export";
+import DateFilter from "./overlays/filter-by-date";
 
 
 const finance_card_info = [
@@ -49,18 +50,25 @@ export default function InstitutionFinanceOverview() {
                         <span><img src={ArrowUpRight} alt="Arrow up right icon"/></span>
                     </Link>
                 </div>
-
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {finance_card_info.map((finance_info) => (
-                        <FinanceCards 
-                            title={finance_info.title} 
-                            value={finance_info.value}
+               <section className="flex flex-col gap-[1.25rem]">
+                    <div className="w-full flex gap-2 items-center justify-end">
+                        <DateFilter />
+                        <ShareExportPopover />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {finance_card_info.map((finance_info) => (
+                            <FinanceCards 
+                                title={finance_info.title} 
+                                value={finance_info.value}
                             bgColor={finance_info.bgColor}
                             image={finance_info.image}
                             percent={finance_info.percent}
                             percentColor={finance_info.percentColor}/>
-                    ))}
-                </section>
+                        ))}
+                    </div>
+               </section>
+
+                
 
                 <section className="flex w-full gap-3 items-center justify-center ">
                     <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
