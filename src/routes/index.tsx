@@ -29,7 +29,7 @@ import CountdownPage from "@/components/custom/CountdownPage";
 import InstitutionFinanceOverview from "@/pages/dashboard/institution/finance";
 import InstitutionInvoices from "@/pages/dashboard/institution/finance/invoices";
 import PlainLayout from "@/layouts/PlainLayout";
-import InvoiceDetails from "@/pages/dashboard/invoice/invoice-details";
+import InvoiceDetails from "@/pages/dashboard/institution/finance/invoices/invoice-details";
 // import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 
 const router = [
@@ -228,7 +228,7 @@ const router = [
     routes: [
       {
         name: "invoice-details",
-        path: "invoice-details",
+        path: "/institution/finance-overview/invoice/:id",
         element: InvoiceDetails,
       },
     ],

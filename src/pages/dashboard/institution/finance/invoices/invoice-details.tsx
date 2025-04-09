@@ -10,7 +10,7 @@ export default function InvoiceDetails() {
   return (
     <div className="w-[80%] mx-auto border border-[#0E0F0C1F] rounded-xl px-8 py-5 my-10">
       <div className="flex flex-col items-center w-full">
-        <Link className="flex items-center gap-2" to="/home">
+        <Link className="flex items-center gap-2" to="/institution/finance-overview/invoice">
           <LeftArrow /> Back to Dashboard
         </Link>
         <div className="flex justify-between items-start w-full">
