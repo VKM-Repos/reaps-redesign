@@ -12,7 +12,7 @@ export default function InstitutionInvoices() {
     return (
         <TransitionElement>
             <div className="flex flex-col gap-[1.25rem]">
-                <button onClick={() => {navigate(-1)}} className="flex gap-2 items-center text-primary">
+                <button onClick={() => {navigate(`/institution/finance-overview`)}} className="flex gap-2 items-center text-primary">
                     <img src={ArrowRight} alt="Back button icon" />
                     <span className="font-semibold text-[1.375rem]">Invoices</span>
                 </button>
