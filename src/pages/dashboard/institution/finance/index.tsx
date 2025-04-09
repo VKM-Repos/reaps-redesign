@@ -72,8 +72,8 @@ export default function InstitutionFinanceOverview() {
 
                 
 
-                <section className="flex w-full gap-3 items-center justify-center ">
-                    <div className="w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
+                <section className="flex flex-col md:flex-row w-full gap-3 items-center justify-center ">
+                    <div className="w-full md:w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Monthly Payment</p>
                             <div className="flex gap-2 items-center justify-center">
@@ -87,7 +87,7 @@ export default function InstitutionFinanceOverview() {
                         </div>
                         <MonthlyPaymentsChart />
                     </div>
-                    <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
+                    <div className="w-full md:w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Revenue By Category</p>
                             <div className="w-full flex gap-2 items-center justify-end">
@@ -101,10 +101,10 @@ export default function InstitutionFinanceOverview() {
                     </div>
                 </section>
 
-                <section className="flex w-full h-full gap-3 items-center justify-center ">
-                    <div className="h-full w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 shadow-lg">
-                        <div className="py-4 flex items-center justify-between">
-                            <p className="font-semibold text-[1.375rem]">Revenue Comparison</p>
+                <section className="flex flex-col md:flex-row w-full h-full gap-3 items-center justify-center ">
+                    <div className="h-full w-full md:w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 shadow-lg">
+                        <div className="py-4 flex items-center justify-between w-full">
+                            <p className="font-semibold text-[1.375rem] w-full whitespace-nowrap">Revenue Comparison</p>
                             <div className="w-full flex gap-2 items-center justify-end">
                                 <GenericDateFilter current="oneMonth" date_list={revenue_comparison_range_list}/>
                                 <ShareExportPopover />
@@ -123,7 +123,7 @@ export default function InstitutionFinanceOverview() {
                         </p>
                     </div>
 
-                    <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
+                    <div className="w-full md:w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-[1.375rem]">Payment by Gender</p>
                         </div>
