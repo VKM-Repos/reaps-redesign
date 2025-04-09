@@ -25,10 +25,10 @@ import InstitutionConfigurationPage from "@/pages/dashboard/institutions/[id]/co
 import InstitutionTransactionsPage from "@/pages/dashboard/institutions/[id]/transactions";
 import InstitutionCategories from "@/pages/dashboard/institution/categories";
 import InstitutionActivities from "@/pages/dashboard/institution/activities";
-import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 import CountdownPage from "@/components/custom/CountdownPage";
 import InstitutionFinanceOverview from "@/pages/dashboard/institution/finance";
 import InstitutionInvoices from "@/pages/dashboard/institution/finance/invoices";
+// import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 
 const router = [
   {
@@ -151,12 +151,12 @@ const router = [
               }
             ]
           },
-          {
-            name: "Institution Transactions",
-            path: "institution/transactions",
-            title: "Institution Transactions",
-            element: InstitutionTransactions,
-          },
+          // {
+          //   name: "Institution Transactions",
+          //   path: "institution/transactions",
+          //   title: "Institution Transactions",
+          //   element: InstitutionTransactions,
+          // },
         ],
       },
       {
