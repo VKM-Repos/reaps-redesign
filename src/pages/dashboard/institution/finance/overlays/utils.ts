@@ -1,9 +1,13 @@
 export type RangeKey = "today" | "last7days"  | "yesterday"  |  "lastWeek"  | "last14days" | "last30days" | "custom";
 
-export type RangeListObj = {
-    label: string,
-    key: RangeKey
-}
+type BaseRangeListObj<K extends string = RangeKey> = {
+  label: string;
+  key: K;
+};
+
+export type RangeListObj = BaseRangeListObj<RangeKey>;
+
+export type RangeListObjTwo = BaseRangeListObj<string>;
 
 export type DateRangeType = {
   start: Date,
@@ -39,6 +43,64 @@ export const range_list: RangeListObj[] = [
         label: 'Custom',
         key: 'custom'
     }
+]
+
+export const revenue_comparison_range_list: RangeListObjTwo[] = [
+  {
+    label: '1 month',
+    key: 'oneMonth'
+  },
+  {
+    label: '2 months',
+    key: 'twoMonths'
+  },
+  {
+    label: '3 months',
+    key: 'threeMonths',
+  },
+  {
+    label: '6 months',
+    key: 'sixMonths'
+  },
+  {
+    label: '9 months',
+    key: 'nineMonths'
+  },
+  {
+    label: '1 year',
+    key: 'oneYear'
+  },
+  {
+    label: 'Custom',
+    key: 'custom'
+  }
+]
+
+export const revenue_category_range_list: RangeListObjTwo[] = [
+    {
+      label: 'Today',
+      key: 'today'
+    },
+    {
+      label: 'Yesterday',
+      key: 'yesterday'
+    },
+    {
+      label: 'Last 7 days',
+      key: 'last7days'
+    },
+    {
+      label: 'Last Week',
+      key: 'lastWeek'
+    },
+    {
+      label: 'Last 14 days',
+      key: 'last14days'
+    },
+    {
+      label: 'Last Month',
+      key: 'lastMonth'
+    },
 ]
 
 export function formatShortDate(dateInput: any) {
