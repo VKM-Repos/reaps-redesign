@@ -56,6 +56,7 @@ export const statusColorMap: { [key: string]: { bg: string; text: string } } = {
   Success: { bg: "#E5FFE5", text: "#00C000" },
   Active: { bg: "#E5FFE5", text: "#00C000" },
   Inactive: { bg: "#FFE5E6", text: "#FF000A" },
+  "Not Active": { bg: "#FFE5E6", text: "#FF000A" },
   Pending: { bg: "#FFFBE5", text: "#CCAF09" },
   failed: { bg: "#FFE5E8", text: "#BF1E2C" },
   Declined: { bg: "#FFE5E8", text: "#BF1E2C" },

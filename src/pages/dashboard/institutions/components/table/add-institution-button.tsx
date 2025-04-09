@@ -1,22 +1,9 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import AddIcon from "@/components/custom/Icons/AddIcon";
-import { useRef } from "react";
 import CreateInstitutionForm from "../forms/create-institution-form";
 
-export function AddInstitutionButton({ refetch }: { refetch: () => void }) {
-  const closeDialogBtn = useRef<HTMLButtonElement | null>(null);
-  console.log(refetch);
-
-  // const handleClosDialog = () => {
-  //   refetch();
-  //   closeDialogBtn.current?.click();
-  // };
+export function AddInstitutionButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -27,8 +14,8 @@ export function AddInstitutionButton({ refetch }: { refetch: () => void }) {
           Add
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[50%] overflow-y-scroll h-full no-scrollbar py-10">
-        <div className="mt-12 px-7">
+      <DialogContent className="w-[50%] overflow-y-scroll h-auto max-h-[90%] my-auto p-12 no-scrollbar bg-white ">
+        <div className="">
           <h2 className="text-center text-xl2 font-semibold font-inter">
             Add Institution
           </h2>
@@ -36,16 +23,6 @@ export function AddInstitutionButton({ refetch }: { refetch: () => void }) {
             Enter details to create admin account
           </p>
           <CreateInstitutionForm />
-          <DialogClose asChild>
-            <Button
-              ref={closeDialogBtn}
-              type="button"
-              variant="ghost"
-              className="hidden"
-            >
-              Close
-            </Button>
-          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
