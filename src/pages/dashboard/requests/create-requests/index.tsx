@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import RequestsLayout from "@/layouts/RequestsLayout";
 import ResearchInformation from "../components/ethical-request-forms/research-information";
 import ApplicationInformation from "../components/ethical-request-forms/application-information";
 import SupportingDocuments from "../components/ethical-request-forms/supporting-document";
 import SavingLoader from "../components/SavingLoader";
 import {
-  EthicalRequestStore,
+  type EthicalRequestStore,
   useEthicalRequestStore,
 } from "@/store/ethicalRequestStore";
 import ApplicationSummary from "../components/ethical-request-forms/application-summary";
@@ -18,14 +18,22 @@ import { queryClient } from "@/providers";
 import { useNavigate } from "react-router-dom";
 import PaymentCart from "../components/ethical-request-forms/payment-cart";
 import { useGET } from "@/hooks/useGET.hook";
+import useUserStore from "@/store/user-store";
+import { CategoryChecks } from "@/components/custom/category-check";
 
 const CreateRequests = () => {
   const { data, step, setStep, resetStore } = useEthicalRequestStore();
 
   const navigate = useNavigate();
-
+  const { user, categoryExist } = useUserStore();
+  console.log(user, categoryExist, "checks");
+  if (categoryExist) {
+    console.log("Req");
+  } else {
+    console.log("No Req");
+  }
   const { data: payment_config } = useGET({
-    url: `payment-configs-by-context`,
+    url: "payment-configs-by-context",
     queryKey: ["GET_PAYMENT_CONFIGS"],
   });
 
@@ -130,19 +138,23 @@ const CreateRequests = () => {
   return (
     <>
       {isPending && <Loader />}
-      <div className="flex flex-col gap-[1.25rem] mb-20">
-        <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
-          <h1 className="text-[1.875rem] font-bold">Requests</h1>
+      {!categoryExist ? (
+        <CategoryChecks isOpen={true} />
+      ) : (
+        <div className="flex flex-col gap-[1.25rem] mb-20">
+          <div className="flex flex-col md:flex-row gap-5 md:gap-auto justify-between md:items-center mx-auto w-full">
+            <h1 className="text-[1.875rem] font-bold">Requests</h1>
+          </div>
+          <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
+            <RequestsLayout>
+              <div className="relative md:w-[80%] mx-auto">
+                {step > 1 && <SavingLoader />}
+              </div>
+              <RenderRequestsForm />
+            </RequestsLayout>
+          </div>
         </div>
-        <div className="w-full my-0 mx-auto flex flex-col justify-center items-center">
-          <RequestsLayout>
-            <div className="relative md:w-[80%] mx-auto">
-              {step > 1 && <SavingLoader />}
-            </div>
-            <RenderRequestsForm />
-          </RequestsLayout>
-        </div>
-      </div>
+      )}
     </>
   );
 };

@@ -8,8 +8,6 @@ type Props = {
 };
 
 const RequestTable = ({ data }: Props) => {
-  console.log(data, "cus");
-
   return (
     <div className="w-full">
       {data.length > 0 ? (
