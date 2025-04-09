@@ -5,6 +5,11 @@ export type RangeListObj = {
     key: RangeKey
 }
 
+export type DateRangeType = {
+  start: Date,
+  end: Date 
+}
+
 export const range_list: RangeListObj[] = [
     {
         label: 'Today',
@@ -69,8 +74,8 @@ export const getDateRange = (key: RangeKey, customStart?: Date, customEnd?: Date
       };
     case 'lastWeek':
         return {
-            start: new Date(now.getTime() - 6 * oneDay),
-            end: new Date(now.getTime() - 6 * oneDay),
+            start: new Date(now.getTime() - 7 * oneDay),
+            end: new Date(now.getTime() - 7 * oneDay),
         }
     case 'last14days':
         return {
