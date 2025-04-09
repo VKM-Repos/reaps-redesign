@@ -94,15 +94,11 @@
     @apply bg-background text-foreground;
   }
   [aria-selected="true"] {
-    @apply bg-gray-400;
-  }
-  
-  [aria-selected="true"]:hover {
-    @apply bg-gray-600;
+    @apply bg-gray-300;
   }
   
   [aria-selected="false"]:hover {
-    @apply bg-gray-400;
+    @apply bg-gray-200;
   }
 }
 
