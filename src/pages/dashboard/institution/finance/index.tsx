@@ -9,6 +9,8 @@ import { MonthlyPaymentsChart, PaymentByGenderChart, RevenueCategoryChart, Reven
 import InstitutionPayments from "./payments";
 import { ShareExportPopover } from "./overlays/share-export";
 import DateFilter from "./overlays/filter-by-date";
+import GenericDateFilter from "./overlays/generic-date-filter";
+import { revenue_category_range_list, revenue_comparison_range_list } from "./overlays/utils";
 
 
 const finance_card_info = [
@@ -60,10 +62,10 @@ export default function InstitutionFinanceOverview() {
                             <FinanceCards 
                                 title={finance_info.title} 
                                 value={finance_info.value}
-                            bgColor={finance_info.bgColor}
-                            image={finance_info.image}
-                            percent={finance_info.percent}
-                            percentColor={finance_info.percentColor}/>
+                                bgColor={finance_info.bgColor}
+                                image={finance_info.image}
+                                percent={finance_info.percent}
+                                percentColor={finance_info.percentColor}/>
                         ))}
                     </div>
                </section>
@@ -88,7 +90,10 @@ export default function InstitutionFinanceOverview() {
                     <div className="w-[45%] rounded-[.875rem] border border-[#8686871A] p-4 mb-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-sm">Revenue By Category</p>
-                            <ShareExportPopover />
+                            <div className="w-full flex gap-2 items-center justify-end">
+                                <GenericDateFilter current="today" date_list={revenue_category_range_list}/>
+                                <ShareExportPopover />
+                            </div>
                         </div>
                         <div className="w-full">
                             <RevenueCategoryChart />
@@ -100,7 +105,10 @@ export default function InstitutionFinanceOverview() {
                     <div className="h-full w-[60%] rounded-[.875rem] border border-[#8686871A] p-4 shadow-lg">
                         <div className="py-4 flex items-center justify-between">
                             <p className="font-semibold text-[1.375rem]">Revenue Comparison</p>
-                            <ShareExportPopover />
+                            <div className="w-full flex gap-2 items-center justify-end">
+                                <GenericDateFilter current="oneMonth" date_list={revenue_comparison_range_list}/>
+                                <ShareExportPopover />
+                            </div>
                         </div>
                         <RevenueComparisonChart />
                         <p className="flex gap-3 items-center text-[#333] text-xs mt-4 justify-center w-full">

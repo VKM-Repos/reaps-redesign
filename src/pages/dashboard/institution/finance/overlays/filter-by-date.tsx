@@ -4,7 +4,7 @@ import SharpArrowDown from '@/assets/arrow-down-sharp.svg'
 import { Calendar } from "@/components/ui/calendar";
 import { DateRangeType, formatShortDate, getDateRange, preventFutureDateSelection, range_list, RangeKey } from "./utils";
 
-
+// api can be consumed here, only one component uses this component
 export default function DateFilter() {
     const now = new Date();
     const [rangeKey, setRangeKey] = useState<RangeKey>("today");
