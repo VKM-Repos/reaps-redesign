@@ -141,9 +141,14 @@ export default function SideBarProvider({ children }: SideBarProviderProps) {
               path: "/institution/activities",
               icon: <Activities size="24" />,
             },
+            // {
+            //   label: "Transactions",
+            //   path: "/institution/transactions",
+            //   icon: <TransactionsIcon size="24" />,
+            // },
             {
-              label: "Transactions",
-              path: "/institution/transactions",
+              label: "Finance Overview",
+              path: "/institution/finance-overview",
               icon: <TransactionsIcon size="24" />,
             },
           ],
