@@ -1,7 +1,7 @@
 import { CustomCell } from "@/components/custom/CustomTable";
 import StatusPill from "@/components/custom/StatusPill";
 import { ColumnDef } from "@tanstack/react-table";
-import ViewInvoice from "../view-invoice";
+import ViewInvoice from "../view";
 
 export const columns: ColumnDef<any>[] = [
     {
