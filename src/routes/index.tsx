@@ -25,10 +25,12 @@ import InstitutionConfigurationPage from "@/pages/dashboard/institutions/[id]/co
 import InstitutionTransactionsPage from "@/pages/dashboard/institutions/[id]/transactions";
 import InstitutionCategories from "@/pages/dashboard/institution/categories";
 import InstitutionActivities from "@/pages/dashboard/institution/activities";
-import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 import CountdownPage from "@/components/custom/CountdownPage";
+import InstitutionFinanceOverview from "@/pages/dashboard/institution/finance";
+import InstitutionInvoices from "@/pages/dashboard/institution/finance/invoices";
 import PlainLayout from "@/layouts/PlainLayout";
-import InvoiceDetails from "@/pages/dashboard/invoice/invoice-details";
+import InvoiceDetails from "@/pages/dashboard/institution/finance/invoices/view/invoice-details";
+// import InstitutionTransactions from "@/pages/dashboard/institution/transactions";
 
 const router = [
   {
@@ -138,11 +140,25 @@ const router = [
             element: InstitutionActivities,
           },
           {
-            name: "Institution Transactions",
-            path: "institution/transactions",
-            title: "Institution Transactions",
-            element: InstitutionTransactions,
+            name: "Institution Finance Overview",
+            path: "institution/finance-overview",
+            title: "Institution Finance Overview",
+            element: InstitutionFinanceOverview,
+            routes: [
+              {
+                name: "Institution Finance Overview",
+                path: "institution/finance-overview/invoice",
+                title: "Institution Invoice",
+                element: InstitutionInvoices,
+              }
+            ]
           },
+          // {
+          //   name: "Institution Transactions",
+          //   path: "institution/transactions",
+          //   title: "Institution Transactions",
+          //   element: InstitutionTransactions,
+          // },
         ],
       },
       {
@@ -212,7 +228,7 @@ const router = [
     routes: [
       {
         name: "invoice-details",
-        path: "invoice-details",
+        path: "/institution/finance-overview/invoice/:id",
         element: InvoiceDetails,
       },
     ],
