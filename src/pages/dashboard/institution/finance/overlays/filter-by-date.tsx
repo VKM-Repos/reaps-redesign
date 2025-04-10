@@ -19,14 +19,13 @@ export default function DateFilter() {
     
     const handleRangeSelect = (key: RangeKey, index: number, customStart?: Date, customEnd?: Date) => {
         setRangeKey(key);
-        
         const newRange = key === 'custom'
           ? getDateRange(key, customStart, customEnd)
           : getDateRange(key);
       
         setCustomRange(newRange);
         setSelectedRange(newRange);
-        setSelectedIndex(index === selectedIndex ? null : index);
+        setSelectedIndex(index === selectedIndex ? null : index);     
     };
 
 
@@ -50,17 +49,18 @@ export default function DateFilter() {
                     <p className="font-bold text-[#535057] border-b border-b-[#DDDDDF] absolute w-full left-2 mb-2">Filter</p>
                     <div className="flex gap-2 w-full mt-6">
                         <ul className="flex flex-col gap-1 justify-center w-full min-w-[7rem] border-r-2 border-r-[#DDDDDF]">
-                            {range_list.map(({ label, key}, index) => (
+                            {range_list.map(({ label, key}, index) => {
+                                return(
                                 <li key={key}>
                                     <button 
                                         aria-selected={selectedIndex === index} 
-                                        onClick={() => handleRangeSelect(key, index)} 
+                                        onClick={() =>{ handleRangeSelect(key, index, customRange.start, customRange.end);}} 
                                         className="text-xs font-light text-[#535057] px-[.625rem] py-2 w-full text-left"
                                     >
                                         {label}
                                     </button>
                                 </li>
-                            ))}
+                            )})}
                         </ul>
                         <Calendar 
                             mode="range"
